@@ -1,19 +1,11 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users_and_studies', {
+  return sequelize.define('studies_and_tags', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id'
-      }
     },
     study_id: {
       type: DataTypes.INTEGER,
@@ -22,8 +14,16 @@ module.exports = function(sequelize, DataTypes) {
         model: 'studies',
         key: 'id'
       }
+    },
+    tags_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'tags',
+        key: 'id'
+      }
     }
   }, {
-    tableName: 'users_and_studies'
+    tableName: 'studies_and_tags'
   });
 };

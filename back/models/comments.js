@@ -1,13 +1,14 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users_and_studies', {
+  const comments = sequelize.define('comments', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
-    user_id: {
+    writer: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -15,15 +16,25 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    study_id: {
+    study_post_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'studies',
+        model: 'study_posts',
         key: 'id'
       }
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    created_date: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
-    tableName: 'users_and_studies'
+    tableName: 'comments'
   });
+
+  return comments;
 };

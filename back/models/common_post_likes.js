@@ -1,29 +1,32 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users_and_studies', {
+  const common_post_likes = sequelize.define('common_post_likes', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
-    user_id: {
+    common_posts_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'common_posts',
+        key: 'id'
+      }
+    },
+    USERS_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
         key: 'id'
       }
-    },
-    study_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'studies',
-        key: 'id'
-      }
     }
   }, {
-    tableName: 'users_and_studies'
+    tableName: 'common_post_likes'
   });
+
+  return common_post_likes;
 };

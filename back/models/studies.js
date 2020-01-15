@@ -5,8 +5,15 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
+      primaryKey: true
+    },
+    minor_class_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'minor_classes',
+        key: 'id'
+      }
     },
     name: {
       type: DataTypes.STRING(45),

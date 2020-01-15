@@ -1,29 +1,29 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users_and_studies', {
+  return sequelize.define('comments_likes', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    user_id: {
+    comments_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'comments',
+        key: 'id'
+      }
+    },
+    USERS_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
         key: 'id'
       }
-    },
-    study_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'studies',
-        key: 'id'
-      }
     }
   }, {
-    tableName: 'users_and_studies'
+    tableName: 'comments_likes'
   });
 };

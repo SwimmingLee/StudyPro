@@ -1,29 +1,26 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users_and_studies', {
+  return sequelize.define('minor_classes', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    user_id: {
+    major_class_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'users',
+        model: 'major_classes',
         key: 'id'
       }
     },
-    study_id: {
-      type: DataTypes.INTEGER,
+    name: {
+      type: DataTypes.STRING(45),
       allowNull: false,
-      references: {
-        model: 'studies',
-        key: 'id'
-      }
+      unique: true
     }
   }, {
-    tableName: 'users_and_studies'
+    tableName: 'minor_classes'
   });
 };

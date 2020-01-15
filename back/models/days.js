@@ -1,19 +1,11 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users_and_studies', {
+  return sequelize.define('days', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id'
-      }
     },
     study_id: {
       type: DataTypes.INTEGER,
@@ -22,8 +14,12 @@ module.exports = function(sequelize, DataTypes) {
         model: 'studies',
         key: 'id'
       }
+    },
+    day: {
+      type: DataTypes.STRING(3),
+      allowNull: false
     }
   }, {
-    tableName: 'users_and_studies'
+    tableName: 'days'
   });
 };
