@@ -1,11 +1,12 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users_and_studies', {
+  const users_and_studies = sequelize.define('users_and_studies', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     user_id: {
       type: DataTypes.INTEGER,
@@ -26,4 +27,5 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'users_and_studies'
   });
+  return users_and_studies;
 };

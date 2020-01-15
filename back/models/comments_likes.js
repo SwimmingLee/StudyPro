@@ -1,11 +1,12 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('comments_likes', {
+  const commnets_likes =  sequelize.define('comments_likes', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     comments_id: {
       type: DataTypes.INTEGER,
@@ -26,4 +27,5 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'comments_likes'
   });
+  return commnets_likes;
 };

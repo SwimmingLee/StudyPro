@@ -1,11 +1,12 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('tags', {
+  const tags = sequelize.define('tags', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     name: {
       type: DataTypes.STRING(45),
@@ -15,4 +16,6 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'tags'
   });
+
+  return tags;
 };

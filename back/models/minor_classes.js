@@ -1,11 +1,12 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('minor_classes', {
+  const minor_classes = sequelize.define('minor_classes', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     major_class_id: {
       type: DataTypes.INTEGER,
@@ -23,4 +24,5 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'minor_classes'
   });
+  return minor_classes;
 };
