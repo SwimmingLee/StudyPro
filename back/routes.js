@@ -9,6 +9,7 @@ const SIGNIN = "/signin";
 // Study
 const STUDYS = "/studys";
 const CREATE_STIDY = "/create";
+const JOIN_STUDY = "/join"
 
 const routes = {
     users : USERS,
@@ -19,6 +20,7 @@ const routes = {
 
     studys : STUDYS,
     create_study : CREATE_STIDY,
+    join_study: JOIN_STUDY,
 }
 
 export default routes;

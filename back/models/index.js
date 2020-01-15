@@ -1,11 +1,10 @@
-// import config from "../config/config"
-const config = require("../config/config.json")
 import Sequelize from "sequelize"
 import fs from "fs"
 import path from "path"
+
+const config = require("../config/config.json")
 const d = config["development"]
 let db = {}
-
 const sequelize = new Sequelize(d.database, d.username, d.password, d)
 
 fs
@@ -26,10 +25,5 @@ Object.keys(db).forEach(function(modelName) {
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize
-
-// db.USERS = USERS(sequelize, Sequelize)
-// db.STUDIES = STUDIES(sequelize, Sequelize)
-
-
 
 module.exports = db

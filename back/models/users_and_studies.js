@@ -5,14 +5,16 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
-        key: 'id'
+        key: 'id',
+        onDelete: 'cascade',
       }
     },
     study_id: {
@@ -20,7 +22,8 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       references: {
         model: 'studies',
-        key: 'id'
+        key: 'id',
+        onDelete: 'cascade',
       }
     }
   }, {
