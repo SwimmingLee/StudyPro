@@ -1,6 +1,6 @@
 import jsonwebtoken from "jsonwebtoken"
 import jwtObj from "../config/jwt"
-import {USERS} from "../models"
+import {users, studies} from "../models"
 import crypto from "crypto"
 
 
@@ -18,7 +18,8 @@ export const login = function(req, res, next) {
     {
         expiresIn : '5m'
     })
-    USERS.findAll({
+
+    users.findAll({
         where: {
             email: req.body.email,
         }
@@ -43,29 +44,30 @@ export const login = function(req, res, next) {
         }
     })
 };
-
 export const signin = function(req, res) {
     const email = req.body.email
+    const nickname = req.body.nickname
+    const name = req.body.name
     let password = req.body.password
+
     let cipher = crypto.createCipher('aes192', secretObj.secret)
     cipher.update(password, 'utf8', 'base64')
     const ciphered_password = cipher.final('base64')
 
-    const name = req.body.name
-
-    USERS.findAll({
+    users.findAll({
         where: {
             email: email
         }
     })
-    .then(users => {
-        if (users.length) {
+    .then(temp_users => {
+        if (temp_users.length) {
             res.send("이미 존재하는 아이디 입니다.")
         } else{
-            USERS.create({
+            users.create({
                 email,
                 name,
-                password: ciphered_password
+                password: ciphered_password,
+                nickname,
             })
 
             res.send(`${email}이 생성되었습니다`)

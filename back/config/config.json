@@ -2,10 +2,14 @@
   "development": {
     "username": "root",
     "password": "123456",
-    "database": "MySQL",
+    "database": "samoim",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "define": {
+      "timestamps": false,
+      "underscored" : true
+  }
   },
   "test": {
     "username": "root",
