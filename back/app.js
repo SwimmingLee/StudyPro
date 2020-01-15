@@ -8,10 +8,13 @@ import helmet from "helmet"
 import cookieParser from "cookie-parser"
 import bodyParser from "body-parser"
 import userRouter from "./routers/userRouter"
+import studyRouter from "./routers/studyRouter"
 import routes from "./routes"
 import { localsMiddelWare } from "./middleware"
+// import sequelize from "./models/index"
 
 const app = express()
+// var sequelize = require('./models/index').sequelize;
 
 app.engine('pug', require('pug').__express)
 app.set('view engine', 'pug');
@@ -25,6 +28,9 @@ app.use(morgan("dev"));
 
 app.use(localsMiddelWare)
 app.use(routes.users, userRouter);
+app.use(routes.studys, studyRouter);
+
+// sequelize.sync()
 
 export default app;
 
