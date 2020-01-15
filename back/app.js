@@ -11,9 +11,11 @@ import userRouter from "./routers/userRouter"
 import studyRouter from "./routers/studyRouter"
 import routes from "./routes"
 import { localsMiddelWare } from "./middleware"
+import dotenv from "dotenv";
 // import sequelize from "./models/index"
 
 const app = express()
+dotenv.config();
 // var sequelize = require('./models/index').sequelize;
 
 app.engine('pug', require('pug').__express)

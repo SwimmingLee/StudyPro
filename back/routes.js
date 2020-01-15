@@ -3,7 +3,7 @@
 const USERS  = "/users";
 const USER_DETAIL = "/:id";
 const CHANGE_PASSWARD = "/change-password";
-const LOGIN = "/login";
+const SIGNUP = "/signup";
 const SIGNIN = "/signin";
 
 // Study
@@ -15,7 +15,7 @@ const routes = {
     users : USERS,
     userDetail : USER_DETAIL,
     changePassword : CHANGE_PASSWARD,
-    login : LOGIN,
+    signup : SIGNUP,
     signin : SIGNIN,
 
     studys : STUDYS,

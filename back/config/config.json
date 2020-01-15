@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "123456",
-    "database": "samoim",
+    "password": "cjsdks2",
+    "database": "nodejs",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": false,

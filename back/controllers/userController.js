@@ -1,79 +1,84 @@
 import jsonwebtoken from "jsonwebtoken"
-import jwtObj from "../config/jwt"
 import {users, studies} from "../models"
 import crypto from "crypto"
 
 
 const jwt = jsonwebtoken
-let secretObj = jwtObj
 
 export const userDetail = (req, res) => res.send("UserDetail");
+
 export const changePassword = (req, res) => res.send("ChangePassword");
-export const login = function(req, res, next) {
+
+export const signin = function(req, res, next) {
+    const {email, password} = req.body;
 
     let token = jwt.sign({
-        email : req.body.email
+        email
     },
-    secretObj.secret,
+    process.env.SECRET_KEY,
     {
         expiresIn : '5m'
     })
 
-    users.findAll({
-        where: {
-            email: req.body.email,
-        }
-    })
-    .then(users => {
-        if (users.length) {
-            let password = req.body.password
-            let cipher = crypto.createCipher('aes192', secretObj.secret)
-            cipher.update(password, 'utf8', 'base64')
-            const ciphered_password = cipher.final('base64')
+    
+    users.findOne({where: {email}})
+        .then(user => {
+            if (user) {
+                let cipher = crypto.createCipher('aes192', process.env.SECRET_KEY)
+                cipher.update(password, 'utf8', 'base64')
+                const ciphered_password = cipher.final('base64')
 
-            if ( users[0].dataValues.password === ciphered_password) {
-                res.cookie("user", token)
-                res.json({
-                    token: token,
-                })
+                if ( user.dataValues.password === ciphered_password) {
+                    res.cookie("user", token)
+                    res.json({
+                        token: token,
+                    })
+                } else {
+                    res.send("password incorrect")
+                }
             } else {
-                res.send("비밀번호가 틀렸습니다.")
+                res.send("email not exist")
             }
-        } else {
-            res.send("아이디없음")
-        }
-    })
+        })
 };
-export const signin = function(req, res) {
-    const email = req.body.email
-    const nickname = req.body.nickname
-    const name = req.body.name
-    let password = req.body.password
 
-    let cipher = crypto.createCipher('aes192', secretObj.secret)
+
+export const signup = function(req, res, next) {
+    const {email, nickname, name, password, gender, auth} = req.body;
+
+    let cipher = crypto.createCipher('aes192', process.env.SECRET_KEY)
     cipher.update(password, 'utf8', 'base64')
     const ciphered_password = cipher.final('base64')
 
-    users.findAll({
-        where: {
-            email: email
-        }
-    })
-    .then(temp_users => {
-        if (temp_users.length) {
-            res.send("이미 존재하는 아이디 입니다.")
-        } else{
-            users.create({
-                email,
-                name,
-                password: ciphered_password,
-                nickname,
-            })
+    users.findOne({where: {email}})
+        .then((user)=> {
+            if(user) {
+                res.send("userEmail exist");
+                throw new Error("userEmail exist");
+            }
+        })
+        .then(()=>{
+            return users.findOne({where:{nickname}})
+        })
+        .then((user)=>{
+            if(user) {
+                res.send("nickname exist");
+                throw new Error("nickname exist");
+            }
+            else {
+                users.create({
+                    email,
+                    name,
+                    password: ciphered_password,
+                    nickname,
+                    gender,
+                    auth
+                })
+                res.send(`create ${email}`)
+            }
+        })
+        .catch((error)=>{
+            //console.log(error);
+        })
 
-            res.send(`${email}이 생성되었습니다`)
-        }
-    })
-    .catch(() =>{
-        res.send("gg")
-    })
 }
