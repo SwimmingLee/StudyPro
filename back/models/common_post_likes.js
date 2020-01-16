@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
-    common_posts_id: {
+    common_post_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    USERS_id: {
+    user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

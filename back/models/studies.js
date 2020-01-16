@@ -60,5 +60,40 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'studies'
   });
+
+  studies.delete_study = async function(study_id) {
+
+    const study = await this.findOne({where:{id: study_id}})
+    if (!study) {
+        return "Wrong ID"
+    } else {
+
+        studies.destroy({where: {id:study_id}})
+        return `${study_id}번 스터디 삭제완료`
+    }
+  }
+
+
+  studies.create_study = async function(data) {
+
+    const study = await this.findOne({where: {name:data.name}})
+    if (study) {
+        return "이미 존재하는 스터디 이름입니다"
+    } else {
+        this.create(data)
+        return `${data.name}이 생성되었습니다.`
+    }
+  }
+
+  studies.update_study = async function(study_id, data) {
+    const study = await this.findOne({where:{id: study_id}})
+    if (!study) {
+        return "Wrong ID"
+    } else {
+        this.update(data, {where: {id:study_id}})
+        return `${study_id}번 스터디 변경완료`
+    }
+  }
+
   return studies;
 };

@@ -9,9 +9,9 @@ const SIGNIN = "/signin";
 // Study
 const STUDYS = "/studys";
 const CREATE_STIDY = "/create";
-const JOIN_STUDY = "/join"
-const DELETE_STUDY = "/delete"
-const UPDATE_STUDY = "/update/:study_id"
+const JOIN_STUDY = "/join";
+const DELETE_STUDY = "/delete";
+const UPDATE_STUDY = "/update/:study_id";
 
 // Common Post
 const COMMON_POSTS = "/common_post";
@@ -27,6 +27,19 @@ const CREATE_COMMENT = "/create_comment";
 const UPDATE_COMMENT = "/update_comment/:id";
 const DELETE_COMMENT = "/delete_comment/:id";
 
+// Works
+const WORKS = "/works";
+const CREATE_WORK = "/create";
+const DELETE_WORK = "/delete/:work_id";
+const UPDATE_WORK = "/update/:work_id";
+const READ_WORKS = "/read";
+
+// Applies
+const APPLIES = "/apply";
+const CREATE_APPLY = "/create";
+const DELETE_APPLY = "/delete/:apply_id";
+const UPDATE_APPLY = "/update/:apply_id";
+const READ_APPLIES = "/read";
 
 const routes = {
     users : USERS,
@@ -51,7 +64,19 @@ const routes = {
     read_comment : READ_COMMENT,
     create_comment : CREATE_COMMENT,
     update_comment : UPDATE_COMMENT,
-    delete_comment : DELETE_COMMENT
+    delete_comment : DELETE_COMMENT,
+
+    works : WORKS,
+    create_work : CREATE_WORK,
+    delete_work : DELETE_WORK,
+    update_work : UPDATE_WORK,
+    read_works : READ_WORKS,
+
+    applies : APPLIES,
+    create_apply : CREATE_APPLY,
+    delete_apply : DELETE_APPLY,
+    update_apply : UPDATE_APPLY,
+    read_applies : READ_APPLIES,
 }
 
 export default routes;

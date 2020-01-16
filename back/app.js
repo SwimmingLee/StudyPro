@@ -12,8 +12,10 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser"
 import userRouter from "./routers/userRouter"
 import studyRouter from "./routers/studyRouter"
+import workRouter from "./routers/workRouter"
 import commentRouter from "./routers/commentRouter"
 import common_postRouter from "./routers/common_postRouter"
+import applyRouter from "./routers/applyRouter"
 import routes from "./routes"
 
 const app = express()
@@ -35,6 +37,8 @@ app.use(routes.users, userRouter);
 app.use(routes.studys, studyRouter);
 app.use(routes.comments, commentRouter);
 app.use(routes.common_posts, common_postRouter);
+app.use(routes.works, workRouter);
+app.use(routes.applies, applyRouter)
 
 // sequelize.sync()
 
