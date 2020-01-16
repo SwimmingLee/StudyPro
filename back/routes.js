@@ -10,6 +10,9 @@ const SIGNIN = "/signin";
 const STUDYS = "/studys";
 const CREATE_STIDY = "/create";
 const JOIN_STUDY = "/join"
+const DELETE_STUDY = "/delete"
+const UPDATE_STUDY = "/update/:study_id"
+
 
 const routes = {
     users : USERS,
@@ -21,6 +24,8 @@ const routes = {
     studys : STUDYS,
     create_study : CREATE_STIDY,
     join_study: JOIN_STUDY,
+    delete_study: DELETE_STUDY,
+    update_study: UPDATE_STUDY,
 }
 
 export default routes;
