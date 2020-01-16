@@ -21,6 +21,8 @@ const routes = {
     studys : STUDYS,
     create_study : CREATE_STIDY,
     join_study: JOIN_STUDY,
+    delete_study: DELETE_STUDY,
+    update_study: UPDATE_STUDY,
 }
 
 export default routes;
