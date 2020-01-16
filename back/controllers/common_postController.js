@@ -1,24 +1,20 @@
-import jsonwebtoken from "jsonwebtoken"
 import {users} from "../models"
 
 const jwt = jsonwebtoken
 
-export const userDetail = (req, res) => res.send("UserDetail");
-
-export const changePassword = (req, res) => res.send("ChangePassword");
-
-export const signin = function(req, res, next) {
+export const post_save = function(req, res, next) {
     const {email, password} = req.body;
+
+    let token = jwt.sign(
+        {email},
+        process.env.SECRET_KEY,
+        {expiresIn : '5m'}
+    )
 
     users.findOne({where: {email}})
         .then(user => {
             if (user) {
                 if (user.verify(password)) {
-                    let token = jwt.sign(
-                        {nickname:user.dataValues.nickname},
-                        process.env.SECRET_KEY,
-                        {expiresIn : '5m'}
-                    )
                     res.cookie("user", token)
                     res.json({
                         token: token,

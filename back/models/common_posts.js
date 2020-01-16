@@ -20,6 +20,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    board: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
     created_date: {
       type: DataTypes.DATE,
       allowNull: true
@@ -32,5 +36,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'common_posts'
   });
+
+  
   return common_posts;
 };
