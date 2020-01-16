@@ -1,4 +1,4 @@
-# webproject
+# front-sk
 
 ## Project setup
 ```
