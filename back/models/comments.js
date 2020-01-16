@@ -43,7 +43,7 @@ module.exports = function(sequelize, DataTypes) {
       {
         writer : user_id,
         study_post_id : study_post_id,
-        content = content,
+        content : content,
         
       }
     )

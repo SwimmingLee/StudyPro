@@ -26,17 +26,24 @@ module.exports = function(sequelize, DataTypes) {
     },
     created_date: {
       type: DataTypes.DATE,
-      allowNull: true
+      defaultValue: DataTypes.NOW,
     },
     view: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: '0'
+      defaultValue: '0',
     }
   }, {
     tableName: 'common_posts'
   });
 
+  common_posts.create_common_post = function(post){
+    return this.create({
+      writer:post.writer, 
+      content:post.content,
+      board:post.board,
+    })
+  }
   
   return common_posts;
 };
