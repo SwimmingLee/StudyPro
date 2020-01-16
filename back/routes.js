@@ -10,6 +10,9 @@ const SIGNIN = "/signin";
 const STUDYS = "/studys";
 const CREATE_STIDY = "/create";
 const JOIN_STUDY = "/join"
+const DELETE_STUDY = "/delete"
+const UPDATE_STUDY = "/update/:study_id"
+
 
 const routes = {
     users : USERS,

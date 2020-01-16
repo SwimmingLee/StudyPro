@@ -59,11 +59,9 @@ export const delete_study = async function(req, res) {
 export const update_study = async function(req, res) {
     const study_id =  req.params.study_id
 
-    const study = await studies.findOne({id: study_id})
-
+    const study = await studies.findOne({where:{id: study_id}})
     if (!study) {
         res.send("Wrong ID")
-        throw new Error("Wrong ID")
     } else {
         studies.update(req.body, {where: {id:study_id}})
         res.send(`${study_id}번 스터디 변경완료`)
