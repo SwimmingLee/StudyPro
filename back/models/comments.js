@@ -1,5 +1,6 @@
 /* jshint indent: 2 */
 
+
 module.exports = function(sequelize, DataTypes) {
   const comments = sequelize.define('comments', {
     id: {
@@ -35,6 +36,18 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'comments'
   });
+
+
+  comments.create_comment = async function(user_id, study_post_id,content){
+    comments.create(
+      {
+        writer : user_id,
+        study_post_id : study_post_id,
+        content = content,
+        
+      }
+    )
+  }
 
   return comments;
 };

@@ -31,6 +31,7 @@ app.use(morgan("dev"));
 app.use(localsMiddelWare)
 app.use(routes.users, userRouter);
 app.use(routes.studys, studyRouter);
+app.use(routes.comments, commentRouter);
 
 // sequelize.sync()
 
