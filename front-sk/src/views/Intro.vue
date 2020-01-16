@@ -15,18 +15,14 @@
         <div class="container shape-container align-items-center">
             <div class="col px-0">
                 <div class="row justify-content-center align-items-center">
-                    <div class="col-lg-7 text-center pt-lg">
+                    <div class="col-lg-10 text-center pt-lg">
                         <br><br>
-                        <img src="@/assets/images/logo.png" style="width: 200px;" class="img-fluid">
-                        <p class="lead text-white mt-4 mb-5">온라인으로 끝까지 공부하는 가장 확실한 방법!<br>스터디프로</p>
+                        <img src="@/assets/images/logo_brown.png" style="width: 500px;" class="img-fluid">
+                        <p style="text-align:left;font-size:250%;color:white"><br>온라인으로 끝까지 공부하는 가장 확실한 방법!<br>스터디 프로</p>
+                       <!-- <p class="lead text-white mt-4 mb-5">온라인으로 끝까지 공부하는 가장 확실한 방법!<br>스터디프로</p>-->
                         <div class="btn-wrapper">
                             <router-link to="/main">
-                                <button
-                                            class="mb-3 mb-sm-0"
-                                            type="info"
-                                            icon="fa fa-sign-in">
-                                    Enter
-                                </button>
+                                <button class="btn" id="btn" type="submit"><img class="btn-img" src="@/assets/images/enterbutton.png" style="width:300px"></button>
                             </router-link>
                         </div>
                     </div>
@@ -35,6 +31,7 @@
         </div>
     </section>
 </template>
+
 <script>
 
 export default {

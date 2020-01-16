@@ -1,21 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Router from 'vue-router'
-import routes from './routes'
-import store from './vuex/store'
-import StudyPro from './plugins/studyPro.js'
+import './registerServiceWorker'
+import router from './router'
+import store from './store'
+import StudyPro from './plugins/studyPro';
 
 Vue.config.productionTip = false
 
-Vue.use(Router);
-Vue.use(StudyPro);
-
-const router = new Router({
-    routes,
-});
+Vue.use(StudyPro)
 
 new Vue({
     router,
     store,
-    render: h => h(App),
-}).$mount('#app');
+    render: h => h(App)
+}).$mount('#app')

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 <template>
     <div class="wrap components-page">
         <div class="wrapB">
@@ -133,14 +134,14 @@
                         title: '확인',
                         highlight: true,
                         onClick: () => {
-                            console.log('클릭')
+                            // console.log('클릭')
 
                         }
                     },
                     {
                         title: '취소',
                         onClick: () => {
-                            console.log('클릭')
+                            // console.log('클릭')
                         }
                     }
                 ],
