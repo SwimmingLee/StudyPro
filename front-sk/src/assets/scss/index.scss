@@ -1,0 +1,14 @@
+// Core
+@import "bootstrap/functions";
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+@import "custom/functions";
+@import "custom/variables";
+@import "custom/mixins";
+// Bootstrap components
+@import "bootstrap/reboot";
+// Custom
+@import './custom/custom.scss';
+// Vendor
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';

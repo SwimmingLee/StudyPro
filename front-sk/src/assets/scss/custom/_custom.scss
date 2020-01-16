@@ -1,0 +1,319 @@
+// Intro sections
+.section-intro {
+    @include media-breakpoint-up(md) {
+        height: 100vh;
+        min-height: 300px;
+    }
+}
+
+// Circle sections
+.section-shaped {
+    height: 100vh;
+    margin: 180px 0;
+    position: relative;
+    .stars-and-coded {
+        margin-top: 8rem;
+    }
+    .shape {
+        position: absolute;
+        top: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        span {
+            position: absolute;
+        }
+        +.container {
+            position: relative;
+            padding-top: 0rem;
+            padding-bottom: 0rem;
+            height: 100%;
+        }
+        &.shape-skew {
+            +.container {
+                padding-top: 0;
+                .col {
+                    margin-top: -100px;
+                }
+            }
+            +.shape-container {
+                padding-top: 18rem;
+                padding-bottom: 19rem;
+            }
+        }
+    }
+    .shape-skew {
+        transform: skewY(-8deg);
+        transform-origin: 0;
+        span {
+            transform: skew(8deg);
+        }
+    }
+    // Color variations
+    .shape-primary {
+        background: linear-gradient(150deg, shapes-primary-color("step-1-gradient-bg") 15%, shapes-primary-color("step-2-gradient-bg") 70%, shapes-primary-color("step-3-gradient-bg") 94%);
+         :nth-child(1) {
+            background: shapes-primary-color("span-1-bg");
+        }
+         :nth-child(2) {
+            background: shapes-primary-color("span-2-bg");
+        }
+         :nth-child(3) {
+            background: shapes-primary-color("span-3-bg");
+        }
+         :nth-child(4) {
+            background: shapes-primary-color("span-4-bg");
+        }
+         :nth-child(5) {
+            background: shapes-primary-color("span-5-bg");
+        }
+    }
+    .shape-default {
+        background: linear-gradient(150deg, shapes-default-color("step-1-gradient-bg") 15%, shapes-default-color("step-2-gradient-bg") 70%, shapes-default-color("step-3-gradient-bg") 94%);
+         :nth-child(1) {
+            background: shapes-default-color("span-1-bg");
+        }
+         :nth-child(2) {
+            background: shapes-default-color("span-2-bg");
+        }
+         :nth-child(3) {
+            background: shapes-default-color("span-3-bg");
+        }
+         :nth-child(4) {
+            background: shapes-default-color("span-4-bg");
+        }
+         :nth-child(5) {
+            background: shapes-default-color("span-5-bg");
+        }
+    }
+    .shape-light {
+        background: linear-gradient(150deg, shapes-light-color("step-1-gradient-bg") 15%, shapes-light-color("step-2-gradient-bg") 70%, shapes-light-color("step-3-gradient-bg") 94%);
+         :nth-child(1) {
+            background: shapes-light-color("span-1-bg");
+        }
+         :nth-child(2) {
+            background: shapes-light-color("span-2-bg");
+        }
+         :nth-child(3) {
+            background: shapes-light-color("span-3-bg");
+        }
+         :nth-child(4) {
+            background: shapes-light-color("span-4-bg");
+        }
+         :nth-child(5) {
+            background: shapes-light-color("span-5-bg");
+        }
+    }
+    .shape-dark {
+        background: linear-gradient(150deg, shapes-dark-color("step-1-gradient-bg") 15%, shapes-dark-color("step-2-gradient-bg") 70%, shapes-dark-color("step-3-gradient-bg") 94%);
+         :nth-child(1) {
+            background: shapes-dark-color("span-1-bg");
+        }
+         :nth-child(2) {
+            background: shapes-dark-color("span-2-bg");
+        }
+         :nth-child(3) {
+            background: shapes-dark-color("span-3-bg");
+        }
+         :nth-child(4) {
+            background: shapes-dark-color("span-4-bg");
+        }
+         :nth-child(5) {
+            background: shapes-dark-color("span-5-bg");
+        }
+    }
+    .shape-style-1 {
+        span {
+            height: 120px;
+            width: 120px;
+            border-radius: 50%;
+        }
+        .span-200 {
+            height: 200px;
+            width: 200px;
+        }
+        .span-150 {
+            height: 150px;
+            width: 150px;
+        }
+        .span-100 {
+            height: 100px;
+            width: 100px;
+        }
+        .span-75 {
+            height: 75px;
+            width: 75px;
+        }
+        .span-50 {
+            height: 50px;
+            width: 50px;
+        }
+         :nth-child(1) {
+            left: -4%;
+            bottom: auto;
+            background: rgba(255, 255, 255, .1);
+        }
+         :nth-child(2) {
+            right: 4%;
+            top: 10%;
+            background: rgba(255, 255, 255, .1);
+        }
+         :nth-child(3) {
+            top: 280px;
+            right: 5.66666%;
+            background: rgba(255, 255, 255, .3);
+        }
+         :nth-child(4) {
+            top: 320px;
+            right: 7%;
+            background: rgba(255, 255, 255, .15);
+        }
+         :nth-child(5) {
+            top: 38%;
+            left: 1%;
+            right: auto;
+            background: rgba(255, 255, 255, .05);
+        }
+         :nth-child(6) {
+            width: 200px;
+            height: 200px;
+            top: 44%;
+            left: 10%;
+            right: auto;
+            background: rgba(255, 255, 255, .15);
+        }
+         :nth-child(7) {
+            bottom: 50%;
+            right: 36%;
+            background: rgba(255, 255, 255, .04);
+        }
+         :nth-child(8) {
+            bottom: 70px;
+            right: 2%;
+            background: rgba(255, 255, 255, .2);
+        }
+         :nth-child(9) {
+            bottom: 1%;
+            right: 2%;
+            background: rgba(255, 255, 255, .1);
+        }
+         :nth-child(10) {
+            bottom: 1%;
+            left: 1%;
+            right: auto;
+            background: rgba(255, 255, 255, .05);
+        }
+        @include media-breakpoint-down(md) {
+            span {
+                height: 120px;
+            }
+        }
+        @include media-breakpoint-down(sm) {
+            span {
+                height: 90px;
+            }
+        }
+        // shape color variations
+        &.shape-primary {
+            background: linear-gradient(150deg, shapes-primary-color("step-1-gradient-bg") 15%, shapes-primary-color("step-2-gradient-bg") 70%, shapes-primary-color("step-3-gradient-bg") 94%);
+        }
+        &.shape-default {
+            background: linear-gradient(150deg, shapes-default-color("step-1-gradient-bg") 15%, shapes-default-color("step-2-gradient-bg") 70%, shapes-default-color("step-3-gradient-bg") 94%);
+        }
+        &.shape-light {
+            background: linear-gradient(150deg, shapes-light-color("step-1-gradient-bg") 15%, shapes-light-color("step-2-gradient-bg") 70%, shapes-light-color("step-3-gradient-bg") 94%);
+        }
+        &.shape-dark {
+            background: linear-gradient(150deg, shapes-dark-color("step-1-gradient-bg") 15%, shapes-dark-color("step-2-gradient-bg") 70%, shapes-dark-color("step-3-gradient-bg") 94%);
+        }
+    }
+    // Styles - works with a color variation class (e.g shapes-default)
+    .shape-style-2 {
+        span {
+            height: 190px;
+        }
+        .span-sm {
+            height: 100px;
+        }
+         :nth-child(1) {
+            width: 33.33333%;
+            top: 0;
+            left: -16.66666%;
+        }
+         :nth-child(2) {
+            width: 33.33333%;
+            top: 0;
+            left: 16.66666%;
+            right: auto;
+        }
+         :nth-child(3) {
+            width: 33.33333%;
+            left: 49.99999%;
+            bottom: auto;
+        }
+         :nth-child(4) {
+            width: 33.33333%;
+            top: 55%;
+            right: -16.66666%;
+        }
+         :nth-child(5) {
+            width: 33.33333%;
+            bottom: 0;
+        }
+        @include media-breakpoint-down(md) {
+            span {
+                height: 120px;
+            }
+        }
+        @include media-breakpoint-down(sm) {
+            span {
+                height: 90px;
+            }
+        }
+    }
+    .shape-style-3 {
+        span {
+            height: 140px;
+        }
+        .span-sm {
+            height: 100px;
+        }
+         :nth-child(1) {
+            width: 66%;
+            left: -16.66666%;
+            bottom: auto;
+        }
+         :nth-child(2) {
+            width: 40%;
+            top: 54%;
+            //height: 320px;
+            right: -16.66666%;
+        }
+         :nth-child(3) {
+            width: 33.33333%;
+            top: 34%;
+            left: -16.66666%;
+            right: auto;
+        }
+         :nth-child(4) {
+            width: 60%;
+            bottom: 0;
+            right: -16.66666%;
+            opacity: .6;
+        }
+         :nth-child(5) {
+            width: 33.33333%;
+            bottom: 0;
+        }
+        @include media-breakpoint-down(md) {
+            span {
+                height: 120px;
+            }
+        }
+        @include media-breakpoint-down(sm) {
+            span {
+                height: 90px;
+            }
+        }
+    }
+}
