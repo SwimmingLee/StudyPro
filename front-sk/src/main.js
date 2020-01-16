@@ -1,16 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
-import './registerServiceWorker'
-import router from './router'
-import store from './store'
-import StudyPro from './plugins/studyPro';
+import vuetify from './plugins/vuetify';
+
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import '@mdi/font/css/materialdesignicons.css'
 
 Vue.config.productionTip = false
 
-Vue.use(StudyPro)
-
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+  vuetify,
+  render: h => h(App)
 }).$mount('#app')
