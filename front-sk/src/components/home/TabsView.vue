@@ -1,13 +1,8 @@
 <template>
     <v-slide-group
-    v-model="model"
-    class="pa-4"
-    :prev-icon="prevIcon"
-    :next-icon="nextIcon"
-    :multiple="multiple"
-    :mandatory="mandatory"
-    :show-arrows="showArrows"
-    :center-active="centerActive"
+        class="pa-4"
+        multiple
+        show-arrows
     >
     <v-slide-item
         v-for="n in 15"

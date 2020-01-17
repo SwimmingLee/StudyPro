@@ -1,6 +1,5 @@
 <template>
   <v-toolbar sylte="height=56px">
-    <v-toolbar-side-icon></v-toolbar-side-icon>
     <v-toolbar-title>
       <v-img src="@/assets/images/logo_brown.png" style="width:60px; height:50px"/>
     </v-toolbar-title>

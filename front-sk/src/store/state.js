@@ -1,3 +1,5 @@
 export default [{
-    isUser: false
+    uid: '',
+    token: '',
+    isAuth: false,
 }]
