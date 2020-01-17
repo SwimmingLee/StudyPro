@@ -35,7 +35,10 @@ export const read_work = async function(req, res) {
     const result = await works.read_work(work_id)
 
     if (!result) {
-        res.send("없는 지원입니다")
+        res.send({
+            "state": "fail",
+            "detail": "Wrong id"
+        })
     }
     else {
         const study = await studies.findOne({where:{id:result.study_id}})

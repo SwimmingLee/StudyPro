@@ -12,10 +12,10 @@ export const create_study = async function(req, res) {
         // tag모델에 추가하는 과정
     }
     const result = await studies.create_study(wrong_id, data)
-    if (typeof result == "string") {res.send(result)}
+    if (result.state === "fail") {res.send(result)}
     else {
-        users_and_studies.join_to_study(data.captain, result[1].id, false, false)
-        res.send(result[0])
+        users_and_studies.join_to_study(data.captain, result.detail[1].id, false, false)
+        res.send(result.detail[0])
     }
 }
 
@@ -76,7 +76,6 @@ export const read_study = async function(req, res) {
 export const search_studies = async function(req, res) {
     const searching_captain = await users.findOne({where:{name: req.body.captain}})
     let searching_captain_id = searching_captain ? searching_captain.id : -1
-    // if (searching_captain) {searching_captain_id = searching_captain.id}
 
     const result = await studies.search_studies(req.body, searching_captain_id)
     let study

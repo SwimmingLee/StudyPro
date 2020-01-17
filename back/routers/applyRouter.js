@@ -8,6 +8,6 @@ const applyRouter = express.Router();
 applyRouter.post(routes.apply, create_apply)
 applyRouter.delete(routes.apply_detail, delete_apply)
 applyRouter.put(routes.apply_detail, update_apply)
-applyRouter.post(routes.apply_detail, read_apply)
+applyRouter.get(routes.apply_detail, read_apply)
 
 export default applyRouter;

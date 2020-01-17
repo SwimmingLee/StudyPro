@@ -29,13 +29,22 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   users_and_studies.join_to_study = async function(user_id, study_id, wrong_id, already_join) {
-    if (wrong_id) {return "Wrong id"}
-    else if (already_join) {return "이미 가입한 스터디입니다"}
+    if (wrong_id) {return {
+      "state": "fail",
+      "detail": "wrong id"
+    }}
+    else if (already_join) {return {
+      "state": "fail",
+      "detail": "이미 가입한 스터디입니다"
+    }}
     else {
       users_and_studies.create({
         user_id, study_id
       })
-      return `${user_id}번 유저가 ${study_id}번 스터디에 가입하였습니다.`
+      return {
+        "state": "success",
+        "detail": `${user_id}번 유저가 ${study_id}번 스터디에 가입하였습니다.`
+      }
     }
 
   }
