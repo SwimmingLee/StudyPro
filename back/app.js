@@ -8,7 +8,8 @@ import helmet from "helmet"
 import cookieParser from "cookie-parser"
 import { localsMiddelWare } from "./middleware"
 import dotenv from "dotenv";
-// import sequelize from "./models/index"
+import cors from "cors";
+
 import bodyParser from "body-parser"
 import userRouter from "./routers/userRouter"
 import studyRouter from "./routers/studyRouter"
@@ -21,11 +22,8 @@ import routes from "./routes"
 
 const app = express()
 dotenv.config();
-// var sequelize = require('./models/index').sequelize;
 
-app.engine('pug', require('pug').__express)
-app.set('view engine', 'pug');
-//app.set('views', './views');
+app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -42,7 +40,6 @@ app.use(routes.common_posts, common_postRouter);
 app.use(routes.works, workRouter);
 app.use(routes.applies, applyRouter)
 
-// sequelize.sync()
 
 export default app;
 
