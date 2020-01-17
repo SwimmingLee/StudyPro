@@ -9,7 +9,7 @@
                         <p>
                         온라인으로 끝까지 공부하는 가장 확실한 방법!<br>스터디 프로</p>
                         <div>
-                            <router-link to="/main">
+                            <router-link to="/home">
                                 <button id="btn" type="submit"><img class="btn-img" src="@/assets/images/enterbutton.png" style="width:300px"></button>
                             </router-link>
                         </div>

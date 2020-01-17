@@ -1,40 +1,28 @@
 <template>
   <div id="home">
     <banner />
-   <v-container fluid>
+    <v-container fluid>
     <v-row>
       <v-col cols="8">
-          <v-card
-            class="pa-1"
-            outlined
-            tile
-          >
+          <v-card class="pa-1" outlined tile>
             <top-left/>
           </v-card>
       </v-col>
       <v-col cols="4">
-          <v-card
-            class="pa-1"
-            outlined
-            tile
-          >
+          <v-card class="pa-1" outlined tile>
             <top-right/>
           </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">
-          <v-card
-            class="pa-1"
-            outlined
-            tile
-          >
+          <v-card class="pa-1" outlined tile>
             <middle/>
           </v-card>
       </v-col>
     </v-row>
-  </v-container>
-  </div>
+    </v-container>
+  </div> 
 </template>
 
 <script>

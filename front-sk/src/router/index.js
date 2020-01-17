@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import intro from '../views/Intro'
 import home from '../views/Home'
-// import appHeader from '@/components/common/Header'
+import appHeader from '@/components/common/Header'
 
 Vue.use(VueRouter)
 
@@ -19,7 +19,7 @@ const routes = [{
         path: '/home',
         name: 'home',
         components: {
-            header: null,
+            header: appHeader,
             default: home,
             footer: null
         }
