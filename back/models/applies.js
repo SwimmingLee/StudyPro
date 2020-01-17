@@ -33,15 +33,18 @@ module.exports = function(sequelize, DataTypes) {
   });
 
 
-  applies.create_apply = async function(data) {
+  applies.create_apply = async function(wrong_id, data) {
     const user_id = data.user_id
     const study_id = data.study_id
 
     const apply = await this.findOne({where:{user_id, study_id}})
     if (apply) {return "이미 가입신청한 스터디입니다"}
     else {
-      this.create(data)
-      return `${user_id}번 유저가 ${study_id}번 스터디에 가입신청 하였습니다`
+      if (wrong_id) {return "Wrong id"}
+      else {
+        this.create(data)
+        return `${user_id}번 유저가 ${study_id}번 스터디에 가입신청 하였습니다`
+      }
     }
   }
 
@@ -63,9 +66,9 @@ module.exports = function(sequelize, DataTypes) {
     }    
   }
 
-  applies.read_applies = async function(study_id) {
-    const applies = await this.findAll({where:{study_id}})
-    return applies
+  applies.read_apply = async function(apply_id) {
+    const apply = await this.findOne({where:{id:apply_id}})
+    return apply
   }
   return applies;
 };

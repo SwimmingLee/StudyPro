@@ -9,6 +9,7 @@ const SIGNIN = "/signin";
 const STUDIES = "/studies";
 const STUDY = "/";
 const STUDY_DETAIL = "/:study_id";
+const STUDY_SEARCH = "/search";
 
 // Common Post
 const COMMON_POSTS = "/common_posts";
@@ -46,6 +47,7 @@ const routes = {
     studies : STUDIES,
     study : STUDY,
     study_detail : STUDY_DETAIL,
+    study_search : STUDY_SEARCH,
 
     common_posts : COMMON_POSTS,
     common_post : COMMON_POST,

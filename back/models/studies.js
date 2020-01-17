@@ -1,4 +1,5 @@
 /* jshint indent: 2 */
+import {Op} from "sequelize"
 
 module.exports = function(sequelize, DataTypes) {
   const studies = sequelize.define('studies', {
@@ -13,6 +14,14 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       references: {
         model: 'minor_classes',
+        key: 'id'
+      }
+    },
+    captain: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
         key: 'id'
       }
     },
@@ -74,14 +83,20 @@ module.exports = function(sequelize, DataTypes) {
   }
 
 
-  studies.create_study = async function(data) {
-
+  studies.create_study = async function(wrong_id, data) {
+    if (wrong_id) {return "Wrong id"}
     const study = await this.findOne({where: {name:data.name}})
     if (study) {
         return "이미 존재하는 스터디 이름입니다"
     } else {
-        this.create(data)
-        return `${data.name}이 생성되었습니다.`
+        
+        if (data.start_time && data.end_time) {
+          if (data.start_time > data.end_time) {
+            return "시간이 잘못설정되었습니다."
+          }
+        }
+        const created_study = await this.create(data)
+        return [`${data.name}이 생성되었습니다.`, created_study]
     }
   }
 
@@ -93,6 +108,59 @@ module.exports = function(sequelize, DataTypes) {
         this.update(data, {where: {id:study_id}})
         return `${study_id}번 스터디 변경완료`
     }
+  }
+
+  studies.read_study = async function(study_id) {
+    const study = await this.findOne({where:{id: study_id}})
+    if (!study) {
+      return "Wrong id"
+    } else {
+      return study
+    }
+  }
+
+  studies.search_studies = async function(data, captain_id) {
+
+
+    let where = {}
+    let key
+    for (key of Object.keys(data)) {
+
+      switch (key) {
+        case "name":
+          where["name"] = {[Op.like]: "%" + data.name + "%"};
+          break;
+
+        case "start_time", "start_date":
+          where[`${key}`] = {
+            [Op.or]: [
+              { [Op.lte] : data[`${key}`] },
+              null
+            ]
+          };
+          break;
+
+        case "end_time":
+          where["end_time"] = {
+            [Op.or]: [
+              { [Op.gte] : data.end_time },
+              null
+            ]
+          };
+          break;
+
+        case "captain":
+          where["captain"] = captain_id;
+          break;
+
+        default:
+          where[`${key}`] = data[`${key}`];
+          break;
+      }
+    }
+
+    const result = await this.findAll({where})
+    return result
   }
 
   return studies;

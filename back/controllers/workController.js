@@ -29,9 +29,25 @@ export const update_work = async function(req, res) {
     res.send(result)
 }
 
-export const read_works = async function(req, res) {
-    const study_id = req.body.study_id
+export const read_work = async function(req, res) {
+    const work_id = req.params.work_id
 
-    const result = await works.read_works_by_study(study_id)
-    res.send(result)
+    const result = await works.read_work(work_id)
+
+    if (!result) {
+        res.send("없는 지원입니다")
+    }
+    else {
+        const study = await studies.findOne({where:{id:result.study_id}})
+        const user = await users.findOne({where:{id:result.writer}})
+        delete result.dataValues.writer
+
+        delete user.dataValues.password
+        delete user.dataValues.auth
+
+        result.dataValues.study = study
+        result.dataValues.writer = user
+
+        res.send(result)
+    }
 }
