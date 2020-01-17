@@ -28,5 +28,17 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'common_post_likes'
   });
 
+
+  common_post_likes.toggle_post_like = function(status) {
+    if (islike === 1) {
+      common_post_likes.destroy({where: {user_id, post_id}})
+    }
+    else {
+      common_post_likes.create({
+        common_post_id:post_id,
+        user_id:user_id
+      })
+    }
+  }
   return common_post_likes;
 };

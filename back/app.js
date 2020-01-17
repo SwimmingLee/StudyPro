@@ -34,7 +34,7 @@ app.use(morgan("dev"));
 
 app.use(localsMiddelWare)
 app.use(routes.users, userRouter);
-app.use(routes.studys, studyRouter);
+app.use(routes.studies, studyRouter);
 app.use(routes.comments, commentRouter);
 app.use(routes.common_posts, common_postRouter);
 app.use(routes.works, workRouter);
