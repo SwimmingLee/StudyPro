@@ -6,9 +6,9 @@ import {create_work, delete_work, update_work, read_works} from "../controllers/
 
 const workRouter = express.Router();
 
-workRouter.post(routes.create_work, create_work);
-workRouter.delete(routes.delete_work, delete_work);
-workRouter.put(routes.update_work, update_work);
-workRouter.post(routes.read_works, read_works)
+workRouter.post(routes.work, create_work);
+workRouter.delete(routes.work_detail, delete_work);
+workRouter.put(routes.work_detail, update_work);
+workRouter.post(routes.work_detail, read_works)
 
 export default workRouter;

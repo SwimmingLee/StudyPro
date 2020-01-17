@@ -1,45 +1,34 @@
-
 // User
 const USERS  = "/users";
-const USER_DETAIL = "/:id";
+const USER_DETAIL = "/:user_id";
 const CHANGE_PASSWARD = "/change-password";
 const SIGNUP = "/signup";
 const SIGNIN = "/signin";
 
 // Study
-const STUDYS = "/studys";
-const CREATE_STIDY = "/create";
-const JOIN_STUDY = "/join";
-const DELETE_STUDY = "/delete";
-const UPDATE_STUDY = "/update/:study_id";
+const STUDIES = "/studies";
+const STUDY = "/";
+const STUDY_DETAIL = "/:study_id";
 
 // Common Post
-const COMMON_POSTS = "/common_post";
-const READ_COMMON_POST = "/read";
-const CREATE_COMMON_POST = "/create";
-const DELETE_COMMON_POST = "/delete";
-const UPDATE_COMMON_POST = "/update";
+const COMMON_POSTS = "/common_posts";
+const COMMON_POST = "/";
+const COMMON_POST_DETAIL = "/:post_id";
 
 // Comments
-const COMMENTS = "/comment";
-const READ_COMMENT = "/read_comment";
-const CREATE_COMMENT = "/create_comment";
-const UPDATE_COMMENT = "/update_comment/:id";
-const DELETE_COMMENT = "/delete_comment/:id";
+const COMMENTS = "/comments";
+const COMMENT = "/";
+const COMMENT_DETAIL = "/:commnet_id";
 
 // Works
 const WORKS = "/works";
-const CREATE_WORK = "/create";
-const DELETE_WORK = "/delete/:work_id";
-const UPDATE_WORK = "/update/:work_id";
-const READ_WORKS = "/read";
+const WORK = "/";
+const WORK_DETAIL = "/:work_id";
 
 // Applies
-const APPLIES = "/apply";
-const CREATE_APPLY = "/create";
-const DELETE_APPLY = "/delete/:apply_id";
-const UPDATE_APPLY = "/update/:apply_id";
-const READ_APPLIES = "/read";
+const APPLIES = "/applies";
+const APPLY = "/";
+const APPLY_DETAIL = "/:apply_id";
 
 const routes = {
     users : USERS,
@@ -48,35 +37,26 @@ const routes = {
     signup : SIGNUP,
     signin : SIGNIN,
 
-    studys : STUDYS,
-    create_study : CREATE_STIDY,
-    join_study: JOIN_STUDY,
-    delete_study: DELETE_STUDY,
-    update_study: UPDATE_STUDY,
+    studies : STUDIES,
+    study : STUDY,
+    study_detail : STUDY_DETAIL,
 
     common_posts : COMMON_POSTS,
-    read_common_post : READ_COMMON_POST,
-    create_common_post : CREATE_COMMON_POST,
-    delete_common_post : DELETE_COMMON_POST,
-    update_common_post : UPDATE_COMMON_POST,
+    common_post : COMMON_POST,
+    common_post_detail : COMMON_POST_DETAIL,
 
     comments : COMMENTS,
-    read_comment : READ_COMMENT,
-    create_comment : CREATE_COMMENT,
-    update_comment : UPDATE_COMMENT,
-    delete_comment : DELETE_COMMENT,
+    comment : COMMENT,
+    comment_detail : COMMENT_DETAIL,
 
     works : WORKS,
-    create_work : CREATE_WORK,
-    delete_work : DELETE_WORK,
-    update_work : UPDATE_WORK,
-    read_works : READ_WORKS,
-
+    work : WORK,
+    work_detail : WORK_DETAIL,
+    
     applies : APPLIES,
-    create_apply : CREATE_APPLY,
-    delete_apply : DELETE_APPLY,
-    update_apply : UPDATE_APPLY,
-    read_applies : READ_APPLIES,
+    apply : APPLY,
+    apply_detail : APPLY_DETAIL,
+
 }
 
 export default routes;
