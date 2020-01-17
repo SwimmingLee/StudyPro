@@ -13,8 +13,8 @@ import bodyParser from "body-parser"
 import userRouter from "./routers/userRouter"
 import studyRouter from "./routers/studyRouter"
 import workRouter from "./routers/workRouter"
-import common_commentRouter from "./routers/common_commentRouter"
-import study_commentRouter from "./routers/study_commentRouter"
+import commentRouter from "./routers/commentRouter"
+// import study_commentRouter from "./routers/study_commentRouter"
 import common_postRouter from "./routers/common_postRouter"
 import applyRouter from "./routers/applyRouter"
 import routes from "./routes"
@@ -36,8 +36,8 @@ app.use(morgan("dev"));
 app.use(localsMiddelWare)
 app.use(routes.users, userRouter);
 app.use(routes.studies, studyRouter);
-app.use(routes.common_comments, common_commentRouter);
-app.use(routes.study_comments, study_commentRouter);
+app.use(routes.comments, commentRouter);
+// app.use(routes.study_comments, study_commentRouter);
 app.use(routes.common_posts, common_postRouter);
 app.use(routes.works, workRouter);
 app.use(routes.applies, applyRouter)
