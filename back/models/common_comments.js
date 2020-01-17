@@ -1,8 +1,7 @@
 /* jshint indent: 2 */
 
-
 module.exports = function(sequelize, DataTypes) {
-  const comments = sequelize.define('comments', {
+  const common_comments =  sequelize.define('common_comments', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -17,11 +16,11 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    study_post_id: {
+    post_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'study_posts',
+        model: 'common_posts',
         key: 'id'
       }
     },
@@ -34,20 +33,8 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'comments'
+    tableName: 'common_comments'
   });
 
-
-  comments.create_comment = async function(user_id, study_post_id,content){
-    comments.create(
-      {
-        writer : user_id,
-        study_post_id : study_post_id,
-        content : content,
-        
-      }
-    )
-  }
-
-  return comments;
+  return common_comments;
 };
