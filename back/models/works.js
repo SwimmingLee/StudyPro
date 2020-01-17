@@ -75,10 +75,10 @@ module.exports = function(sequelize, DataTypes) {
     }
   }
 
-  works.read_works_by_study = async function(study_id) {
-    const works = await this.findAll({where:{study_id}})
+  works.read_work = async function(work_id) {
+    const work = await this.findOne({where:{id:work_id}})
     
-    return works
+    return work
   }
   return works;
 };
