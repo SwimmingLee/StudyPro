@@ -16,14 +16,14 @@ const COMMON_POST = "/";
 const COMMON_POST_DETAIL = "/:post_id";
 
 // Common Comments
-const COMMON_COMMENTS = "/common_comments";
-const COMMON_COMMENT = "/";
-const COMMON_COMMENT_DETAIL = "/:common_commnet_id";
+const COMMENTS = "/comments";
+const COMMENT = "/";
+// const COMMON_COMMENT_DETAIL = "/:common_commnet_id";
 
-// Common Comments
-const STUDY_COMMENTS = "/study_comments";
-const STUDY_COMMENT = "/";
-const STUDY_COMMENT_DETAIL = "/:study_commnet_id";
+// // Common Comments
+// const STUDY_COMMENTS = "/study_comments";
+// const STUDY_COMMENT = "/";
+// const STUDY_COMMENT_DETAIL = "/:study_commnet_id";
 
 
 // Works
@@ -51,13 +51,13 @@ const routes = {
     common_post : COMMON_POST,
     common_post_detail : COMMON_POST_DETAIL,
 
-    common_comments : COMMON_COMMENTS,
-    common_comment : COMMON_COMMENT,
-    common_comment_detail : COMMON_COMMENT_DETAIL,
+    comments : COMMENTS,
+    comment : COMMENT,
+    // comment_detail : COMMON_COMMENT_DETAIL,
 
-    study_comments : STUDY_COMMENTS,
-    study_comment : STUDY_COMMENT,
-    study_comment_detail : STUDY_COMMENT_DETAIL,
+    // study_comments : STUDY_COMMENTS,
+    // study_comment : STUDY_COMMENT,
+    // study_comment_detail : STUDY_COMMENT_DETAIL,
 
     works : WORKS,
     work : WORK,
