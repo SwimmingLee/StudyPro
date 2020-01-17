@@ -2,8 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import studyPro from './plugins/studyPro';
 import vuetify from './plugins/vuetify'
+import studyPro from './plugins/studyPro';
 import './registerServiceWorker'
 
 Vue.config.productionTip = false

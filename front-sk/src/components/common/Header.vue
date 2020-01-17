@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar>
+  <v-toolbar sylte="height=56px">
     <v-toolbar-side-icon></v-toolbar-side-icon>
     <v-toolbar-title>Title</v-toolbar-title>
     <v-spacer></v-spacer>

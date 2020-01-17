@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
+  <v-app>
     <router-view name="header"/>
     <v-fade-transition>
       <router-view/>
     </v-fade-transition>
     <router-view name="footer"/>
-  </div>
+  </v-app>
 </template>
 
 <script>
