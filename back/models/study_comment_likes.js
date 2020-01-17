@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  const commnets_likes =  sequelize.define('comments_likes', {
+  const study_comment_likes =  sequelize.define('study_comment_likes', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'comments',
+        model: 'study_comments',
         key: 'id'
       }
     },
@@ -25,7 +25,8 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   }, {
-    tableName: 'comments_likes'
+    tableName: 'study_comment_likes'
   });
-  return commnets_likes;
+
+  return study_comment_likes;
 };
