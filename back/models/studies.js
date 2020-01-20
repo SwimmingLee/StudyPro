@@ -63,8 +63,9 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     created_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: DataTypes.NOW,
     }
   }, {
     tableName: 'studies'
@@ -74,46 +75,76 @@ module.exports = function(sequelize, DataTypes) {
 
     const study = await this.findOne({where:{id: study_id}})
     if (!study) {
-        return "Wrong ID"
+        return {
+          "state": "fail",
+          "detail": "wrong id"
+      }
     } else {
 
         studies.destroy({where: {id:study_id}})
-        return `${study_id}번 스터디 삭제완료`
+        return {
+          "state": "success",
+          "detail": `${study_id}번 스터디 삭제완료`
+      }
     }
   }
 
 
   studies.create_study = async function(wrong_id, data) {
-    if (wrong_id) {return "Wrong id"}
+    if (wrong_id) {return {
+          "state": "fail",
+          "detail": "wrong id"
+      }}
     const study = await this.findOne({where: {name:data.name}})
     if (study) {
-        return "이미 존재하는 스터디 이름입니다"
+        return {
+          "state": "fail",
+          "detail": "이미 존재하는 스터디 이름입니다"
+      }
     } else {
         
         if (data.start_time && data.end_time) {
           if (data.start_time > data.end_time) {
-            return "시간이 잘못설정되었습니다."
+            return {
+              "state": "fail",
+              "detail": "시간이 잘못설정되었습니다."
+          }
           }
         }
         const created_study = await this.create(data)
-        return [`${data.name}이 생성되었습니다.`, created_study]
+        return {
+          "state": "success",
+          "detail": [{
+            "state": "success",
+            "detail": `${data.name}이 생성되었습니다.`
+        }, created_study]
+      }
     }
   }
 
   studies.update_study = async function(study_id, data) {
     const study = await this.findOne({where:{id: study_id}})
     if (!study) {
-        return "Wrong ID"
+        return {
+          "state": "fail",
+          "detail": "wrong id"
+      }
     } else {
         this.update(data, {where: {id:study_id}})
-        return `${study_id}번 스터디 변경완료`
+        return {
+          "state": "success",
+          "detail": `${study_id}번 스터디 변경완료`
+      }
     }
   }
 
   studies.read_study = async function(study_id) {
     const study = await this.findOne({where:{id: study_id}})
     if (!study) {
-      return "Wrong id"
+      return {
+          "state": "fail",
+          "detail": "wrong id"
+      }
     } else {
       return study
     }
@@ -134,7 +165,7 @@ module.exports = function(sequelize, DataTypes) {
         case "start_time", "start_date":
           where[`${key}`] = {
             [Op.or]: [
-              { [Op.lte] : data[`${key}`] },
+              { [Op.gte] : data[`${key}`] },
               null
             ]
           };
@@ -143,7 +174,7 @@ module.exports = function(sequelize, DataTypes) {
         case "end_time":
           where["end_time"] = {
             [Op.or]: [
-              { [Op.gte] : data.end_time },
+              { [Op.lte] : data.end_time },
               null
             ]
           };

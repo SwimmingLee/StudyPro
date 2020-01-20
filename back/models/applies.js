@@ -38,31 +38,52 @@ module.exports = function(sequelize, DataTypes) {
     const study_id = data.study_id
 
     const apply = await this.findOne({where:{user_id, study_id}})
-    if (apply) {return "이미 가입신청한 스터디입니다"}
+    if (apply) {return {
+      "state": "fail",
+      "detail": "이미 가입신청한 스터디입니다"
+  }}
     else {
-      if (wrong_id) {return "Wrong id"}
+      if (wrong_id) {return {
+      "state": "fail",
+      "detail": "wrong id"
+  }}
       else {
         this.create(data)
-        return `${user_id}번 유저가 ${study_id}번 스터디에 가입신청 하였습니다`
+        return {
+          "state": "success",
+          "detail": `${user_id}번 유저가 ${study_id}번 스터디에 가입신청 하였습니다`
+      }
       }
     }
   }
 
   applies.delete_apply = async function(apply_id) {
     const apply = await this.findOne({where:{id:apply_id}})
-    if (!apply) {return "Wrong id"}
+    if (!apply) {return {
+      "state": "fail",
+      "detail": "wrong id"
+  }}
     else {
       this.destroy({where:{id:apply_id}})
-      return `${apply_id}번 신청을 거절하였습니다.`
+      return {
+        "state": "success",
+        "detail": `${apply_id}번 신청을 거절하였습니다.`
+    }
     }
   }
 
   applies.update_apply = async function(apply_id, data) {
     const apply = await this.findOne({where:{id:apply_id}})
-    if (!apply) {return "Wrong id"}
+    if (!apply) {return {
+      "state": "fail",
+      "detail": "wrong id"
+  }}
     else {
       this.update(data, {where:{id:apply_id}})
-      return `${apply_id}번 신청을 수정하였습니다.`
+      return {
+        "state": "success",
+        "detail": `${apply_id}번 신청을 수정하였습니다.`
+    }
     }    
   }
 

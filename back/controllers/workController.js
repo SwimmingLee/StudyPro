@@ -1,7 +1,10 @@
-import {works, users, studies} from "../models"
+import {study_works, personal_works, users, studies} from "../models"
 
 export const create_work = async function(req, res) {
     const data = req.body
+    
+    const works = req.body.study === '1' ? study_works : personal_works
+    
 
     const user = await users.findOne({where:{id:data.writer}})
     const study = await studies.findOne({where:{id:data.study_id}})
@@ -15,6 +18,8 @@ export const create_work = async function(req, res) {
 }
 
 export const delete_work = async function(req, res) {
+    const works = req.body.study === '1' ? study_works : personal_works
+
     const work_id = req.params.work_id
     const result = await works.delete_work(work_id)
 
@@ -22,6 +27,8 @@ export const delete_work = async function(req, res) {
 }
 
 export const update_work = async function(req, res) {
+    const works = req.body.study === '1' ? study_works : personal_works
+
     const work_id = req.params.work_id
     const data = req.body
 
@@ -30,12 +37,18 @@ export const update_work = async function(req, res) {
 }
 
 export const read_work = async function(req, res) {
+
+    const works = req.body.study === '1' ? study_works : personal_works
+
     const work_id = req.params.work_id
 
     const result = await works.read_work(work_id)
 
     if (!result) {
-        res.send("없는 지원입니다")
+        res.send({
+            "state": "fail",
+            "detail": "Wrong id"
+        })
     }
     else {
         const study = await studies.findOne({where:{id:result.study_id}})
