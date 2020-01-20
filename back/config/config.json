@@ -13,13 +13,17 @@
   }
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",  
-    "host": "127.0.0.1",
-  
+    "username": "samoim_admin",
+    "password": "abcproject",
+    "database": "samoim",  
+    "host": "samoim.c3wz4cqqzwga.us-east-1.rds.amazonaws.com",
     "dialect": "mysql",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "timezone": "+09:00",
+    "define": {
+      "timestamps": false,
+      "underscored" : true
+  }
   },
   "production": {
     "username": "root",

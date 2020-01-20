@@ -1,22 +1,40 @@
-import {users, studies, users_and_studies, applies} from "../models"
+import {users, studies, users_and_studies, applies, days, tags, studies_and_tags} from "../models"
 
 // 
 export const create_study = async function(req, res) {
     const data = req.body
     const user = await users.findOne({where:{id: data.captain}})
     const wrong_id = !user
-    if (data.days) {
-        // day모델에 추가하는 과정
-    }
-    if (data.tags) {
-        // tag모델에 추가하는 과정
-    }
+
     const result = await studies.create_study(wrong_id, data)
+    
     if (result.state === "fail") {res.send(result)}
     else {
-        users_and_studies.join_to_study(data.captain, result.detail[1].id, false, false)
+        const created_study_id = result.detail[1].id
+        users_and_studies.join_to_study(data.captain, created_study_id, false, false)
         res.send(result.detail[0])
+        if (data.days) {
+            // day모델에 추가하는 과정
+            const input_days = data.days.replace('[', '').replace(']', '').split(',')
+            days.create_days(created_study_id, input_days)
+        }
+        if (data.tags) {
+            // tag모델에 추가하는 과정
+            const input_tags = data.tags.replace('[', '').replace(']', '').replace('#', '').replace(' ','').split(',')
+            for (const tag of input_tags) {
+                const temp_tag = await tags.findOne({where :{name:tag}})
+                if (temp_tag) {
+                    studies_and_tags.create_study_tag(created_study_id, temp_tag.id)
+                }
+                else {
+                    const created_tag = await tags.create_tag(tag)
+                    studies_and_tags.create_study_tag(created_study_id, created_tag.id)
+                }
+            }
+
+        }
     }
+
 }
 
 export const join_study = async function(req, res) {
@@ -69,7 +87,6 @@ export const read_study = async function(req, res) {
 
     result.dataValues.applies = study_applies
     result.dataValues.users = study_users
-
     res.send(result)
 }
 
