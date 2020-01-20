@@ -16,6 +16,10 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
+    title: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
     content: {
       type: DataTypes.TEXT,
       allowNull: false
@@ -37,14 +41,29 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'common_posts'
   });
 
-  common_posts.create_common_post = async function(writer, content, board){
+  common_posts.create_common_post = async function(writer, title,content, board){
     let result;
     
     result = this.create(
       {
-        writer : writer, 
+        writer : writer,
+        title : "title",
         content : content,
         board : board
+      }
+    )
+    return result;
+  }
+  
+  common_posts.read_common_post = async function(post_id){
+    let result;
+    
+    result = this.findOne(
+      {
+        where:
+          {
+            id : post_id
+          }
       }
     )
     return result;

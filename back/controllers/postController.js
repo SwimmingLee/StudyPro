@@ -5,40 +5,38 @@ import {Op} from "sequelize";
 
 export const create_common_post = async function(req, res) {
     try{
-        const {writer, content, board} = req.body;
+        const {writer, title, content, board} = req.body;
         let result;
-        result = common_post_model.create_common_post(writer, content, board);
+        result = await common_post_model.create_common_post(writer, title, content, board);
         res.send(result);
     }catch(error){
         res.send('error');
     }
-};
+}
 
-export const read_post = async function(req, res) {
-    const {post_id} = req.params;
-    console.log(req.params);
+export const read_common_post = async function(req, res) {
+    const {post_id} = req.params.id;
     const {user_id} = req.body;
+    
+    let result = await common_post_model.read_common_post(post_id)
+    
+    // const like = await common_post_likes.findOne(
+    //     {where:{
+    //         [Op.and]: [
+    //             { common_post_id: Number(post_id) },
+    //             { user_id: Number(user_id) }]
+    //         }
+    //     }
+    // );
 
 
-    
-    const post = await common_post_model.findOne({where:{id:Number(post_id)}});
-    
-    
-    const like = await common_post_likes.findOne(
-        {where:{
-            [Op.and]: [
-                { common_post_id: Number(post_id) },
-                { user_id: Number(user_id) }]
-            }
-        }
-    );
+    // if (like == null) {
+    //     res.send({post, like:0});
+    // }
+    // else {
+    //     res.json({post, like:1});
+    // }
+    return result;
 
 
-    if (like == null) {
-        res.send({post, like:0});
-    }
-    else {
-        res.json({post, like:1});
-    }
-    
-};
+}
