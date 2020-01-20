@@ -12,9 +12,9 @@ const STUDY_DETAIL = "/:study_id";
 const STUDY_SEARCH = "/search";
 
 // Common Post
-const COMMON_POSTS = "/common_posts";
-const COMMON_POST = "/";
-const COMMON_POST_DETAIL = "/:post_id";
+const POSTS = "/posts";
+const POST = "/post";
+const POST_DETAIL = "/:post_id";
 
 // Comments
 const COMMENTS = "/comments";
@@ -44,9 +44,9 @@ const routes = {
     study_detail : STUDY_DETAIL,
     study_search : STUDY_SEARCH,
 
-    common_posts : COMMON_POSTS,
-    common_post : COMMON_POST,
-    common_post_detail : COMMON_POST_DETAIL,
+    posts : POSTS,
+    post : POST,
+    post_detail : POST_DETAIL,
 
     comments : COMMENTS,
     comment : COMMENT,

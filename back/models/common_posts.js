@@ -37,12 +37,17 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'common_posts'
   });
 
-  common_posts.create_common_post = function(post){
-    return this.create({
-      writer:post.writer, 
-      content:post.content,
-      board:post.board,
-    })
+  common_posts.create_common_post = async function(writer, content, board){
+    let result;
+    
+    result = this.create(
+      {
+        writer : writer, 
+        content : content,
+        board : board
+      }
+    )
+    return result;
   }
   
   return common_posts;
