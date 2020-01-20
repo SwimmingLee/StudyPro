@@ -64,7 +64,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     created_date: {
       type: DataTypes.DATEONLY,
-      allowNull: true
+      allowNull: true,
+      defaultValue: DataTypes.NOW,
     }
   }, {
     tableName: 'studies'

@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  const works =  sequelize.define('works', {
+  const study_works =  sequelize.define('study_works', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -41,10 +41,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'works'
+    tableName: 'study_works'
   });
 
-  works.create_work = async function(data, wrong_id, same_work) {
+  study_works.create_work = async function(data, wrong_id, same_work) {
       
       if (!data.content || !data.writer || !data.start_date || !data.end_date || !data.study_id) {return "Data 부족"}
       else if (wrong_id) {
@@ -65,7 +65,7 @@ module.exports = function(sequelize, DataTypes) {
       }
   }
 
-  works.delete_work = async function(work_id) {
+  study_works.delete_work = async function(work_id) {
     const work = await this.findOne({where:{id:work_id}})
 
     if (!work) {return {
@@ -81,7 +81,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }
 
-  works.update_work = async function(work_id, data) {
+  study_works.update_work = async function(work_id, data) {
     const work = await this.findOne({where:{id:work_id}})
     if (!work) {return {
       "state": "fail",
@@ -96,10 +96,10 @@ module.exports = function(sequelize, DataTypes) {
     }
   }
 
-  works.read_work = async function(work_id) {
+  study_works.read_work = async function(work_id) {
     const work = await this.findOne({where:{id:work_id}})
     
     return work
   }
-  return works;
+  return study_works;
 };
