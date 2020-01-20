@@ -1,18 +1,14 @@
 <template>
   <div class="mx-5">
-    <v-row>
-      <v-text-field v-model="email" label="E-mail" hide-details="auto"/>
+    <v-row class="justify-center">
+      <v-col class="pb-0" sm="11">
+        <v-btn large block color="primary">Sign In</v-btn>
+      </v-col>
     </v-row>
     <v-row>
-      <v-text-field v-model="password" label="Password"/>
-    </v-row>
-    <v-row class="justify-end" sm="4">
-      <div class="ma-1">
-        <v-btn color="white">Sign Up</v-btn>
-      </div>
-      <div class="ma-1">
-        <v-btn @click.prevent="onLogin" color="white">Sign In</v-btn>
-      </div>
+      <v-col class="text-center pt-1 pb-0">
+        <v-btn text small>Create Acount</v-btn>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -24,7 +20,8 @@ export default {
   name: 'Login',
   data: () => ({
     email: '',
-    password: ''
+    password: '',
+    dialog: false
   }),
   methods: {
     ...mapActions(['login']),
@@ -36,7 +33,6 @@ export default {
         console.error(err)
       }
     }
-
   }
 }
 </script>

@@ -1,14 +1,14 @@
 <template>
-  <div id="home">
+  <div id="search">
     <banner />
     <v-container fluid>
     <v-row>
-      <v-col cols="8" lg="9" md="8" sm="7">
+      <v-col cols="8">
           <v-card class="pa-1" outlined tile>
             <top-left/>
           </v-card>
       </v-col>
-      <v-col cols="4" lg="3" md="4" sm="5">
+      <v-col cols="4">
           <v-card class="pa-1" outlined tile>
             <top-right/>
           </v-card>
@@ -29,7 +29,7 @@
   export default {
       name: "home",
       components: {
-        Banner: () => import('@/components/home/Banner'),
+        Banner: () => import('@/components/studysearch/Banner'),
         TopLeft: () => import('@/components/home/TopLeft'),
         TopRight: () => import('@/components/home/TopRight'),
         Middle: () => import('@/components/home/Middle'),

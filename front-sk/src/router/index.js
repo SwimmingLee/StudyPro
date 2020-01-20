@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import intro from '../views/Intro'
-import home from '../views/Home'
+import intro from '@/views/Intro'
+import home from '@/views/Home'
 import appHeader from '@/components/common/Header'
+import studySearch from '@/views/StudySearch'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,15 @@ const routes = [{
         components: {
             header: appHeader,
             default: home,
+            footer: null
+        }
+    },
+    {
+        path: '/search',
+        name: 'search',
+        components: {
+            header: null,
+            default: studySearch,
             footer: null
         }
     }
