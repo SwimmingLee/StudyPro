@@ -11,10 +11,16 @@ const STUDY = "/";
 const STUDY_DETAIL = "/:study_id";
 const STUDY_SEARCH = "/search";
 
-// Common Post
-const POSTS = "/posts";
-const POST = "/post";
-const POST_DETAIL = "/:post_id";
+//Common Post
+const COMMON_POSTS = "/common_posts";
+//Study Post
+const STUDY_POSTS = "/study_posts";
+
+const POST = "/post"
+const COMMON_POST = "/post/:board";
+const STUDY_POST = "/post/:study_id&:board";
+const COMMON_POST_DETAIL = "/detail/:post_id";
+const STUDY_POST_DETAIL = "/detail/:study_id&:post_id";
 
 // Comments
 const COMMENTS = "/comments";
@@ -32,6 +38,11 @@ const APPLIES = "/applies";
 const APPLY = "/";
 const APPLY_DETAIL = "/:apply_id";
 
+
+
+
+
+
 const routes = {
     users : USERS,
     userDetail : USER_DETAIL,
@@ -44,9 +55,13 @@ const routes = {
     study_detail : STUDY_DETAIL,
     study_search : STUDY_SEARCH,
 
-    posts : POSTS,
     post : POST,
-    post_detail : POST_DETAIL,
+    common_posts : COMMON_POSTS,
+    common_post : COMMON_POST,
+    common_post_detail : COMMON_POST_DETAIL,
+    study_posts : STUDY_POSTS,
+    study_post : STUDY_POST,
+    study_post_detail: STUDY_POST_DETAIL,
 
     comments : COMMENTS,
     comment : COMMENT,

@@ -35,7 +35,7 @@ app.use(localsMiddelWare)
 app.use(routes.users, userRouter);
 app.use(routes.studies, studyRouter);
 app.use(routes.comments, commentRouter);
-// app.use(routes.study_comments, study_commentRouter);
+// app.use(routes.study_posts, study_postRouter);
 app.use(routes.common_posts, common_postRouter);
 app.use(routes.works, workRouter);
 app.use(routes.applies, applyRouter)

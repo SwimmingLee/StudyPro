@@ -1,18 +1,13 @@
-import {common_posts as common_post_model, common_post_likes as common_post_like_model, comments} from "../models"
-import {study_posts as study_post_model, study_post_likes as study_post_like_model, comments} from "../models"
+import {common_posts as common_post_model, common_post_likes as common_post_like_model} from "../models"
+import {study_posts as study_post_model, study_post_likes as study_post_like_model} from "../models"
 
 import {Op} from "sequelize";
 
-export const create_post = async function(req, res, next) {
-    
+export const create_common_post = async function(req, res) {
     try{
-        const {writer, content, board, post_type} = req.body;
+        const {writer, content, board} = req.body;
         let result;
-        if(post_type === "common"){
-            result = common_post_model.create_common_post(writer, content, board);
-        }else{
-            result = study_post_model.create_study_post(writer, content, board);
-        }
+        result = common_post_model.create_common_post(writer, content, board);
         res.send(result);
     }catch(error){
         res.send('error');
