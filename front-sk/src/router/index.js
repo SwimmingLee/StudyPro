@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import intro from '../views/Intro'
-import home from '../views/Home'
+import intro from '@/views/Intro'
+import home from '@/views/Home'
 import appHeader from '@/components/common/Header'
-import join from '@/components/user/Join'
-import login from '@/components/user/Login'
+import studySearch from '@/views/StudySearch'
 
 Vue.use(VueRouter)
 
@@ -27,20 +26,11 @@ const routes = [{
         }
     },
     {
-        path: '/join',
-        name: 'join',
+        path: '/search',
+        name: 'search',
         components: {
-            header: appHeader,
-            default: join,
-            footer: null
-        }
-    },
-    {
-        path: '/login',
-        name: 'login',
-        components: {
-            header: appHeader,
-            default: login,
+            header: null,
+            default: studySearch,
             footer: null
         }
     }
