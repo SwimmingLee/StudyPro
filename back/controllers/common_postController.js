@@ -9,12 +9,17 @@ export const create_post = function(req, res, next) {
     res.send('create post');
 };
 
+
 export const read_post = async function(req, res) {
     const {post_id} = req.params;
     console.log(req.params);
     const {user_id} = req.body;
 
+
+    
     const post = await common_posts.findOne({where:{id:Number(post_id)}});
+    
+    
     const like = await common_post_likes.findOne(
         {where:{
             [Op.and]: [
@@ -23,6 +28,8 @@ export const read_post = async function(req, res) {
             }
         }
     );
+
+    
     if (like == null) {
         res.send({post, like:0});
     }

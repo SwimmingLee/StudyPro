@@ -16,9 +16,11 @@ const COMMON_POSTS = "/common_posts";
 const COMMON_POST = "/";
 const COMMON_POST_DETAIL = "/:post_id";
 
-// Common Comments
+// Comments
 const COMMENTS = "/comments";
-const COMMENT = "/";
+const COMMENT = "/comment";
+const COMMENT_like = "/comment_like";
+
 
 // Works
 const WORKS = "/works";
@@ -48,6 +50,7 @@ const routes = {
 
     comments : COMMENTS,
     comment : COMMENT,
+    comment_like: COMMENT_like,
 
     works : WORKS,
     work : WORK,

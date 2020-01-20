@@ -1,4 +1,5 @@
 /* jshint indent: 2 */
+import {Op} from "sequelize";
 
 module.exports = function(sequelize, DataTypes) {
   const common_post_likes = sequelize.define('common_post_likes', {
@@ -40,5 +41,9 @@ module.exports = function(sequelize, DataTypes) {
       })
     }
   }
+
+
+
+
   return common_post_likes;
 };
