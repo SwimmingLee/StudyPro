@@ -30,17 +30,61 @@ module.exports = function(sequelize, DataTypes) {
   });
 
 
-  common_post_likes.toggle_post_like = function(status) {
-    if (islike === 1) {
-      common_post_likes.destroy({where: {user_id, post_id}})
-    }
-    else {
-      common_post_likes.create({
-        common_post_id:post_id,
-        user_id:user_id
-      })
-    }
+  // common_post_likes.toggle_post_like = function(status) {
+  //   if (islike === 1) {
+  //     common_post_likes.destroy({where: {user_id, post_id}})
+  //   }
+  //   else {
+  //     common_post_likes.create({
+  //       common_post_id:post_id,
+  //       user_id:user_id
+  //     })
+  //   }
+  // }
+
+
+  common_post_likes.read_like = async function(post_id, user_id){
+    let result = this.findOne(
+      {
+        where:
+        {
+          [Op.and] : 
+            [
+              {id : post_id},
+              {user_id : user_id}
+            ]
+        }
+      }
+    )
+    return result;
   }
+
+  common_post_likes.create_like = async function(post_id, user_id){
+    let result = await this.create(
+      {
+        post_id : post_id,
+        user_id : user_id
+      }
+    )
+    return result;
+  }
+
+  common_post_likes.delete_like = async function(post_id, user_id){
+    let result = await this.destroy(
+      {
+        where:
+        {
+          [Op.and] : 
+            [
+              {post_id : post_id},
+              {user_id : user_id}
+            ]
+        }
+      }
+    )
+    return result;
+  }
+  
 
 
 

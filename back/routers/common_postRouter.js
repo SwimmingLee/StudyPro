@@ -1,6 +1,6 @@
 import express from "express"
 import routes from "../routes"
-import {create_common_post, read_common_post} from "../controllers/postController"
+import {create_common_post, read_common_post, update_common_post, delete_common_post, list_common_post} from "../controllers/postController"
 
 
 
@@ -18,8 +18,11 @@ import {create_common_post, read_common_post} from "../controllers/postControlle
 
 const common_postRouter = express.Router();
 
+common_postRouter.get(routes.common_post,list_common_post);
 common_postRouter.post(routes.post,create_common_post);
 common_postRouter.get(routes.common_post_detail,read_common_post);
+common_postRouter.put(routes.common_post_detail,update_common_post);
+common_postRouter.delete(routes.common_post_detail,delete_common_post);
 
 
 

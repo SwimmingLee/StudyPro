@@ -58,7 +58,7 @@ module.exports = function(sequelize, DataTypes) {
   common_posts.read_common_post = async function(post_id){
     let result;
     
-    result = this.findOne(
+    result = await this.findOne(
       {
         where:
           {
@@ -66,8 +66,55 @@ module.exports = function(sequelize, DataTypes) {
           }
       }
     )
+    result.dataValues.like = false;
+    return result;
+  }
+
+  common_posts.update_common_post = async function(post_id, title, content){
+    let result;
+    
+    result = await this.update(
+      {
+        title : title, 
+        content : content
+      },
+      {
+        where : 
+        {
+          id : post_id
+        }
+      }
+    )
+    return result;
+  }
+
+  common_posts.delete_common_post = async function(post_id){
+    let result;
+    
+    result = await this.destroy(
+      {
+        where : 
+        {
+          id : post_id
+        }
+      }
+    )
+    return result;
+  }
+
+  common_posts.list_common_post = async function(board){
+    let result;
+    
+    result = await this.findAll(
+      {
+        where : 
+        {
+          board : board
+        }
+      }
+    )
     return result;
   }
   
   return common_posts;
-};
+}
