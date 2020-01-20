@@ -1,4 +1,4 @@
-import {users, studies, users_and_studies, applies, days, tags, studies_and_tags} from "../models"
+import {users, studies, users_and_studies, applies, days, tags, studies_and_tags, marked_studies} from "../models"
 
 // 
 export const create_study = async function(req, res) {
@@ -70,42 +70,59 @@ export const update_study = async function(req, res) {
 
 export const read_study = async function(req, res) {
     const study_id =  req.params.study_id
-
+    const user_id = req.body.user_id ? req.body.user_id : -1
     const result = await studies.read_study(study_id)
     const study_applies = await applies.findAll({where:{study_id}})
     const study_users_links = await users_and_studies.findAll({where:{study_id}})
     let study_users = []
-    let link
-    let temp_user
-
+    let link, temp_user, is_joined = false
+    const is_liked = await marked_studies.findOne({where:{user_id, study_id}})
+    const like = is_liked ? true : false
+    
     for (link of study_users_links) {
         temp_user = await users.findOne({where:{id: link.user_id}})
         delete temp_user.dataValues.password
         delete temp_user.dataValues.auth
         study_users.push(temp_user)
-    }
 
+        if (link.user_id == user_id) is_joined = true;
+    }
     result.dataValues.applies = study_applies
     result.dataValues.users = study_users
+    result.dataValues.like = like
+    result.dataValues.is_joined = is_joined
+
     res.send(result)
 }
 
 export const search_studies = async function(req, res) {
-    const searching_captain = await users.findOne({where:{name: req.body.captain}})
+    const searching_captain = req.body.captain ? await users.findOne({where:{name: req.body.captain}}) : -1
     let searching_captain_id = searching_captain ? searching_captain.id : -1
+    const user_id = req.body.user_id ? req.body.user_id : -1
 
     const result = await studies.search_studies(req.body, searching_captain_id)
-    let study
-    let captain
+    let study, captain, like, is_joined
     for (study of result) {
         captain = await users.findOne({where:{id:study.dataValues.captain}})
-        
+        like = await marked_studies.findOne({where:{user_id, study_id:study.dataValues.id}}) ? true : false
+        is_joined = await users_and_studies.findOne({where:{user_id, study_id:study.dataValues.id}}) ? true : false
         delete captain.dataValues.password
         delete captain.dataValues.auth
         delete study.dataValues.captain
 
         study.dataValues.captain = captain
+        study.dataValues.like = like
+        study.dataValues.is_joined = is_joined
+
     }
 
+    res.send(result)
+}
+
+export const mark_study = async function(req, res) {
+    const study_id = req.params.study_id
+    const user_id = req.body.user_id
+
+    const result = await marked_studies.mark_study(user_id, study_id)
     res.send(result)
 }

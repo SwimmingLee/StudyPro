@@ -10,6 +10,7 @@ const STUDIES = "/studies";
 const STUDY = "/";
 const STUDY_DETAIL = "/:study_id";
 const STUDY_SEARCH = "/search";
+const STUDY_MARK = "/mark/:study_id";
 
 // Common Post
 const POSTS = "/posts";
@@ -43,6 +44,7 @@ const routes = {
     study : STUDY,
     study_detail : STUDY_DETAIL,
     study_search : STUDY_SEARCH,
+    study_mark : STUDY_MARK,
 
     posts : POSTS,
     post : POST,

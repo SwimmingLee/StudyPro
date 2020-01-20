@@ -152,7 +152,6 @@ module.exports = function(sequelize, DataTypes) {
 
   studies.search_studies = async function(data, captain_id) {
 
-
     let where = {}
     let key
     for (key of Object.keys(data)) {
@@ -162,7 +161,7 @@ module.exports = function(sequelize, DataTypes) {
           where["name"] = {[Op.like]: "%" + data.name + "%"};
           break;
 
-        case "start_time", "start_date":
+        case "start_time":
           where[`${key}`] = {
             [Op.or]: [
               { [Op.gte] : data[`${key}`] },
@@ -171,10 +170,10 @@ module.exports = function(sequelize, DataTypes) {
           };
           break;
 
-        case "end_time":
-          where["end_time"] = {
+        case "end_time", "start_date":
+          where[`${key}`] = {
             [Op.or]: [
-              { [Op.lte] : data.end_time },
+              { [Op.lte] : data[`${key}`] },
               null
             ]
           };
