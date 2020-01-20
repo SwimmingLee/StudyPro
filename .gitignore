@@ -146,3 +146,10 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/node,windows,visualstudiocode
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Editor directories and files
+.idea
+.vscode
