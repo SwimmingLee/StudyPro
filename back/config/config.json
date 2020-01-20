@@ -12,11 +12,11 @@
       "underscored" : true
   }
   },
-  "test": {
-    "username": "samoim_admin",
+  "aws_development": {
+    "username": "root",
     "password": "abcproject",
     "database": "samoim",  
-    "host": "samoim.c3wz4cqqzwga.us-east-1.rds.amazonaws.com",
+    "host": "15.164.245.201",
     "dialect": "mysql",
     "operatorsAliases": false,
     "timezone": "+09:00",
