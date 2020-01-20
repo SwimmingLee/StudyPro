@@ -4,6 +4,7 @@ import intro from '../views/Intro'
 import home from '../views/Home'
 import appHeader from '@/components/common/Header'
 import join from '@/components/user/Join'
+import login from '@/components/user/Login'
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,15 @@ const routes = [{
         components: {
             header: appHeader,
             default: join,
+            footer: null
+        }
+    },
+    {
+        path: '/login',
+        name: 'login',
+        components: {
+            header: appHeader,
+            default: login,
             footer: null
         }
     }
