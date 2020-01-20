@@ -16,6 +16,14 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
+    study_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'studies',
+        key: 'id'
+      }
+    },
     content: {
       type: DataTypes.TEXT,
       allowNull: false
