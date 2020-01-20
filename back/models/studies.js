@@ -55,7 +55,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     start_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
     isopen: {
@@ -63,7 +63,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     created_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: true,
       defaultValue: DataTypes.NOW,
     }
