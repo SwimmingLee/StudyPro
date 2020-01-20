@@ -9,16 +9,16 @@ const SIGNIN = "/signin";
 const STUDIES = "/studies";
 const STUDY = "/";
 const STUDY_DETAIL = "/:study_id";
+const STUDY_SEARCH = "/search";
 
 // Common Post
 const COMMON_POSTS = "/common_posts";
 const COMMON_POST = "/";
 const COMMON_POST_DETAIL = "/:post_id";
 
-// Comments
+// Common Comments
 const COMMENTS = "/comments";
 const COMMENT = "/";
-const COMMENT_DETAIL = "/:commnet_id";
 
 // Works
 const WORKS = "/works";
@@ -40,6 +40,7 @@ const routes = {
     studies : STUDIES,
     study : STUDY,
     study_detail : STUDY_DETAIL,
+    study_search : STUDY_SEARCH,
 
     common_posts : COMMON_POSTS,
     common_post : COMMON_POST,
@@ -47,7 +48,6 @@ const routes = {
 
     comments : COMMENTS,
     comment : COMMENT,
-    comment_detail : COMMENT_DETAIL,
 
     works : WORKS,
     work : WORK,

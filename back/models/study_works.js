@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  const works =  sequelize.define('works', {
+  const study_works =  sequelize.define('study_works', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -41,44 +41,65 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'works'
+    tableName: 'study_works'
   });
 
-  works.create_work = async function(data, wrong_id, same_work) {
+  study_works.create_work = async function(data, wrong_id, same_work) {
       
       if (!data.content || !data.writer || !data.start_date || !data.end_date || !data.study_id) {return "Data 부족"}
       else if (wrong_id) {
-        return "Wrong id"
-      } else if (same_work) {return "같은 날짜에 같은 일정이 존재합니다."}
+        return {
+      "state": "fail",
+      "detail": "wrong id"
+  }
+      } else if (same_work) {return {
+        "state": "fail",
+        "detail": "같은 날짜에 같은 일정이 존재합니다."
+    }}
       else {
         this.create(data)
-        return `${data.study_id}번 스터디에 일정이 추가되었습니다.`
+        return {
+          "state": "success",
+          "detail": `${data.study_id}번 스터디에 일정이 추가되었습니다.`
+      }
       }
   }
 
-  works.delete_work = async function(work_id) {
+  study_works.delete_work = async function(work_id) {
     const work = await this.findOne({where:{id:work_id}})
 
-    if (!work) {return "Wrong id"}
+    if (!work) {return {
+      "state": "fail",
+      "detail": "wrong id"
+  }}
     else {
       this.destroy({where:{id:work_id}})
-      return `${work_id}번 일정이 삭제되었습니다.`
+      return {
+        "state": "success",
+        "detail": `${work_id}번 일정이 삭제되었습니다.`
+    }
     }
   }
 
-  works.update_work = async function(work_id, data) {
+  study_works.update_work = async function(work_id, data) {
     const work = await this.findOne({where:{id:work_id}})
-    if (!work) {return "Wrong id"}
+    if (!work) {return {
+      "state": "fail",
+      "detail": "wrong id"
+  }}
     else {
       this.update(data, {where:{id:work_id}})
-      return `${work_id}번 일정이 수정되었습니다.`
+      return {
+        "state": "success",
+        "detail": `${work_id}번 일정이 수정되었습니다.`
+    }
     }
   }
 
-  works.read_works_by_study = async function(study_id) {
-    const works = await this.findAll({where:{study_id}})
+  study_works.read_work = async function(work_id) {
+    const work = await this.findOne({where:{id:work_id}})
     
-    return works
+    return work
   }
-  return works;
+  return study_works;
 };

@@ -1,15 +1,14 @@
 /* jshint indent: 2 */
 
-
 module.exports = function(sequelize, DataTypes) {
-  const comments = sequelize.define('comments', {
+  return sequelize.define('alarms', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-    writer: {
+    from: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -17,11 +16,11 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    study_post_id: {
+    to: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'study_posts',
+        model: 'users',
         key: 'id'
       }
     },
@@ -29,25 +28,21 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    title: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
     created_date: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      defaultValue: DataTypes.NOW,
+    },
+    check: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: '0'
     }
   }, {
-    tableName: 'comments'
+    tableName: 'alarms'
   });
-
-
-  comments.create_comment = async function(user_id, study_post_id,content){
-    comments.create(
-      {
-        writer : user_id,
-        study_post_id : study_post_id,
-        content : content,
-        
-      }
-    )
-  }
-
-  return comments;
 };

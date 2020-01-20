@@ -21,13 +21,15 @@ export const signin = function(req, res, next) {
                     )
                     res.cookie("user", token)
                     res.json({
+                        state: "success",
                         token: token,
+                        user_id: user.dataValues.id
                     })
                 } else {
-                    res.send("password incorrect")
+                    res.json({state:"fail"})
                 }
             } else {
-                res.send("email not exist")
+                res.json({state:"fail"})
             }
         })
 };
@@ -48,16 +50,22 @@ export const signup = function(req, res, next) {
         })
         .then((user)=>{
             if(user) {
-                res.send("nickname exist");
+                res.json({
+                    state:"fail",
+                    detail: "nickname exist"
+                });
                 throw new Error("nickname exist");
             }
             else {
                 users.save(req.body);
-                res.send(`create ${email}`)
+                res.json({
+                    state:"success"
+                });
             }
         })
         .catch((error)=>{
-            console.log('이메일 또는 닉네임이 중첩됩니다.');
+            console.log(error);
+            next(error);
         })
 
 }
