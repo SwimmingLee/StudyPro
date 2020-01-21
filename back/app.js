@@ -15,7 +15,6 @@ import userRouter from "./routers/userRouter"
 import studyRouter from "./routers/studyRouter"
 import workRouter from "./routers/workRouter"
 import commentRouter from "./routers/commentRouter"
-// import study_commentRouter from "./routers/study_commentRouter"
 import postRouter from "./routers/postRouter"
 import applyRouter from "./routers/applyRouter"
 import alarmRouter from "./routers/alarmRouter"
@@ -36,7 +35,6 @@ app.use(localsMiddelWare)
 app.use(routes.users, userRouter);
 app.use(routes.studies, studyRouter);
 app.use(routes.comments, commentRouter);
-// app.use(routes.study_comments, study_commentRouter);
 app.use(routes.posts, postRouter);
 app.use(routes.works, workRouter);
 app.use(routes.applies, applyRouter);
