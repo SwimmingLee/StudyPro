@@ -65,9 +65,9 @@ module.exports = function (sequelize, DataTypes) {
 
   users.prototype.getToken = function() {
     return jwt.sign(
-      {nickname:this.dataValues.id},
+      {user_id:this.dataValues.id},
       process.env.JWT_KEY,
-      {expiresIn : '5m'}
+      {expiresIn : '2h'}
     )
   }
 
