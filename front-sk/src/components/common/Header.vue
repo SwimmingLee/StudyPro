@@ -46,9 +46,16 @@
                 <v-col cols="12" class="py-0">
                   <v-text-field
                     hint="비밀번호는 8자리 이상의 문자 + 숫자 조합입니다"
-                    label="Password" required type="password"></v-text-field>
+                    label="Password"
+                    required
+                    type="password"
+                  ></v-text-field>
                 </v-col>
-                <v-checkbox id="modalCheckbox" class="py-0 mb-0" v-model="checkbox" label="로그인 상태 유지"
+                <v-checkbox
+                  id="modalCheckbox"
+                  class="py-0 mb-0"
+                  v-model="checkbox"
+                  label="로그인 상태 유지"
                   color="primary"
                   value="primary"
                   hide-details
@@ -91,7 +98,7 @@
           </v-card>
         </v-expansion-panel-content>
       </v-expansion-panel>
-    </v-container> -->
+    </v-container>-->
   </nav>
 </template>
 
@@ -103,17 +110,11 @@ export default {
       loginModal: false,
       checkbox: false,
       links: [
-        { icon: 'dashboard', text: 'DashBoard', route: '/' },
-        { icon: 'folder', text: 'My Projects', route: '/home' },
-        { icon: 'person', text: 'Team', route: '/home' }
+        { icon: "dashboard", text: "DashBoard", route: "/" },
+        { icon: "folder", text: "My Projects", route: "/home" },
+        { icon: "person", text: "Team", route: "/home" }
       ]
     }
-  },
-}
+  }
+};
 </script>
-
-<style scoped>
-#lgiModal {
-  padding: 5px;
-}
-</style>
