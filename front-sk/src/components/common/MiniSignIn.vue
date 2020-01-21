@@ -2,7 +2,7 @@
   <div class="mx-5">
     <v-row class="justify-center">
       <v-col class="pb-0" sm="11">
-        <v-btn @click="loginModal = !loginModal" large block color="primary">Sign In</v-btn>
+        <v-btn large block color="primary" @click="loginModal=true">Sign In</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -10,7 +10,8 @@
         <v-btn to="/join" text small>Create Acount</v-btn>
       </v-col>
     </v-row>
-      <!-- loginModal -->
+
+          <!-- loginModal -->
       <v-dialog v-model="loginModal" max-width="600px">
         <v-card id="lgiModal" class="px-0 pt-0">
           <v-card-title class="customTheme darken-2 white--text pb-3">
