@@ -1,5 +1,5 @@
 import {common_posts as common_post_model, common_post_likes as common_post_like_model, comments} from "../models"
-import {study_posts as study_post_model, study_post_likes as study_post_like_model, comments} from "../models"
+import {study_posts as study_post_model, study_post_likes as study_post_like_model} from "../models"
 
 import {Op} from "sequelize";
 

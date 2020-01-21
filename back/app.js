@@ -16,8 +16,9 @@ import studyRouter from "./routers/studyRouter"
 import workRouter from "./routers/workRouter"
 import commentRouter from "./routers/commentRouter"
 // import study_commentRouter from "./routers/study_commentRouter"
-import common_postRouter from "./routers/common_postRouter"
+import postRouter from "./routers/postRouter"
 import applyRouter from "./routers/applyRouter"
+import alarmRouter from "./routers/alarmRouter"
 import routes from "./routes"
 
 const app = express()
@@ -36,9 +37,10 @@ app.use(routes.users, userRouter);
 app.use(routes.studies, studyRouter);
 app.use(routes.comments, commentRouter);
 // app.use(routes.study_comments, study_commentRouter);
-app.use(routes.common_posts, common_postRouter);
+app.use(routes.posts, postRouter);
 app.use(routes.works, workRouter);
-app.use(routes.applies, applyRouter)
+app.use(routes.applies, applyRouter);
+app.use(routes.alarms, alarmRouter);
 
 
 export default app;

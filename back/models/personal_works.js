@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     study_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'studies',
         key: 'id'
@@ -46,7 +46,7 @@ module.exports = function(sequelize, DataTypes) {
 
   personal_works.create_work = async function(data, wrong_id, same_work) {
       
-      if (!data.content || !data.writer || !data.start_date || !data.end_date || !data.study_id) {return "Data 부족"}
+      if (!data.content || !data.writer || !data.start_date || !data.end_date) {return "Data 부족"}
       else if (wrong_id) {
         return {
       "state": "fail",
@@ -60,7 +60,7 @@ module.exports = function(sequelize, DataTypes) {
         this.create(data)
         return {
           "state": "success",
-          "detail": `${data.study_id}번 스터디에 일정이 추가되었습니다.`
+          "detail": `${data.user_id}번 유저에게 일정이 추가되었습니다.`
       }
       }
   }
