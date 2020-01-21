@@ -47,10 +47,10 @@ module.exports = function(sequelize, DataTypes) {
     result = this.create(
       {
         writer : writer,
-        title : "title",
+        title : title,
         content : content,
         board : board
-      }
+      } 
     )
     return result;
   }
