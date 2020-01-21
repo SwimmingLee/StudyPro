@@ -1,71 +1,65 @@
-import jsonwebtoken from "jsonwebtoken"
 import {users} from "../models"
-
-const jwt = jsonwebtoken
 
 export const userDetail = (req, res) => res.send("UserDetail");
 
 export const changePassword = (req, res) => res.send("ChangePassword");
 
-export const signin = function(req, res, next) {
+export const signin = async function(req, res) {
     const {email, password} = req.body;
+    const user = await users.findOne(  
+        {where: {
+                email,
+                platform_type:"local",
+            }
+        });
+    
+    if (user) {
+        const pass = await user.verify(password)
+        if (pass) {
+            let token = user.getToken()
+            res.cookie("accessToken", token)
+            res.json({
+                state: "success",
+                token: token,
+                user_id: user.dataValues.id
+            })
+        }
+        else {
+            res.json({state:"fail"}); 
+        }
+    } else {
+        res.json({state:"fail"});
+    }
+};            
 
-    users.findOne({where: {email}})
+export const read_users = function(req, res) {
+    users.findAll({})
         .then(user => {
-            if (user) {
-                if (user.verify(password)) {
-                    let token = jwt.sign(
-                        {nickname:user.dataValues.nickname},
-                        process.env.SECRET_KEY,
-                        {expiresIn : '5m'}
-                    )
-                    res.cookie("user", token)
-                    res.json({
-                        state: "success",
-                        token: token,
-                        user_id: user.dataValues.id
-                    })
-                } else {
-                    res.json({state:"fail"})
-                }
-            } else {
-                res.json({state:"fail"})
-            }
+            res.send(user)
         })
-};
+}
 
+export const signup = async function(req, res, next) {
+    const {email} = req.body;
 
-export const signup = function(req, res, next) {
-    const {email, nickname} = req.body;
-
-    users.findOne({where: {email}})
-        .then((user)=> {
-            if(user) {
-                res.send("userEmail exist");
-                throw new Error("userEmail exist");
+    const user = await users.findOne(  
+        {   
+            where: 
+            {   
+                email,
+                platform_type:"local",
             }
-        })
-        .then(()=>{
-            return users.findOne({where:{nickname}})
-        })
-        .then((user)=>{
-            if(user) {
-                res.json({
-                    state:"fail",
-                    detail: "nickname exist"
-                });
-                throw new Error("nickname exist");
-            }
-            else {
-                users.save(req.body);
-                res.json({
-                    state:"success"
-                });
-            }
-        })
-        .catch((error)=>{
-            console.log(error);
-            next(error);
-        })
+        });
+    
+    if(user) {
+        res.send("userEmail exist");
+        throw new Error("userEmail exist");
+    }
+    else {
+        users.save(req.body, "local");
+        res.json({
+            state:"success"
+        });
+    }          
 
 }

@@ -1,9 +1,8 @@
-import dotenv from "dotenv";
-dotenv.config();
+
 var fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-
+const dotenv = require('dotenv').config();
 const env = process.env.NODE_ENV || 'development';
 console.log(process.env.NODE_ENV)
 const config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
@@ -17,7 +16,6 @@ fs
     .forEach(function (file) {
         var model = sequelize.import(path.join(__dirname, file));
         db[model.name] = model;
-        console.log('model.name:' + model.name);  // 테스트로그 model명..
     });
 Object.keys(db).forEach(function (modelName) {
     if ("associate" in db[modelName]) {
