@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 
     <v-form>
         <v-container>
@@ -7,7 +7,10 @@
             테스트! 테스트!
             </v-card-text>
 
-            <!-- <v-row>
+
+
+
+            <v-row>
                 <v-col cols="12" sm="6">
                     <v-text-field
                         v-model="last"
@@ -66,14 +69,15 @@
                     <v-btn color="error" dark>취소하기</v-btn>
                 </v-col>
 
-            </v-row> -->
+            </v-row>
                      
         </v-container>
     </v-form>
-</template>
+</template>    -->
 
 
-// <script>
+<!--
+ <script>
 //   export default {
 //     data () {
 //       return {
@@ -102,4 +106,4 @@
 //     },
 //   }
 // </script>
-
+-->
