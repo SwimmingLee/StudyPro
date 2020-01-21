@@ -8,9 +8,9 @@ const SIGNIN = "/signin";
 // Study
 const STUDIES = "/studies";
 const STUDY = "/";
-const STUDY_DETAIL = "/:study_id";
 const STUDY_SEARCH = "/search";
-const STUDY_MARK = "/mark/:study_id";
+const STUDY_MARK = "/mark";
+const STUDY_DETAIL = "/:study_id";
 
 // Common Post
 const POSTS = "/posts";

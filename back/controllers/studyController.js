@@ -31,7 +31,6 @@ export const create_study = async function(req, res) {
                     studies_and_tags.create_study_tag(created_study_id, created_tag.id)
                 }
             }
-
         }
     }
 
@@ -120,9 +119,23 @@ export const search_studies = async function(req, res) {
 }
 
 export const mark_study = async function(req, res) {
-    const study_id = req.params.study_id
+    const study_id = req.body.study_id
     const user_id = req.body.user_id
 
     const result = await marked_studies.mark_study(user_id, study_id)
+    res.send(result)
+}
+
+export const read_marked_studies = async function(req, res) {
+    const user_id = req.body.user_id ? req.body.user_id : -1
+
+    const markings = await marked_studies.findAll({where:{user_id}})
+    let result = []
+
+    for (let marking of markings) {
+        const marked_study = await studies.read_study(marking.study_id)
+        result.push(marked_study)
+    }
+
     res.send(result)
 }
