@@ -18,7 +18,7 @@ export const create_study = async function(req, res) {
         data.minor_class_id = minor_class.id
         result = await studies.create_study(wrong_id, data)
     }
-    
+
     if (result.state === "fail") {res.send(result)}
     else {
         const created_study_id = result.detail[1].id
@@ -106,11 +106,19 @@ export const read_study = async function(req, res) {
 }
 
 export const search_studies = async function(req, res) {
-    const searching_captain = req.body.captain ? await users.findOne({where:{name: req.body.captain}}) : -1
-    let searching_captain_id = searching_captain ? searching_captain.id : -1
-    const user_id = req.body.user_id ? req.body.user_id : -1
+    const searching_captain = req.body.captain ? await users.findOne({where:{name: req.body.captain}}) : undefined
+    const searching_minor_class = req.body.minor_class ? await minor_classes.findOne({where:{name: req.body.minor_class}}) : undefined
+    const searching_major_class = req.body.major_class ? await major_classes.findOne({where:{name: req.body.major_class}}) : undefined
 
-    const result = await studies.search_studies(req.body, searching_captain_id)
+    const searching_captain_id = searching_captain ? searching_captain.id : -1
+    const searching_minor_class_id = searching_minor_class ? searching_minor_class.id : -1
+    const searching_major_class_id = searching_major_class ? searching_major_class.id : -1
+
+    const user_id = req.body.user_id ? req.body.user_id : -1
+    const id_data = {captain_id : searching_captain_id, minor_class_id:searching_minor_class_id, major_class_id: searching_major_class_id}
+
+    const result = await studies.search_studies(req.body, id_data)
+
     let study, captain, like, is_joined
     for (study of result) {
         captain = await users.findOne({where:{id:study.dataValues.captain}})
