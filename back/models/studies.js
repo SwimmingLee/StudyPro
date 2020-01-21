@@ -162,7 +162,7 @@ module.exports = function(sequelize, DataTypes) {
           break;
 
         case "start_time":
-          where[`${key}`] = {
+          where[`${key}`] = { 
             [Op.or]: [
               { [Op.gte] : data[`${key}`] },
               null
@@ -190,8 +190,12 @@ module.exports = function(sequelize, DataTypes) {
           where[`${key}`+'_id'] = id_data[`${key}`+'_id']
           break;
 
+        case "tag":
+        case "days":
+          break;
+
         default:
-          
+
           where[`${key}`] = data[`${key}`];
           break;
       }
