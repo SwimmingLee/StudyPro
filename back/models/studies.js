@@ -71,8 +71,7 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'studies'
   });
 
-  studies.delete_study = async function(study_id) {
-
+  studies.delete_study = async function(study_id, user_id) {
     const study = await this.findOne({where:{id: study_id}})
     if (!study) {
         return {
@@ -80,12 +79,15 @@ module.exports = function(sequelize, DataTypes) {
           "detail": "wrong id"
       }
     } else {
-
-        studies.destroy({where: {id:study_id}})
-        return {
-          "state": "success",
-          "detail": `${study_id}번 스터디 삭제완료`
-      }
+        if (study.captain != user_id) {return {
+          "state": "fail",
+          "detail": `작성자가 아닙니다`
+        }} else {
+          this.destroy({where: {id:study_id}})
+          return {
+            "state": "success",
+            "detail": `${study_id}번 스터디 삭제완료`
+        }}
     }
   }
 
@@ -120,7 +122,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   
 
-  studies.update_study = async function(study_id, data) {
+  studies.update_study = async function(study_id, data, user_id) {
     const study = await this.findOne({where:{id: study_id}})
     if (!study) {
         return {
@@ -128,11 +130,15 @@ module.exports = function(sequelize, DataTypes) {
           "detail": "wrong id"
       }
     } else {
+        if (study.captain != user_id) {return {
+          "state": "fail",
+          "detail": `작성자가 아닙니다`
+        }} else {
         this.update(data, {where: {id:study_id}})
         return {
           "state": "success",
           "detail": `${study_id}번 스터디 변경완료`
-      }
+        }}
     }
   }
 

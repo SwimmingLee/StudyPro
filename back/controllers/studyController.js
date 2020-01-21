@@ -68,16 +68,18 @@ export const join_study = async function(req, res) {
 
 export const delete_study = async function(req, res) {
     const study_id =  req.query.study_id
+    const user_id = res.locals.user ? res.locals.user.id : -1
 
-    const result = await studies.delete_study(study_id)
+    const result = await studies.delete_study(study_id, user_id)
     res.send(result)
 
 }
 
 export const update_study = async function(req, res) {
     const study_id =  req.query.study_id
+    const user_id = res.locals.user ? res.locals.user.id : -1
 
-    const result = await studies.update_study(study_id, req.body)
+    const result = await studies.update_study(study_id, req.body, user_id)
     res.send(result)
 }
 
@@ -124,10 +126,10 @@ export const search_studies = async function(req, res) {
 
     const user_id = req.body.user_id ? req.body.user_id : -1
     const id_data = {tag_id: searching_tag_id, captain_id : searching_captain_id, minor_class_id:searching_minor_class_id, major_class_id: searching_major_class_id}
-    const result = await studies.search_studies(req.body, id_data)
-    const return_result = []
+    const temp_result = await studies.search_studies(req.body, id_data)
+    const result = []
     let study, captain, like, is_joined, day, study_day, flag, study_tag
-    for (study of result) {
+    for (study of temp_result) {
         flag = true
         captain = await users.findOne({where:{id:study.dataValues.captain}})
         like = await marked_studies.findOne({where:{user_id, study_id:study.dataValues.id}}) ? true : false
@@ -150,10 +152,10 @@ export const search_studies = async function(req, res) {
             if (!study_tag) flag = false
         }
 
-        if (flag) return_result.push(study)
+        if (flag) result.push(study)
     }
 
-    res.send(return_result)
+    res.send(result)
 }
 
 export const mark_study = async function(req, res) {

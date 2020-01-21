@@ -57,33 +57,42 @@ module.exports = function(sequelize, DataTypes) {
     }
   }
 
-  applies.delete_apply = async function(apply_id) {
+  applies.delete_apply = async function(apply_id, user_id) {
     const apply = await this.findOne({where:{id:apply_id}})
     if (!apply) {return {
       "state": "fail",
       "detail": "wrong id"
   }}
     else {
-      this.destroy({where:{id:apply_id}})
+
+      if (apply.user_id != user_id) {return {
+        "state": "fail",
+        "detail": `작성자가 아닙니다`
+      }} else {
+      this.destroy({where: {id:apply_id}})
       return {
         "state": "success",
-        "detail": `${apply_id}번 신청을 거절하였습니다.`
-    }
-    }
+        "detail": `${apply_id}번 지원 삭제완료`
+    }}
+  }
   }
 
-  applies.update_apply = async function(apply_id, data) {
+  applies.update_apply = async function(apply_id, data, user_id) {
     const apply = await this.findOne({where:{id:apply_id}})
     if (!apply) {return {
       "state": "fail",
       "detail": "wrong id"
   }}
     else {
+      if (apply.user_id != user_id) {return {
+        "state": "fail",
+        "detail": `작성자가 아닙니다`
+      }} else {
       this.update(data, {where:{id:apply_id}})
       return {
         "state": "success",
         "detail": `${apply_id}번 신청을 수정하였습니다.`
-    }
+      }}
     }    
   }
 

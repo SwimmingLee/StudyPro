@@ -46,54 +46,61 @@ module.exports = function(sequelize, DataTypes) {
 
   study_works.create_work = async function(data, wrong_id, same_work) {
       
-      if (!data.content || !data.writer || !data.start_date || !data.end_date || !data.study_id) {return "Data 부족"}
-      else if (wrong_id) {
-        return {
+    if (!data.content || !data.writer || !data.start_date || !data.end_date || !data.study_id) {return "Data 부족"}
+    else if (wrong_id) {
+      return {
+    "state": "fail",
+    "detail": "wrong id"
+}
+    } else if (same_work) {return {
       "state": "fail",
-      "detail": "wrong id"
-  }
-      } else if (same_work) {return {
-        "state": "fail",
-        "detail": "같은 날짜에 같은 일정이 존재합니다."
-    }}
-      else {
-        this.create(data)
-        return {
-          "state": "success",
-          "detail": `${data.study_id}번 스터디에 일정이 추가되었습니다.`
-      }
-      }
-  }
-
-  study_works.delete_work = async function(work_id) {
-    const work = await this.findOne({where:{id:work_id}})
-
-    if (!work) {return {
-      "state": "fail",
-      "detail": "wrong id"
+      "detail": "같은 날짜에 같은 일정이 존재합니다."
   }}
     else {
-      this.destroy({where:{id:work_id}})
+      const created_work = await this.create(data)
       return {
         "state": "success",
-        "detail": `${work_id}번 일정이 삭제되었습니다.`
+        "detail": `${created_work.study_id}번 스터디에 일정이 추가되었습니다.`
     }
+    }
+}
+
+  study_works.delete_work = async function(work_id, user_id) {
+    const work = await this.findOne({where:{id:work_id}})
+
+    if (!work) {return {
+      "state": "fail",
+      "detail": "wrong id"
+  }}
+    else {
+      if (work.writer != user_id) {return {
+        "state": "fail",
+        "detail": `작성자가 아닙니다`
+      }} else {
+        this.destroy({where: {id:work_id}})
+        return {
+          "state": "success",
+          "detail": `${work_id}번 일정 삭제완료`
+      }}
     }
   }
-
-  study_works.update_work = async function(work_id, data) {
+  study_works.update_work = async function(work_id, data, user_id) {
     const work = await this.findOne({where:{id:work_id}})
     if (!work) {return {
       "state": "fail",
       "detail": "wrong id"
   }}
     else {
+      if (work.writer != user_id) {return {
+        "state": "fail",
+        "detail": `작성자가 아닙니다`
+      }} else {
       this.update(data, {where:{id:work_id}})
       return {
         "state": "success",
         "detail": `${work_id}번 일정이 수정되었습니다.`
     }
-    }
+    }}
   }
 
   study_works.read_work = async function(work_id) {
