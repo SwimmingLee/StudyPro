@@ -30,10 +30,10 @@
                     label="Password"
                     required
                     type="password"
+                    v-model="password"
                   ></v-text-field>
                 </v-col>
                 <v-checkbox
-                  id="modalCheckbox"
                   class="py-0 mb-0"
                   v-model="checkbox"
                   label="로그인 상태 유지"
@@ -47,7 +47,7 @@
           <v-card-actions class="pt-0 pr-5">
             <v-spacer></v-spacer>
             <v-btn color="error lighten-1" tile @click="loginModal= false">창 닫기</v-btn>
-            <v-btn color="customTheme darken-2 white--text" tile @click="loginModal= false">로그인</v-btn>
+            <v-btn color="customTheme darken-2 white--text" tile @click="onLogin">로그인</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -63,6 +63,7 @@ export default {
     email: '',
     password: '',
     loginModal: false,
+    checkbox: false,
   }),
   methods: {
     ...mapActions(['login']),

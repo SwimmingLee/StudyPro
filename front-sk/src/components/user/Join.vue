@@ -164,23 +164,10 @@
               </v-col>
             </v-row>
 
-            <v-btn :disabled="!valid" color="success" @click="validate">
+            <v-btn :disabled="!valid" color="success" @click="onSignup">
               가입하기
             </v-btn>
-
-            <!-- <v-btn color="error" @click="reset">
-                            초기화
-                        </v-btn>
-                        
-                        <v-btn color="warning" @click="resetValidation">
-                            Reset Validation
-                        </v-btn> -->
           </v-form>
-
-          <!-- <v-checkbox v-model="disabled" class="mx-2" label="Disabled"></v-checkbox>
-                    <v-checkbox v-model="readonly" class="mx-2" label="Read-only"></v-checkbox>
-                    <v-checkbox v-model="error" class="mx-2" label="Error"></v-checkbox>
-                    <v-checkbox v-model="success" class="mx-2" label="Success"></v-checkbox> -->
         </v-app>
       </div>
     </v-container>
@@ -188,6 +175,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
  
   data: () => ({
@@ -247,21 +236,20 @@ export default {
     os: false,
     db: false,
     cn: false,
-    cs: false
+    cs: false,
+    created: false
   }),
 
   methods: {
-    validate() {
-      if (this.$refs.form.validate()) {
-        this.snackbar = true;
+    ...mapActions(['signup']),
+    async onSignup () {
+      try {
+        let signupResult = await this.signup({name: this.name, nickname: this.nickname, email: this.email, password: this.password, gender: 'M', phone: this.phone})
+        this.created = signupResult
+      } catch (err) {
+        console.error(err)
       }
     }
-    // reset() {
-    //   this.$refs.form.reset();
-    // },
-    // resetValidation() {
-    //   this.$refs.form.resetValidation();
-    // }
   },
   computed: {
     passwordConfirmationRule() {
