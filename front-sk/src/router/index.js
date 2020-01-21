@@ -30,7 +30,7 @@ const routes = [{
         path: '/search',
         name: 'search',
         components: {
-            header: null,
+            header: appHeader,
             default: studySearch,
             footer: null
         }

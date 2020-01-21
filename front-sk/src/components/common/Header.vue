@@ -1,4 +1,5 @@
 <template>
+<<<<<<< front-sk/src/components/common/Header.vue
   <nav>
     <v-toolbar text>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -7,7 +8,7 @@
         <span>PRO</span>
       </v-toolbar-title>
 
-      <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
 
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
@@ -104,6 +105,7 @@
 
 <script>
 export default {
+  name: "appHeader",
   data() {
     return {
       drawer: false,
@@ -114,7 +116,7 @@ export default {
         { icon: "folder", text: "My Projects", route: "/home" },
         { icon: "person", text: "Team", route: "/home" }
       ]
-    }
+    };
   }
 };
 </script>

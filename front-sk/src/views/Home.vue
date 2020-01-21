@@ -16,7 +16,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-          <v-card class="pa-1" outlined tile>
+          <v-card class="pa-1 transparent" outlined tile>
             <middle/>
           </v-card>
       </v-col>

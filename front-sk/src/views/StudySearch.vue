@@ -1,38 +1,46 @@
 <template>
   <div id="search">
     <banner />
-    <v-container fluid>
-    <v-row>
-      <v-col cols="8">
-          <v-card class="pa-1" outlined tile>
-            <top-left/>
-          </v-card>
-      </v-col>
-      <v-col cols="4">
-          <v-card class="pa-1" outlined tile>
-            <top-right/>
-          </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-          <v-card class="pa-1" outlined tile>
-            <middle/>
-          </v-card>
-      </v-col>
-    </v-row>
-    </v-container>
-  </div> 
+    <contents />
+  </div>
 </template>
 
 <script>
-  export default {
-      name: "home",
-      components: {
-        Banner: () => import('@/components/studysearch/Banner'),
-        TopLeft: () => import('@/components/home/TopLeft'),
-        TopRight: () => import('@/components/home/TopRight'),
-        Middle: () => import('@/components/home/Middle'),
-      }
+export default {
+  name: "home",
+  data: () => ({
+    isLoading: false,
+    items: [],
+    model: null,
+    search: null,
+    tab: null,
+  }),
+  components: {
+    Banner: () => import("@/components/studysearch/Banner"),
+    contents: () => import("@/components/studysearch/Contents")
+  },
+  watch: {
+    model(val) {
+      if (val != null) this.tab = 0;
+      else this.tab = null;
+    },
+    search() {
+      // Items have already been loaded
+      if (this.items.length > 0) return;
+
+      this.isLoading = true;
+
+      // Lazily load input items
+      fetch("https://api.coinmarketcap.com/v2/listings/")
+        .then(res => res.json())
+        .then(res => {
+          this.items = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => (this.isLoading = false));
+    }
   }
+};
 </script>
