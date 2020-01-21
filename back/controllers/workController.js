@@ -4,7 +4,7 @@ export const create_work = async function(req, res) {
     const data = req.body
     
     const works = req.body.study == '1' ? study_works : personal_works
-    const user_id = data.writer ? data.writer : -1
+    const user_id = res.locals.user ? res.locals.user.id : -1
     const study_id = data.study_id ? data.study_id : -1
 
 

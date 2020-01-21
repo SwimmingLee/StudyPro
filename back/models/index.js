@@ -1,5 +1,3 @@
-import dotenv from "dotenv"
-dotenv.config();
 var fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
@@ -16,7 +14,7 @@ fs
     .forEach(function (file) {
         var model = sequelize.import(path.join(__dirname, file));
         db[model.name] = model;
-    });
+    }); 
 Object.keys(db).forEach(function (modelName) {
     if ("associate" in db[modelName]) {
         db[modelName].associate(db);

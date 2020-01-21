@@ -1,8 +1,9 @@
 import {applies, users, studies} from "../models"
 
 export const create_apply = async function(req, res) {
-
-    const user = await users.findOne({where:{id:req.body.user_id}})
+    const user_id = res.locals.user ? res.locals.user.id : -1
+    
+    const user = await users.findOne({where:{id:user_id}})
     const study = await studies.findOne({where:{id:req.body.study_id}})
     const wrong_id = !user || !study
 

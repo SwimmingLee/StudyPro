@@ -114,13 +114,11 @@ module.exports = function(sequelize, DataTypes) {
         const created_study = await this.create(data)
         return {
           "state": "success",
-          "detail": [{
-            "state": "success",
-            "detail": `${data.name}이 생성되었습니다.`
-        }, created_study]
+          "detail": created_study
+        }
       }
     }
-  }
+  
 
   studies.update_study = async function(study_id, data) {
     const study = await this.findOne({where:{id: study_id}})

@@ -1,7 +1,7 @@
 import {alarms, users} from "../models"
 
 export const create_alarm = async function(req, res) {
-    const from = req.body.from ? req.body.from : -1
+    const from = res.locals.user ? res.locals.user.id : -1
     const to = req.body.to ? req.body.to : -1
 
     const from_user = users.findOne({where:{id:from}})
@@ -13,7 +13,7 @@ export const create_alarm = async function(req, res) {
         "state": "fail",
         "detail": "wrong id"
     })} else {
-
+        
     }
 }
 
