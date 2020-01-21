@@ -33,6 +33,11 @@ const APPLIES = "/applies";
 const APPLY = "/";
 const APPLY_DETAIL = "/:apply_id";
 
+// Alarms
+const ALARMS = "/alarms";
+const ALARM = "/";
+const ALARM_DETAIL = "/:alarm_id";
+
 const routes = {
     users : USERS,
     userDetail : USER_DETAIL,
@@ -61,6 +66,10 @@ const routes = {
     applies : APPLIES,
     apply : APPLY,
     apply_detail : APPLY_DETAIL,
+
+    alarms : ALARMS,
+    alarm : ALARM,
+    alarm_detail : ALARM_DETAIL,
 
 }
 
