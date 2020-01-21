@@ -1,5 +1,8 @@
+const HOME  = "/";
+
 // User
 const USERS  = "/users";
+
 const USER_DETAIL = "/:user_id";
 const CHANGE_PASSWARD = "/change-password";
 const SIGNUP = "/signup";
@@ -40,6 +43,8 @@ const ALARM = "/";
 const ALARM_DETAIL = "/:alarm_id";
 
 const routes = {
+    home : HOME,
+
     users : USERS,
     userDetail : USER_DETAIL,
     changePassword : CHANGE_PASSWARD,

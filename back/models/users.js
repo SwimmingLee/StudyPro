@@ -1,5 +1,6 @@
 /* jshint indent: 2 */
 import crypto from "crypto"
+import jwt from "jsonwebtoken"
 
 module.exports = function (sequelize, DataTypes) {
   const users = sequelize.define('users', {
@@ -48,28 +49,51 @@ module.exports = function (sequelize, DataTypes) {
   });
 
   users.prototype.verify = function(password) {
-    let cipher = crypto.createCipher('aes192', process.env.SECRET_KEY)
-    cipher.update(password, 'utf8', 'base64')
-    const ciphered_password = cipher.final('base64')
+    return new Promise((resolve, reject) => {
+      crypto.pbkdf2(password, process.env.SECRET_KEY, 92412, 64, 'sha512', async (err, key) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            this.dataValues.password === key.toString('base64')
+          )
+        }
+      })
+    })
 
-    return this.dataValues.password === ciphered_password;
   };
 
-  users.save = function (user) {
-    const {email, nickname, name, password, gender, auth} = user;
+  users.prototype.getToken = function() {
+    return jwt.sign(
+      {nickname:this.dataValues.id},
+      process.env.JWT_KEY,
+      {expiresIn : '5m'}
+    )
+  }
 
-    let cipher = crypto.createCipher('aes192', process.env.SECRET_KEY)
-    cipher.update(password, 'utf8', 'base64')
-    const ciphered_password = cipher.final('base64')
-
-    return this.create({
-      email,
+  users.save = function async (user, platform_type, auth) {
+    const {
+      email, 
+      phone,
+      password, 
       name,
-      password: ciphered_password,
-      nickname,
-      gender,
-      auth
-    })
+      nickname, 
+      gender} = user;
+    
+    const self = this;
+    crypto.pbkdf2(password, process.env.SECRET_KEY, 92412, 64, 'sha512', async (err, key) => {
+      const hashed_password = await key.toString('base64');
+      self.create({
+            email,
+            platform_type,
+            phone,
+            password: hashed_password,
+            name,
+            nickname,
+            gender,
+            auth : auth || 0
+        })
+    });
   }
 
   return users;
