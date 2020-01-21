@@ -22,7 +22,7 @@ export const create_work = async function(req, res) {
 export const delete_work = async function(req, res) {
     const works = req.body.study === '1' ? study_works : personal_works
 
-    const work_id = req.params.work_id
+    const work_id = req.query.work_id
     const result = await works.delete_work(work_id)
 
     res.send(result)
@@ -31,7 +31,7 @@ export const delete_work = async function(req, res) {
 export const update_work = async function(req, res) {
     const works = req.body.study === '1' ? study_works : personal_works
 
-    const work_id = req.params.work_id
+    const work_id = req.query.work_id
     const data = req.body
 
     const result = await works.update_work(work_id, data)
@@ -42,7 +42,7 @@ export const read_work = async function(req, res) {
 
     const works = req.body.study === '1' ? study_works : personal_works
 
-    const work_id = req.params.work_id
+    const work_id = req.query.work_id
 
     const result = await works.read_work(work_id)
 

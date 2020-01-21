@@ -1,12 +1,23 @@
-import {users, studies, users_and_studies, applies, days, tags, studies_and_tags, marked_studies} from "../models"
+import {users, studies, users_and_studies, applies, days, tags, studies_and_tags, marked_studies, minor_classes} from "../models"
 
 // 
 export const create_study = async function(req, res) {
     const data = req.body
     const user = await users.findOne({where:{id: data.captain}})
     const wrong_id = !user
-
-    const result = await studies.create_study(wrong_id, data)
+    const minor_class = await minor_classes.findOne({where:{name: data.minor_class}})
+    
+    let result
+    if (!minor_class) {
+        result = {
+            state: "fail",
+            detail: "소주제가 잘못되었습니다"
+        }
+    } else {
+        delete data.minor_class
+        data.minor_class_id = minor_class.id
+        result = await studies.create_study(wrong_id, data)
+    }
     
     if (result.state === "fail") {res.send(result)}
     else {
@@ -53,7 +64,7 @@ export const join_study = async function(req, res) {
 }
 
 export const delete_study = async function(req, res) {
-    const study_id = req.params.study_id
+    const study_id =  req.query.study_id
 
     const result = await studies.delete_study(study_id)
     res.send(result)
@@ -61,14 +72,14 @@ export const delete_study = async function(req, res) {
 }
 
 export const update_study = async function(req, res) {
-    const study_id =  req.params.study_id
+    const study_id =  req.query.study_id
 
     const result = await studies.update_study(study_id, req.body)
     res.send(result)
 }
 
 export const read_study = async function(req, res) {
-    const study_id =  req.params.study_id
+    const study_id =  req.query.study_id
     const user_id = req.body.user_id ? req.body.user_id : -1
     const result = await studies.read_study(study_id)
     const study_applies = await applies.findAll({where:{study_id}})
