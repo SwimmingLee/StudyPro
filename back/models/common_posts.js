@@ -1,7 +1,8 @@
 /* jshint indent: 2 */
+import { Op } from "sequelize";
 
-module.exports = function(sequelize, DataTypes) {
-  const common_posts =  sequelize.define('common_posts', {
+module.exports = function (sequelize, DataTypes) {
+  const common_posts = sequelize.define('common_posts', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -41,80 +42,133 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'common_posts'
   });
 
-  common_posts.create_common_post = async function(writer, title,content, board){
+  common_posts.create_common_post = async function (writer, title, content, board) {
     let result;
-    
+
     result = this.create(
       {
-        writer : writer,
-        title : title,
-        content : content,
-        board : board
-      } 
-    )
-    return result;
-  }
-  
-  common_posts.read_common_post = async function(post_id){
-    let result;
-    
-    result = await this.findOne(
-      {
-        where:
-          {
-            id : post_id
-          }
+        writer: writer,
+        title: title,
+        content: content,
+        board: board
       }
     )
-    result.dataValues.like = false;
     return result;
   }
 
-  common_posts.update_common_post = async function(post_id, title, content){
+  common_posts.read_common_post = async function (post_id) {
+    try {
+
+
+      let result;
+      result = await this.findOne(
+        {
+          where:
+          {
+            id: post_id
+          }
+        }
+      )
+      result.dataValues.like = false;
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  common_posts.update_common_post = async function (post_id, title, content) {
     let result;
-    
+
     result = await this.update(
       {
-        title : title, 
-        content : content
+        title: title,
+        content: content
       },
       {
-        where : 
+        where:
         {
-          id : post_id
+          id: post_id
         }
       }
     )
     return result;
   }
 
-  common_posts.delete_common_post = async function(post_id){
+  common_posts.delete_common_post = async function (post_id) {
     let result;
-    
+
     result = await this.destroy(
       {
-        where : 
+        where:
         {
-          id : post_id
+          id: post_id
         }
       }
     )
     return result;
   }
 
-  common_posts.list_common_post = async function(board){
+  common_posts.list_common_post = async function (board) {
     let result;
-    
-    result = await this.findAll(
-      {
-        where : 
+    try {
+      result = await this.findAll(
         {
-          board : board
+          where:
+          {
+            board: board
+          }
         }
-      }
-    )
-    return result;
+      )
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
   }
-  
+
+  common_posts.search_common_post = async function (board, subject, word) {
+    try {
+      let result;
+      let query = "select * from common_posts where board = :board and ";
+      let where;
+      let values = {
+        board: board
+      }
+      if (subject === "content") {
+
+        where = "(content like '%"+word+"%')";
+      } else if (subject === "content&title") {
+        where = "(content like '%"+word+"%' or title like '%"+word+"%')";
+      } else if (subject === "writer") {
+        where = "(writer like '%"+word+"%'";
+      } else {
+        where = "title like '%"+word+"%'";
+      }
+      query += where;
+      
+      result = await this.sequelize.query(query, { replacements: values })
+      //   result = await this.findAll(
+      //     {
+      //       where:
+      //       {
+      //         [Op.and]:
+      //           [
+      //             { board: board },
+      //             {
+      //                   subject:
+      //                    {
+      //                       [Op.like]: "%" + word + "%"
+      //                     }
+      //             }
+      //           ]
+      //       }
+      //     }
+      //   )
+      
+      return result[0];
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return common_posts;
 }
