@@ -114,8 +114,8 @@ export default {
       checkbox: false,
       links: [
         { icon: "dashboard", text: "DashBoard", route: "/" },
-        { icon: "folder", text: "My Projects", route: "/home" },
-        { icon: "person", text: "Team", route: "/home" }
+        { icon: "folder", text: "My Projects", route: "/a" },
+        { icon: "person", text: "Team", route: "/b" }
       ]
     };
   }
