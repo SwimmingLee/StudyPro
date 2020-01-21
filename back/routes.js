@@ -10,10 +10,10 @@ const SIGNIN = "/signin";
 
 // Study
 const STUDIES = "/studies";
-const STUDY = "/";
+const STUDY = "/create";
 const STUDY_SEARCH = "/search";
 const STUDY_MARK = "/mark";
-const STUDY_DETAIL = "/:study_id";
+const STUDY_DETAIL = "/detail";
 
 
 //Post
@@ -29,18 +29,18 @@ const COMMENT_like = "/comment_like";
 
 // Works
 const WORKS = "/works";
-const WORK = "/";
-const WORK_DETAIL = "/:work_id";
+const WORK = "/create";
+const WORK_DETAIL = "/detail";
 
 // Applies
 const APPLIES = "/applies";
-const APPLY = "/";
-const APPLY_DETAIL = "/:apply_id";
+const APPLY = "/create";
+const APPLY_DETAIL = "/detail";
 
 // Alarms
 const ALARMS = "/alarms";
-const ALARM = "/";
-const ALARM_DETAIL = "/:alarm_id";
+const ALARM = "/create";
+const ALARM_DETAIL = "/detail";
 
 const routes = {
     home : HOME,
