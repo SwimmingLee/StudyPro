@@ -7,7 +7,7 @@
     </v-row>
     <v-row>
       <v-col class="text-center pt-1 pb-0">
-        <v-btn text small>Create Acount</v-btn>
+        <v-btn to="/join" text small>Create Acount</v-btn>
       </v-col>
     </v-row>
   </div>

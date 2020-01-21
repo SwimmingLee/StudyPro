@@ -1,11 +1,12 @@
 <template>
-<<<<<<< front-sk/src/components/common/Header.vue
   <nav>
     <v-toolbar text>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title class="gray--text">
-        <span class="font-weight-light">Study</span>
-        <span>PRO</span>
+      <v-toolbar-title>
+        <v-btn text to="/home" color="none">
+          <span class="font-weight-light">Study</span>
+          <span>PRO</span>
+        </v-btn>
       </v-toolbar-title>
 
         <v-spacer></v-spacer>
