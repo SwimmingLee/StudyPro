@@ -12,9 +12,10 @@ export const create_post = async function(req, res) {
         }else if(type==="study"){
             result = await study_post_model.create_study_post(study_id,writer, title, content, board);
         }
-
+        
         res.send(result);
     }catch(error){
+        console.log(error);
         res.send('error');
     }
 }
@@ -45,29 +46,32 @@ export const read_post = async function(req, res) {
         
         const post_id = req.query.post_id;
         const {user_id, type} = req.body;
-        let result, like;
+        let result;
+        let like = false;
+        
         if(type ==="common"){
             result = await common_post_model.read_common_post(post_id)
         }else if(type ==="study"){
-            
             result = await study_post_model.read_study_post(post_id)
         }
-
-        if(user_id){
-            like = await this.read_like(post_id,user_id,type);
-        }
         
-        result.like = like;
+        if(result){
+            if(user_id){
+                like = await this.read_like(post_id,user_id,type);
+            }
+            result.like = like;
+        }
         res.send(result);
-
+        
     }catch(error){
+        console.log(error);
         res.send("error");
     }
 }
 
 export const update_post = async function(req, res) {
     try{
-
+        
         
         const {post_id, title, content, type} = req.body;
         let result;
@@ -100,7 +104,8 @@ export const delete_post = async function(req, res) {
 export const list_post = async function(req, res) {
     try{
         
-        const {board,type,study_id} = req.query;
+        const {board} = req.query;
+        const {type, study_id} = req.body;
         console.log(board, type);
         
         let result;

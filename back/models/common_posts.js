@@ -61,6 +61,9 @@ module.exports = function (sequelize, DataTypes) {
 
 
       let result;
+      console.log("post_id", post_id);
+      
+      await this.count_view(post_id);
       result = await this.findOne(
         {
           where:
@@ -69,12 +72,51 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       )
-      result.dataValues.like = false;
       return result;
     } catch (error) {
       console.log(error);
     }
   }
+
+
+  common_posts.count_view = async function (post_id) {
+    let view_result, view_cnt = 0;
+
+    view_result = await this.findOne(
+      {
+        attributes:
+          [
+            'view'
+          ],
+        where:
+        {
+          id: post_id
+        }
+
+      }
+    )
+
+    console.log(view_result);
+    
+    if (view_result) {
+      view_cnt = (view_result.dataValues.view)+1;
+      console.log(post_id,'  ',view_cnt);
+      
+      await this.update(
+        {
+          view: view_cnt,
+        },
+        {
+          where:
+          {
+            id: post_id
+          }
+        }
+      )
+    }
+
+  }
+
 
   common_posts.update_common_post = async function (post_id, title, content) {
     let result;
@@ -135,16 +177,16 @@ module.exports = function (sequelize, DataTypes) {
       }
       if (subject === "content") {
 
-        where = "(content like '%"+word+"%')";
+        where = "(content like '%" + word + "%')";
       } else if (subject === "content&title") {
-        where = "(content like '%"+word+"%' or title like '%"+word+"%')";
+        where = "(content like '%" + word + "%' or title like '%" + word + "%')";
       } else if (subject === "writer") {
-        where = "(writer like '%"+word+"%'";
+        where = "(writer like '%" + word + "%'";
       } else {
-        where = "title like '%"+word+"%'";
+        where = "title like '%" + word + "%'";
       }
       query += where;
-      
+
       result = await this.sequelize.query(query, { replacements: values })
       //   result = await this.findAll(
       //     {
@@ -163,12 +205,15 @@ module.exports = function (sequelize, DataTypes) {
       //       }
       //     }
       //   )
-      
+
       return result[0];
     } catch (error) {
       console.log(error);
     }
   }
 
+
   return common_posts;
 }
+
+

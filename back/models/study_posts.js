@@ -81,7 +81,6 @@ module.exports = function(sequelize, DataTypes) {
           }
       }
     )
-    result.dataValues.like = false;
     return result;
   }
 
