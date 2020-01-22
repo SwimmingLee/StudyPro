@@ -246,6 +246,7 @@ export default {
       try {
         let signupResult = await this.signup({name: this.name, nickname: this.nickname, email: this.email, password: this.password, gender: 'M', phone: this.phone})
         this.created = signupResult
+        console.log(signupResult)
       } catch (err) {
         console.error(err)
       }

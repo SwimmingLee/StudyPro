@@ -5,24 +5,25 @@
         <v-col class="pa-2 col-10 col-md-9">
           <!-- 검색 창 -->
           <v-autocomplete
-            v-model="model"
-            :items="items"
+            :items="recommendItems"
             :loading="isLoading"
-            :search-input.sync="search"
+            :search-input.sync="searchInput"
             chips
             clearable
             hide-details
             hide-selected
             item-text="name"
             item-value="symbol"
-            label="Search for Study Groups..."
+            label="Search"
             solo
+            @keyup.enter="loadList()"
           >
             <template v-slot:no-data>
               <v-list-item>
                 <v-list-item-title>
-                  Search for your favorite
-                  <strong>Groups</strong>
+                  Type 
+                  <strong>group name</strong>
+                   you want to find
                 </v-list-item-title>
               </v-list-item>
             </template>
@@ -47,9 +48,6 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title v-text="item.name"></v-list-item-title>
-                <v-list-item-subtitle
-                  v-text="item.symbol"
-                ></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
                 <v-icon>mdi-coin</v-icon>
@@ -62,15 +60,12 @@
 
       <!-- 상세 검색 -->
       <v-row class="justify-center">
-        <v-col class="col-10 col-md-9 pt-0 mx-auto">
+        <v-col class="col-11 col-md-9 pt-0 mx-auto">
           <v-expansion-panels>
             <v-expansion-panel hover>
               <v-expansion-panel-header>Details</v-expansion-panel-header>
               <v-expansion-panel-content>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                <timeselector/>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -91,7 +86,7 @@
           infinite-scroll-distance="10"
         >
           <v-list-group
-            v-for="item in items"
+            v-for="item in displayItems"
             :key="item.gid"
             v-model="item.active"
             :prepend-icon="item.action"
@@ -102,7 +97,7 @@
                 <v-layout row>
                   <v-flex column xs7 class="pl-3">
                     <v-list-item-title
-                      v-text="item.groupName"
+                      v-text="item.gid"
                     ></v-list-item-title>
                   </v-flex>
                   <v-flex column xs2>
@@ -197,80 +192,71 @@
 </template>
 
 <script>
-var count = 2;
+import { mapActions } from 'vuex'
+import Timeselector from 'vue-timeselector'
+
+var count = 0;
+
 export default {
   data: () => ({
     isLoading: false,
-    model: null,
-    search: null,
+    searchInput: null,
     tab: null,
-    data: [],
-    busy: false,
-    items: [
-      {
-        action: "local_activity",
-        gid: 1,
-        groupName: "Group1",
-        items: [
-          {
-            intro: "저희 스터디 모임은 ....",
-            startDate: "2020년 1월 22일",
-            duration: "2달"
-          }
-        ],
-        locked: true
-      }
-    ],
+    busy: true,
     groupModal: false,
-    gid: 0
+    gid: 0,
+    searchForm: {
+      name: '',
+      startdate: '',
+      starttime: '',
+      endtime: '',
+      duration: '',
+      tags: '',
+      minorClass: '',
+      goal: ''
+    },
+    recommendItems: [],
+    items: [],
+    displayItems: [],
   }),
   components: {
-    GroupModal: () => import("@/components/studysearch/GroupModal")
+    GroupModal: () => import("@/components/studysearch/GroupModal"),
+    Timeselector,
   },
   watch: {
-    model(val) {
-      if (val != null) this.tab = 0;
-      else this.tab = null;
-    },
-    search() {
-      // Items have already been loaded
-      if (this.items.length > 0) return;
-
+    async searchInput() {
+      if(this.searchInput == '' || this.searchInput == null)  {
+        this.isLoading = false;
+        return
+      }
       this.isLoading = true;
 
-      // Lazily load input items
-      fetch("https://api.coinmarketcap.com/v2/listings/")
-        .then(res => res.json())
-        .then(res => {
-          this.items = res.data;
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => (this.isLoading = false));
+      this.searchForm['name'] = this.searchInput;
+      this.recommendItems = await this.getGroups(this.searchForm);
+
+      this.isLoading = false;
     }
   },
   methods: {
+    ...mapActions(['getGroups']),
+    async loadList(){
+      try {
+        this.items = await this.getGroups(this.searchForm)
+        this.loadMore();
+      } catch (err) {
+        console.log(err)
+      }
+    },
     loadMore: function() {
       this.busy = true;
       setTimeout(() => {
         for (var i = 0; i < 10; i++) {
-          this.items.push({
-            action: "local_activity",
-            gid: 0 + count,
-            groupName: "Group" + count++,
-            items: [
-              {
-                intro: "저희 스터디 모임은 ....",
-                startDate: "2020년 1월 " + count + "일",
-                duration: count + "달"
-              }
-            ],
-            locked: false
-          });
-          this.busy = false;
+          var item = this.items.shift();
+          item['gid'] = count++
+          this.displayItems.push(item);
         }
       }, 1000);
+      this.busy = false;
     },
     viewDetail(gid) {
       this.gid = gid;

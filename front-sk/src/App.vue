@@ -2,7 +2,7 @@
   <v-app>
     <router-view name="header"/>
     <v-fade-transition>
-      <router-view/>
+      <router-view class="fill-height"/>
     </v-fade-transition>
     <router-view name="footer"/>
   </v-app>

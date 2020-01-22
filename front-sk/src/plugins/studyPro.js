@@ -7,5 +7,5 @@ import "@/assets/scss/index.scss";
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 Vue.use(globalComponents);
-Vue.use(infiniteScroll)
+Vue.use(infiniteScroll);
 export default {}
