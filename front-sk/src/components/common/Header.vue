@@ -86,21 +86,6 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <!-- Expansion Panels -->
-    <!-- <v-container>
-      <v-expansion-panel>
-        <v-expansion-panel-content v-for="link in links" :key="link.text" router :to="link.route">
-          <div slot="header">{{ link.text }}</div>
-          <v-card>
-            <v-card-text>
-              <span class="font-weight-bold">HelloHello</span>
-              <span>Info</span>
-            </v-card-text>
-          </v-card>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-container>-->
   </nav>
 </template>
 
