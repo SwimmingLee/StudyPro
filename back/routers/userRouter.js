@@ -1,7 +1,7 @@
 import express from "express"
 import routes from "../routes"
 import passport from "passport"
-import { user, userDetail, changePassword, signup, signin, read_users } from "../controllers/userController";
+import { userDetail, changePassword, signup, signin, read_users } from "../controllers/userController";
 
 const userRouter = express.Router();
 
@@ -39,5 +39,15 @@ userRouter.get('/kakao/callback', passport.authenticate('kakao', {
 }), (req, res) => {
     res.redirect(routes.home);
 });
+
+userRouter.get('/naver', passport.authenticate('naver', {session: false}));
+userRouter.get('/naver/callback', passport.authenticate('naver', {
+    failureRedirect: '/',
+    session: false,
+}), (req, res) => {
+    res.redirect(routes.home);
+});
+
+
 userRouter.get(routes.userDetail, userDetail);
 export default userRouter;
