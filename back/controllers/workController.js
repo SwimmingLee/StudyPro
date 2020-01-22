@@ -3,12 +3,14 @@ import {study_works, personal_works, users, studies} from "../models"
 export const create_work = async function(req, res) {
     const data = req.body
     
-    const works = req.body.study === '1' ? study_works : personal_works
-    
+    const works = req.body.study == '1' ? study_works : personal_works
+    const user_id = data.writer ? data.writer : -1
+    const study_id = data.study_id ? data.study_id : -1
 
-    const user = await users.findOne({where:{id:data.writer}})
-    const study = await studies.findOne({where:{id:data.study_id}})
-    const wrong_id = !user || !study
+
+    const user = await users.findOne({where:{id:user_id}})
+    const study = await studies.findOne({where:{id:study_id}})
+    const wrong_id = !user || (!study && req.body.study == '1')
 
     const same_content_at_date = await works.findOne({where:{start_date:data.start_date, content:data.content}})
     const same_work = !same_content_at_date
@@ -20,7 +22,7 @@ export const create_work = async function(req, res) {
 export const delete_work = async function(req, res) {
     const works = req.body.study === '1' ? study_works : personal_works
 
-    const work_id = req.params.work_id
+    const work_id = req.query.work_id
     const result = await works.delete_work(work_id)
 
     res.send(result)
@@ -29,7 +31,7 @@ export const delete_work = async function(req, res) {
 export const update_work = async function(req, res) {
     const works = req.body.study === '1' ? study_works : personal_works
 
-    const work_id = req.params.work_id
+    const work_id = req.query.work_id
     const data = req.body
 
     const result = await works.update_work(work_id, data)
@@ -40,7 +42,7 @@ export const read_work = async function(req, res) {
 
     const works = req.body.study === '1' ? study_works : personal_works
 
-    const work_id = req.params.work_id
+    const work_id = req.query.work_id
 
     const result = await works.read_work(work_id)
 

@@ -1,2 +1,2 @@
-# WeTube
-Cloning YouTube With Vanilla and NodeJS 
+# Samoim
+StudyPro Website

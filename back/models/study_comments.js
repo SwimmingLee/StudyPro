@@ -56,13 +56,12 @@ module.exports = function(sequelize, DataTypes) {
 
   study_comments.read_comment = async function(post_id){
     try{
-
-        let query = "select study_comments.id study_comment_id, created_date, study_comments.writer, users.nickname, study_comments.content, count(study_comment_likes.comment_id) likes from study_comments join users on(study_comments.writer = users.id) left join study_comment_likes on (study_comments.id = study_comment_likes.comment_id) where post_id = :post_id group by study_comments.id;";
-        let values = {
-          post_id
-        }
-
-        let result = await this.sequelize.query(query, {replacements:values})
+      let query = "select study_comments.id study_comment_id, created_date, study_comments.writer, users.nickname, study_comments.content, count(study_comment_likes.comment_id) likes from study_comments join users on(study_comments.writer = users.id) left join study_comment_likes on (study_comments.id = study_comment_likes.comment_id) where post_id = :post_id group by study_comments.id;";
+      let values = {
+        post_id
+      }
+      
+      let result = await this.sequelize.query(query, {replacements:values})
       return result[0];
     
     }catch(error){
