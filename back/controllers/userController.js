@@ -14,9 +14,9 @@ export const signin = async function(req, res) {
         });
     
     if (user) {
-        const pass = await user.verify(password)
+        const pass = await user.verify(password);
         if (pass) {
-            let token = user.getToken()
+            let token = await user.getToken()
             res.cookie("accessToken", token)
             res.json({
                 state: "success",
@@ -24,7 +24,7 @@ export const signin = async function(req, res) {
                 user_id: user.dataValues.id
             })
         }
-        else {
+        else {   
             res.json({state:"fail"}); 
         }
     } else {
@@ -45,7 +45,7 @@ export const signup = async function(req, res, next) {
     const user = await users.findOne(  
         {   
             where: 
-            {   
+            {
                 email,
                 platform_type:"local",
             }
@@ -56,10 +56,15 @@ export const signup = async function(req, res, next) {
         throw new Error("userEmail exist");
     }
     else {
-        users.save(req.body, "local");
-        res.json({
-            state:"success"
-        });
+        const new_user = await users.save(req.body, "local");
+
+        if (new_user) {
+            res.json({
+                state:"success"
+            });
+        } else {
+            res.json({state:"fail"});
+        }
     }          
 
 }
