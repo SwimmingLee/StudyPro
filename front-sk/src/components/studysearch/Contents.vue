@@ -92,22 +92,103 @@
         >
           <v-list-group
             v-for="item in items"
-            :key="item.title"
+            :key="item.gid"
             v-model="item.active"
             :prepend-icon="item.action"
             no-action
           >
             <template v-slot:activator>
               <v-list-item-content>
-                <v-list-item-title v-text="item.title"></v-list-item-title>
+                <v-layout row>
+                  <v-flex column xs7 class="pl-3">
+                    <v-list-item-title
+                      v-text="item.groupName"
+                    ></v-list-item-title>
+                  </v-flex>
+                  <v-flex column xs2>
+                    <span>Mon, Fri</span>
+                  </v-flex>
+                  <v-flex column xs2>
+                    <span>08:00 ~ 12:00</span>
+                  </v-flex>
+                  <v-flex column xs1 text-center>
+                    <v-icon class="mdi mdi-lock" v-if="item.locked"></v-icon>
+                  </v-flex>
+                </v-layout>
               </v-list-item-content>
             </template>
+            <!-- 펼쳤을 때 화면 -->
+            <template>
+              <v-layout class="ma-2" row>
+                <v-flex column xs12 md10>
+                  <v-list-item
+                    v-for="subItem in item.items"
+                    :key="subItem.intro"
+                  >
+                    <v-list-item-content>
+                      <v-layout row class="px-3">
+                        <v-layout column xs2 align-center justify-center>
+                          <v-avatar color="white ">
+                            <v-icon size="62">mdi-account-circle</v-icon>
+                          </v-avatar>
+                        </v-layout>
 
-            <v-list-item v-for="subItem in item.items" :key="subItem.title">
-              <v-list-item-content>
-                <v-list-item-title v-text="subItem.title"></v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+                        <!-- 내용 -->
+                        <v-flex column xs10 class="pl-4">
+                          <!-- 스터디 소개글 -->
+                          <v-layout row class="pb-2">
+                            <v-flex column xs2 class="text-end pr-3">
+                              <v-content text class="font-weight-bold"
+                                >스터디 소개</v-content
+                              >
+                            </v-flex>
+                            <v-flex column xs7>
+                              {{ subItem.intro }}
+                            </v-flex>
+                          </v-layout>
+                          <!-- 시작시간 -->
+                          <v-layout row class="pb-2">
+                            <v-flex column xs2 class="text-end pr-3">
+                              <v-content text class="font-weight-bold"
+                                >시작날짜</v-content
+                              >
+                            </v-flex>
+                            <v-flex column xs7>
+                              {{ subItem.startDate }}
+                            </v-flex>
+                          </v-layout>
+                          <!-- 스터디기간 -->
+                          <v-layout row>
+                            <v-flex column xs2 class="text-end pr-3">
+                              <v-content text class="font-weight-bold"
+                                >스터디기간</v-content
+                              >
+                            </v-flex>
+                            <v-flex column xs7>
+                              {{ subItem.duration }}
+                            </v-flex>
+                          </v-layout>
+                        </v-flex>
+                      </v-layout>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-flex>
+                <v-layout column xs-3 md-2 justify-center>
+                  <v-btn
+                    class="white lighten-3"
+                    elevation="1"
+                    @click="viewDetail(item.gid)"
+                  >
+                    <span class="dark--text">view detail</span>
+                  </v-btn>
+                </v-layout>
+                <group-modal
+                  :group-modal="groupModal"
+                  :gid="gid"
+                  v-on:close="modalClose"
+                />
+              </v-layout>
+            </template>
           </v-list-group>
         </v-list>
       </v-card>
@@ -116,7 +197,7 @@
 </template>
 
 <script>
-var count = 0;
+var count = 2;
 export default {
   data: () => ({
     isLoading: false,
@@ -128,46 +209,24 @@ export default {
     items: [
       {
         action: "local_activity",
-        title: "Attractions",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "restaurant",
-        title: "Dining",
-        active: true,
+        gid: 1,
+        groupName: "Group1",
         items: [
-          { title: "Breakfast & brunch" },
-          { title: "New American" },
-          { title: "Sushi" }
-        ]
-      },
-      {
-        action: "school",
-        title: "Education",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "directions_run",
-        title: "Family",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "healing",
-        title: "Health",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "content_cut",
-        title: "Office",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "local_offer",
-        title: "Promotions",
-        items: [{ title: "List Item" }]
+          {
+            intro: "저희 스터디 모임은 ....",
+            startDate: "2020년 1월 22일",
+            duration: "2달"
+          }
+        ],
+        locked: true
       }
-    ]
+    ],
+    groupModal: false,
+    gid: 0
   }),
+  components: {
+    GroupModal: () => import("@/components/studysearch/GroupModal")
+  },
   watch: {
     model(val) {
       if (val != null) this.tab = 0;
@@ -194,17 +253,31 @@ export default {
   methods: {
     loadMore: function() {
       this.busy = true;
-      console.log(this.items);
       setTimeout(() => {
         for (var i = 0; i < 10; i++) {
           this.items.push({
             action: "local_activity",
-            title: "Attractions" + count++,
-            items: [{ title: "List Item" }]
+            gid: 0 + count,
+            groupName: "Group" + count++,
+            items: [
+              {
+                intro: "저희 스터디 모임은 ....",
+                startDate: "2020년 1월 " + count + "일",
+                duration: count + "달"
+              }
+            ],
+            locked: false
           });
           this.busy = false;
         }
       }, 1000);
+    },
+    viewDetail(gid) {
+      this.gid = gid;
+      this.groupModal = true;
+    },
+    modalClose() {
+      this.groupModal = false;
     }
   }
 };

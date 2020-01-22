@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    tags_id: {
+    tag_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -27,5 +27,10 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'studies_and_tags'
   });
+
+  studies_and_tags.create_study_tag = async function(study_id, tag_id) {
+    this.create({study_id, tag_id})
+  }
+
   return studies_and_tags;
 };

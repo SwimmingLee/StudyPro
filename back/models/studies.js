@@ -150,20 +150,19 @@ module.exports = function(sequelize, DataTypes) {
     }
   }
 
-  studies.search_studies = async function(data, captain_id) {
-
-
+  studies.search_studies = async function(data, id_data) {
+    
     let where = {}
     let key
     for (key of Object.keys(data)) {
-
+      
       switch (key) {
         case "name":
           where["name"] = {[Op.like]: "%" + data.name + "%"};
           break;
 
-        case "start_time", "start_date":
-          where[`${key}`] = {
+        case "start_time":
+          where[`${key}`] = { 
             [Op.or]: [
               { [Op.gte] : data[`${key}`] },
               null
@@ -171,20 +170,32 @@ module.exports = function(sequelize, DataTypes) {
           };
           break;
 
-        case "end_time":
-          where["end_time"] = {
+        case "end_time" :
+        case "start_date" :
+          where[`${key}`] = {
             [Op.or]: [
-              { [Op.lte] : data.end_time },
+              { [Op.lte] : data[`${key}`] },
               null
             ]
           };
           break;
 
         case "captain":
-          where["captain"] = captain_id;
+          where["captain"] = id_data.captain_id;
+          break;
+        
+        case "minor_class":
+        case "major_class":
+          
+          where[`${key}`+'_id'] = id_data[`${key}`+'_id']
+          break;
+
+        case "tag":
+        case "days":
           break;
 
         default:
+
           where[`${key}`] = data[`${key}`];
           break;
       }
