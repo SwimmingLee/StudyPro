@@ -64,13 +64,16 @@ export default {
   watch: {
     groupModal() {
       this.open = this.groupModal;
+      if(this.open){
+        this.load();
+      }
     }
   },
   methods: {
     ...mapActions(['getGroup']),
     async load(){
       try {
-        let response = await this.getGroup(this.gid);
+        let response = await this.getGroup({id:this.gid});
         console.log(response)
       } catch (err) {
         console.log(err)

@@ -6,7 +6,6 @@ import appHeader from '@/components/common/Header'
 import appFooter from '@/components/common/Footer'
 import studySearch from '@/views/StudySearch'
 import join from '@/components/user/Join'
-import workspace from '@/components/WorkSpace'
 
 Vue.use(VueRouter)
 
@@ -44,15 +43,6 @@ const routes = [{
             header: appHeader,
             default: join,
             footer: appFooter
-        }
-    },
-    {
-        path: '/workspace',
-        name: 'workspace',
-        components: {
-            header: null,
-            default: workspace,
-            footer: null
         }
     }
 ]

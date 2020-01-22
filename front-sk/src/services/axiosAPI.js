@@ -42,6 +42,23 @@ const requestGetGroup = (id, token) => {
     })
 }
 
+const requestGetGroups = (payload) => {
+    return axios({
+        method: 'GET',
+        url: 'http://15.164.245.201:8000/studies/detail',
+        params: {
+            'name': payload.name,
+            'start_date': payload.startdate,
+            'start_time': payload.starttime,
+            'end_time': payload.endtime,
+            'days': payload.duration,
+            'tags': payload.tags,
+            'minor_class': payload.minorClass,
+            'goal': payload.goal
+        }
+    })
+}
+
 export default {
     async login(email, password) {
         try {
@@ -63,6 +80,14 @@ export default {
         try {
             const getGroupResponse = await requestGetGroup(id, token)
             return getGroupResponse.data
+        } catch (err) {
+            console.error(err)
+        }
+    },
+    async getGroups(payload) {
+        try {
+            const getGroupsResponse = await requestGetGroups(payload)
+            return getGroupsResponse.data
         } catch (err) {
             console.error(err)
         }

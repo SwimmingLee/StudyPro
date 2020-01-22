@@ -16,5 +16,21 @@ export default {
         } catch (err) {
             console.error(err)
         }
+    },
+    async getGroup(id, token) {
+        try {
+            const getGroupResponse = await axiosAPI.getGroup(id, token)
+            return getGroupResponse
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    async getGroups(payload) {
+        try {
+            const getGroupsResponse = await axiosAPI.getGroups(payload)
+            return getGroupsResponse
+        } catch (err) {
+            console.log(err)
+        }
     }
 }
