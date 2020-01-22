@@ -6,6 +6,7 @@ import appHeader from '@/components/common/Header'
 import appFooter from '@/components/common/Footer'
 import studySearch from '@/views/StudySearch'
 import join from '@/components/user/Join'
+import mypage from '@/components/user/Mypage'
 
 Vue.use(VueRouter)
 
@@ -42,6 +43,15 @@ const routes = [{
         components: {
             header: appHeader,
             default: join,
+            footer: appFooter
+        }
+    },
+    {
+        path: '/mypage',
+        name: 'mypage',
+        components: {
+            header: appHeader,
+            default: mypage,
             footer: appFooter
         }
     }
