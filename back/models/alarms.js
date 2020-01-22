@@ -84,7 +84,7 @@ module.exports = function(sequelize, DataTypes) {
       }}
     }
   }
-
+  //
   alarms.read_alarm = async function(alarm_id) {
     const alarm = await this.findOne({where:{id:alarm_id}})
     
