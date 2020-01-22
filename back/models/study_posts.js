@@ -72,7 +72,7 @@ module.exports = function(sequelize, DataTypes) {
   
   study_posts.read_study_post = async function(post_id){
     let result;
-    
+    await this.count_view(post_id)
     result = await this.findOne(
       {
         where:
@@ -83,6 +83,44 @@ module.exports = function(sequelize, DataTypes) {
     )
     return result;
   }
+
+
+  study_posts.count_view = async function (post_id) {
+    let view_result, view_cnt = 0;
+
+    view_result = await this.findOne(
+      {
+        attributes:
+          [
+            'view'
+          ],
+        where:
+        {
+          id: post_id
+        }
+
+      }
+    )
+    
+    if (view_result) {
+      view_cnt = (view_result.dataValues.view)+1;
+      await this.update(
+        {
+          view: view_cnt,
+        },
+        {
+          where:
+          {
+            id: post_id
+          }
+        }
+      )
+    }
+  }
+
+
+
+  
 
   study_posts.update_study_post = async function(post_id, title, content){
     let result;

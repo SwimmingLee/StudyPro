@@ -45,8 +45,8 @@ export const read_post = async function(req, res) {
     try{
         
         const post_id = req.query.post_id;
-        const {user_id, type} = req.body;
-        let result;
+        const {type} = req.body;
+        let result, user_id;
         let like = false;
         
         if(type ==="common"){
@@ -56,6 +56,7 @@ export const read_post = async function(req, res) {
         }
         
         if(result){
+            user_id = res.locals.user.id;
             if(user_id){
                 like = await this.read_like(post_id,user_id,type);
             }

@@ -59,10 +59,7 @@ module.exports = function (sequelize, DataTypes) {
   common_posts.read_common_post = async function (post_id) {
     try {
 
-
       let result;
-      console.log("post_id", post_id);
-      
       await this.count_view(post_id);
       result = await this.findOne(
         {
@@ -95,13 +92,9 @@ module.exports = function (sequelize, DataTypes) {
 
       }
     )
-
-    console.log(view_result);
     
     if (view_result) {
       view_cnt = (view_result.dataValues.view)+1;
-      console.log(post_id,'  ',view_cnt);
-      
       await this.update(
         {
           view: view_cnt,
@@ -114,7 +107,6 @@ module.exports = function (sequelize, DataTypes) {
         }
       )
     }
-
   }
 
 
@@ -188,24 +180,6 @@ module.exports = function (sequelize, DataTypes) {
       query += where;
 
       result = await this.sequelize.query(query, { replacements: values })
-      //   result = await this.findAll(
-      //     {
-      //       where:
-      //       {
-      //         [Op.and]:
-      //           [
-      //             { board: board },
-      //             {
-      //                   subject:
-      //                    {
-      //                       [Op.like]: "%" + word + "%"
-      //                     }
-      //             }
-      //           ]
-      //       }
-      //     }
-      //   )
-
       return result[0];
     } catch (error) {
       console.log(error);
