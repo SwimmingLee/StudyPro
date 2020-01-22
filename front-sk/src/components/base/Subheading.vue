@@ -11,7 +11,6 @@
 <script>
   export default {
     name: 'BaseSubheading',
-
     inheritAttrs: false
   }
 </script>
