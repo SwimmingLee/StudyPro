@@ -1,10 +1,10 @@
-import dotenv from "dotenv"
-dotenv.config();
+
 var fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const dotenv = require('dotenv').config();
 const env = process.env.NODE_ENV || 'development';
+console.log(process.env.NODE_ENV)
 const config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
 const db = {};
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
