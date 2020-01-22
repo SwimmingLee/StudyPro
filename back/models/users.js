@@ -2,9 +2,6 @@
 import crypto from "crypto"
 import jwt from "jsonwebtoken"
 
-
-
-
 module.exports = function (sequelize, DataTypes) {
   const users = sequelize.define('users', {
     id: {

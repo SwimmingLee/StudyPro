@@ -1,6 +1,8 @@
 import passport from "passport";
 import local from "passport-local";
-import kakao from "passport-kakao";
+// import kakao from "passport-kakao";
+const kakao = require("passport-kakao");
+const naver = require("passport-naver");
 import {users} from "../models";
 
 async function loginByThirdparty(info, done) {
@@ -21,9 +23,31 @@ async function loginByThirdparty(info, done) {
 }
 
 const KakaoStrategy = kakao.Strategy;
-passport.use(new kakao({
-        clientID: process.env.KAKAO_ID,
+passport.use(new KakaoStrategy({
+        clientID: process.env.KAKAO_CLIENT_ID,
         callbackURL: process.env.KAKAO_CB_URL
+    }, async (accessToken, refreshToken, profile, done) => {
+        try{
+            console.log(profile._json);
+            loginByThirdparty({
+                email: "null",
+                name: "null",
+                plaform: "kakao",
+            }, done);            
+        } catch (err) {
+            console.log(err);
+            done(err);
+        }
+
+    }
+));
+
+
+const NaverStrategy = naver.Strategy;
+passport.use(new NaverStrategy({
+        clientID: process.env.NAVER_CLIENT_ID,
+        clientSecret: process.env.NAVER_CLIENT_SECRET,
+        callbackURL: process.env.NAVER_CB_URL
     }, async (accessToken, refreshToken, profile, done) => {
         try{
             console.log(profile._json);

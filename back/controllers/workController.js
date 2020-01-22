@@ -4,10 +4,10 @@ export const create_work = async function(req, res) {
     const data = req.body
     
     const works = req.body.study == '1' ? study_works : personal_works
-    const user_id = data.writer ? data.writer : -1
-    const study_id = data.study_id ? data.study_id : -1
-
-
+    const user_id = res.locals.user ? res.locals.user.id : -1
+    const study_id = req.query.study_id ? req.query.study_id : -1
+    data.writer = user_id
+    data.study_id = study_id
     const user = await users.findOne({where:{id:user_id}})
     const study = await studies.findOne({where:{id:study_id}})
     const wrong_id = !user || (!study && req.body.study == '1')
@@ -21,20 +21,22 @@ export const create_work = async function(req, res) {
 
 export const delete_work = async function(req, res) {
     const works = req.body.study === '1' ? study_works : personal_works
+    const user_id = res.locals.user ? res.locals.user.id : -1
 
     const work_id = req.query.work_id
-    const result = await works.delete_work(work_id)
+    const result = await works.delete_work(work_id, user_id)
 
     res.send(result)
 }
 
 export const update_work = async function(req, res) {
     const works = req.body.study === '1' ? study_works : personal_works
+    const user_id = res.locals.user ? res.locals.user.id : -1
 
     const work_id = req.query.work_id
     const data = req.body
 
-    const result = await works.update_work(work_id, data)
+    const result = await works.update_work(work_id, data, user_id)
     res.send(result)
 }
 
