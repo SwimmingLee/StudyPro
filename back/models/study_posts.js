@@ -52,6 +52,7 @@ module.exports = function(sequelize, DataTypes) {
 
 
   study_posts.create_study_post = async function(study_id,writer, title,content, board){
+    
     let result;
     try{
       result = await this.create(
@@ -69,21 +70,57 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   
-  study_posts.read_study_post = async function(post_id, study_id){
+  study_posts.read_study_post = async function(post_id){
     let result;
-    
+    await this.count_view(post_id)
     result = await this.findOne(
       {
         where:
           {
             id : post_id,
-            study_id : study_id
           }
       }
     )
-    result.dataValues.like = false;
     return result;
   }
+
+
+  study_posts.count_view = async function (post_id) {
+    let view_result, view_cnt = 0;
+
+    view_result = await this.findOne(
+      {
+        attributes:
+          [
+            'view'
+          ],
+        where:
+        {
+          id: post_id
+        }
+
+      }
+    )
+    
+    if (view_result) {
+      view_cnt = (view_result.dataValues.view)+1;
+      await this.update(
+        {
+          view: view_cnt,
+        },
+        {
+          where:
+          {
+            id: post_id
+          }
+        }
+      )
+    }
+  }
+
+
+
+  
 
   study_posts.update_study_post = async function(post_id, title, content){
     let result;
@@ -133,6 +170,53 @@ module.exports = function(sequelize, DataTypes) {
       }
     )
     return result;
+  }
+
+
+  study_posts.search_study_post = async function (study_id,board, subject, word) {
+    try {
+      let result;
+      let query = "select * from study_posts where (board = :board and study_id = :study_id) and";
+      let where;
+      let values = {
+        board: board,
+        study_id : study_id
+      }
+      if (subject === "content") {
+
+        where = "(content like '%"+word+"%')";
+      } else if (subject === "content&title") {
+        where = "(content like '%"+word+"%' or title like '%"+word+"%')";
+      } else if (subject === "writer") {
+        where = "(writer like '%"+word+"%')";
+      } else {
+        where = "(title like '%"+word+"%')";
+      }
+      query += where;
+      
+      result = await this.sequelize.query(query, { replacements: values })
+      //   result = await this.findAll(
+      //     {
+      //       where:
+      //       {
+      //         [Op.and]:
+      //           [
+      //             { board: board },
+      //             {
+      //                   subject:
+      //                    {
+      //                       [Op.like]: "%" + word + "%"
+      //                     }
+      //             }
+      //           ]
+      //       }
+      //     }
+      //   )
+      
+      return result[0];
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return study_posts;

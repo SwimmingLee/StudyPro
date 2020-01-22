@@ -1,6 +1,6 @@
 import express from "express"
 import routes from "../routes"
-import {create_post, read_post, update_post, delete_post, list_post} from "../controllers/postController"
+import {create_post, read_post, update_post, delete_post, list_post, search_post} from "../controllers/postController"
 // import {read_study_post, create_study_post, update_study_post,delete_study_post, list_study_post} from "../controllers/postController"
 
 
@@ -24,12 +24,12 @@ const postRouter = express.Router();
 // const POST_DETAIL = "/detail";
 
 
-
-postRouter.get(routes.post,list_post);
-postRouter.post(routes.posts,create_post);
+postRouter.get(routes.post_list,list_post);
+postRouter.post(routes.post_detail,create_post);
 postRouter.get(routes.post_detail,read_post);
 postRouter.put(routes.post_detail,update_post);
 postRouter.delete(routes.post_detail,delete_post);
+postRouter.post(routes.post_search,search_post);
 
 
 
