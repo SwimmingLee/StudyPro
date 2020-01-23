@@ -1,7 +1,6 @@
 <template>
-  <div id="home">
-    <banner />
-    <v-container fluid>
+  <v-content id="home">
+    <v-container>
       <v-row>
         <v-col cols="8" lg="9" md="8" sm="7">
           <v-card class="pa-1" outlined tile>
@@ -22,7 +21,7 @@
         </v-col>
       </v-row>
     </v-container>
-  </div>
+  </v-content>
 </template>
 
 <script>
@@ -31,7 +30,6 @@
 export default {
   name: "home",
   components: {
-    Banner: () => import("@/components/home/Banner"),
     TopLeft: () => import("@/components/home/TopLeft"),
     TopRight: () => import("@/components/home/TopRight"),
     Middle: () => import("@/components/home/Middle")
