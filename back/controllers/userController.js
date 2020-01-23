@@ -66,7 +66,7 @@ export const signup = async function(req, res, next) {
         throw new Error("userEmail exist");
     }
     else {
-    const new_user = await users.save(req.body, "local");
+        const new_user = await users.save(req.body, "local");
 
         if (new_user) {
             res.json({
