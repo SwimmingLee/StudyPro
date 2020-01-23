@@ -183,7 +183,7 @@ export default {
       items: [
         { icon: "group", title: "My Study", route: "/study" },
         { icon: "calendar_today", title: "Calendar", route: "/calendar" },
-        { icon: "account_circle", title: "Account", route: "/account" }
+        { icon: "account_circle", title: "My page", route: "/mypage" }
       ]
     };
   }
