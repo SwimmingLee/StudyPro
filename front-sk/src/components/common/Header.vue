@@ -1,18 +1,39 @@
 <template>
-  <nav>
+  <v-container>
     <!-- Header Menu -->
-    <v-card class="overflow-hidden">
       <v-app-bar
+        app
         fixed
         shrink-on-scroll
         prominent
-        src="@/assets/Background.jpg"
+        src="@/assets/images/IntroBackground.jpg"
         fade-img-on-scroll
         scroll-threshold="200"
         class="pa-1"
       >
         <template v-slot:img="{ props }">
-          <v-img v-bind="props" gradient="to bottom, rgba(255,255,255,1), rgba(0,0,0,.5)"></v-img>
+          <v-img v-bind="props" gradient="to bottom, rgba(255,255,255,1), rgba(0,0,0,.5)">
+                  <v-layout
+        fill-height
+        align-center
+        pa-3
+        aria-hidden
+      >
+        <v-flex
+          xs12
+          md7
+          offset-xs1
+        >
+          <h1 class="white--text display-3 font-weight-light">
+            The Art Of Travel
+          </h1>
+          <div class="font-weight-light pl-1 mb-2"
+               style="color:rgba(255,255,255,.8);">
+            Finding Beauty, One flight at a time
+          </div>
+        </v-flex>
+      </v-layout>
+          </v-img>
         </template>
 
         <router-link to="/home" text-decoration="none">
@@ -48,7 +69,6 @@
           </v-tabs>
         </template>
       </v-app-bar>
-    </v-card>
 
     <!-- Login Modal Boxs -->
     <v-dialog v-model="loginModal" max-width="600px">
@@ -98,16 +118,16 @@
     </v-dialog>
 
     <!-- Navigation Bar -->
-    <v-navigation-drawer app right v-model="drawer" class="customTheme lighten-1">
+    <v-navigation-drawer app right v-model="drawer" color="rgba(100,100,100, .85">
       <div>
-        <v-layout column class="white">
+        <v-layout column transparent>
           <v-flex class="mt-2">
             <v-container>
-              <v-icon large class="mr-5" @click="drawer = false">keyboard_arrow_right</v-icon>
+              <v-icon large class="mr-3 white--text" @click="drawer = false">keyboard_arrow_right</v-icon>
               <router-link to="/home" text-decoration="none">
-                <v-icon class="mr-2">fa-graduation-cap</v-icon>
-                <span class="font-weight-light">Study</span>
-                <span>PRO</span>
+                <v-icon large class="mr-2">fa-graduation-cap</v-icon>
+                <span class="logo font-weight-light">Study</span>
+                <span class="logo ">PRO</span>
               </router-link>
             </v-container>
           </v-flex>
@@ -140,11 +160,11 @@
 
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn block>Log out</v-btn>
+          <v-btn block color="rgba(255,255,255,.6)">Log out</v-btn>
         </div>
       </template>
     </v-navigation-drawer>
-  </nav>
+  </v-container>
 </template>
 
 <script>
@@ -174,5 +194,10 @@ export default {
 .v-application a {
   color: gray;
   text-decoration: none;
+}
+
+.logo{
+  font-size: 20px;
+  color: rgba(255,255,255,.9);
 }
 </style>
