@@ -15,6 +15,7 @@ export const local_signin = async function (req, res, next) {
             } else {
                 const token = user.getToken();
                 return res.json({
+                    state: "success",
                     user: {
                         id: user.id,
                         email: user.email,
@@ -58,18 +59,24 @@ export const signup = async function(req, res, next) {
         });
     
     if(user) {
-        res.send("userEmail exist");
+        res.json({
+            state: "fail",
+            detail: "userEmail exist"
+        });
         throw new Error("userEmail exist");
     }
     else {
-        const new_user = await users.save(req.body, "local");
+    const new_user = await users.save(req.body, "local");
 
         if (new_user) {
             res.json({
                 state:"success"
             });
         } else {
-            res.json({state:"fail"});
+            res.json({
+                state:"fail",
+                detail: "not save"
+            });
         }
     }          
 
