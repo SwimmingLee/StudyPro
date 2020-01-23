@@ -64,7 +64,6 @@ passport.use(new NaverStrategy({
     }
 ));
 
-
 const LocalStrategy = local.Strategy;
 passport.use(new LocalStrategy({
         usernameField: 'email',
