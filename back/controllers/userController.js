@@ -1,9 +1,39 @@
 import {users} from "../models";
 import passport from "passport";
 
-export const userDetail = (req, res) => res.send("UserDetail");
+export const read_users = function(req, res) {
+    users.findAll({})
+        .then(user => {
+            res.send(user)
+        })
+}
+export const read_user = async (req, res) => {
+    const user = await users.findOne({where: {id:req.params.user_id}})
+    res.json({
+        user: {
+            id: user.id,
+            email: user.email,
+            phone: user.phone,
+            name: user.name,
+            nickname: user.nickname,
+            gender: user.gender
+        },
+    });
+}
 
-export const changePassword = (req, res) => res.send("ChangePassword");
+export const update_user = async (req, res) => { 
+    //const user_info = req.body;
+    //const user = await users.update_user(user_info, { where: { id: req.params.user_id } })
+
+    res.json({
+        state: "updating...",
+    });
+
+}
+export const delete_user = async (req, res) => {
+    const user = await users.destroy({where: {id:req.params.user_id}})
+    res.json({user});
+}
 
 export const local_signin = async function (req, res, next) {
     passport.authenticate('local', { session: false }, (err, user, info) => {
@@ -19,7 +49,10 @@ export const local_signin = async function (req, res, next) {
                     user: {
                         id: user.id,
                         email: user.email,
+                        phone: user.phone,
                         name: user.name,
+                        nickname: user.nickname,
+                        gender: user.gender
                     },
                     token
                 })
@@ -41,12 +74,6 @@ export const naver_signin_callback = passport.authenticate('naver', {
         session: false,
     });
 
-export const read_users = function(req, res) {
-    users.findAll({})
-        .then(user => {
-            res.send(user)
-        })
-}
 
 export const signup = async function(req, res, next) {
     const {email} = req.body;
