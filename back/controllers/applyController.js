@@ -11,21 +11,21 @@ export const create_apply = async function(req, res) {
 }
 
 export const delete_apply = async function(req, res) {
-    const apply_id = req.params.apply_id
+    const apply_id = req.query.apply_id
     
     const result = await applies.delete_apply(apply_id)
     res.send(result)
 }
 
 export const update_apply = async function(req, res) {
-    const apply_id = req.params.apply_id
+    const apply_id = req.query.apply_id
 
     const result = await applies.update_apply(apply_id, req.body)
     res.send(result)
 }
 
 export const read_apply = async function(req, res) {
-    const apply_id = req.params.apply_id
+    const apply_id = req.query.apply_id
 
     const result = await applies.read_apply(apply_id)
     if (!result) {

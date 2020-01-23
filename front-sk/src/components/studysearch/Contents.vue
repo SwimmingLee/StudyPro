@@ -5,24 +5,25 @@
         <v-col class="pa-2 col-10 col-md-9">
           <!-- 검색 창 -->
           <v-autocomplete
-            v-model="model"
-            :items="items"
+            :items="recommendItems"
             :loading="isLoading"
-            :search-input.sync="search"
+            :search-input.sync="searchInput"
             chips
             clearable
             hide-details
             hide-selected
             item-text="name"
             item-value="symbol"
-            label="Search for Study Groups..."
+            label="Search"
             solo
+            @keyup.enter="loadList()"
           >
             <template v-slot:no-data>
               <v-list-item>
                 <v-list-item-title>
-                  Search for your favorite
-                  <strong>Groups</strong>
+                  Type 
+                  <strong>group name</strong>
+                   you want to find
                 </v-list-item-title>
               </v-list-item>
             </template>
@@ -47,9 +48,6 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title v-text="item.name"></v-list-item-title>
-                <v-list-item-subtitle
-                  v-text="item.symbol"
-                ></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
                 <v-icon>mdi-coin</v-icon>
@@ -62,15 +60,12 @@
 
       <!-- 상세 검색 -->
       <v-row class="justify-center">
-        <v-col class="col-10 col-md-9 pt-0 mx-auto">
+        <v-col class="col-11 col-md-9 pt-0 mx-auto">
           <v-expansion-panels>
             <v-expansion-panel hover>
               <v-expansion-panel-header>Details</v-expansion-panel-header>
               <v-expansion-panel-content>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                <timeselector/>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -91,23 +86,104 @@
           infinite-scroll-distance="10"
         >
           <v-list-group
-            v-for="item in items"
-            :key="item.title"
+            v-for="item in displayItems"
+            :key="item.gid"
             v-model="item.active"
             :prepend-icon="item.action"
             no-action
           >
             <template v-slot:activator>
               <v-list-item-content>
-                <v-list-item-title v-text="item.title"></v-list-item-title>
+                <v-layout row>
+                  <v-flex column xs7 class="pl-3">
+                    <v-list-item-title
+                      v-text="item.gid"
+                    ></v-list-item-title>
+                  </v-flex>
+                  <v-flex column xs2>
+                    <span>Mon, Fri</span>
+                  </v-flex>
+                  <v-flex column xs2>
+                    <span>08:00 ~ 12:00</span>
+                  </v-flex>
+                  <v-flex column xs1 text-center>
+                    <v-icon class="mdi mdi-lock" v-if="item.locked"></v-icon>
+                  </v-flex>
+                </v-layout>
               </v-list-item-content>
             </template>
+            <!-- 펼쳤을 때 화면 -->
+            <template>
+              <v-layout class="ma-2" row>
+                <v-flex column xs12 md10>
+                  <v-list-item
+                    v-for="subItem in item.items"
+                    :key="subItem.intro"
+                  >
+                    <v-list-item-content>
+                      <v-layout row class="px-3">
+                        <v-layout column xs2 align-center justify-center>
+                          <v-avatar color="white ">
+                            <v-icon size="62">mdi-account-circle</v-icon>
+                          </v-avatar>
+                        </v-layout>
 
-            <v-list-item v-for="subItem in item.items" :key="subItem.title">
-              <v-list-item-content>
-                <v-list-item-title v-text="subItem.title"></v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+                        <!-- 내용 -->
+                        <v-flex column xs10 class="pl-4">
+                          <!-- 스터디 소개글 -->
+                          <v-layout row class="pb-2">
+                            <v-flex column xs2 class="text-end pr-3">
+                              <v-content text class="font-weight-bold"
+                                >스터디 소개</v-content
+                              >
+                            </v-flex>
+                            <v-flex column xs7>
+                              {{ subItem.intro }}
+                            </v-flex>
+                          </v-layout>
+                          <!-- 시작시간 -->
+                          <v-layout row class="pb-2">
+                            <v-flex column xs2 class="text-end pr-3">
+                              <v-content text class="font-weight-bold"
+                                >시작날짜</v-content
+                              >
+                            </v-flex>
+                            <v-flex column xs7>
+                              {{ subItem.startDate }}
+                            </v-flex>
+                          </v-layout>
+                          <!-- 스터디기간 -->
+                          <v-layout row>
+                            <v-flex column xs2 class="text-end pr-3">
+                              <v-content text class="font-weight-bold"
+                                >스터디기간</v-content
+                              >
+                            </v-flex>
+                            <v-flex column xs7>
+                              {{ subItem.duration }}
+                            </v-flex>
+                          </v-layout>
+                        </v-flex>
+                      </v-layout>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-flex>
+                <v-layout column xs-3 md-2 justify-center>
+                  <v-btn
+                    class="white lighten-3"
+                    elevation="1"
+                    @click="viewDetail(item.gid)"
+                  >
+                    <span class="dark--text">view detail</span>
+                  </v-btn>
+                </v-layout>
+                <group-modal
+                  :group-modal="groupModal"
+                  :gid="gid"
+                  v-on:close="modalClose"
+                />
+              </v-layout>
+            </template>
           </v-list-group>
         </v-list>
       </v-card>
@@ -116,95 +192,78 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import Timeselector from 'vue-timeselector'
+
 var count = 0;
+
 export default {
   data: () => ({
     isLoading: false,
-    model: null,
-    search: null,
+    searchInput: null,
     tab: null,
-    data: [],
-    busy: false,
-    items: [
-      {
-        action: "local_activity",
-        title: "Attractions",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "restaurant",
-        title: "Dining",
-        active: true,
-        items: [
-          { title: "Breakfast & brunch" },
-          { title: "New American" },
-          { title: "Sushi" }
-        ]
-      },
-      {
-        action: "school",
-        title: "Education",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "directions_run",
-        title: "Family",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "healing",
-        title: "Health",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "content_cut",
-        title: "Office",
-        items: [{ title: "List Item" }]
-      },
-      {
-        action: "local_offer",
-        title: "Promotions",
-        items: [{ title: "List Item" }]
-      }
-    ]
-  }),
-  watch: {
-    model(val) {
-      if (val != null) this.tab = 0;
-      else this.tab = null;
+    busy: true,
+    groupModal: false,
+    gid: 0,
+    searchForm: {
+      name: '',
+      startdate: '',
+      starttime: '',
+      endtime: '',
+      duration: '',
+      tags: '',
+      minorClass: '',
+      goal: ''
     },
-    search() {
-      // Items have already been loaded
-      if (this.items.length > 0) return;
-
+    recommendItems: [],
+    items: [],
+    displayItems: [],
+  }),
+  components: {
+    GroupModal: () => import("@/components/studysearch/GroupModal"),
+    Timeselector,
+  },
+  watch: {
+    async searchInput() {
+      if(this.searchInput == '' || this.searchInput == null)  {
+        this.isLoading = false;
+        return
+      }
       this.isLoading = true;
 
-      // Lazily load input items
-      fetch("https://api.coinmarketcap.com/v2/listings/")
-        .then(res => res.json())
-        .then(res => {
-          this.items = res.data;
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => (this.isLoading = false));
+      this.searchForm['name'] = this.searchInput;
+      this.recommendItems = await this.getGroups(this.searchForm);
+
+      this.isLoading = false;
     }
   },
   methods: {
+    ...mapActions(['getGroups']),
+    async loadList(){
+      try {
+        this.items = await this.getGroups(this.searchForm)
+        this.loadMore();
+      } catch (err) {
+        console.log(err)
+      }
+    },
     loadMore: function() {
       this.busy = true;
-      console.log(this.items);
       setTimeout(() => {
         for (var i = 0; i < 10; i++) {
-          this.items.push({
-            action: "local_activity",
-            title: "Attractions" + count++,
-            items: [{ title: "List Item" }]
-          });
-          this.busy = false;
+          var item = this.items.shift();
+          item['gid'] = count++
+          this.displayItems.push(item);
         }
       }, 1000);
+      this.busy = false;
+    },
+    viewDetail(gid) {
+      this.gid = gid;
+      this.groupModal = true;
+    },
+    modalClose() {
+      this.groupModal = false;
     }
   }
 };

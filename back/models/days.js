@@ -23,5 +23,14 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'days'
   });
+
+  
+  days.create_days = async function(study_id, days) {
+
+    for (const day of days) {
+      this.create({study_id, day})
+    }
+  }
+
   return days;
 };

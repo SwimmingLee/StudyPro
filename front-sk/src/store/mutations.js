@@ -7,7 +7,13 @@ export default {
     [types.TOKEN](state, token) {
         state.token = token
     },
+    [types.ERROR_STATE](state, error_state) {
+        state.error_state = error_state
+    },
     [types.IS_AUTH](state, isAuth) {
         state.isAuth = isAuth
+    },
+    [types.USER_NICKNAME](state, userNickname) {
+        state.userNickname = userNickname
     }
 }
