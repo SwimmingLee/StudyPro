@@ -7,6 +7,7 @@ import appFooter from '@/components/common/Footer'
 import studySearch from '@/views/StudySearch'
 import join from '@/components/user/Join'
 import mypage from '@/components/user/Mypage'
+import workspace from '@/components/WorkSpace'
 
 Vue.use(VueRouter)
 
@@ -53,6 +54,15 @@ const routes = [{
             header: appHeader,
             default: mypage,
             footer: appFooter
+        }
+    },
+    {
+        path: '/workspace',
+        name: 'workspace',
+        components: {
+            header: null,
+            default: workspace,
+            footer: null
         }
     }
 ]

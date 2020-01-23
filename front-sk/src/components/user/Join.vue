@@ -206,6 +206,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   data: () => ({
     valid: true,
@@ -270,16 +272,22 @@ export default {
     os: false,
     db: false,
     cn: false,
-    cs: false
+    cs: false,
+    created: false
   }),
   components: {
     banner: () => import("@/components/home/Banner")
   },
 
   methods: {
-    validate() {
-      if (this.$refs.form.validate()) {
-        this.snackbar = true;
+    ...mapActions(['signup']),
+    async onSignup () {
+      try {
+        let signupResult = await this.signup({name: this.name, nickname: this.nickname, email: this.email, password: this.password, gender: 'M', phone: this.phone})
+        this.created = signupResult
+        console.log(signupResult)
+      } catch (err) {
+        console.error(err)
       }
     }
   },
