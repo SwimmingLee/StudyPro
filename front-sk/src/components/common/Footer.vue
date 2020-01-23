@@ -1,13 +1,11 @@
 <template>
   <nav>
-    <v-btn v-scroll="onScroll" v-show="toTopBtn" fab
-      dark
-      fixed
-      bottom
-      right
-      color="error" @click="toTop"
+    <v-btn v-scroll="onScroll" v-show="toTopBtn"
+      fab fixed bottom right
+      class="red pa-0" @click="toTop"
     >
-      <v-icon>keyboard_arrow_up</v-icon>
+
+	<v-icon class="white--text">fa-arrow-up</v-icon>
     </v-btn>
     <v-footer class="customTheme" padless>
       <v-row justify="center" no-gutters>
