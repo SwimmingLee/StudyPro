@@ -64,6 +64,15 @@ const routes = [{
             default: workspace,
             footer: null
         }
+    },
+    {
+        path: '/mypage',
+        name: 'mypage',
+        components: {
+            header: null,
+            default: mypage,
+            footer: null
+        }
     }
 ]
 

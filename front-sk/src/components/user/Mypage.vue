@@ -4,7 +4,7 @@
 
     <v-row justify="center"
       ><v-col cols="12" sm="10">
-        <v-card class="mx-auto" max-width="1500">
+        <v-card class="mt-7" max-width="1500">
           <v-toolbar flat color="black" dark>
             <v-toolbar-title style="font-size:30px">마이페이지</v-toolbar-title>
           </v-toolbar>
