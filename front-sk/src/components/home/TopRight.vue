@@ -12,8 +12,8 @@ import { mapState } from 'vuex'
 
 export default {
     components: {
-        MiniSignin: () => import('@/components/common/MiniSignin'),
-        MiniUserInfo: () => import('@/components/common/MiniUserInfo')
+        MiniSignin: () => import('@/components/user/MiniSignin'),
+        MiniUserInfo: () => import('@/components/user/MiniUserInfo')
     },
     computed: {
         ...mapState(['isAuth'])

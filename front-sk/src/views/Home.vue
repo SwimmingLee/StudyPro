@@ -2,12 +2,12 @@
   <v-content id="home">
     <v-container>
       <v-row>
-        <v-col cols="8" lg="9" md="8" sm="7">
+        <v-col cols="12" lg="9" md="8" sm="12">
           <v-card class="pa-1" outlined tile>
             <top-left />
           </v-card>
         </v-col>
-        <v-col cols="4" lg="3" md="4" sm="5">
+        <v-col lg="3" md="4" class="d-none d-md-block">
           <v-card class="pa-1" outlined tile>
             <top-right />
           </v-card>
