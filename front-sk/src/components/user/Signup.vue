@@ -1,6 +1,5 @@
 <template>
   <v-form>
-    <banner />
     <v-container>
       <div id="app">
         <v-app id="inspire">
@@ -273,9 +272,6 @@ export default {
     cs: false,
     created: false
   }),
-  components: {
-    banner: () => import("@/components/home/Banner")
-  },
 
   methods: {
     ...mapActions(['signup']),

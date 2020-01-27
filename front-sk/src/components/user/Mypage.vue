@@ -1,7 +1,5 @@
 <template>
   <v-form>
-    <banner />
-
     <v-row justify="center"
       ><v-col cols="12" sm="10">
         <v-card class="mx-auto" max-width="1500">
@@ -44,7 +42,6 @@
 <script>
 export default {
   components: {
-    Banner: () => import("@/components/home/Banner"),
     EditProfile: () => import("@/components/mypage/EditProfile"),
     ManageStudy: () => import("@/components/mypage/ManageStudy"),
     Withdrawal: () => import("@/components/mypage/Withdrawal")
