@@ -17,5 +17,10 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'tags'
   });
 
+  tags.create_tag = async function(tag_name) {
+    const result = await this.create({name:tag_name})
+    return result
+  }
+
   return tags;
 };

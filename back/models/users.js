@@ -1,5 +1,6 @@
 /* jshint indent: 2 */
 import crypto from "crypto"
+import jwt from "jsonwebtoken"
 
 module.exports = function (sequelize, DataTypes) {
   const users = sequelize.define('users', {
@@ -12,11 +13,18 @@ module.exports = function (sequelize, DataTypes) {
     email: {
       type: DataTypes.STRING(100),
       allowNull: false,
-      unique: true
+    },
+    platform_type: {
+      type: DataTypes.STRING(10),
+      allowNull: true
+    },
+    phone: {
+      type: DataTypes.STRING(45),
+      allowNull: true,
     },
     password: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true,
     },
     name: {
       type: DataTypes.STRING(45),
@@ -25,7 +33,6 @@ module.exports = function (sequelize, DataTypes) {
     nickname: {
       type: DataTypes.STRING(45),
       allowNull: false,
-      unique: true
     },
     gender: {
       type: DataTypes.STRING(1),
@@ -39,29 +46,58 @@ module.exports = function (sequelize, DataTypes) {
     tableName: 'users'
   });
 
-  users.prototype.verify = function(password) {
-    let cipher = crypto.createCipher('aes192', process.env.SECRET_KEY)
-    cipher.update(password, 'utf8', 'base64')
-    const ciphered_password = cipher.final('base64')
+  users.hash = function(password) {
+    return new Promise((resolve, reject) => {
+      crypto.pbkdf2(password, process.env.SECRET_KEY, 92412, 64, 'sha512', async (err, key) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            key.toString('base64')
+          )
+        }
+      })
+    })
+  }
 
-    return this.dataValues.password === ciphered_password;
+  users.prototype.verify = async function(password) {
+    const hash = await users.hash(password);
+    return this.dataValues.password === hash;
   };
 
-  users.save = function (user) {
-    const {email, nickname, name, password, gender, auth} = user;
+  users.prototype.getToken = function() {
+    return jwt.sign(
+      {user_id:this.dataValues.id},
+      process.env.JWT_KEY,
+      {expiresIn : '2h'}
+    )
+  }
 
-    let cipher = crypto.createCipher('aes192', process.env.SECRET_KEY)
-    cipher.update(password, 'utf8', 'base64')
-    const ciphered_password = cipher.final('base64')
+  users.save = async function (user, platform_type, auth) {
+    try {
+      const {
+        email,
+        phone,
+        password,
+        name,
+        nickname,
+        gender } = user;
 
-    return this.create({
-      email,
-      name,
-      password: ciphered_password,
-      nickname,
-      gender,
-      auth
-    })
+      const hash = await users.hash(password);
+      const new_user = await this.create({
+        email,
+        platform_type,
+        phone,
+        password: hash,
+        name,
+        nickname,
+        gender,
+        auth: auth || 0
+      })
+      return new_user;
+    } catch (err) {
+      return false;
+    }
   }
 
   return users;

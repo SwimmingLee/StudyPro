@@ -71,8 +71,7 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'studies'
   });
 
-  studies.delete_study = async function(study_id) {
-
+  studies.delete_study = async function(study_id, user_id) {
     const study = await this.findOne({where:{id: study_id}})
     if (!study) {
         return {
@@ -80,12 +79,15 @@ module.exports = function(sequelize, DataTypes) {
           "detail": "wrong id"
       }
     } else {
-
-        studies.destroy({where: {id:study_id}})
-        return {
-          "state": "success",
-          "detail": `${study_id}번 스터디 삭제완료`
-      }
+        if (study.captain != user_id) {return {
+          "state": "fail",
+          "detail": `작성자가 아닙니다`
+        }} else {
+          this.destroy({where: {id:study_id}})
+          return {
+            "state": "success",
+            "detail": `${study_id}번 스터디 삭제완료`
+        }}
     }
   }
 
@@ -114,15 +116,13 @@ module.exports = function(sequelize, DataTypes) {
         const created_study = await this.create(data)
         return {
           "state": "success",
-          "detail": [{
-            "state": "success",
-            "detail": `${data.name}이 생성되었습니다.`
-        }, created_study]
+          "detail": created_study
+        }
       }
     }
-  }
+  
 
-  studies.update_study = async function(study_id, data) {
+  studies.update_study = async function(study_id, data, user_id) {
     const study = await this.findOne({where:{id: study_id}})
     if (!study) {
         return {
@@ -130,11 +130,15 @@ module.exports = function(sequelize, DataTypes) {
           "detail": "wrong id"
       }
     } else {
+        if (study.captain != user_id) {return {
+          "state": "fail",
+          "detail": `작성자가 아닙니다`
+        }} else {
         this.update(data, {where: {id:study_id}})
         return {
           "state": "success",
           "detail": `${study_id}번 스터디 변경완료`
-      }
+        }}
     }
   }
 
@@ -150,20 +154,19 @@ module.exports = function(sequelize, DataTypes) {
     }
   }
 
-  studies.search_studies = async function(data, captain_id) {
-
-
+  studies.search_studies = async function(data, id_data) {
+    
     let where = {}
     let key
     for (key of Object.keys(data)) {
-
+      
       switch (key) {
         case "name":
           where["name"] = {[Op.like]: "%" + data.name + "%"};
           break;
 
-        case "start_time", "start_date":
-          where[`${key}`] = {
+        case "start_time":
+          where[`${key}`] = { 
             [Op.or]: [
               { [Op.gte] : data[`${key}`] },
               null
@@ -171,20 +174,32 @@ module.exports = function(sequelize, DataTypes) {
           };
           break;
 
-        case "end_time":
-          where["end_time"] = {
+        case "end_time" :
+        case "start_date" :
+          where[`${key}`] = {
             [Op.or]: [
-              { [Op.lte] : data.end_time },
+              { [Op.lte] : data[`${key}`] },
               null
             ]
           };
           break;
 
         case "captain":
-          where["captain"] = captain_id;
+          where["captain"] = id_data.captain_id;
+          break;
+        
+        case "minor_class":
+        case "major_class":
+          
+          where[`${key}`+'_id'] = id_data[`${key}`+'_id']
+          break;
+
+        case "tag":
+        case "days":
           break;
 
         default:
+
           where[`${key}`] = data[`${key}`];
           break;
       }
