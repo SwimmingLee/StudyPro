@@ -65,6 +65,7 @@
             <tr>
               <td>기간</td>
               <td colspan="7">
+                  
               </td>
             </tr>
             <tr>
