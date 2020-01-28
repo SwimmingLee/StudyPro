@@ -1,0 +1,85 @@
+<template>
+  <div id="groupmodal">
+    <v-dialog v-model="open" max-width="80%">
+      <v-card id="lgiModal" class="px-0 pt-0">
+        <v-card-title class="customTheme darken-2 white--text pb-3">
+          <span class="headline">Log In</span>
+        </v-card-title>
+        <v-card-text class="py-0 px-7">
+          <v-container class="pb-0">
+            <v-row>
+              <v-col cols="12" class="pb-0">
+                <v-icon left>email</v-icon>
+                <v-text-field
+                  label="E-mail"
+                  required
+                  type="email"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" class="py-0">
+                <v-text-field
+                  hint="비밀번호는 8자리 이상의 문자 + 숫자 조합입니다"
+                  label="Password"
+                  required
+                  type="password"
+                ></v-text-field>
+              </v-col>
+              <v-checkbox
+                id="modalCheckbox"
+                class="py-0 mb-0"
+                v-model="checkbox"
+                label="로그인 상태 유지"
+                color="primary"
+                value="primary"
+                hide-details
+              ></v-checkbox>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions class="pt-0 pr-5">
+          <v-spacer></v-spacer>
+          <v-btn color="error lighten-1" tile @click="close">창 닫기</v-btn>
+          <v-btn color="customTheme darken-2 white--text" tile @click="close"
+            >로그인</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
+<script>
+import { mapActions } from 'vuex'
+
+export default {
+  name: "groupmodal",
+  data: () => ({
+    checkbox: false,
+    open: false,
+    item: {
+
+    },
+  }),
+  props: ["groupModal", "gid"],
+  watch: {
+    groupModal() {
+      this.open = this.groupModal;
+    }
+  },
+  methods: {
+    ...mapActions(['getGroup']),
+    async load(){
+      try {
+        let response = await this.getGroup(this.gid);
+        console.log(response)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    close() {
+      this.open = false;
+      this.$emit("close");
+    }
+  }
+};
+</script>

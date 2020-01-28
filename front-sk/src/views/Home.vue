@@ -3,12 +3,12 @@
     <banner />
     <v-container fluid>
     <v-row>
-      <v-col cols="8">
+      <v-col cols="8" lg="9" md="8" sm="7">
           <v-card class="pa-1" outlined tile>
             <top-left/>
           </v-card>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="4" lg="3" md="4" sm="5">
           <v-card class="pa-1" outlined tile>
             <top-right/>
           </v-card>
@@ -16,7 +16,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-          <v-card class="pa-1" outlined tile>
+          <v-card class="pa-1 transparent" outlined tile>
             <middle/>
           </v-card>
       </v-col>
