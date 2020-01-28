@@ -1,10 +1,52 @@
-@font-face {
-    font-family: 'RIDIBatang';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
 // .v-application--wrap {
 //     background-color: rgba(21, 21, 22, 0.699);
 // }
+$black: #212529;
+$white: #ffffff;
+.userPanel {
+    display: block;
+    text-decoration: none;
+    transition: all 200ms ease;
+    &.active {
+        background-color: rgba(0, 0, 0, .45);
+    }
+    ul {
+        li {
+            a {
+                background-color: transparent;
+            }
+        }
+    }
+}
+
+.userdropdown {
+    transform: translatex(20%) rotatex(90deg) scale(0);
+    transform-origin: 0 0;
+    border-radius: 0.35em;
+    background-color: rgba($white, 0.85);
+    visibility: hidden;
+    transition: all 200ms linear;
+    width: 160px;
+    &.usermenu {
+        transform: translatex(20%);
+        visibility: visible;
+    }
+    ul>li {
+        &:hover {
+            background-color: rgba(200, 200, 200, 0.55);
+        }
+    }
+}
+
+ul {
+    list-style-type: none;
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
