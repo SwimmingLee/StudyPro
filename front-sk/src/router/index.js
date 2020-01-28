@@ -4,7 +4,7 @@ import intro from '@/views/Intro'
 import home from '@/views/Home'
 import appHeader from '@/components/common/Header'
 import appFooter from '@/components/common/Footer'
-import studySearch from '@/views/StudySearch'
+import study from '@/views/Study'
 import signup from '@/components/user/Signup'
 import mypage from '@/components/user/Mypage'
 import workspace from '@/components/WorkSpace'
@@ -34,7 +34,7 @@ const routes = [{
         name: 'study',
         components: {
             header: appHeader,
-            default: studySearch,
+            default: study,
             footer: appFooter
         }
     },

@@ -1,6 +1,6 @@
 export default {
     uid: '',
     token: '',
-    isAuth: true,
+    isAuth: false,
     userNickname: 'Unknown'
 }

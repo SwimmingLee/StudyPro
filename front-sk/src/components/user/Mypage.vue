@@ -1,4 +1,5 @@
 <template>
+<v-content>
   <v-form>
     <v-row justify="center"
       ><v-col cols="12" sm="10">
@@ -37,6 +38,7 @@
       </v-col>
     </v-row>
   </v-form>
+  </v-content>
 </template>
 
 <script>
