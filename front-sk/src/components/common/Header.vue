@@ -56,16 +56,16 @@
       </v-btn>
 
       <!-- 유저 이미지 -->
-      <v-expansion-panels v-else>
+      <!-- <v-expansion-panels v-else>
         <v-expansion-panel>
-          <v-expansion-panel-header class="pa-0">
-            <v-avatar class="wrap-contents">
-              <v-icon class="wrap-contents">mdi-account-circle</v-icon>
+          <v-expansion-panel-header class="pa-0"> -->
+            <v-avatar class="">
+              <v-icon class="">mdi-account-circle</v-icon>
             </v-avatar>
-            <span>닉네임</span>
-          </v-expansion-panel-header>
+            <span>[nickname]</span>
+          <!-- </v-expansion-panel-header>
         </v-expansion-panel>
-      </v-expansion-panels>
+      </v-expansion-panels> -->
       <!-- 유저 이미지 끝 -->
 
       <v-app-bar-nav-icon @click="drawer = true"
