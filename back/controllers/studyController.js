@@ -2,10 +2,10 @@ import {users, studies, users_and_studies, applies, days, tags, studies_and_tags
 
 // 
 export const create_study = async function(req, res) {
-    const data = req.body
-    const user_id = res.locals.user || -1
-    const user = await users.findOne({where:{id: user_id}})
-    const wrong_id = !user
+    const data = req.body;
+    const user_id = res.locals.user.id;
+
+    const wrong_id = user_id;
     const minor_class = await minor_classes.findOne({where:{name: data.minor_class}})
     
     let result
@@ -51,12 +51,11 @@ export const create_study = async function(req, res) {
 
 export const join_study = async function(req, res) {
     
-    const user_id = res.locals.user ? res.locals.user.id : -1
+    const user_id = res.locals.user.id;
     const study_id = req.query.study_id
 
-    const user = await users.findOne({where:{id:user_id}})
     const study = await studies.findOne({where:{id:study_id}})
-    const wrong_id = !user || !study
+    const wrong_id = !study
 
     const already_join = await users_and_studies.findOne({
         where: {user_id, study_id}
@@ -68,7 +67,7 @@ export const join_study = async function(req, res) {
 
 export const delete_study = async function(req, res) {
     const study_id =  req.query.study_id
-    const user_id = res.locals.user ? res.locals.user.id : -1
+    const user_id = res.locals.user.id;
 
     const result = await studies.delete_study(study_id, user_id)
     res.send(result)
@@ -77,7 +76,7 @@ export const delete_study = async function(req, res) {
 
 export const update_study = async function(req, res) {
     const study_id =  req.query.study_id
-    const user_id = res.locals.user ? res.locals.user.id : -1
+    const user_id = res.locals.user.id;
 
     const result = await studies.update_study(study_id, req.body, user_id)
     res.send(result)
@@ -86,7 +85,7 @@ export const update_study = async function(req, res) {
 export const read_study = async function(req, res) {
     
     const study_id =  req.query.study_id
-    const user_id = res.locals.user ? res.locals.user.id : -1
+    const user_id = res.locals.user.id;
     const result = await studies.read_study(study_id)
     const study_applies = await applies.findAll({where:{study_id}})
     const study_users_links = await users_and_studies.findAll({where:{study_id}})
@@ -160,14 +159,14 @@ export const search_studies = async function(req, res) {
 
 export const mark_study = async function(req, res) {
     const study_id = req.query.study_id
-    const user_id = res.locals.user ? res.locals.user.id : -1
+    const user_id = res.locals.user.id;
 
     const result = await marked_studies.mark_study(user_id, study_id)
     res.send(result)
 }
 
 export const read_marked_studies = async function(req, res) {
-    const user_id = res.locals.user ? res.locals.user.id : -1
+    const user_id = res.locals.user.id;
 
     const markings = await marked_studies.findAll({where:{user_id}})
     let result = [], marking

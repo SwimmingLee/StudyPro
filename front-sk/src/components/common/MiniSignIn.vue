@@ -1,19 +1,56 @@
 <template>
   <div class="mx-5">
-    <v-row>
-      <v-text-field v-model="email" label="E-mail" hide-details="auto"/>
+    <v-row class="justify-center">
+      <v-col class="pb-0" sm="11">
+        <v-btn large block color="primary" @click="loginModal=true">Sign In</v-btn>
+      </v-col>
     </v-row>
     <v-row>
-      <v-text-field v-model="password" label="Password"/>
+      <v-col class="text-center pt-1 pb-0">
+        <v-btn to="/join" text small>Create Acount</v-btn>
+      </v-col>
     </v-row>
-    <v-row class="justify-end" sm="4">
-      <div class="ma-1">
-        <v-btn color="white">Sign Up</v-btn>
-      </div>
-      <div class="ma-1">
-        <v-btn @click.prevent="onLogin" color="white">Sign In</v-btn>
-      </div>
-    </v-row>
+
+          <!-- loginModal -->
+      <v-dialog v-model="loginModal" max-width="600px">
+        <v-card id="lgiModal" class="px-0 pt-0">
+          <v-card-title class="customTheme darken-2 white--text pb-3">
+            <span class="headline">Log In</span>
+          </v-card-title>
+          <v-card-text class="py-0 px-7">
+            <v-container class="pb-0">
+              <v-row>
+                <v-col cols="12" class="pb-0">
+                  <v-icon left>email</v-icon>
+                  <v-text-field v-model="email" label="E-mail" required type="email"></v-text-field>
+                </v-col>
+                <v-col cols="12" class="py-0">
+                  <v-text-field
+                    hint="비밀번호는 8자리 이상의 문자 + 숫자 조합입니다"
+                    label="Password"
+                    required
+                    type="password"
+                    v-model="password"
+                  ></v-text-field>
+                </v-col>
+                <v-checkbox
+                  class="py-0 mb-0"
+                  v-model="checkbox"
+                  label="로그인 상태 유지"
+                  color="primary"
+                  value="primary"
+                  hide-details
+                ></v-checkbox>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions class="pt-0 pr-5">
+            <v-spacer></v-spacer>
+            <v-btn color="error lighten-1" tile @click="loginModal= false">창 닫기</v-btn>
+            <v-btn color="customTheme darken-2 white--text" tile @click="onLogin">로그인</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
   </div>
 </template>
 
@@ -24,7 +61,9 @@ export default {
   name: 'Login',
   data: () => ({
     email: '',
-    password: ''
+    password: '',
+    loginModal: false,
+    checkbox: false,
   }),
   methods: {
     ...mapActions(['login']),
@@ -36,7 +75,6 @@ export default {
         console.error(err)
       }
     }
-
   }
 }
 </script>

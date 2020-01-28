@@ -1,32 +1,41 @@
 import {applies, users, studies} from "../models"
 
 export const create_apply = async function(req, res) {
-    let data = req.body
-    data.user_id = res.locals.user.id
-    const study = await studies.findOne({where:{id:req.body.study_id}})
-    const wrong_id = !study
+    let data = req.body;
+    
+    const study = await studies.findOne({where:{id:req.body.study_id}});
 
-    const result = await applies.create_apply(wrong_id, data)
-    res.send(result)
+    if (!study) {
+        res.send({
+        "state": "fail",
+        "detail": "wrong study"
+        });
+    } else {
+        const result = await applies.create_apply(wrong_id, data);
+        res.send(result);
+    }
+
 }
 
-export const delete_apply = async function(req, res) {  
-    const apply_id = req.query.apply_id
-    const result = await applies.delete_apply(apply_id, res.locals.user.id)
-    res.send(result)
+export const delete_apply = async function(req, res) {
+    const user_id = res.locals.user.id;
+    const apply_id = req.query.apply_id;
+    const result = await applies.delete_apply(apply_id, user_id);
+    res.send(result);
 }
 
 export const update_apply = async function(req, res) {
-    const apply_id = req.query.apply_id
-
-    const result = await applies.update_apply(apply_id, req.body, res.locals.user.id)
-    res.send(result)
+    const user_id = res.locals.user.id;
+    const apply_id = req.query.apply_id;
+    
+    const result = await applies.update_apply(apply_id, req.body, user_id);
+    res.send(result);
 }
 
 export const read_apply = async function(req, res) {
-    const apply_id = req.query.apply_id
+    const apply_id = req.query.apply_id;
 
-    const result = await applies.read_apply(apply_id)
+    const result = await applies.read_apply(apply_id);
     if (!result) {
         res.send("없는 지원입니다")
     }
