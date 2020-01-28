@@ -1,5 +1,6 @@
 import {study_works, personal_works, users, studies} from "../models"
 
+//req.body.study가 1이면 스터디 일정, 0이면 개인 일정
 export const create_work = async function(req, res) {
     const data = req.body
     
