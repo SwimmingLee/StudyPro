@@ -6,11 +6,12 @@ import 'vuetify/dist/vuetify.min.css'
 Vue.use(Vuetify);
 
 export default new Vuetify({
-    icons: { iconfont:"md" },
+    icons: { iconfont: "md" },
     theme: {
         themes: {
             light: {
-                customTheme: "#93A2D4",
+                customTheme: "#404040",
+                customOrange: "#E48E58",
             },
         },
     },

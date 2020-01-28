@@ -1283,7 +1283,7 @@ acorn-walk@^6.1.1:
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-6.2.0.tgz#123cb8f3b84c2171f1f7fb252615b1c78a6b1a8c"
   integrity sha512-7evsyfH1cLOCdAzZAd43Cic04yKydNx0cF+7tiA19p1XnLLPU4dpCQOqpjqwokFe//vS0QqfqqjCS2JkiIs0cA==
 
-acorn@^6.0.2, acorn@^6.0.7, acorn@^6.1.1, acorn@^6.2.1:
+acorn@^6.0.2, acorn@^6.0.7, acorn@^6.1.1, acorn@^6.2.1, acorn@^6.3.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.0.tgz#b659d2ffbafa24baf5db1cdbb2c94a983ecd2784"
   integrity sha512-gac8OEcQ2Li1dxIEWGZzsp2BitJxwkwcOm0zHAJLcPJaVvm58FRnk6RkuLRpU1EujipU2ZFODv2P9DLMfnV8mw==
@@ -8526,6 +8526,14 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue-timeselector@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vue-timeselector/-/vue-timeselector-1.0.0.tgz#069be4f8d0f4122ceba1c8600ccbe8eee295f692"
+  integrity sha512-xuninvDI+DIOJiEw/gYVPz6LxHeHlw9hXD9TWIi+/s3w3vQKDZDvIfglbbNMQC/u/SKMNRCQ4LPlFxRTEEUYDA==
+  dependencies:
+    acorn "^6.3.0"
+    vue "^2.6.10"
 
 vue@^2.6.10:
   version "2.6.11"

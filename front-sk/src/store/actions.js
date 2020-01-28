@@ -54,12 +54,19 @@ export default {
     },
 
     async signup(store, { email, nickname, name, password, gender, phone }) {
+        console.log("signup")
         let signupResponse = await api.signup(email, nickname, name, password, gender, phone)
+        console.log(signupResponse)
         return processSignup(store, signupResponse)
     },
 
     async getGroup(store, { id }) {
         let getGroupResponse = await api.getGroup(id, store.getters.getToken)
         return getGroupResponse
+    },
+
+    async getGroups(store, payload) {
+        let getGroupsResponse = await api.getGroups(payload)
+        return getGroupsResponse
     }
 }

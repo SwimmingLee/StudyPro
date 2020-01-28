@@ -1,8 +1,8 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <router-view name="header"/>
     <v-fade-transition>
-      <router-view/>
+      <router-view class="mainView"/>
     </v-fade-transition>
     <router-view name="footer"/>
   </v-app>
