@@ -3,18 +3,17 @@ import {study_posts as study_post_model, study_post_likes as study_post_like_mod
 
 
 export const create_post = async function(req, res) {
-    try{
+    try {
         const {study_id,writer, title, content, board, type} = req.body;
         
         let result;
-        if(type==="common"){
+        if (type === "common") {
             result = await common_post_model.create_common_post(writer, title, content, board);
-        }else if(type==="study"){
+        } else if (type === "study") {
             result = await study_post_model.create_study_post(study_id,writer, title, content, board);
         }
-        
         res.send(result);
-    }catch(error){
+    } catch (error){
         console.log(error);
         res.send('error');
     }
@@ -24,9 +23,9 @@ export const read_like = async function(user_id, post_id,type) {
     try{
         
         let like;
-        if(type ==="common"){
+        if(type === "common"){
             like = await common_post_like_model.read_like(post_id,user_id);
-        }else if(type ==="study"){
+        }else if(type === "study"){
             like = await study_post_like_model.read_like(post_id,user_id);
         }
         if(like){
@@ -49,22 +48,22 @@ export const read_post = async function(req, res) {
         let result, user_id;
         let like = false;
         
-        if(type ==="common"){
+        if(type === "common"){
             result = await common_post_model.read_common_post(post_id)
-        }else if(type ==="study"){
+        }else if(type === "study"){
             result = await study_post_model.read_study_post(post_id)
         }
         
-        if(result){
+        if (result){
             user_id = res.locals.user.id;
-            if(user_id){
+            if (user_id){
                 like = await this.read_like(post_id,user_id,type);
             }
             result.like = like;
         }
         res.send(result);
         
-    }catch(error){
+    } catch(error){
         console.log(error);
         res.send("error");
     }
@@ -72,8 +71,6 @@ export const read_post = async function(req, res) {
 
 export const update_post = async function(req, res) {
     try{
-        
-        
         const {post_id, title, content, type} = req.body;
         let result;
         if(type === "common"){
@@ -104,7 +101,6 @@ export const delete_post = async function(req, res) {
 
 export const list_post = async function(req, res) {
     try{
-        
         const {board} = req.query;
         const {type, study_id} = req.body;
         console.log(board, type);

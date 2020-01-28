@@ -13,7 +13,6 @@ module.exports = function (sequelize, DataTypes) {
     email: {
       type: DataTypes.STRING(100),
       allowNull: false,
-      unique: true
     },
     platform_type: {
       type: DataTypes.STRING(10),
@@ -34,7 +33,6 @@ module.exports = function (sequelize, DataTypes) {
     nickname: {
       type: DataTypes.STRING(45),
       allowNull: false,
-      unique: true
     },
     gender: {
       type: DataTypes.STRING(1),
@@ -48,19 +46,23 @@ module.exports = function (sequelize, DataTypes) {
     tableName: 'users'
   });
 
-  users.prototype.verify = function(password) {
+  users.hash = function(password) {
     return new Promise((resolve, reject) => {
       crypto.pbkdf2(password, process.env.SECRET_KEY, 92412, 64, 'sha512', async (err, key) => {
         if (err) {
           reject(err);
         } else {
           resolve(
-            this.dataValues.password === key.toString('base64')
+            key.toString('base64')
           )
         }
       })
     })
+  }
 
+  users.prototype.verify = async function(password) {
+    const hash = await users.hash(password);
+    return this.dataValues.password === hash;
   };
 
   users.prototype.getToken = function() {
@@ -71,29 +73,31 @@ module.exports = function (sequelize, DataTypes) {
     )
   }
 
-  users.save = function async (user, platform_type, auth) {
-    const {
-      email, 
-      phone,
-      password, 
-      name,
-      nickname, 
-      gender} = user;
-    
-    const self = this;
-    crypto.pbkdf2(password, process.env.SECRET_KEY, 92412, 64, 'sha512', async (err, key) => {
-      const hashed_password = await key.toString('base64');
-      self.create({
-            email,
-            platform_type,
-            phone,
-            password: hashed_password,
-            name,
-            nickname,
-            gender,
-            auth : auth || 0
-        })
-    });
+  users.save = async function (user, platform_type, auth) {
+    try {
+      const {
+        email,
+        phone,
+        password,
+        name,
+        nickname,
+        gender } = user;
+
+      const hash = await users.hash(password);
+      const new_user = await this.create({
+        email,
+        platform_type,
+        phone,
+        password: hash,
+        name,
+        nickname,
+        gender,
+        auth: auth || 0
+      })
+      return new_user;
+    } catch (err) {
+      return false;
+    }
   }
 
   return users;
