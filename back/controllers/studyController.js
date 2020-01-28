@@ -3,7 +3,7 @@ import {users, studies, users_and_studies, applies, days, tags, studies_and_tags
 // 
 export const create_study = async function(req, res) {
     const data = req.body
-    const user_id = res.locals.user ? res.locals.user.id : -1
+    const user_id = res.locals.user || -1
     const user = await users.findOne({where:{id: user_id}})
     const wrong_id = !user
     const minor_class = await minor_classes.findOne({where:{name: data.minor_class}})

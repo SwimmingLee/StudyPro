@@ -2,7 +2,7 @@ import {applies, users, studies} from "../models"
 
 export const create_apply = async function(req, res) {
     let data = req.body
-    data.user_id = res.local.user.id
+    data.user_id = res.locals.user.id
     const study = await studies.findOne({where:{id:req.body.study_id}})
     const wrong_id = !study
 
@@ -12,14 +12,14 @@ export const create_apply = async function(req, res) {
 
 export const delete_apply = async function(req, res) {  
     const apply_id = req.query.apply_id
-    const result = await applies.delete_apply(apply_id, res.local.user.id)
+    const result = await applies.delete_apply(apply_id, res.locals.user.id)
     res.send(result)
 }
 
 export const update_apply = async function(req, res) {
     const apply_id = req.query.apply_id
 
-    const result = await applies.update_apply(apply_id, req.body, res.local.user.id)
+    const result = await applies.update_apply(apply_id, req.body, res.locals.user.id)
     res.send(result)
 }
 
@@ -32,7 +32,7 @@ export const read_apply = async function(req, res) {
     }
     else {
         const study = await studies.findOne({where:{id:result.study_id}})
-        const user = res.local.user;
+        const user = res.locals.user;
 
         delete user.dataValues.password
         delete user.dataValues.auth
