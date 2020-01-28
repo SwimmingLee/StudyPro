@@ -1,5 +1,5 @@
 <template>
-  <v-content app id="contents">
+  <v-content id="contents" class="py-5">
     <v-row class="justify-center">
       <v-col class="pa-2 col-10 col-md-9">
         <!-- 검색 창 -->
@@ -155,16 +155,15 @@
                 <v-col sm="3" class="pl-6 pb-0 pt-4">
                   <p>기간</p>
                 </v-col>
-                <v-col sm="3" class="pb-0 pt-2">
+                <v-col sm="2" class="pb-0 pt-2">
                   <v-text-field
-                    class="pt-0 pb-3"
-                    label="number"
-                    hide-details="auto"
+                    class="pt-0 pb-3 inputDuration"
+                    hide-details
                     v-model="searchForm.duration"
                     type="number"
                   ></v-text-field>
                 </v-col>
-                <v-col sm="4" class="pb-0 pt-0">
+                <v-col sm="3" class="pb-0 pt-0">
                   <v-overflow-btn
                     class="my-2 pb-0"
                     v-model="durationOp"
@@ -183,8 +182,8 @@
     </v-row>
 
     <!-- 결과 테이블 -->
-    <v-card class="mx-10">
-      <v-toolbar color="red lighten-3" dark>
+    <v-card class="col-10 offset-1">
+      <v-toolbar color="blue lighten-2" dark>
         <v-toolbar-title>Search Results</v-toolbar-title>
       </v-toolbar>
 
@@ -339,7 +338,7 @@ export default {
     ]
   }),
   components: {
-    GroupModal: () => import("@/components/studysearch/GroupModal"),
+    GroupModal: () => import("@/components/study/GroupModal"),
     Timeselector
   },
   watch: {
