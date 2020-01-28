@@ -145,7 +145,7 @@
         /></v-content>
         <v-layout column align-center>
           <v-flex>
-            <router-link to="/myinfo">
+            <router-link to="/mypage">
               <v-avatar size="42">
                 <img src="@/assets/articles/pigduck.jpg" alt />
               </v-avatar>

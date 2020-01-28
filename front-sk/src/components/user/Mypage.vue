@@ -1,5 +1,6 @@
 <template>
   <v-form>
+    <v-content>
     <v-row justify="center"
       ><v-col cols="12" sm="10">
         <v-card class="mx-auto" max-width="1500">
@@ -13,7 +14,7 @@
             </v-tab>
             <v-tab>
               <!-- <v-icon left>mdi-lock</v-icon> -->
-              내 스터디 관리
+              비밀번호변경
             </v-tab>
             <v-tab>
               <!-- <v-icon left>mdi-access-point</v-icon> -->
@@ -36,6 +37,7 @@
         </v-card>
       </v-col>
     </v-row>
+    </v-content>
   </v-form>
 </template>
 
@@ -43,7 +45,7 @@
 export default {
   components: {
     EditProfile: () => import("@/components/mypage/EditProfile"),
-    ManageStudy: () => import("@/components/mypage/ManageStudy"),
+    ManageStudy: () => import("@/components/mypage/ChangePassword"),
     Withdrawal: () => import("@/components/mypage/Withdrawal")
   }
 };

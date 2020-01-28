@@ -2,5 +2,5 @@ export default {
     uid: '',
     token: '',
     isAuth: true,
-    userNickname: 'Unknown'
+    userNickname: 'nickname'
 }
