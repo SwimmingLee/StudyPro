@@ -96,6 +96,7 @@ module.exports = function (sequelize, DataTypes) {
       })
       return new_user;
     } catch (err) {
+      console.log(err)
       return false;
     }
   }

@@ -7,6 +7,8 @@ const USER_DETAIL = "/:user_id";
 const CHANGE_PASSWARD = "/change-password";
 const SIGNUP = "/signup";
 const SIGNIN = "/signin";
+const SOCIAL_SIGNIN = "/social/signin";
+const CHECK_TOKEN = "/token";
 
 // Study
 const STUDIES = "/studies";
@@ -51,6 +53,8 @@ const routes = {
     changePassword : CHANGE_PASSWARD,
     signup : SIGNUP,
     signin : SIGNIN,
+    social_signin : SOCIAL_SIGNIN,
+    check_token: CHECK_TOKEN,
 
     studies : STUDIES,
     study : STUDY,

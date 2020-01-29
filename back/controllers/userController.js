@@ -1,5 +1,105 @@
 import {users} from "../models";
-import passport from "passport";
+import jwt from "jsonwebtoken"
+
+export const signin = async function(req, res) {
+    const {email, password} = req.body;
+    const user = await users.findOne(  
+        {where: {
+                email,
+                platform_type:"local",
+            }
+        });
+    
+    if (user) {
+        const pass = await user.verify(password);
+        if (pass) {
+            let token = await user.getToken()
+            res.cookie("accessToken", token)
+            res.json({
+                state: "success",
+                token: token,
+                user: user.dataValues
+            })
+        }
+        else {   
+            res.json({state:"fail"}); 
+        }
+    } else {
+        res.json({state:"fail"});
+    }
+};     
+
+
+export const social_signin = async function(req, res) {
+    const {email, nickname, gender, platform_type} = req.body;
+    try{
+        let user = await users.findOne({ where: { email, platform_type } });
+        if (!user) {
+            user = await users.save({
+                email,
+                nickname,
+                gender,
+                platform_type,
+            },
+            platform_type
+            );
+        }
+        let token = await user.getToken()
+            res.json({
+                state: "success",
+                token: token,
+                user: user.dataValues
+            })
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+export const check_token = async function(req, res) {
+    const {token} = req.body;
+    if (token) {
+        const decoded = await jwt.verify(token, process.env.SECRET_KEY)
+        if (decoded) {
+            const user = await users.findOne({ where: { id: decoded.user_id } });
+            const token = await user.getToken()
+            res.json({
+                state: "success",
+                token: token,
+                user: user.dataValues
+            })
+        }
+    } else {
+        res.json({
+            state: "fail",
+            detail: "not token"
+    })
+}
+    
+}
+
+export const check_token = async function(req, res) {
+    const {token} = req.body;
+    if (token) {
+        const decoded = await jwt.verify(token, process.env.SECRET_KEY)
+        if (decoded) {
+            const user = await users.findOne({ where: { id: decoded.user_id } });
+            const token = await user.getToken()
+            res.json({
+                state: "success",
+                token: token,
+                user: user.dataValues
+            })
+        }
+    } else {
+        res.json({
+            state: "fail",
+            detail: "not token"
+    })
+}
+    
+}
+
 
 export const read_users = function(req, res) {
     users.findAll({})
@@ -34,45 +134,6 @@ export const delete_user = async (req, res) => {
     const user = await users.destroy({where: {id:req.params.user_id}})
     res.json({user});
 }
-
-export const local_signin = async function (req, res, next) {
-    passport.authenticate('local', { session: false }, (err, user, info) => {
-        if (err || !user) {
-            return res.status(400).json({ state: "fail" });
-        }
-        req.login(user, { session: false }, (err) => {
-            if (err) {
-            } else {
-                const token = user.getToken();
-                return res.json({
-                    state: "success",
-                    user: {
-                        id: user.id,
-                        email: user.email,
-                        phone: user.phone,
-                        name: user.name,
-                        nickname: user.nickname,
-                        gender: user.gender
-                    },
-                    token
-                })
-            }
-        })
-    })(req, res, next);
-};            
-
-
-export const kakao_signin = passport.authenticate('kakao', {session: false});
-export const kakao_signin_callback =  passport.authenticate('kakao', {
-        failureRedirect: '/',
-        session: false,
-    });
-
-export const naver_signin = passport.authenticate('naver', {session: false});
-export const naver_signin_callback = passport.authenticate('naver', {
-        failureRedirect: '/',
-        session: false,
-    });
 
 
 export const signup = async function(req, res, next) {
