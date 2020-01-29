@@ -1,8 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import intro from '../views/Intro'
-import home from '../views/Home'
+import intro from '@/views/Intro'
+import home from '@/views/Home'
 import appHeader from '@/components/common/Header'
+import appFooter from '@/components/common/Footer'
+import studySearch from '@/views/StudySearch'
+import signup from '@/components/user/Signup'
+import mypage from '@/components/user/Mypage'
+import workspace from '@/components/WorkSpace'
 
 Vue.use(VueRouter)
 
@@ -21,7 +26,49 @@ const routes = [{
         components: {
             header: appHeader,
             default: home,
+            footer: appFooter,
+        }
+    },
+    {
+        path: '/study',
+        name: 'study',
+        components: {
+            header: appHeader,
+            default: studySearch,
+            footer: appFooter
+        }
+    },
+    {
+        path: '/signup',
+        name: 'signup',
+        components: {
+            header: appHeader,
+            default: signup,
+            footer: appFooter
+        }
+    },
+    {
+        path: '/mypage',
+        name: 'mypage',
+        components: {
+            header: appHeader,
+            default: mypage,
+            footer: appFooter
+        }
+    },
+    {
+        path: '/workspace',
+        name: 'workspace',
+        components: {
+            header: null,
+            default: workspace,
             footer: null
+        }
+    },
+    {
+        path: '/auth/kakao/callback',
+        components: {
+            template: '<div class="auth-component"></div>'
         }
     }
 ]

@@ -41,7 +41,7 @@ export const read_apply = async function(req, res) {
     }
     else {
         const study = await studies.findOne({where:{id:result.study_id}})
-        const user = await users.findOne({where:{id:result.user_id}})
+        const user = res.locals.user;
 
         delete user.dataValues.password
         delete user.dataValues.auth

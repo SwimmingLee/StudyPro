@@ -50,13 +50,14 @@ export const read_post = async function(req, res) {
         
         if(type === "common"){
             result = await common_post_model.read_common_post(post_id)
+
         }else if(type === "study"){
             result = await study_post_model.read_study_post(post_id)
         }
         
-        if (result){
+        if (result) {
             user_id = res.locals.user.id;
-            if (user_id){
+            if (user_id) {
                 like = await this.read_like(post_id,user_id,type);
             }
             result.like = like;

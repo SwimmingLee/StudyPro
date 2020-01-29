@@ -1,5 +1,5 @@
-export default [{
-    uid: '',
-    token: '',
-    isAuth: false,
-}]
+export default {
+    uid: {},
+    token: "",
+    userNickname: {}
+}

@@ -1,13 +1,18 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
+import Vue from 'vue'
+import Vuetify from 'vuetify/lib'
 
-Vue.use(Vuetify, {
+import 'vuetify/dist/vuetify.min.css'
+
+Vue.use(Vuetify);
+
+export default new Vuetify({
+    icons: { iconfont: "md" },
     theme: {
-        primary: '#CBAA5C',
-        secondary: '#083759'
+        themes: {
+            light: {
+                customTheme: "#404040",
+                customOrange: "#E48E58",
+            },
+        },
     },
-    iconfont: 'mdi'
-});
-
-export default new Vuetify({});
+})
