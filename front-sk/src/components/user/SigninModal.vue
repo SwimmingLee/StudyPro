@@ -57,8 +57,6 @@
 
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
-
-    
 <script>
 import { mapState } from "vuex";
 import { mapActions } from "vuex";

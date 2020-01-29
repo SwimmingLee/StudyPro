@@ -21,7 +21,6 @@ export default {
       accessToken = await sessionStorage.getItem("accessToken");
     }
 
-
     this.checkToken({token:accessToken});
     
   }
