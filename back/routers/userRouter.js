@@ -6,13 +6,15 @@ import {
     update_user, 
     delete_user,
     signup, 
-    signin, 
+    signin,
+    social_signin,
     check_token
 } from "../controllers/userController";
 
 const userRouter = express.Router();
 userRouter.post(routes.signup, signup);
 userRouter.post(routes.signin, signin);
+userRouter.post(routes.social_signin, social_signin);
 userRouter.post(routes.check_token, check_token);
 userRouter.get(routes.home, read_users);
 userRouter.get(routes.userDetail, read_user);
