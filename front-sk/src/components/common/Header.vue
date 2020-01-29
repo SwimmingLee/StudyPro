@@ -8,7 +8,7 @@
       prominent
       src="@/assets/images/IntroBackground.jpg"
       fade-img-on-scroll
-      scroll-threshold="200"
+      scroll-threshold="100"
     >
       <template v-slot:img="{ props }">
         <v-img
@@ -56,16 +56,28 @@
       </v-btn>
 
       <!-- 유저 이미지 -->
-      <!-- <v-expansion-panels v-else>
-        <v-expansion-panel>
-          <v-expansion-panel-header class="pa-0"> -->
-            <v-avatar class="">
-              <v-icon class="">mdi-account-circle</v-icon>
-            </v-avatar>
-            <span>[nickname]</span>
-          <!-- </v-expansion-panel-header>
-        </v-expansion-panel>
-      </v-expansion-panels> -->
+      <!-- <v-container class="align-right"> -->
+      <template v-else>
+        <a 
+          @click="usermenu = !usermenu, usermenuactive = !usermenuactive"
+          :class="{ usermenuactive }" class="userPanel">
+          <v-avatar>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
+          <span class="mr-2 grey--text" >[nickname]</span> 
+          <svg viewBox="0 0 451.847 451.847" width="12"><path d="M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751
+		c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0
+		c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z" fill="rgba(200,200,200,.7)"/></svg>
+          <div :class="{ usermenu }" class="userdropdown">
+            <ul class="pl-0">
+              <li v-for="item in usermenuitems" :key="item.title">
+                <a href="item.route" target="_blank" class="black--text subtitle-1 pl-5">{{ item.title }}</a>
+              </li>
+            </ul>
+          </div>
+        </a>
+      </template>
+      <!-- </v-container> -->
       <!-- 유저 이미지 끝 -->
 
       <v-app-bar-nav-icon @click="drawer = true"
@@ -145,7 +157,7 @@
         /></v-content>
         <v-layout column align-center>
           <v-flex>
-            <router-link to="/myinfo">
+            <router-link to="/mypage">
               <v-avatar size="42">
                 <img src="@/assets/articles/pigduck.jpg" alt />
               </v-avatar>
@@ -192,6 +204,8 @@ export default {
       drawer: false,
       signinModal: false,
       checkbox: false,
+      usermenu: false,
+      usermenuactive: false,
       menus: [
         { icon: "home", title: "Home", route: "/home" },
         { icon: "group", title: "Study", route: "/study" },
@@ -206,6 +220,11 @@ export default {
         { title: "Information", route: "/myinfo" },
         { title: "Study Groups", route: "/mygroups" },
         { title: "Calendar", route: "/mycalendar" }
+      ],
+      usermenuitems: [
+        { title: "My Page", route: "/mypage"},
+        { title: "My Groups", route: "/mygroup"},
+        { title: "Calendar", route: "/calendar"},
       ]
     };
   },
@@ -220,12 +239,16 @@ export default {
   methods: {
     signinClose() {
       this.signinModal = false;
+    },
+    userMenu(){
+      console.log("hello")
     }
   }
 };
 </script>
 
 <style scoped>
+
 .v-application a {
   color: gray;
   text-decoration: none;
@@ -243,8 +266,4 @@ export default {
   opacity: 0.8;
 }
 
-.userPanel {
-  display: flex;
-  flex-wrap: wrap;
-}
 </style>
