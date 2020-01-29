@@ -1,18 +1,18 @@
 <template>
   <v-content app id="search" class="fill-height">
     <v-card min-height="90%" min-width="539px" class="mx-3">
-      <v-tabs vertical>
-        <v-tab>
+      <v-tabs vertical class="pl-3 pt-3">
+        <v-tab class="py-3">
           <v-icon left>mdi-magnify</v-icon>
-          스터디그룹 검색
+          <span>스터디그룹 검색</span>
         </v-tab>
-        <v-tab>
+        <v-tab class="py-3">
           <v-icon left>mdi-account-multiple</v-icon>
-          스터디그룹 리스트
+          <span>스터디그룹 리스트</span>
         </v-tab>
-        <v-tab>
+        <v-tab class="py-3">
           <v-icon left>mdi-book-open-variant</v-icon>
-          스터디생성
+          <span>스터디생성</span>
         </v-tab>
 
         <v-tab-item>
