@@ -1,25 +1,5 @@
 <template>
-  <table border="10">
-    <tr>
-      <td rowspan="3">
-        <!-- 캔버스 -->
-        <canvas id="canvas" width="600" height="400"></canvas>
-      </td>
-      <td height="200">
-        <!-- 색상 선택기 -->
-        <div id="colorpicker"></div>
-      </td>
-    </tr>
-    <tr>
-      <td height="25">
-        <!-- 슬라이더: 펜 두께 -->
-        <div id="slider"></div>
-      </td>
-    </tr>
-    <tr>
-      <td style="background: orange;"></td>
-    </tr>
-  </table>
+  <canvas id="canvas" width="640" height="640"></canvas>
 </template>
 
 <script src="//code.jquery.com/jquery-1.11.1.js"></script>
@@ -78,6 +58,7 @@ $(document).ready(function() {
     context.moveTo(data.x1, data.y1);
     context.lineTo(data.x2, data.y2);
     context.stroke();
+    console.log("Hello");
   });
 
   // UI를 구성

@@ -45,8 +45,6 @@
   </v-container>
 </template>
 
-<script src="//code.jquery.com/jquery-1.11.1.js"></script>
-
 <script>
 import Board from "@/components/workspace/Board";
 import Chatting from "@/components/workspace/Chatting";

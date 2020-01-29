@@ -1,15 +1,10 @@
 <template>
-  <div>
-    <div>
-      <textarea id="chatLog" class="chat_log" readonly></textarea>
-    </div>
-    <form id="chat">
-      <input id="name" class="name" type="text" readonly />
-      <input id="message" class="message" type="text" />
-      <input type="submit" class="chat" value="chat" />
-    </form>
-    <v-container class="pa-1">
-    <v-textarea outlined v-model="textarea" disabled autofocus id="chatLog"></v-textarea>
+  <v-container>
+    <v-textarea outlined disabled autofocus>
+      <v-text-field>
+      <v-list v-for="(msg, index) in messages" :key="index">{{ msg }}</v-list>
+      </v-text-field>
+    </v-textarea>
     <v-text-field
       outlined
       v-model="msg"
@@ -24,50 +19,22 @@
       @click:append-outer="sendMessage"
       @click:prepend="changeIcon"
       @click:clear="clearMessage"
-      @keyup.13="sendMessage"
+      @keyup.enter="sendMessage"
     ></v-text-field>
   </v-container>
-  </div>
-
 </template>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.js"></script>
-
-
 <script>
-const io = require("socket.io-client");
-$(document).ready(function() {
-  var socket = io.connect("http://70.12.246.89:8210", {transports:['websocket']});
-      socket.emit('join',1);
-      $('#chat').on('submit', function(e){
-        socket.emit('send message', {
-          room_id : 1,
-          name : $('#name').val(),
-          message :  $('#message').val()
-        });
-        $('#message').val("");
-        $("#message").focus();
-        e.preventDefault();
-      });
-
-      socket.on('receive message', function(msg){
-        $('#chatLog').append(msg+'\n');
-        $('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
-      });
-
-      socket.on('change name', function(name){
-        $('#name').val(name);
-      });
-});
+import io from "socket.io-client";
 
 export default {
   data() {
     return {
+      name: "room",
       msg: "",
-      textarea: "",
-      password: "Password",
-      show: false,
+      messages: [],
+      socket: "",
+      // socket: io("http://70.12.246.89:8210"),
       marker: true,
       iconIndex: 0,
       icons: [
@@ -84,31 +51,22 @@ export default {
         "mdi-heart",
         "mdi-star",
         "mdi-cached",
-        "mdi-thumb-up",
+        "mdi-thumb-up"
       ]
     };
   },
-
-  computed: {
-    icon() {
-      return this.icons[this.iconIndex];
-    }
-  },
-
   methods: {
-    submitMessageFunc() {
-      if (this.msg.length === 0) return false;
-      this.$emit("submitMessage", this.msg);
-      this.msg = "";
-      return true;
+    sendMessage() {
+      this.socket.emit("send message", {
+        name: this.name,
+        msg: this.msg,
+        room_id: 1,
+      });
+      this.resetIcon();
+      this.clearMessage();
     },
     toggleMarker() {
       this.marker = !this.marker;
-    },
-    sendMessage() {
-      this.textarea += this.msg + "\n";
-      this.resetIcon();
-      this.clearMessage();
     },
     clearMessage() {
       this.msg = "";
@@ -121,14 +79,20 @@ export default {
         ? (this.iconIndex = 0)
         : this.iconIndex++;
     }
-  }
+  },
+  computed: {
+    icon() {
+      return this.icons[this.iconIndex];
+    }
+  },
+  created() {
+    this.socket = io.connect("http://70.12.246.89:8210", {transports:['websocket']});
+    this.socket.emit("join", 1);
+  },
+  mounted() {
+    this.socket.on("receive message", (msg) => {
+      this.messages.push(msg + '\n');
+    });
+  },
 };
 </script>
-
-
-    <style scoped>
-      .chat_log{ width: 95%; height: 200px; }
-      .name{ width: 10%; }
-      .message{ width: 70%; }
-      .chat{ width: 10%; }
-    </style>
