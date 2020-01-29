@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   data: () => ({
     signinRemain: false,
@@ -80,11 +82,20 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['login']),
+    async onLogin () {
+      try {
+        let loginResult = await this.login({email: this.email, password: this.password})
+        console.log('LR = ' +loginResult)
+      } catch (err) {
+        console.error(err)
+      }
+    },
     close() {
       this.$emit("close");
     },
     signin(){
-
+      this.onLogin();
     }
   }
 };
