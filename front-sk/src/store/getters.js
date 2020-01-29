@@ -1,5 +1,7 @@
 export default {
     getToken: state => state.token,
-    getIsAuth: state => state.isAuth,
+    isAuth: (state) => {
+        return state.token != "" ? true : false
+        },
     getUserNickname: state => state.getUserNickname,
 }

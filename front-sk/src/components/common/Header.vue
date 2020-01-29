@@ -40,7 +40,7 @@
       <v-btn
         class="mt-1 d-none d-sm-flex"
         @click="signinModal = true"
-        v-if="!$store.state.isAuth"
+        v-if="!isAuth"
         text
       >
         <span>Sign In</span>
@@ -50,7 +50,7 @@
         to="/signup"
         elevation="0"
         text
-        v-if="!$store.state.isAuth"
+        v-if="!isAuth"
       >
         <span>Sign Up</span>
       </v-btn>
@@ -138,7 +138,7 @@
       </v-list>
 
       <!-- User Pages -->
-      <v-container class="my-0 pa-0" v-if="$store.state.isAuth">
+      <v-container class="my-0 pa-0" v-if="isAuth">
         <v-content text disabled class="grey--text text-center mx-4 mb-4 pa-0"
           >User Pages
           <hr
@@ -172,7 +172,7 @@
       <v-container v-else>
       </v-container>
       <template v-slot:append>
-        <v-card-actions class="justify-center" v-if="!$store.state.isAuth">
+        <v-card-actions class="justify-center" v-if="!isAuth">
           <v-btn text class="pink--text" @click="signinModal=true">Sign in</v-btn>
           <v-btn text class="pink--text transparent" elevation="0" to="/signup">Sign up</v-btn>
         </v-card-actions>
@@ -208,6 +208,11 @@ export default {
         { title: "Calendar", route: "/mycalendar" }
       ]
     };
+  },
+  computed: {
+    isAuth: function() {
+      return this.$store.getters.isAuth;
+    },
   },
   components: {
     signinModal: () => import("@/components/user/SigninModal")

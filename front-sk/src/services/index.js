@@ -9,6 +9,22 @@ export default {
             console.error(err)
         }
     },
+    async socialLogin(email, nickname, gender, platform) {
+        try {
+            const loginResponse = await axiosAPI.socialLogin(email, nickname, gender, platform)
+            return loginResponse
+        } catch (err) {
+            console.error(err)
+        }
+    },
+    async checkToken(token) {
+        try {
+            const checkTokenResponse = await axiosAPI.checkToken(token)
+            return checkTokenResponse
+        } catch (err) {
+            console.error(err);
+        }
+    },
     async signup(email, nickname, name, password, gender, phone) {
         try {
             const singupRespone = await axiosAPI.signup(email, nickname, name, password, gender, phone)
@@ -32,5 +48,5 @@ export default {
         } catch (err) {
             console.log(err)
         }
-    }
+    },
 }

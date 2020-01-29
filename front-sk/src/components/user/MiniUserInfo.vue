@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-row class="justify-end mr-2">
-            <v-btn class="transparent" elevation=0>
+            <v-btn @click="logout()" class="transparent" elevation=0>
                 <span class="italic">sign out</span>
             </v-btn> 
         </v-row>
@@ -17,10 +17,14 @@
 
 <script>
 import { mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
     computed: {
         ...mapState(['userNickname'])
+    },
+    methods: {
+        ...mapActions(['logout']),
     }
 }
 </script>

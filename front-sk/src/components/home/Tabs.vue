@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 
 export default {
   name: "tabs",
@@ -101,7 +100,9 @@ export default {
     ]
   }),
   computed: {
-    ...mapState(["isAuth"])
+    isAuth: function() {
+      return this.$store.getters.isAuth;
+    },
   },
   methods: {
     studyEnter() {

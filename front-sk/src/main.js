@@ -13,5 +13,5 @@ new Vue({
     store,
     vuetify,
     studyPro,
-    render: h => h(App)
+    render: h => h(App),
 }).$mount('#app')

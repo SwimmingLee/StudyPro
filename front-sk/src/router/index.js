@@ -64,6 +64,12 @@ const routes = [{
             default: workspace,
             footer: null
         }
+    },
+    {
+        path: '/auth/kakao/callback',
+        components: {
+            template: '<div class="auth-component"></div>'
+        }
     }
 ]
 

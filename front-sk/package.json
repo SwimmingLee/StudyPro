@@ -13,8 +13,11 @@
         "material-design-icons-iconfont": "^5.0.1",
         "register-service-worker": "^1.6.2",
         "vue": "^2.6.10",
+        "vue-axios": "^2.1.5",
         "vue-infinite-scroll": "^2.0.2",
+        "vue-kakao-login": "^1.0.5",
         "vue-router": "^3.1.3",
+        "vue-social-auth": "^1.4.3",
         "vue-timeselector": "^1.0.0",
         "vuetify": "^2.2.4",
         "vuex": "^3.1.2"

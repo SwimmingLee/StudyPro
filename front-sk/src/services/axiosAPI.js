@@ -14,6 +14,29 @@ const requestLogin = (email, password) => {
     })
 }
 
+const requestSocialLogin = (email, nickname, gender, platform) => {
+    return axios({
+        method: 'POST',
+        url: 'http://15.164.245.201:8000/users/social/signin',
+        data: {
+            'email': email,
+            'nickname':nickname,
+            'gender': gender,
+            'platform_type': platform
+        }
+    })
+}
+
+const requestCheckToken = (token) => {
+    return axios({
+        method: 'POST',
+        url: 'http://15.164.245.201:8000/users/token',
+        data: {
+            'token': token
+        }
+    })
+}
+
 const requestSignup = (email, nickname, name, password, gender, phone) => {
     return axios({
         method: 'POST',
@@ -59,6 +82,8 @@ const requestGetGroups = (payload) => {
     })
 }
 
+
+
 export default {
     async login(email, password) {
         try {
@@ -66,6 +91,22 @@ export default {
             return loginResponse.data
         } catch (err) {
             console.error(err)
+        }
+    },
+    async socialLogin(email, nickname, gender, platform) {
+        try {
+            const socialLoginResponse = await requestSocialLogin(email, nickname, gender, platform)
+            return socialLoginResponse.data
+        } catch (err) {
+            console.error(err)
+        }
+    },
+    async checkToken(token) {
+        try {
+            const checkTokenResponse = await requestCheckToken(token)
+            return checkTokenResponse.data
+        } catch (err) {
+            console.error(err);
         }
     },
     async signup(email, nickname, name, password, gender, phone) {
@@ -91,5 +132,5 @@ export default {
         } catch (err) {
             console.error(err)
         }
-    }
+    },
 }

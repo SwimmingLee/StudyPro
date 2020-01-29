@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 
 export default {
     components: {
@@ -16,7 +15,10 @@ export default {
         MiniUserInfo: () => import('@/components/user/MiniUserInfo')
     },
     computed: {
-        ...mapState(['isAuth'])
+        isAuth : function () {
+            return this.$store.getters.isAuth;
+        }
+        
     }
 }
 </script>
