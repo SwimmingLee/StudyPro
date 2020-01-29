@@ -78,28 +78,6 @@ export const check_token = async function(req, res) {
     
 }
 
-export const check_token = async function(req, res) {
-    const {token} = req.body;
-    if (token) {
-        const decoded = await jwt.verify(token, process.env.SECRET_KEY)
-        if (decoded) {
-            const user = await users.findOne({ where: { id: decoded.user_id } });
-            const token = await user.getToken()
-            res.json({
-                state: "success",
-                token: token,
-                user: user.dataValues
-            })
-        }
-    } else {
-        res.json({
-            state: "fail",
-            detail: "not token"
-    })
-}
-    
-}
-
 
 export const read_users = function(req, res) {
     users.findAll({})
