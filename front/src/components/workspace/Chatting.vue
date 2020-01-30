@@ -2,7 +2,7 @@
   <v-container>
     <v-card outlined class="pt-3 px-3">
       <v-card
-        max-height="200"
+        height="200"
         class="chat overflow-y-auto mx-1 pa-3"
         outlined
         autofocus

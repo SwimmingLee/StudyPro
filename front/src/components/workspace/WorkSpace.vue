@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="siz pa-2">
+  <v-container fluid class="pa-2">
     <v-card class="px-4 customTheme lighten-2">
       <v-row>
         <v-col cols="12" md="8">
@@ -59,6 +59,7 @@ export default {
 
 <style scoped>
 .siz {
+  width: 100vh !important;
   height: 100vh !important;
 }
 </style>
