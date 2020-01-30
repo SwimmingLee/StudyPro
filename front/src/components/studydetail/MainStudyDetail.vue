@@ -24,7 +24,7 @@
       <v-tabs vertical>
         <v-tab class="py-10">
           <!-- <v-icon left>mdi-magnify</v-icon> -->
-          스터디 홈
+          홈으로
         </v-tab>
         <v-tab class="py-10">
           <!-- <v-icon left>mdi-account-multiple</v-icon> -->
@@ -33,8 +33,9 @@
 
         <v-tab class="py-10">
           <!-- <v-icon left>mdi-book-open-variant</v-icon> -->
-          스터디 회원
+          멤버리스트
         </v-tab>
+        
 
         <v-tab-item>
           <v-card flat>
@@ -63,7 +64,7 @@ export default {
   name: "studydetail",
   components: {
     StudyHome: () => import("@/components/studydetail/StudyHome"),
-    StudyBoard: () => import("@/components/studydetail/StudyBoard")
+    StudyBoard: () => import("@/components/studydetail/StudyBoard"),
   }
 };
 </script>
