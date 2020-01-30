@@ -16,12 +16,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { mapActions } from 'vuex'
+    
 
 export default {
     computed: {
-        ...mapState(['userNickname'])
+        userNickname: function() {
+            return this.$store.getters.userNickname;
+        },
     },
     methods: {
         ...mapActions(['logout']),

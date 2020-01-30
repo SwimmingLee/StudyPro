@@ -2,22 +2,49 @@
   <v-content app id="search" class="fill-height">
     <v-card>
       <v-img src="@/assets/images/cherryblossom.jpg" aspect-ratio="7">
-        <v-card-title class="pt-10" style="color:blue;font-size:80px"
-          >6조 공통 프로젝트 스터디</v-card-title
-        >
+        <v-card-title style="transform: translateY(150%)"
+          ><p
+            style="
+          font-family: Tahoma, Geneva, sans-serif;
+          font-size:80px;
+          font-weight: 600;
+          color: #FFFFFF;
+          text-shadow: 6px 4px 0 #686669;
+          "
+          >
+            Team #6 SSAFY study
+          </p>
+        </v-card-title>
       </v-img>
 
-      <v-btn
-        class="mr-4"
-        color="pink"
-        fab
-        absolute
-        x-large
-        right
-        style="transform: translateY(-150%)"
-      >
-        입장하기
-      </v-btn>
+      <router-link to="/workspace">
+        <v-btn
+          class="mr-4"
+          height="60"
+          width="250"
+          color="#9EFFBE"
+          absolute
+          x-large
+          right
+          style="transform: translateY(-130%) translateX(-40%);
+        box-shadow:inset 0px 1px 0px 0px #fff6af;
+        background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+        background-color:#ffec64;
+        border-radius:6px;
+        border:1px solid #ffaa22;
+        display:inline-block;
+        cursor:pointer;
+        color:#333333;
+        font-family:Arial;
+        font-size:30px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #ffee66;"
+        >
+          입장하기
+        </v-btn>
+      </router-link>
     </v-card>
 
     <v-card>
@@ -28,7 +55,11 @@
         </v-tab>
         <v-tab class="py-10">
           <!-- <v-icon left>mdi-account-multiple</v-icon> -->
-          스터디 게시판
+          일정 관리
+        </v-tab>
+
+        <v-tab class="py-10">
+          게시판
         </v-tab>
 
         <v-tab class="py-10">

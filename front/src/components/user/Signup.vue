@@ -62,6 +62,7 @@
                 <v-row justify="center" align="center">
                   <v-col cols="12" sm="10">
                     <v-select
+                      v-model="genderinput"
                       :items="gender"
                       label="성별"
                       :rules="genderRules"
@@ -188,7 +189,7 @@
                         class="mr-4"
                         :disabled="!valid"
                         color="success"
-                        @click="validate"
+                        @click="onSignup()"
                       >
                         가입하기
                       </v-btn>
@@ -248,6 +249,7 @@ export default {
 
     gender: ["남성", "여성"],
     genderRules: [v => !!v || "성별을 선택해 주세요."],
+    genderinput: "",
 
     nickname: "",
     nicknameRules: [
@@ -284,9 +286,9 @@ export default {
         let signupResult = await this.signup({
           name: this.name,
           nickname: this.nickname,
-          email: this.email,
+          email: this.id,
           password: this.password,
-          gender: "M",
+          gender: (this.genderinput == "남성") ? "M" : "W",
           phone: this.phone
         });
         this.created = signupResult;
@@ -294,7 +296,7 @@ export default {
       } catch (err) {
         console.error(err);
       }
-    }
+    },
   },
   computed: {
     passwordConfirmationRule() {

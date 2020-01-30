@@ -1,5 +1,6 @@
 export default {
     uid: {},
-    token: "ㄴㅁㅇㄹ",
+    token: "",
+    user: {},
     userNickname: {}
 }
