@@ -8,6 +8,7 @@ import study from '@/views/Study'
 import signup from '@/components/user/Signup'
 import mypage from '@/components/user/Mypage'
 import workspace from '@/components/WorkSpace'
+import studydetail from '@/components/studydetail/MainStudyDetail'
 
 Vue.use(VueRouter)
 
@@ -66,9 +67,12 @@ const routes = [{
         }
     },
     {
-        path: '/auth/kakao/callback',
+        path: '/study/studydetail',
+        name: 'studydetail',
         components: {
-            template: '<div class="auth-component"></div>'
+            header: appHeader,
+            default: studydetail,
+            footer: appFooter
         }
     }
 ]

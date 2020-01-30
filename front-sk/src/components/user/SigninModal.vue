@@ -29,7 +29,7 @@
             </v-col>
             <v-col>
               <a id="kakao-login-btn"></a>
-              <button @click="AuthLogin('kakao')">로그인</button>
+              <button @click="AuthLogin('kakao')">카카오 로그인</button>
             </v-col>
             <v-col>
               <button @click="AuthLogout('kakao')">로그아웃</button>
