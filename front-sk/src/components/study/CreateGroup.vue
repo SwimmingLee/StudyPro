@@ -1,5 +1,5 @@
 <template>
-  <div id="createGroup" class="ma-5">
+  <div id="createGroup" class="mx-5">
     <v-card class="pa-5 pb-2">
       <p class="ml-5">그룹 생성</p>
       <hr />
@@ -11,11 +11,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr class="no-hover-color">
               <td>카테고리</td>
               <td colspan="7">[카테고리선택]</td>
             </tr>
-            <tr>
+            <tr class="no-hover-color">
               <td>그룹명</td>
               <td colspan="7">
                 <v-text-field
@@ -26,7 +26,7 @@
                 ></v-text-field>
               </td>
             </tr>
-            <tr>
+            <tr class="no-hover-color">
               <td>모임목표(간이)</td>
               <td colspan="7">
                 <v-text-field
@@ -37,7 +37,7 @@
                 ></v-text-field>
               </td>
             </tr>
-            <tr>
+            <tr class="no-hover-color">
               <td>모임소개(상세)</td>
               <td colspan="7">
                 <v-textarea
@@ -49,7 +49,7 @@
                 ></v-textarea>
               </td>
             </tr>
-            <tr>
+            <tr class="no-hover-color">
               <td>인원제한</td>
               <td colspan="7">
                 <div>
@@ -63,7 +63,7 @@
                 </div>
               </td>
             </tr>
-            <tr>
+            <tr class="no-hover-color">
               <td>기간</td>
               <td colspan="7">
                 <v-daterange
@@ -74,7 +74,7 @@
                 ></v-daterange>
               </td>
             </tr>
-            <tr>
+            <tr class="no-hover-color">
               <td>요일</td>
               <td colspan="7">
                 <v-btn-toggle v-model="dayofweek" multiple dense group>
@@ -84,7 +84,7 @@
                 </v-btn-toggle>
               </td>
             </tr>
-            <tr>
+            <tr class="no-hover-color">
               <td>시간대</td>
               <td colspan="7">
                 <v-row>
@@ -101,11 +101,11 @@
                 </v-row>
               </td>
             </tr>
-            <tr>
+            <tr class="no-hover-color">
               <td>검색어</td>
               <td colspan="7"></td>
             </tr>
-            <tr>
+            <tr class="no-hover-color">
               <td>공개 비공개</td>
               <td colspan="7">
                 <v-radio-group v-model="radios" :mandatory="false">
@@ -198,7 +198,6 @@ export default {
 <style>
 p {
   font-size: 30px;
-  color: rgb(49, 78, 173);
 }
 
 .v-text-field__details {
@@ -218,7 +217,7 @@ p {
   display: none;
 }
 
-tr:hover{
+.no-hover-color:hover{
   background-color: white !important;
 }
 
