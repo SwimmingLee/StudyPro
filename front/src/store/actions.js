@@ -1,5 +1,6 @@
-import { UID, TOKEN, ERROR_STATE } from './mutation_types'
+import { UID, TOKEN, ERROR_STATE, USER } from './mutation_types'
 import api from '../services'
+import WbKakao from "@/social-signin/kakao/kakao";
 
 let setUID = ({ commit }, data) => {
     commit(UID, data)
@@ -13,12 +14,17 @@ let setToken = ({ commit }, data) => {
     commit(TOKEN, data)
 }
 
+let setUser = ({ commit }, data) => {
+    commit(USER, data)
+}
+ 
 let processSignin = (store, data) => {
     switch (data.state) {
         case 'fail':
             setErrorState(store, '잘못된 아이디 또는 비밀번호 입니다')
             break
         case 'success':
+            setUser(store, data.user)
             setUID(store, data.UID)
             setToken(store, data.token)
             sessionStorage.setItem("accessToken", data.token);
@@ -43,12 +49,14 @@ let processSignup = (store, data) => {
 export default {
     async login(store, { email, password }) {
         let loginResponse = await api.login(email, password)
+        console.log(loginResponse)
         processSignin(store, loginResponse)
         return store.getters.isAuth
     },
     
     async logout(store) {
         setToken(store, "");
+        WbKakao.signout();
         sessionStorage.setItem("accessToken", "");
     },
 
@@ -65,7 +73,7 @@ export default {
     },
 
     async signup(store, { email, nickname, name, password, gender, phone }) {
-        console.log("signup")
+        console.log(email, nickname, name, password, gender, phone);
         let signupResponse = await api.signup(email, nickname, name, password, gender, phone)
         console.log(signupResponse)
         return processSignup(store, signupResponse)
