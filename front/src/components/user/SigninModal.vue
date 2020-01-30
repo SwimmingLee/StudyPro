@@ -29,10 +29,7 @@
             </v-col>
             <v-col>
               <a id="kakao-login-btn"></a>
-              <button @click="AuthLogin('kakao')">카카오 로그인</button>
-            </v-col>
-            <v-col>
-              <button @click="AuthLogout('kakao')">로그아웃</button>
+              <button @click="AuthKakaoSignin('kakao')">카카오 로그인</button>
             </v-col>
             <v-checkbox
               id="modalCheckbox"
@@ -55,11 +52,11 @@
   </v-dialog>
 </template>
 
-<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
 <script>
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
+import WbKakao from "@/social-signin/kakao/kakao";
 
 
 export default {
@@ -69,7 +66,7 @@ export default {
     idRules: [v => !!v || "아이디를 입력해 주세요."],
     passwordRules: [v => !!v || "비밀번호를   입력해 주세요."],
     id: "",
-    password: ""
+    password: "",
   }),
   computed: {
     ...mapState(["token"])
@@ -86,59 +83,41 @@ export default {
     }
   },
   mounted() {
-    const plugin = document.createElement("script");
-    plugin.setAttribute("src", "//developers.kakao.com/sdk/js/kakao.min.js");
-    plugin.async = true;
-    document.head.appendChild(plugin);
-    
-    Kakao.init("abcf1485814ecadfca6ac4f572c55b43");
+
   },
   methods: {
-    ...mapActions(["socialLogin", "logout"]),
+    ...mapActions(["socialLogin", "logout", "login"]),
     close() {
       this.$emit("close");
     },
-    signin() {},
-    AuthLogin() {
-      const self = this;
-      Kakao.Auth.loginForm({
-        success: function(authObj) {
-          // 로그인 성공시, API를 호출합니다.
-          Kakao.API.request({
-            url: "/v2/user/me",
-            success: async function(res) {
-              let {
-                properties: { nickname },
-                kakao_account: { email, gender }
-              } = res;
-              try {
-                gender = gender === "mail" ? "M" : "F";
-                const loginResult = await self.socialLogin({
-                  email,
-                  nickname,
-                  gender,
-                  platform: "kakao"
-                });
-              } catch (err) {
-                console.log(err);
-              }
-            },
-            fail: function(error) {
-              alert("로그인 실패");
-            }
-          });
-        },
-        fail: function(err) {
-          alert("로그인 실패: 카카오 정보 획득 실패");
-        }
+    signin() {
+      this.login({
+        email: this.id,
+        password: this.password
       });
     },
+    async AuthKakaoSignin() {
+      const user_info = await WbKakao.signinForm();
+      let {
+        properties: { nickname },
+        kakao_account: { email, gender }
+      } = user_info;
+
+      try {
+        gender = gender === "mail" ? "M" : "F";
+        const loginResult = await this.socialLogin({
+          email,
+          nickname,
+          gender,
+          platform: "kakao"
+        });
+        console.log(loginResult);
+      } catch (err) {
+        console.log(err);
+      }
+    },
     AuthLogout() {
-      console.log(Kakao.Auth);
-      Kakao.Auth.logout(() => {
-        logout();
-        console.log("로그아웃  되었습니다.");
-      });
+      this.logout();
       // 카카오 로그인 버튼을 생성합니다.
     }
   }

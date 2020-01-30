@@ -10,6 +10,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import WbKakao from "@/social-signin/kakao/kakao";
 
 export default {
   methods: {
@@ -22,7 +23,7 @@ export default {
     }
 
     this.checkToken({token:accessToken});
-    
+    WbKakao.init();
   }
 };
 </script>

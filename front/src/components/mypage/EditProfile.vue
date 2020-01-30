@@ -4,62 +4,58 @@
       <div id="app">
         <v-app id="inspire">
           <v-form ref="form" v-model="valid">
-            <v-row
-              ><v-col cols="12" sm="12">
+            <v-row>
+              <v-col cols="12" sm="12">
                 <v-card class="mx-auto" max-width="1000">
-                  <v-row justify="center" align="center"
-                    ><v-col cols="12" sm="10">
+                  <v-row justify="center" align="center">
+                    <v-col cols="12" sm="10">
                       <v-text-field
                         :disabled="true"
                         v-model="id"
                         :rules="idRules"
                         label="아이디"
                         required
-                      ></v-text-field> </v-col
-                  ></v-row>
-
-                  <v-row justify="center" align="center"
-                    ><v-col cols="12" sm="10">
-                      <v-text-field
-                        v-model="name"
-                        :rules="nameRules"
-                        label="이름"
-                        required
-                      ></v-text-field> </v-col
-                  ></v-row>
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
 
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
-                      <v-select
-                        :items="gender"
-                        label="성별"
-                        dense
-                      ></v-select> </v-col
-                  ></v-row>
+                      <v-text-field v-model="name" :rules="nameRules" label="이름" required></v-text-field>
+                    </v-col>
+                  </v-row>
 
-                  <v-row justify="center" align="center"
-                    ><v-col cols="12" sm="10">
+                  <v-row justify="center" align="center">
+                    <v-col cols="12" sm="10">
+                      <v-select :items="gender" label="성별" dense></v-select>
+                    </v-col>
+                  </v-row>
+
+                  <v-row justify="center" align="center">
+                    <v-col cols="12" sm="10">
                       <v-text-field
                         v-model="nickname"
                         :counter="10"
                         :rules="nicknameRules"
                         label="닉네임"
                         required
-                      ></v-text-field> </v-col
-                  ></v-row>
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
 
-                  <v-row justify="center" align="center"
-                    ><v-col cols="12" sm="10">
+                  <v-row justify="center" align="center">
+                    <v-col cols="12" sm="10">
                       <v-text-field
                         v-model="phone"
                         :rules="phoneRules"
                         label="휴대전화 번호( - 제외하고 입력해 주세요.)"
                         required
-                      ></v-text-field> </v-col
-                  ></v-row>
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
 
-                  <v-row justify="center" align="center"
-                    ><v-col cols="12" sm="10">
+                  <v-row justify="center" align="center">
+                    <v-col cols="12" sm="10">
                       <v-text-field
                         v-model="introducing"
                         :counter="50"
@@ -69,89 +65,55 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                </v-card> </v-col
-            ></v-row>
+                </v-card>
+              </v-col>
+            </v-row>
 
-            <v-row
-              ><v-col cols="12" sm="12">
+            <v-row>
+              <v-col cols="12" sm="12">
                 <v-card class="px-5 mx-auto" max-width="1000">
                   <v-card-text class="pt-0" style="font-size:18px">
-                    <p><br /></p>
-                    관심있는 분야를 선택해 주세요.
+                    <p>
+                      <br />
+                    </p>관심있는 분야를 선택해 주세요.
                   </v-card-text>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="3"
-                      ><v-checkbox
-                        v-model="db"
-                        class="mx-2"
-                        label="데이터베이스"
-                      ></v-checkbox
-                    ></v-col>
-                    <v-col cols="12" sm="3"
-                      ><v-checkbox
-                        v-model="bc"
-                        class="mx-2"
-                        label="블록체인"
-                      ></v-checkbox
-                    ></v-col>
-                    <v-col cols="12" sm="3"
-                      ><v-checkbox
-                        v-model="al"
-                        class="mx-2"
-                        label="알고리즘"
-                      ></v-checkbox
-                    ></v-col>
-                    <v-col cols="12" sm="3"
-                      ><v-checkbox
-                        v-model="os"
-                        class="mx-2"
-                        label="운영체제"
-                      ></v-checkbox
-                    ></v-col>
+                    <v-col cols="12" sm="3">
+                      <v-checkbox v-model="db" class="mx-2" label="데이터베이스"></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-checkbox v-model="bc" class="mx-2" label="블록체인"></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-checkbox v-model="al" class="mx-2" label="알고리즘"></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-checkbox v-model="os" class="mx-2" label="운영체제"></v-checkbox>
+                    </v-col>
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="3"
-                      ><v-checkbox
-                        v-model="ai"
-                        class="mx-2"
-                        label="인공지능"
-                      ></v-checkbox
-                    ></v-col>
-                    <v-col cols="12" sm="3"
-                      ><v-checkbox
-                        v-model="ad"
-                        class="mx-2"
-                        label="자율주행"
-                      ></v-checkbox
-                    ></v-col>
-                    <v-col cols="12" sm="3"
-                      ><v-checkbox
-                        v-model="cs"
-                        class="mx-2"
-                        label="컴퓨터보안"
-                      ></v-checkbox
-                    ></v-col>
-                    <v-col cols="12" sm="3"
-                      ><v-checkbox
-                        v-model="cn"
-                        class="mx-2"
-                        label="컴퓨터통신"
-                      ></v-checkbox
-                    ></v-col>
+                    <v-col cols="12" sm="3">
+                      <v-checkbox v-model="ai" class="mx-2" label="인공지능"></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-checkbox v-model="ad" class="mx-2" label="자율주행"></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-checkbox v-model="cs" class="mx-2" label="컴퓨터보안"></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-checkbox v-model="cn" class="mx-2" label="컴퓨터통신"></v-checkbox>
+                    </v-col>
                   </v-row>
-                </v-card> </v-col
-            ></v-row>
+                </v-card>
+              </v-col>
+            </v-row>
 
-            <v-row
-              ><v-col cols="12" sm="12">
-                <v-card
-                  class="mx-auto"
-                  max-width="1000"
-                  color="rgb(0, 0, 0, 0)"
-                  elevation="0"
-                >
+            <v-row>
+              <v-col cols="12" sm="12">
+                <v-card class="mx-auto" max-width="1000" color="rgb(0, 0, 0, 0)" elevation="0">
                   <v-layout row>
                     <v-flex column>
                       <v-layout justify-end>
@@ -160,15 +122,13 @@
                           :disabled="!enablebtn || !valid"
                           color="success"
                           @click="validate"
-                        >
-                          수정하기
-                        </v-btn>
+                        >수정하기</v-btn>
                       </v-layout>
-                    </v-flex></v-layout
-                  ></v-card
-                >
-              </v-col></v-row
-            >
+                    </v-flex>
+                  </v-layout>
+                </v-card>
+              </v-col>
+            </v-row>
           </v-form>
         </v-app>
       </div>
@@ -182,7 +142,7 @@ export default {
     enablebtn: false,
     valid: true,
 
-    id: "dawnstar1007@naver.com",
+    id: "",
     idRules: [
       v => !!v || "아이디를 입력해 주세요.",
       v =>
@@ -193,15 +153,15 @@ export default {
     introducing: "잘 부탁드려요!",
     introducingRules: [v => v.length <= 50 || "최대 50자까지 입력 가능합니다."],
 
-    name: "윤찬희",
+    name: "",
     nameRules: [v => v.length <= 50 || "이름이 너무 깁니다."],
 
     gender: ["남성", "여성"],
 
-    nickname: "cyun",
+    nickname: "",
     nicknameRules: [v => v.length <= 10 || "닉네임은 최대 10자입니다."],
 
-    phone: "01012345678",
+    phone: "",
     phoneRules: [
       v =>
         (v && v.length >= 10 && v.length <= 11) ||
@@ -221,6 +181,33 @@ export default {
     cs: false
   }),
 
+  computed: {
+    passwordConfirmationRule() {
+      return () =>
+        this.password === this.confirmPassword ||
+        "비밀번호가 서로 일치하지 않습니다.";
+    },
+    userNickname: function() {
+      return this.$store.getters.userNickname;
+    },
+    userEmail: function() {
+      return this.$store.getters.userEmail;
+    },
+    userName: function() {
+      return this.$store.getters.userName;
+    },
+    userPhone: function() {
+      return this.$store.getters.userPhone;
+    },
+  },
+
+  mounted() {
+    this.id = this.userEmail;
+    this.nickname = this.userNickname;
+    this.name = this.userName;
+    this.phone = this.userPhone;
+  },
+
   methods: {
     validate() {
       if (
@@ -233,13 +220,7 @@ export default {
       }
     }
   },
-  computed: {
-    passwordConfirmationRule() {
-      return () =>
-        this.password === this.confirmPassword ||
-        "비밀번호가 서로 일치하지 않습니다.";
-    }
-  },
+
   watch: {
     name() {
       if (this.name && this.name != "윤찬희") {
