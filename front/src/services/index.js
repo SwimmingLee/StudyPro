@@ -49,4 +49,29 @@ export default {
             console.log(err)
         }
     },
+    async getMajorClasses(payload) {
+        try {
+            const getMajorClassesReponse = await axiosAPI.getMajorClasses(payload)
+            return getMajorClassesReponse
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    async getMinorClasses(payload) {
+        try {
+            const getMinorClassesReponse = await axiosAPI.getMinorClasses(payload)
+            return getMinorClassesReponse
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    async createGroup(payload) {
+        try {
+            const createGroupReponse = await axiosAPI.createGroup(payload)
+            return createGroupReponse
+        } catch (err) {
+            console.log(err)
+        }
+    },
+
 }

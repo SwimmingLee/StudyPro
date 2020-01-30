@@ -13,7 +13,32 @@
           <tbody>
             <tr class="no-hover-color">
               <td>카테고리</td>
-              <td colspan="7">[카테고리선택]</td>
+              <td colspan="1">대분류</td>
+              <td colspan="3">
+                <div>
+                  <v-overflow-btn
+                    class="mt-4"
+                    :items="majorItems"
+                    v-model="major"                    
+                    segmented
+                    dense
+                    style="width: 200px"
+                  ></v-overflow-btn>
+                </div>
+              </td>
+              <td colspan="1">소분류</td>
+              <td colspan="3">
+                <div>
+                  <v-overflow-btn
+                    class="mt-4"
+                    :items="minorItems"
+                    segmented
+                    dense
+                    style="width: 200px"
+                  ></v-overflow-btn>
+                </div>
+              </td>
+              
             </tr>
             <tr class="no-hover-color">
               <td>그룹명</td>
@@ -56,6 +81,7 @@
                   <v-overflow-btn
                     class="mt-4"
                     :items="dropItems"
+                    v-model="userLimit"
                     segmented
                     dense
                     style="width: 200px"
@@ -134,11 +160,15 @@
 <script>
 import VDaterange from "@/components/base/VDaterange";
 import Timeselector from "vue-timeselector";
+import { mapActions } from "vuex";
+import api from '@/services'
+
 
 export default {
   name: "createGroup",
   data: () => ({
-    category: 'dsf',
+    
+    category: '',
     groupName: "",
     regText: "",
     groupTarget: "",
@@ -154,6 +184,11 @@ export default {
       v => (v && v.length <= 15) || "15자 이내로 작성해주세요"
     ],
     dropItems: [],
+    userLimit: 0,
+    majorItems: [],
+    major:{},
+    minorItems: [],
+    minor:{},
     range: {},
     weekformat: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     dayofweek: [],
@@ -169,21 +204,51 @@ export default {
   watch: {
     groupName(){this.validation();},
     groupTarget(){this.validation();},
-    category(){this.validation();}
+    category(){this.validation();},
+
+    async major() {
+      this.minorItems = []
+      const minor_classes = await api.getMinorClasses(this.major);
+      for (let i = 0; i < minor_classes.data.length; i++) {
+      this.minorItems.push({
+        value: minor_classes.data[i].id,
+        text: minor_classes.data[i].name,
+        callback: () => console.log(i)
+      });
+    }
+    
+    },
+    
   }, 
   methods: {
+    ...mapActions(["createGroup"]),
     validation(){
       if(!this.groupName) return false;
       else if(!this.groupTarget) return false;
-      else if(!this.category) return false;
+      //else if(!this.category) return false;
 
       this.isComplete = true;
     },
-    createGroup(){
-      
+    async createGroup(){
+      const studyInfo = {
+        minor_class_id : this.minor,	//int(11)	YES	MUL	
+            captain: this.user_id,	//int(11)	NO	MUL	
+            name: this.groupName,	//varchar(45)	NO	UNI	
+            goal: this.groupTarget,	//varchar(45)	YES		
+            description: this.regText,	//longtext	NO		
+            user_limit: this.userLimit,	//int(11)	YES		
+            start_time: this.starttime,	//int(11)	YES		
+            end_time: this.endtime,	//int(11)	YES		
+            //status: ,	//varchar(45)	YES		
+            start_date: this.range,	//date	YES		
+            end_date: this.range,	//date	YES		
+            isopen: this.radios,	//tinyint(4)	YES		
+      }
+      console.log(studyInfo)
+      //await api.createGroup()
     },
   },
-  mounted() {
+  async mounted() {
     this.dropItems = [];
     for (var i = 1; i <= 6; i++) {
       this.dropItems.push({
@@ -191,7 +256,19 @@ export default {
         callback: () => console.log(i)
       });
     }
-  }
+
+    this.majorItems = [];
+    const getMajorRes = await api.getMajorClasses();
+    for (let i = 0; i < getMajorRes.data.length; i++) {
+      this.majorItems.push({
+        value: getMajorRes.data[i].id,
+        text: getMajorRes.data[i].name,
+        callback: () => console.log(i)
+      });
+    }
+
+
+  },
 };
 </script>
 

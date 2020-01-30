@@ -47,6 +47,7 @@ let processSignup = (store, data) => {
 }
 
 export default {
+    //////////////////////////////////////////////////////////////////////////////////////
     async login(store, { email, password }) {
         let loginResponse = await api.login(email, password)
         console.log(loginResponse)
@@ -78,6 +79,12 @@ export default {
         console.log(signupResponse)
         return processSignup(store, signupResponse)
     },
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    async createGroup(store, { id }) {
+        let createGroupResponse = await api.createGroup({id})
+        return createGroupResponse
+    },
 
     async getGroup(store, { id }) {
         let getGroupResponse = await api.getGroup(id, store.getters.getToken)
@@ -92,6 +99,6 @@ export default {
     async setAccessToken(store, {token}) {
         setToken(store, token);
     },
-
+    //////////////////////////////////////////////////////////////////////////////////////
 
 }
