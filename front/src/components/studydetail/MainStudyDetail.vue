@@ -64,8 +64,9 @@
 
         <v-tab class="py-10">
           <!-- <v-icon left>mdi-book-open-variant</v-icon> -->
-          멤버 목록
+          멤버리스트
         </v-tab>
+        
 
         <v-tab-item>
           <v-card flat>
@@ -94,7 +95,7 @@ export default {
   name: "studydetail",
   components: {
     StudyHome: () => import("@/components/studydetail/StudyHome"),
-    StudyBoard: () => import("@/components/studydetail/StudyBoard")
+    StudyBoard: () => import("@/components/studydetail/StudyBoard"),
   }
 };
 </script>
