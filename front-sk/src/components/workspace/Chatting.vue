@@ -1,26 +1,34 @@
 <template>
   <v-container>
-    <v-textarea outlined disabled autofocus>
-      <v-text-field>
-      <v-list v-for="(msg, index) in messages" :key="index">{{ msg }}</v-list>
-      </v-text-field>
-    </v-textarea>
-    <v-text-field
-      outlined
-      v-model="msg"
-      append-outer-icon="mdi-send"
-      :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
-      :prepend-icon="icon"
-      clear-icon="mdi-close-circle"
-      clearable
-      label="전송할 메세지를 입력하세요."
-      type="text"
-      @click:append="toggleMarker"
-      @click:append-outer="sendMessage"
-      @click:prepend="changeIcon"
-      @click:clear="clearMessage"
-      @keyup.enter="sendMessage"
-    ></v-text-field>
+    <v-card outlined class="pt-3 px-3">
+      <v-card class="mx-1 pa-3" outlined disabled autofocus align="left">
+        <v-list
+          class="pa-1"
+          outlined
+          v-for="(message, index) in messages"
+          :key="index"
+        >{{ message.name }} : {{message.msg}}</v-list>
+      </v-card>
+      <v-text-field
+        class="mt-5"
+        outlined
+        dense
+        v-model="msg"
+        append-outer-icon="mdi-send"
+        :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
+        :prepend-icon="icon"
+        clear-icon="mdi-close-circle"
+        clearable
+        label="전송할 메세지를 입력하세요."
+        type="text"
+        @click:append="toggleMarker"
+        @click:append-outer="sendMessage"
+        @click:prepend="changeIcon"
+        @click:clear="clearMessage"
+        @keyup.esc="clearMessage"
+        @keyup.enter="sendMessage"
+      ></v-text-field>
+    </v-card>
   </v-container>
 </template>
 
@@ -30,11 +38,11 @@ import io from "socket.io-client";
 export default {
   data() {
     return {
-      name: "room",
+      name: "HyeonCheol",
+      index: 0,
       msg: "",
       messages: [],
       socket: "",
-      // socket: io("http://70.12.246.89:8210"),
       marker: true,
       iconIndex: 0,
       icons: [
@@ -57,10 +65,11 @@ export default {
   },
   methods: {
     sendMessage() {
+      if (this.msg.length === 0) return;
       this.socket.emit("send message", {
         name: this.name,
         msg: this.msg,
-        room_id: 1,
+        room_id: 1
       });
       this.resetIcon();
       this.clearMessage();
@@ -86,13 +95,15 @@ export default {
     }
   },
   created() {
-    this.socket = io.connect("http://70.12.246.89:8210", {transports:['websocket']});
+    this.socket = io.connect("http://70.12.246.89:8210", {
+      transports: ["websocket"]
+    });
     this.socket.emit("join", 1);
   },
   mounted() {
-    this.socket.on("receive message", (msg) => {
-      this.messages.push(msg + '\n');
+    this.socket.on("receive message", msg => {
+      this.messages.push(msg);
     });
-  },
+  }
 };
 </script>
