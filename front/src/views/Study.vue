@@ -22,7 +22,7 @@
         </v-tab-item>
         <v-tab-item>
           <v-card flat>
-
+            <group-list />
           </v-card>
         </v-tab-item>
         <v-tab-item>
@@ -40,7 +40,8 @@ export default {
   name: "search",
   components: {
     studySearch: () => import("@/components/study/Search"),
-    createGroup: () => import("@/components/study/CreateGroup")
+    createGroup: () => import("@/components/study/CreateGroup"),
+    groupList: () => import('@/components/user/MyGroupList')
   }
 };
 </script>
