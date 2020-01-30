@@ -1,8 +1,15 @@
 <template>
   <v-container>
     <v-card outlined class="pt-3 px-3">
-      <v-card class="mx-1 pa-3" outlined disabled autofocus align="left">
+      <v-card
+        height="200"
+        class="chat overflow-y-auto mx-1 pa-3"
+        outlined
+        autofocus
+        align="left"
+      >
         <v-list
+          ref="chat"
           class="pa-1"
           outlined
           v-for="(message, index) in messages"
@@ -33,16 +40,14 @@
 </template>
 
 <script>
-import io from "socket.io-client";
-
 export default {
+  props: ["socket"],
   data() {
     return {
-      name: "HyeonCheol",
+      name: "",
       index: 0,
       msg: "",
       messages: [],
-      socket: "",
       marker: true,
       iconIndex: 0,
       icons: [
@@ -87,20 +92,22 @@ export default {
       this.iconIndex === this.icons.length - 1
         ? (this.iconIndex = 0)
         : this.iconIndex++;
-    }
+    },
   },
   computed: {
     icon() {
       return this.icons[this.iconIndex];
     }
   },
-  created() {
-    this.socket = io.connect("http://70.12.246.89:8210", {
-      transports: ["websocket"]
-    });
-    this.socket.emit("join", 1);
+
+  updated() {
+    var chat = document.querySelector(".chat");
+    chat.scrollTop = chat.scrollHeight;
   },
   mounted() {
+    this.socket.on("join", usrName => {
+      this.name = usrName;
+    });
     this.socket.on("receive message", msg => {
       this.messages.push(msg);
     });
