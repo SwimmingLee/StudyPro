@@ -14,34 +14,34 @@
     ></canvas>
 
     <v-col>
-    <swatches
-      v-model="color"
-      shapes="circles"
-      colors="text-basic"
-      row-length="7"
-      popover-to="upper"
-    />
+      <swatches
+        v-model="color"
+        shapes="circles"
+        colors="text-basic"
+        row-length="7"
+        popover-to="upper"
+      />
 
-    <v-menu :close-on-content-click="false" :nudge-width="200" offset-y>
-      <template v-slot:activator="{on}">
-        <v-btn class="mx-1" fab dark small :color="color" v-on="on">
-          <v-icon dark>mdi-pencil</v-icon>
-        </v-btn>
-      </template>
+      <v-menu :close-on-content-click="false" :nudge-width="200" offset-y>
+        <template v-slot:activator="{on}">
+          <v-btn class="mx-1" fab dark small :color="color" v-on="on">
+            <v-icon dark>mdi-pencil</v-icon>
+          </v-btn>
+        </template>
 
-      <v-card>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-slider label="굵기" min="1" max="20" height="1" tick-size="3" v-model="width"></v-slider>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card>
-    </v-menu>
-    <v-btn class="mx-1" fab dark small color="primary" @click="clear">
-      <v-icon dark>mdi-delete</v-icon>
-    </v-btn>
+        <v-card>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-slider label="굵기" min="1" max="20" height="1" tick-size="3" v-model="width"></v-slider>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-menu>
+      <v-btn class="mx-1" fab dark small color="primary" @click="clear">
+        <v-icon dark>mdi-delete</v-icon>
+      </v-btn>
     </v-col>
   </v-card>
 </template>
@@ -50,8 +50,6 @@
 import Swatches from "vue-swatches";
 import "vue-swatches/dist/vue-swatches.min.css";
 
-const io = require("socket.io-client");
-var socket = null;
 window.onsize = function() {
   alert("!");
 };
@@ -60,6 +58,9 @@ export default {
   components: {
     Swatches
   },
+
+  props: ["socket"],
+
   data() {
     return {
       width: 5,
@@ -75,13 +76,14 @@ export default {
       // context:'',        //Canvas 객체 추출
     };
   },
+
   methods: {
     mouse_down(event) {
       this.isDown = true;
       this.old_x = event.offsetX;
       this.old_y = event.offsetY;
 
-      socket.emit("draw", {
+      this.socket.emit("draw", {
         room_id: 1,
         width: this.width,
         color: this.color,
@@ -120,7 +122,7 @@ export default {
       this.new_x = event.offsetX;
       this.new_y = event.offsetY;
 
-      socket.emit("draw", {
+      this.socket.emit("draw", {
         room_id: 1,
         width: width,
         color: color,
@@ -136,8 +138,7 @@ export default {
       this.isDown = false;
     },
     clear() {
-      
-      socket.emit("clear", {
+      this.socket.emit("clear", {
         room_id: 1
       });
     }
@@ -147,9 +148,9 @@ export default {
     // this.ctx = this.$refs.canvas.getContext('2d');
     this.canvas = document.getElementById("canvas");
     this.context = this.canvas.getContext("2d");
-    socket.on("line", data => {
+    this.socket.on("line", data => {
       this.context.lineWidth = data.width;
-      this.context.lineCap = 'round';
+      this.context.lineCap = "round";
       this.context.strokeStyle = data.color;
       this.context.beginPath();
       this.context.moveTo(data.x1, data.y1);
@@ -157,20 +158,14 @@ export default {
       this.context.stroke();
     });
 
-    socket.on('clear', () => {
+    this.socket.on("clear", () => {
       // console.log('on clear');
-      
+
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     });
     window.onsize = function() {
       // console.log("??");
     };
   },
-  created() {
-    socket = io.connect("http://70.12.246.89:8210", {
-      transports: ["websocket"]
-    });
-    socket.emit("join", 1);
-  }
 };
 </script>
