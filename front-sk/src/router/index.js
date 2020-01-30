@@ -7,8 +7,8 @@ import appFooter from '@/components/common/Footer'
 import study from '@/views/Study'
 import signup from '@/components/user/Signup'
 import mypage from '@/components/user/Mypage'
-import workspace from '@/components/WorkSpace'
 import studydetail from '@/components/studydetail/MainStudyDetail'
+import workspace from '@/components/workspace/WorkSpace'
 
 Vue.use(VueRouter)
 

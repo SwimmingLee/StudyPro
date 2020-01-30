@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # Created by https://www.gitignore.io/api/node,windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,windows,visualstudiocode
@@ -153,3 +154,6 @@ yarn-error.log
 # Editor directories and files
 .idea
 .vscode
+=======
+node_modules
+>>>>>>> 5c67305c8f2a280cdfdd61ae4bcf3ec4e80c9793
