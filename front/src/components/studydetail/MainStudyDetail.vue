@@ -17,15 +17,16 @@
         </v-card-title>
       </v-img>
 
-      <v-btn
-        class="mr-4"
-        height="60"
-        width="250"
-        color="#9EFFBE"
-        absolute
-        x-large
-        right
-        style="transform: translateY(-130%) translateX(-40%);
+      <router-link to="/workspace">
+        <v-btn
+          class="mr-4"
+          height="60"
+          width="250"
+          color="#9EFFBE"
+          absolute
+          x-large
+          right
+          style="transform: translateY(-130%) translateX(-40%);
         box-shadow:inset 0px 1px 0px 0px #fff6af;
         background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
         background-color:#ffec64;
@@ -40,9 +41,10 @@
         padding:6px 24px;
         text-decoration:none;
         text-shadow:0px 1px 0px #ffee66;"
-      >
-      입장하기
-      </v-btn>
+        >
+          입장하기
+        </v-btn>
+      </router-link>
     </v-card>
 
     <v-card>
