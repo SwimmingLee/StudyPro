@@ -109,6 +109,7 @@ export default {
       this.name = usrName;
     });
     this.socket.on("receive message", msg => {
+      
       this.messages.push(msg);
     });
   }
