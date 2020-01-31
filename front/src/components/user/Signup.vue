@@ -191,7 +191,9 @@
                         color="success"
                         @click="onSignup()"
                       >
-                        가입하기
+                        <router-link to="/home">
+                          가입하기
+                        </router-link>
                       </v-btn>
                     </v-layout>
                   </v-flex></v-layout
@@ -288,7 +290,7 @@ export default {
           nickname: this.nickname,
           email: this.id,
           password: this.password,
-          gender: (this.genderinput == "남성") ? "M" : "W",
+          gender: this.genderinput == "남성" ? "M" : "W",
           phone: this.phone
         });
         this.created = signupResult;
@@ -296,7 +298,7 @@ export default {
       } catch (err) {
         console.error(err);
       }
-    },
+    }
   },
   computed: {
     passwordConfirmationRule() {

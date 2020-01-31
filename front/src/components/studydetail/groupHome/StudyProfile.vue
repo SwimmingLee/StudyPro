@@ -3,7 +3,7 @@
     <v-row justify="space-around" class="pt-10">
       <router-link to="/mypage">
         <v-avatar height="120" width="130">
-          <img :elevation="hover ? 16 : 2" src="@/assets/images/pengsoo.jpg" />
+          <img src="@/assets/images/pengsoo.jpg" />
         </v-avatar>
       </router-link>
     </v-row>
