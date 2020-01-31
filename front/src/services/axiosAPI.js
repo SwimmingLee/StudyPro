@@ -65,20 +65,10 @@ const requestGetGroup = (id, token) => {
     })
 }
 
-const requestGetGroups = (payload) => {
+const requestGetGroups = () => {
     return axios({
         method: 'GET',
-        url: 'http://15.164.245.201:8000/studies/detail',
-        params: {
-            'name': payload.name,
-            'start_date': payload.startdate,
-            'start_time': payload.starttime,
-            'end_time': payload.endtime,
-            'days': payload.duration,
-            'tags': payload.tags,
-            'minor_class': payload.minorClass,
-            'goal': payload.goal
-        }
+        url: 'http://15.164.245.201:8000/studies',
     })
 }
 
@@ -112,12 +102,16 @@ const requestCreateGroup = (payload) => {
         status,	//varchar(45)	YES		
         start_date,	//date	YES		
         end_date,	//date	YES		
-        isopen,	//tinyint(4)	YES		
+        isopen,	//tinyint(4)	YES	
+        days,
+        accessToken	
     } = payload;
-
     return axios({
-        method: 'GET',
-        url: 'http://15.164.245.201:8000/class/minor',
+        method: 'POST',
+        url: 'http://15.164.245.201:8000/studies/create',
+        headers: {
+            'accessToken': accessToken
+        },
         data: {
             minor_class_id,	//int(11)	YES	MUL	
             captain,	//int(11)	NO	MUL	
@@ -130,7 +124,8 @@ const requestCreateGroup = (payload) => {
             status,	//varchar(45)	YES		
             start_date,	//date	YES		
             end_date,	//date	YES		
-            isopen,	//tinyint(4)	YES		
+            isopen,	//tinyint(4)	YES	
+            days	
         }
     })
 }

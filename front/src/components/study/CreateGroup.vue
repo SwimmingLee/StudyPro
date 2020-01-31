@@ -19,7 +19,7 @@
                   <v-overflow-btn
                     class="mt-4"
                     :items="majorItems"
-                    v-model="major"                    
+                    v-model="major"
                     segmented
                     dense
                     style="width: 200px"
@@ -32,34 +32,24 @@
                   <v-overflow-btn
                     class="mt-4"
                     :items="minorItems"
+                    v-model="minor"
                     segmented
                     dense
                     style="width: 200px"
                   ></v-overflow-btn>
                 </div>
               </td>
-              
             </tr>
             <tr class="no-hover-color">
               <td>그룹명</td>
               <td colspan="7">
-                <v-text-field
-                  v-model="groupName"
-                  label="그룹명"
-                  :rules="groupRules"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="groupName" label="그룹명" :rules="groupRules" required></v-text-field>
               </td>
             </tr>
             <tr class="no-hover-color">
               <td>모임목표(간이)</td>
               <td colspan="7">
-                <v-text-field
-                  v-model="groupTarget"
-                  label="모임목표"
-                  :rules="targetRules"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="groupTarget" label="모임목표" :rules="targetRules" required></v-text-field>
               </td>
             </tr>
             <tr class="no-hover-color">
@@ -104,9 +94,11 @@
               <td>요일</td>
               <td colspan="7">
                 <v-btn-toggle v-model="dayofweek" multiple dense group>
-                  <v-btn v-for="item in weekformat" :key="item">{{
+                  <v-btn v-for="item in weekformat" :key="item" :value="item">
+                    {{
                     item
-                  }}</v-btn>
+                    }}
+                  </v-btn>
                 </v-btn-toggle>
               </td>
             </tr>
@@ -142,12 +134,11 @@
             </tr>
             <td colspan="8">
               <v-container class="pt-8 text-end">
-                <v-btn 
-                 class="primary font-weight-light" 
-                 @click="createGroup"
-                 :disabled="!isComplete">
-                 모임생성
-                </v-btn>
+                <v-btn
+                  class="primary font-weight-light"
+                  @click="createGroup"
+                  :disabled="!isComplete"
+                >모임생성</v-btn>
               </v-container>
             </td>
           </tbody>
@@ -161,14 +152,12 @@
 import VDaterange from "@/components/base/VDaterange";
 import Timeselector from "vue-timeselector";
 import { mapActions } from "vuex";
-import api from '@/services'
-
+import api from "@/services";
 
 export default {
   name: "createGroup",
   data: () => ({
-    
-    category: '',
+    category: "",
     groupName: "",
     regText: "",
     groupTarget: "",
@@ -186,67 +175,82 @@ export default {
     dropItems: [],
     userLimit: 0,
     majorItems: [],
-    major:{},
+    major: {},
     minorItems: [],
-    minor:{},
+    minor: {},
     range: {},
     weekformat: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     dayofweek: [],
     starttime: "",
     endtime: "",
-    radios: '',
-    isComplete: false,
+    radios: "",
+    isComplete: false
   }),
   components: {
     VDaterange,
     Timeselector
   },
+  computed: {
+    userID: function() {
+      return this.$store.getters.userID;
+    },
+    accessToken: function() {
+      return this.$store.getters.getToken;
+    }
+  },
   watch: {
-    groupName(){this.validation();},
-    groupTarget(){this.validation();},
-    category(){this.validation();},
+    groupName() {
+      this.validation();
+    },
+    groupTarget() {
+      this.validation();
+    },
+    category() {
+      this.validation();
+    },
 
     async major() {
-      this.minorItems = []
+      this.minorItems = [];
       const minor_classes = await api.getMinorClasses(this.major);
       for (let i = 0; i < minor_classes.data.length; i++) {
-      this.minorItems.push({
-        value: minor_classes.data[i].id,
-        text: minor_classes.data[i].name,
-        callback: () => console.log(i)
-      });
+        this.minorItems.push({
+          value: minor_classes.data[i].id,
+          text: minor_classes.data[i].name,
+          callback: () => console.log(i)
+        });
+      }
     }
-    
-    },
-    
-  }, 
+  },
   methods: {
     ...mapActions(["createGroup"]),
-    validation(){
-      if(!this.groupName) return false;
-      else if(!this.groupTarget) return false;
+    validation() {
+      if (!this.groupName) return false;
+      else if (!this.groupTarget) return false;
       //else if(!this.category) return false;
 
       this.isComplete = true;
     },
-    async createGroup(){
+    async createGroup() {
       const studyInfo = {
-        minor_class_id : this.minor,	//int(11)	YES	MUL	
-            captain: this.user_id,	//int(11)	NO	MUL	
-            name: this.groupName,	//varchar(45)	NO	UNI	
-            goal: this.groupTarget,	//varchar(45)	YES		
-            description: this.regText,	//longtext	NO		
-            user_limit: this.userLimit,	//int(11)	YES		
-            start_time: this.starttime,	//int(11)	YES		
-            end_time: this.endtime,	//int(11)	YES		
-            //status: ,	//varchar(45)	YES		
-            start_date: this.range,	//date	YES		
-            end_date: this.range,	//date	YES		
-            isopen: this.radios,	//tinyint(4)	YES		
-      }
-      console.log(studyInfo)
-      //await api.createGroup()
-    },
+        minor_class_id: this.minor, //int(11)	YES	MUL
+        captain: this.userID, //int(11)	NO	MUL
+        name: this.groupName, //varchar(45)	NO	UNI
+        goal: this.groupTarget, //varchar(45)	YES
+        description: this.regText, //longtext	NO
+        user_limit: this.userLimit, //int(11)	YES
+        start_time: this.starttime.getHours()*100 + this.starttime.getMinutes(), //int(11)	YES
+        end_time: this.endtime.getHours()*100 + this.endtime.getMinutes(), //int(11)	YES
+        status: "진행중",	//varchar(45)	YES
+        start_date: this.range.start, //date	YES
+        end_date: this.range.end, //date	YES
+        isopen: this.radios == "공개" ? 1 : 0, //tinyint(4)	YES
+        days: this.dayofweek,
+        accessToken: this.accessToken
+      };
+      console.log("days", this.dayofweek);
+      const res = await api.createGroup(studyInfo);
+      console.log(res, "결과값 ");
+    }
   },
   async mounted() {
     this.dropItems = [];
@@ -266,9 +270,7 @@ export default {
         callback: () => console.log(i)
       });
     }
-
-
-  },
+  }
 };
 </script>
 
@@ -294,8 +296,7 @@ p {
   display: none;
 }
 
-.no-hover-color:hover{
+.no-hover-color:hover {
   background-color: white !important;
 }
-
 </style>

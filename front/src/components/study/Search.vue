@@ -42,9 +42,7 @@
             <v-list-item-avatar
               color="indigo"
               class="headline font-weight-light white--text"
-            >
-              {{ item.name.charAt(0) }}
-            </v-list-item-avatar>
+            >{{ item.name.charAt(0) }}</v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title v-text="item.name"></v-list-item-title>
             </v-list-item-content>
@@ -87,21 +85,14 @@
                         class="pt-0"
                       ></v-text-field>
                     </template>
-                    <v-date-picker
-                      v-model="searchForm.startdate"
-                      no-title
-                      scrollable
-                    >
+                    <v-date-picker v-model="searchForm.startdate" no-title scrollable>
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="calendar = false"
-                        >Cancel</v-btn
-                      >
+                      <v-btn text color="primary" @click="calendar = false">Cancel</v-btn>
                       <v-btn
                         text
                         color="primary"
                         @click="$refs.calendar.save(searchForm.startdate)"
-                        >OK</v-btn
-                      >
+                      >OK</v-btn>
                     </v-date-picker>
                   </v-menu>
                 </v-col>
@@ -112,19 +103,13 @@
                   <p>시간</p>
                 </v-col>
                 <v-col cols="4" sm="3" class="pb-0 pr-0">
-                  <timeselector
-                    v-model="searchForm.starttime"
-                    class="grey lighten-4"
-                  />
+                  <timeselector v-model="searchForm.starttime" class="grey lighten-4" />
                 </v-col>
                 <v-col cols="1" class="pb-0 px-0 text-center">
                   <span>~</span>
                 </v-col>
                 <v-col cols="4" sm="3" class="pb-0 pl-0">
-                  <timeselector
-                    v-model="searchForm.endtime"
-                    class="grey lighten-4"
-                  />
+                  <timeselector v-model="searchForm.endtime" class="grey lighten-4" />
                 </v-col>
                 <v-spacer />
               </v-row>
@@ -134,12 +119,7 @@
                   <p>요일</p>
                 </v-col>
                 <v-col sm="9" class="pb-0 pt-1 pl-0">
-                  <v-btn-toggle
-                    v-model="searchForm.dayofweek"
-                    multiple
-                    dense
-                    group
-                  >
+                  <v-btn-toggle v-model="searchForm.dayofweek" multiple dense group>
                     <v-btn>Mon</v-btn>
                     <v-btn>Tue</v-btn>
                     <v-btn>Wed</v-btn>
@@ -194,7 +174,7 @@
       >
         <v-list-group
           v-for="item in displayItems"
-          :key="item.gid"
+          :key="item.id"
           v-model="item.active"
           :prepend-icon="item.action"
           no-action
@@ -220,7 +200,7 @@
           <!-- 펼쳤을 때 화면 -->
           <template>
             <v-layout class="ma-2" row>
-              <v-list-item :key="item.gid">
+              <v-list-item :key="item.id">
                 <v-list-item-content class="pt-0 pb-1">
                   <v-layout row class="px-3">
                     <v-layout column xs2 align-center justify-center>
@@ -234,55 +214,34 @@
                       <!-- 스터디 소개글 -->
                       <v-layout row class="pb-2">
                         <v-flex column xs2 class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold"
-                            >스터디 소개</v-content
-                          >
+                          <v-content text class="pt-0 font-weight-bold">스터디 소개</v-content>
                         </v-flex>
-                        <v-flex column xs9 class="pl-2">
-                          {{ item.intro }}
-                        </v-flex>
+                        <v-flex column xs9 class="pl-2">{{ item.intro }}</v-flex>
                       </v-layout>
                       <!-- 시작시간 -->
                       <v-layout row class="pb-2 pt-4">
                         <v-flex column xs2 class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold"
-                            >시작날짜</v-content
-                          >
+                          <v-content text class="pt-0 font-weight-bold">시작날짜</v-content>
                         </v-flex>
-                        <v-flex column xs9 class="pl-2">
-                          {{ item.startdate }}
-                        </v-flex>
+                        <v-flex column xs9 class="pl-2">{{ item.startdate }}</v-flex>
                       </v-layout>
                       <!-- 스터디기간 -->
                       <v-layout row class="pt-4">
                         <v-flex column xs2 class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold"
-                            >스터디기간</v-content
-                          >
+                          <v-content text class="pt-0 font-weight-bold">스터디기간</v-content>
                         </v-flex>
-                        <v-flex column xs9 class="pl-2">
-                          {{ item.duration }}
-                        </v-flex>
+                        <v-flex column xs9 class="pl-2">{{ item.duration }}</v-flex>
                       </v-layout>
                     </v-flex>
                   </v-layout>
                   <v-layout column xs1 justify-center class="pt-4">
-                    <v-btn
-                      class="white lighten-3"
-                      elevation="1"
-                      @click="viewDetail(item.gid)"
-                    >
+                    <v-btn class="white lighten-3" elevation="1" @click="viewDetail(item.id)">
                       <span class="dark--text">view detail</span>
                     </v-btn>
                   </v-layout>
                 </v-list-item-content>
               </v-list-item>
-              <group-modal
-                :group-modal="groupModal"
-                :gid="gid"
-                :item="item"
-                v-on:close="modalClose"
-              />
+              <group-modal :group-modal="groupModal" :id="id" :item="item" v-on:close="modalClose" />
             </v-layout>
           </template>
         </v-list-group>
@@ -294,8 +253,7 @@
 <script>
 import { mapActions } from "vuex";
 import Timeselector from "vue-timeselector";
-
-var count = 1;
+import api from "@/services";
 
 export default {
   data: () => ({
@@ -307,7 +265,7 @@ export default {
     calendar: false,
     durationOp: "",
     itemsDuration: ["Day", "Week", "Month", "Year"],
-    gid: 0,
+    id: 0,
     searchForm: {
       name: "",
       startdate: "",
@@ -322,19 +280,18 @@ export default {
     recommendItems: [],
     items: [],
     displayItems: [
-      {
-        action: "build",
-        gid: 0,
-        name: "Example Group",
-        startdate: "2020-01-25",
-        starttime: "18:00",
-        endtime: "20:00",
-        duration: "2 Months",
-        intro:
-          "개발을 위한 샘플 그룹입니다",
-        days: "Mon, Wed, Fri",
-        locked: true
-      }
+      // {
+      //   action: "build",
+      //   id: 0,
+      //   name: "Example Group",
+      //   startdate: "2020-01-25",
+      //   starttime: "18:00",
+      //   endtime: "20:00",
+      //   duration: "2 Months",
+      //   intro: "개발을 위한 샘플 그룹입니다",
+      //   days: "Mon, Wed, Fri",
+      //   locked: true
+      // }
     ]
   }),
   components: {
@@ -343,74 +300,68 @@ export default {
   },
   watch: {
     async searchInput() {
-      if (this.searchInput == "" || this.searchInput == null) {
-        this.isLoading = false;
-        return;
-      }
-      this.isLoading = true;
+      this.recommendItems = [];
+      this.displayItems = [];
+      // if (this.searchInput == "") {
+      //   this.recommendItems = this.items;
+      // } else {
+        console.log(this.items.length)
+        this.items.forEach(element => {
+          const res = element.name.includes(this.searchInput, 0);
+          if (res) {
+            this.recommendItems.push(element);
+          }
+          
+        });
+     // }
+      this.loadMore();
 
-      this.searchForm["name"] = this.searchInput;
-      this.recommendItems = await this.getGroups(this.searchForm);
+      // if (this.searchInput == "" || this.searchInput == null) {
+      //   this.isLoading = false;
+      //   return;
+      // }
+      // this.isLoading = true;
 
-      this.isLoading = false;
+      // this.searchForm["name"] = this.searchInput;
+      // this.recommendItems = await this.getGroups(this.searchForm);
+
+      // this.isLoading = false;
     }
   },
   methods: {
     ...mapActions(["getGroups"]),
     async loadList() {
-      try {
-        this.items = await this.getGroups(this.searchForm);
-        this.loadMore();
-      } catch (err) {
-        console.log(err);
-      }
+      // try {
+      //   this.items = await this.getGroups(this.searchForm);
+      //   this.loadMore();
+      // } catch (err) {
+      //   console.log(err);
+      // }
     },
     loadMore: function() {
       this.busy = true;
       setTimeout(() => {
-        for (var i = 0; i < 10; i++) {
-          // var item = this.items.shift();
-          var item = {
-                        action: "build",
-                        gid: 0,
-                        name: "Example Group" + count,
-                        startdate: "2020-01-25",
-                        starttime: "18:00",
-                        endtime: "20:00",
-                        duration: "2W",
-                        intro:
-                          "개발을 위한 샘플 그룹입니다" + count,
-                        days: "Mon, Wed, Fri",
-                        locked: false
-                      }
-          item["gid"] = count++;
-          var du = item['duration'].charAt(item['duration'].length-1)
-          item['duration'] = item['duration'].replace(du, ' ')
-          if(du == 'M'){
-            item['duration'] = item['duration'] + 'Months'
-          }else if(du == 'D'){
-            item['duration'] = item['duration'] + 'Days'
-          }else if(du == 'W'){
-            item['duration'] = item['duration'] + 'Weeks'
-          }else{
-            item['duration'] = item['duration'] + 'Years'
-          }
-          this.displayItems.push(item);
+        let len = 10;
+        if (this.recommendItems.length < 10) len = this.recommendItems.length;
+        for (var i = 0; i < len; i++) {
+          this.displayItems.push(this.recommendItems.shift());
         }
       }, 100);
       this.busy = false;
     },
-    viewDetail(gid) {
-      this.gid = gid;
+    viewDetail(id) {
+      this.id = id;
       this.groupModal = true;
     },
     modalClose() {
       this.groupModal = false;
     }
   },
-  mounted() {
+  async mounted() {
+    this.items = await api.getGroups();
+    this.recommendItems = this.items.slice(0);
+    this.loadMore();
     this.groupModal = false;
-    count = 1;
   }
 };
 </script>
