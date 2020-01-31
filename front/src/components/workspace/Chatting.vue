@@ -14,7 +14,7 @@
           outlined
           v-for="(message, index) in messages"
           :key="index"
-        >{{ message.name }} : {{message.msg}}</v-list>
+        >{{ message.name.user }} : {{message.msg}}</v-list>
       </v-card>
       <v-text-field
         class="mt-5"

@@ -39,14 +39,7 @@
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
         <v-card outlined tile flex min-height="150">
-          <video
-            playsinline
-            id="remote_video"
-            autoplay
-            preload="metadata"
-            width="100%"
-            height="150"
-          ></video>
+          <video playsinline id="remote_video" autoplay preload="metadata" width="100%" height="150"></video>
         </v-card>
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
