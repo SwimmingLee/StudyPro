@@ -306,10 +306,10 @@ export default {
       //   this.recommendItems = this.items;
       // } else {
         console.log(this.items.length)
-        this.items.forEach(element => {
-          const res = element.name.includes(this.searchInput, 0);
+        this.items.forEach(item => {
+          const res = item.name.includes(this.searchInput, 0);
           if (res) {
-            this.recommendItems.push(element);
+            this.recommendItems.push(item);
           }
           
         });
@@ -331,12 +331,7 @@ export default {
   methods: {
     ...mapActions(["getGroups"]),
     async loadList() {
-      // try {
-      //   this.items = await this.getGroups(this.searchForm);
-      //   this.loadMore();
-      // } catch (err) {
-      //   console.log(err);
-      // }
+
     },
     loadMore: function() {
       this.busy = true;
