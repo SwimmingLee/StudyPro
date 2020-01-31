@@ -1,8 +1,8 @@
 <template>
   <div class="tabs">
     <v-tabs>
-      <v-tab @click="tabSwitch('ng')">New Groups</v-tab>
       <v-tab @click="tabSwitch('np')">New Posts</v-tab>
+      <v-tab @click="tabSwitch('ng')">New Groups</v-tab>
       <v-tab v-if="isAuth">My Groups</v-tab>
     </v-tabs>
     <v-slide-group v-if="current === 'ng'" class="pa-4" multiple show-arrows>
@@ -60,7 +60,7 @@
 export default {
   name: "tabs",
   data: () => ({
-    current: "ng",
+    current: "np",
     items: [
       { header: "Today" },
       {
