@@ -27,9 +27,11 @@
                 </template>
               </v-text-field>
             </v-col>
-            <v-col>
+            <v-col class="pa-0 pl-4">
               <a id="kakao-login-btn"></a>
-              <button @click="AuthKakaoSignin('kakao')">카카오 로그인</button>
+              <button class="social-btn mr-4" @click="AuthKakaoSignin('kakao')" style="width:50px">
+                <v-img src="@/assets/images/social-btn/kakaolink_btn_medium.png"></v-img>
+              </button>
             </v-col>
             <v-checkbox
               id="modalCheckbox"
@@ -127,5 +129,8 @@ export default {
 <style>
 #entireBox {
   opacity: 0.9;
+}
+.social-btn {
+  outline: none;
 }
 </style>
