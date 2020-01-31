@@ -47,7 +47,7 @@ export default {
   },
 
   created() {
-    this.socket = io.connect("http://70.12.247.73:8210", {
+    this.socket = io.connect("http://70.12.246.89:8210", {
     // this.socket = io.connect("http://70.12.247.73:3000", {
       transports: ["websocket"],
       secure: true

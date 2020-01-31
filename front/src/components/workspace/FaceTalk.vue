@@ -39,27 +39,28 @@
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
         <v-card outlined tile flex min-height="150">
-          <video
-            playsinline
-            id="remote_video"
-            autoplay
-            preload="metadata"
-            width="100%"
-            height="150"
-          ></video>
+          <video playsinline id="remote_video_1" autoplay preload="metadata" width="100%" height="150"></video>
         </v-card>
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150"></v-card>
+        <v-card outlined tile flex min-height="150">
+          <video playsinline id="remote_video_2" autoplay preload="metadata" width="100%" height="150"></video>
+        </v-card>
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150"></v-card>
+        <v-card outlined tile flex min-height="150">
+          <video playsinline id="remote_video_3" autoplay preload="metadata" width="100%" height="150"></video>
+        </v-card>
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150"></v-card>
+        <v-card outlined tile flex min-height="150">
+          <video playsinline id="remote_video_4" autoplay preload="metadata" width="100%" height="150"></video>
+        </v-card>
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150"></v-card>
+        <v-card outlined tile flex min-height="150">
+          <video playsinline id="remote_video_5" autoplay preload="metadata" width="100%" height="150"></video>
+        </v-card>
       </v-col>
     </v-row>
   </v-card>
@@ -76,8 +77,6 @@ const pcConfig = {
 };
 
 let pc;
-let local_video = document.getElementById("local_video");
-let local_stream = null;
 
 export default {
   props: ["socket"],
@@ -89,6 +88,17 @@ export default {
       isStarted: false,
       remote_video: null,
       remote_stream: null,
+
+      local_video: null,
+      local_stream: null,
+
+      connected_users: [1, null, null, null, null, null],
+      peer_connections: {},
+
+      remote_videos: [null],
+      remote_streams: [null],
+      temp_remote_video: null,
+      temp_remote_stream: null,
 
       fav: false,
       showProfile: false,
@@ -102,12 +112,12 @@ export default {
     HandlerOnAddStream(event) {
       console.log("onAddStream");
       this.remote_stream = event.stream;
-      this.remote_video.srcObject = this.remote_stream;
+      this.temp_remote_video.srcObject = this.temp_remote_stream;
     },
 
-    sendMessage(message) {
+    sendMessage(message, from, to) {
       console.log("send", message.type);
-      this.socket.emit("message", { message: message, room_id: 1 });
+      this.socket.emit("message", { message: message, room_id: 1, from, to });
     },
 
     HandlerOnIceCandidate(event) {
@@ -131,8 +141,7 @@ export default {
         pc.onaddstream = this.HandlerOnAddStream;
         console.log("create Peer_connection");
 
-        console.log("111111111111", local_stream);
-        pc.addStream(local_stream);
+        pc.addStream(this.local_stream);
         this.isStarted = true;
 
         if (this.isHost) {
@@ -145,7 +154,6 @@ export default {
       this.sendMessage(sdp);
     },
     doCall() {
-      console.log("doCall");
       pc.createOffer(this.setLocalAndSendMessage, function(e) {
         console.log(e);
       });
@@ -158,10 +166,10 @@ export default {
     },
 
     async got_stream(stream) {
-      local_video = await document.getElementById("local_video");
+      this.local_video = await document.getElementById("local_video");
       console.log("gotStream");
-      local_video.srcObject = stream;
-      local_stream = stream;
+      this.local_video.srcObject = stream;
+      this.local_stream = stream;
     },
 
     showProfileMenu(e) {
@@ -172,12 +180,23 @@ export default {
       this.$nextTick(() => {
         this.showProfile = true;
       });
-    }
+    },
+
+    // async getPeerConnection(user_id) {
+    //   if (this.peer_connections[user_id]) {
+    //     return 
+    //   }
+    // }
+
   },
 
   mounted() {
-    this.remote_video = document.getElementById("remote_video");
+    for (let i = 1;  i <= 5; i++) {
+    this.remote_videos.push(document.getElementById(`remote_video_${i}`));
+    }
+    this.local_video = document.getElementById("local_video");
 
+    
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
