@@ -200,7 +200,9 @@
                         color="success"
                         @click="onSignup()"
                       >
-                        가입하기
+                        <router-link to="/home">
+                          가입하기
+                        </router-link>
                       </v-btn>
                     </v-layout>
                   </v-card>
