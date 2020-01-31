@@ -1,15 +1,5 @@
 <template>
-  <v-card
-    id="canvas_card"
-    class = "canvas_card"
-    ref="board"
-    oncontextmenu="return false"
-    ondragstart="return false"
-    onselectstart="return false"
-    maxHeight = "640"
-    maxWidth = "640"
-    
-  >
+  <v-card oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
     <canvas
       ref="canvas"
       @mousedown.left="mouse_down"
@@ -23,18 +13,20 @@
       height="640"
     ></canvas>
 
-    <v-col>
       <swatches
         v-model="color"
         shapes="circles"
         colors="text-basic"
-        row-length="7"
-        popover-to="upper"
+        row-length="6"
+        popover-to="right"
+        :exceptions="exceptions"
+        exception-mode="hidden"
       />
 
-      <v-menu :close-on-content-click="false" :nudge-width="200" offset-y>
+    <v-container class="pa-0">
+      <v-menu absolute :close-on-content-click="false" :nudge-width="200" offset-y>
         <template v-slot:activator="{on}">
-          <v-btn class="mx-1" fab dark small :color="color" v-on="on">
+          <v-btn fab dark small :color="color" v-on="on">
             <v-icon dark>mdi-pencil</v-icon>
           </v-btn>
         </template>
@@ -49,10 +41,11 @@
           </v-container>
         </v-card>
       </v-menu>
-      <v-btn class="mx-1" fab dark small color="primary" @click="clear">
+      
+    </v-container>
+    <v-btn absolute class="mt-1" fab dark small color="primary" @click="clear">
         <v-icon dark>mdi-delete</v-icon>
       </v-btn>
-    </v-col>
   </v-card>
 </template>
 
@@ -68,6 +61,9 @@ export default {
   components: {
     Swatches
   },
+
+  props: ["socket"],
+
   data() {
     return {
       width: 5,
@@ -78,12 +74,11 @@ export default {
       old_y: "",
       new_x: "",
       new_y: "",
-      exceptions: ["#000000"]
+      exceptions: ["#FFFFFF"]
       // canvas : document.getElementById("canvas"),
       // context:'',        //Canvas 객체 추출
     };
   },
-  props: ["socket"],
 
   methods: {
     mouse_down(event) {
@@ -97,8 +92,8 @@ export default {
         color: this.color,
         x1: this.old_x,
         y1: this.old_y,
-        x2: this.old_x,
-        y2: this.old_y
+        x2: this.old_x + 1,
+        y2: this.old_y + 1
       });
     },
     mouse_up() {
@@ -139,7 +134,6 @@ export default {
         x2: this.new_x,
         y2: this.new_y
       });
-
       this.old_x = this.new_x;
       this.old_y = this.new_y;
     },
@@ -150,11 +144,6 @@ export default {
       this.socket.emit("clear", {
         room_id: 1
       });
-    },
-    disconnect() {
-      alert("???");
-      this.socket.emit("disconnect", 1);
-      this.socket.emit("test", 1);
     }
   },
   mounted() {
@@ -173,34 +162,13 @@ export default {
     });
 
     this.socket.on("clear", () => {
-      console.log(window);
       // console.log('on clear');
 
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     });
-
-    window.onresize = () => {
-      // console.log("??",document.getElementById('canvas_card').offsetHeight);
-      // console.log("??",document.getElementById('canvas_card').offsetWidth);
-      // console.log("??",document.getElementById('card123'));
-      // console.log("??",document.getElementById('card').);
-      // div2.style.width = window.innerWidth - 200 + 'px'
-
-      console.log(this.$refs.board);
-
-      this.canvas.width = document.getElementById("canvas_card").offsetWidth;
-      this.canvas.height = document.getElementById("canvas_card").offsetHeight;
-      
-      console.log(this.canvas.width);
-      console.log(this.canvas.height);
+    window.onsize = function() {
+      // console.log("??");
     };
-  }
+  },
 };
 </script>
-
-<style scoped>
-.canvas_card {
-  width: 100vh !important;
-  height: 100vh !important;
-}
-</style>
