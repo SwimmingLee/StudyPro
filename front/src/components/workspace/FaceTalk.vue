@@ -184,17 +184,24 @@ export default {
         video: true
       })
       .then(this.got_stream);
+
+    this.socket.on('join', message => {
+      console.log(message, 'join')
+    })
+
+    this.socket.on('leave', message => {
+      console.log(message, 'leave')
+    })
+
     this.socket.on("message", message => {
-      if (message === "room host") {
-        this.isHost = true;
-        console.log("나는 방장");
-      } else if (message === "get user") {
+
+      if (message === "get user") {
         setTimeout(() => {
           this.maybeStart();
         }, 1000);
       } else if (message.type === "offer") {
         console.log("get offer");
-        if (!this.isStarted && !this.isHost) {
+        if (!this.isStarted) {
           this.maybeStart();
         }
         pc.setRemoteDescription(new RTCSessionDescription(message));
