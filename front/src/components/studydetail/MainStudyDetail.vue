@@ -21,13 +21,12 @@
         </v-row>
         <v-row justify="end" align="end">
           <v-col cols="5" md="3" lg="3" class="text-end mb-4 mr-4">
-            <router-link to="/workspace">
+            <router-link to="/workspace" target="_blank">
               <v-btn
                 color="#9EFFBE"
                 class="display-1"
                 x-large
                 right
-                target="__blank"
                 style="
         box-shadow:inset 0px 1px 0px 0px #fff6af;
         background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
