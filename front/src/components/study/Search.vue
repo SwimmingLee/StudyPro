@@ -64,7 +64,7 @@
             <v-expansion-panel-content>
               <v-row>
                 <v-col sm="3" class="pl-6 pb-0">
-                  <p>시작날짜</p>
+                  <span>시작날짜</span>
                 </v-col>
                 <v-col sm="4" md="3" class="pb-0 pt-0">
                   <v-menu
@@ -98,9 +98,9 @@
                 </v-col>
               </v-row>
               <hr />
-              <v-row>
+              <v-row class="pb-4">
                 <v-col sm="3" class="pl-6 pb-0">
-                  <p>시간</p>
+                  <span>시간</span>
                 </v-col>
                 <v-col cols="4" sm="3" class="pb-0 pr-0">
                   <timeselector v-model="searchForm.starttime" class="grey lighten-4" />
@@ -116,7 +116,7 @@
               <hr />
               <v-row>
                 <v-col sm="3" class="pl-6 pb-0 pt-4">
-                  <p>요일</p>
+                  <span>요일</span>
                 </v-col>
                 <v-col sm="9" class="pb-0 pt-1 pl-0">
                   <v-btn-toggle v-model="searchForm.dayofweek" multiple dense group>
@@ -131,9 +131,9 @@
                 </v-col>
               </v-row>
               <hr />
-              <v-row>
+              <v-row class="pt-4">
                 <v-col sm="3" class="pl-6 pb-0 pt-4">
-                  <p>기간</p>
+                  <span>기간</span>
                 </v-col>
                 <v-col sm="2" class="pb-0 pt-2">
                   <v-text-field

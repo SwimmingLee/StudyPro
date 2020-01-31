@@ -1,212 +1,227 @@
 <template>
-  <v-form>
-    <v-content>
-      <v-container>
-        <div id="app">
-          <v-app id="inspire">
-            <v-form ref="form" v-model="valid">
-              <v-card class="mx-auto" max-width="1000">
-                <br />
+  <div id="singup">
+    <div v-if="!notcreated">
+      <v-form>
+        <v-content>
+          <v-container>
+            <div id="app">
+              <v-app id="inspire">
+                <v-form ref="form" v-model="valid">
+                  <v-card class="mx-5" max-width="1000">
+                    <br />
 
-                <v-row justify="center"
-                  ><v-col cols="12" sm="10">
-                    <v-card-text style="font-size:30px">회원가입</v-card-text>
-                  </v-col></v-row
-                >
+                    <v-row justify="center"
+                      ><v-col cols="12" sm="10">
+                        <v-card-text style="font-size:30px"
+                          >회원가입</v-card-text
+                        >
+                      </v-col></v-row
+                    >
 
-                <v-row justify="center" align="center"
-                  ><v-col cols="12" sm="10">
-                    <v-text-field
-                      v-model="id"
-                      :rules="idRules"
-                      label="아이디"
-                      required
-                    ></v-text-field> </v-col
-                ></v-row>
+                    <v-row justify="center" align="center"
+                      ><v-col cols="12" sm="10">
+                        <v-text-field
+                          v-model="id"
+                          :rules="idRules"
+                          label="아이디"
+                          required
+                        ></v-text-field> </v-col
+                    ></v-row>
 
-                <v-row justify="center" align="center"
-                  ><v-col cols="12" sm="10">
-                    <v-text-field
-                      label="비밀번호"
-                      v-model="password"
-                      :rules="passwordRules"
-                      type="password"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-
-                <v-row justify="center" align="center">
-                  <v-col cols="12" sm="10">
-                    <v-text-field
-                      label="비밀번호 확인"
-                      v-model="confirmPassword"
-                      :rules="
-                        confirmPasswordRules.concat(passwordConfirmationRule)
-                      "
-                      type="password"
-                      required
-                    ></v-text-field> </v-col
-                ></v-row>
-
-                <v-row justify="center" align="center"
-                  ><v-col cols="12" sm="10">
-                    <v-text-field
-                      v-model="name"
-                      :rules="nameRules"
-                      label="이름"
-                      required
-                    ></v-text-field> </v-col
-                ></v-row>
-
-                <v-row justify="center" align="center">
-                  <v-col cols="12" sm="10">
-                    <v-select
-                      v-model="genderinput"
-                      :items="gender"
-                      label="성별"
-                      :rules="genderRules"
-                      dense
-                    ></v-select> </v-col
-                ></v-row>
-
-                <v-row justify="center" align="center"
-                  ><v-col cols="12" sm="10">
-                    <v-text-field
-                      v-model="nickname"
-                      :counter="10"
-                      :rules="nicknameRules"
-                      label="닉네임"
-                      required
-                    ></v-text-field> </v-col
-                ></v-row>
-
-                <v-row justify="center" align="center"
-                  ><v-col cols="12" sm="10">
-                    <v-text-field
-                      v-model="phone"
-                      :rules="phoneRules"
-                      label="휴대전화 번호( - 제외하고 입력해 주세요.)"
-                      required
-                    ></v-text-field> </v-col
-                ></v-row>
-
-                <v-row justify="center" align="center"
-                  ><v-col cols="12" sm="10">
-                    <v-text-field
-                      v-model="introducing"
-                      :counter="50"
-                      :rules="introducingRules"
-                      label="자신을 멋지게 소개해 주세요!"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-card>
-
-              <v-row
-                ><v-col cols="12" sm="12">
-                  <v-card class="px-5 mx-auto" max-width="1000">
-                    <v-card-text class="pt-0" style="font-size:18px">
-                      <p><br /></p>
-                      관심있는 분야를 선택해 주세요.
-                    </v-card-text>
-
-                    <v-row justify="center" align="center">
-                      <v-col cols="12" sm="3"
-                        ><v-checkbox
-                          v-model="db"
-                          class="mx-2"
-                          label="데이터베이스"
-                        ></v-checkbox
-                      ></v-col>
-                      <v-col cols="12" sm="3"
-                        ><v-checkbox
-                          v-model="bc"
-                          class="mx-2"
-                          label="블록체인"
-                        ></v-checkbox
-                      ></v-col>
-                      <v-col cols="12" sm="3"
-                        ><v-checkbox
-                          v-model="al"
-                          class="mx-2"
-                          label="알고리즘"
-                        ></v-checkbox
-                      ></v-col>
-                      <v-col cols="12" sm="3"
-                        ><v-checkbox
-                          v-model="os"
-                          class="mx-2"
-                          label="운영체제"
-                        ></v-checkbox
-                      ></v-col>
+                    <v-row justify="center" align="center"
+                      ><v-col cols="12" sm="10">
+                        <v-text-field
+                          label="비밀번호"
+                          v-model="password"
+                          :rules="passwordRules"
+                          type="password"
+                          required
+                        ></v-text-field>
+                      </v-col>
                     </v-row>
 
                     <v-row justify="center" align="center">
-                      <v-col cols="12" sm="3"
-                        ><v-checkbox
-                          v-model="ai"
-                          class="mx-2"
-                          label="인공지능"
-                        ></v-checkbox
-                      ></v-col>
-                      <v-col cols="12" sm="3"
-                        ><v-checkbox
-                          v-model="ad"
-                          class="mx-2"
-                          label="자율주행"
-                        ></v-checkbox
-                      ></v-col>
-                      <v-col cols="12" sm="3"
-                        ><v-checkbox
-                          v-model="cs"
-                          class="mx-2"
-                          label="컴퓨터보안"
-                        ></v-checkbox
-                      ></v-col>
-                      <v-col cols="12" sm="3"
-                        ><v-checkbox
-                          v-model="cn"
-                          class="mx-2"
-                          label="컴퓨터통신"
-                        ></v-checkbox
-                      ></v-col>
-                    </v-row>
-                  </v-card> </v-col
-              ></v-row>
+                      <v-col cols="12" sm="10">
+                        <v-text-field
+                          label="비밀번호 확인"
+                          v-model="confirmPassword"
+                          :rules="
+                            confirmPasswordRules.concat(
+                              passwordConfirmationRule
+                            )
+                          "
+                          type="password"
+                          required
+                        ></v-text-field> </v-col
+                    ></v-row>
 
-              <v-card
-                class="mx-auto"
-                max-width="1000"
-                color="rgb(0, 0, 0, 0)"
-                elevation="0"
-              >
-                <v-layout row>
-                  <v-flex column>
-                    <v-layout justify-end>
+                    <v-row justify="center" align="center"
+                      ><v-col cols="12" sm="10">
+                        <v-text-field
+                          v-model="name"
+                          :rules="nameRules"
+                          label="이름"
+                          required
+                        ></v-text-field> </v-col
+                    ></v-row>
+
+                    <v-row justify="center" align="center">
+                      <v-col cols="12" sm="10">
+                        <v-select
+                          v-model="genderinput"
+                          :items="gender"
+                          label="성별"
+                          :rules="genderRules"
+                          dense
+                        ></v-select> </v-col
+                    ></v-row>
+
+                    <v-row justify="center" align="center"
+                      ><v-col cols="12" sm="10">
+                        <v-text-field
+                          v-model="nickname"
+                          :counter="10"
+                          :rules="nicknameRules"
+                          label="닉네임"
+                          required
+                        ></v-text-field> </v-col
+                    ></v-row>
+
+                    <v-row justify="center" align="center"
+                      ><v-col cols="12" sm="10">
+                        <v-text-field
+                          v-model="phone"
+                          :rules="phoneRules"
+                          label="휴대전화 번호( - 제외하고 입력해 주세요.)"
+                          required
+                        ></v-text-field> </v-col
+                    ></v-row>
+
+                    <v-row justify="center" align="center"
+                      ><v-col cols="12" sm="10">
+                        <v-text-field
+                          v-model="introducing"
+                          :counter="50"
+                          :rules="introducingRules"
+                          label="자신을 멋지게 소개해 주세요!"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-card>
+
+                  <v-row
+                    ><v-col cols="12" sm="12">
+                      <v-card class="px-5 mx-5" max-width="1000">
+                        <v-card-text class="pt-0" style="font-size:18px">
+                          <p><br /></p>
+                          관심있는 분야를 선택해 주세요.
+                        </v-card-text>
+
+                        <v-row justify="center" align="center">
+                          <v-col cols="12" sm="3"
+                            ><v-checkbox
+                              v-model="db"
+                              class="mx-2"
+                              label="데이터베이스"
+                            ></v-checkbox
+                          ></v-col>
+                          <v-col cols="12" sm="3"
+                            ><v-checkbox
+                              v-model="bc"
+                              class="mx-2"
+                              label="블록체인"
+                            ></v-checkbox
+                          ></v-col>
+                          <v-col cols="12" sm="3"
+                            ><v-checkbox
+                              v-model="al"
+                              class="mx-2"
+                              label="알고리즘"
+                            ></v-checkbox
+                          ></v-col>
+                          <v-col cols="12" sm="3"
+                            ><v-checkbox
+                              v-model="os"
+                              class="mx-2"
+                              label="운영체제"
+                            ></v-checkbox
+                          ></v-col>
+                        </v-row>
+
+                        <v-row justify="center" align="center">
+                          <v-col cols="12" sm="3"
+                            ><v-checkbox
+                              v-model="ai"
+                              class="mx-2"
+                              label="인공지능"
+                            ></v-checkbox
+                          ></v-col>
+                          <v-col cols="12" sm="3"
+                            ><v-checkbox
+                              v-model="ad"
+                              class="mx-2"
+                              label="자율주행"
+                            ></v-checkbox
+                          ></v-col>
+                          <v-col cols="12" sm="3"
+                            ><v-checkbox
+                              v-model="cs"
+                              class="mx-2"
+                              label="컴퓨터보안"
+                            ></v-checkbox
+                          ></v-col>
+                          <v-col cols="12" sm="3"
+                            ><v-checkbox
+                              v-model="cn"
+                              class="mx-2"
+                              label="컴퓨터통신"
+                            ></v-checkbox
+                          ></v-col>
+                        </v-row>
+                      </v-card> </v-col
+                  ></v-row>
+
+                  <v-card
+                    class="mx-5"
+                    max-width="1000"
+                    color="rgb(0, 0, 0, 0)"
+                    elevation="0"
+                  >
+                    <v-layout row right justify-end>
+                      <span
+                        class="red--text lighten-1 mr-10 pt-2"
+                        v-show="notcreated"
+                        >아이디가 이미 존재합니다.</span
+                      >
                       <v-btn
                         class="mr-4"
                         :disabled="!valid"
                         color="success"
                         @click="onSignup()"
                       >
-                        가입하기
+                        <router-link to="/home">
+                          가입하기
+                        </router-link>
                       </v-btn>
                     </v-layout>
-                  </v-flex></v-layout
-                ></v-card
-              >
-            </v-form>
-          </v-app>
-        </div>
-      </v-container>
-    </v-content>
-  </v-form>
+                  </v-card>
+                </v-form>
+              </v-app>
+            </div>
+          </v-container>
+        </v-content>
+      </v-form>
+    </div>
+    <div v-else>
+      <signup-success />
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import SignupSuccess from "@/components/user/SignupSuccess";
 
 export default {
   data: () => ({
@@ -276,9 +291,11 @@ export default {
     db: false,
     cn: false,
     cs: false,
-    created: false
+    notcreated: false
   }),
-
+  components: {
+    SignupSuccess
+  },
   methods: {
     ...mapActions(["signup"]),
     async onSignup() {
@@ -288,15 +305,16 @@ export default {
           nickname: this.nickname,
           email: this.id,
           password: this.password,
-          gender: (this.genderinput == "남성") ? "M" : "W",
+          gender: this.genderinput == "남성" ? "M" : "W",
           phone: this.phone
         });
-        this.created = signupResult;
-        console.log(signupResult);
+        if (!signupResult) {
+          this.notcreated = !signupResult;
+        }
       } catch (err) {
         console.error(err);
       }
-    },
+    }
   },
   computed: {
     passwordConfirmationRule() {

@@ -1,35 +1,18 @@
 <template>
   <v-card width="500" class="mx-auto">
     <v-toolbar color="blue" dark>
-      <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
-
       <v-toolbar-title>오늘의 할일</v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <!-- 
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn> -->
-
-      <!-- <v-btn icon>
-        <v-icon>mdi-checkbox-marked-circle</v-icon>
-      </v-btn> -->
     </v-toolbar>
 
     <v-list two-line>
       <v-list-item-group v-model="selected" multiple active-class="pink--text">
         <template v-for="(item, index) in items">
           <v-list-item :key="item.title">
-            <template v-slot:default="{ active, toggle }">
+            <template v-slot:default="{ active }">
               <v-list-item-content>
                 <v-list-item-title v-text="item.title"></v-list-item-title>
-                <v-list-item-subtitle
-                  class="text--primary"
-                  v-text="item.headline"
-                ></v-list-item-subtitle>
-                <v-list-item-subtitle
-                  v-text="item.subtitle"
-                ></v-list-item-subtitle>
               </v-list-item-content>
 
               <v-list-item-action>
@@ -61,21 +44,15 @@ export default {
     items: [
       {
         action: "15 min",
-        headline: "영어 단어 외우기",
-        title: "",
-        subtitle: ""
+        title: "영어 단어 외우기"
       },
       {
         action: "2 hr",
-        headline: "자기소개서 쓰기",
-        title: "",
-        subtitle: ""
+        title: "자기소개서 쓰기"
       },
       {
         action: "6 hr",
-        headline: "집에 가기",
-        title: "",
-        subtitle: ""
+        title: "집에 가기"
       }
     ]
   })

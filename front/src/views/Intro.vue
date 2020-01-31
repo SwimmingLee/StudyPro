@@ -3,13 +3,13 @@
     <v-layout column class="fill-height ml-7">
       <v-row align="center" style="height:40%">
         <v-col sm="11">
-          <span class="logo font-weight-thin">Study</span>
-          <span class="logo">PRO</span>
+          <span class="logo font-weight-thin" disabled>Study</span>
+          <span class="logo" diabled>PRO</span>
         </v-col>
       </v-row>
       <v-row style="height:20%;">
         <v-col >
-          <p class="explain" style="width:80%">온라인으로 끝까지 공부하는 가장 확실한 방법! 스터디 프로</p>
+          <p class="explain" style="width:75%" disabled>온라인으로 끝까지 공부하는 가장 확실한 방법! 스터디 프로</p>
         </v-col>
       </v-row>
       <v-row style="height:30%">

@@ -67,7 +67,7 @@ const routes = [{
         }
     },
     {
-        path: '/study/studydetail',
+        path: '/study/studydetail/:id',
         name: 'studydetail',
         components: {
             header: appHeader,

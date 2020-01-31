@@ -71,7 +71,7 @@
           <div :class="{ usermenu }" class="userdropdown">
             <ul class="pl-0">
               <li v-for="item in usermenuitems" :key="item.title">
-                <a href="item.route" target="_blank" class="black--text subtitle-1 pl-5">{{ item.title }}</a>
+                <a :href="item.route" class="black--text subtitle-1 pl-5">{{ item.title }}</a>
               </li>
             </ul>
           </div>
@@ -268,5 +268,4 @@ export default {
 #navDrawer {
   opacity: 0.8;
 }
-
 </style>
