@@ -10,7 +10,7 @@
         <v-col align="center" justify="center">
           <v-card outlined tile>
             <v-row no-gutters class="pa-0">
-              <FaceTalk :socket="socket" />
+              <FaceTalk :socket="socket" :user_id="user_id" />
             </v-row>
             <v-row no-gutters>
               <v-col cols="12">
@@ -36,7 +36,8 @@ export default {
   data() {
     return {
       tabs: null,
-      socket: ""
+      socket: "",
+      user_id: null,
     };
   },
 
@@ -47,16 +48,19 @@ export default {
   },
 
   created() {
-    this.socket = io.connect("http://70.12.246.89:8210", {
+    this.user_id = Math.ceil(Math.random() * 100000)
+    
+    this.socket = io.connect("http://192.168.0.23:8210", {
     // this.socket = io.connect("http://70.12.247.73:3000", {
       transports: ["websocket"],
       secure: true
     });
-    this.socket.emit("join", {study_id : 1});
+    this.socket.emit("join", {study_id : 1, user_id: this.user_id});
+
   },
   mounted(){
     window.onbeforeunload = () => {
-      this.socket.emit('leave', {study_id : 1});
+      this.socket.emit('leave', {study_id : 1, user_id: this.user_id});
     };
 
   }

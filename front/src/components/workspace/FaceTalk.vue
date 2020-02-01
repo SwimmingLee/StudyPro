@@ -79,9 +79,10 @@ const pcConfig = {
 let pc;
 
 export default {
-  props: ["socket"],
+  props: ["socket", "user_id"],
   data() {
     return {
+
       // FaceTalk
       stun_server: "stun.l.google.com:19302",
       isHost: false,
@@ -92,13 +93,14 @@ export default {
       local_video: null,
       local_stream: null,
 
-      connected_users: [1, null, null, null, null, null],
+      connected_users: [-1, null, null, null, null, null],
       peer_connections: {},
 
       remote_videos: [null],
-      remote_streams: [null],
+      remote_streams: [null, null, null, null, null, null],
       temp_remote_video: null,
       temp_remote_stream: null,
+      is_host: [null, false, false, false, false, false],
 
       fav: false,
       showProfile: false,
@@ -115,9 +117,9 @@ export default {
       this.temp_remote_video.srcObject = this.temp_remote_stream;
     },
 
-    sendMessage(message, from, to) {
+    sendMessage(message) {
       console.log("send", message.type);
-      this.socket.emit("message", { message: message, room_id: 1, from, to });
+      this.socket.emit("message", message);
     },
 
     HandlerOnIceCandidate(event) {
@@ -182,12 +184,65 @@ export default {
       });
     },
 
-    // async getPeerConnection(user_id) {
-    //   if (this.peer_connections[user_id]) {
-    //     return 
-    //   }
-    // }
+    async getPeerConnection(user_id) {
+      let video_num, temp_null = 10, existed_num = null
+      for (let idx in this.connected_users) {
+        if (this.connected_users[idx] === user_id) { existed_num = idx }
+        else if (!this.connected_users[idx]) {
+          temp_null = temp_null > idx ? idx : temp_null
+        }
+      }
 
+      video_num = existed_num ? existed_num : temp_null
+
+      if (this.peer_connections[user_id]) {
+        return this.peer_connections[user_id]
+      }
+      let t_pc = await new RTCPeerConnection(pcConfig)
+      console.log(t_pc)
+      this.peer_connections[user_id] = t_pc
+
+      t_pc.onicecandidate = function(event) {
+        if (event.candidate) {
+          this.sendMessage({
+            message : {
+              type: "candidate",
+              label: event.candidate.sdpMLineIndex,
+              id: event.candidate.sdpMid,
+              candidate: event.candidate.candidate
+            },
+            study_id: 1,
+            from: this.user_id,
+            to: user_id
+          });
+      }
+
+      t_pc.onaddstream = async function(event) {
+        let remote_video;
+
+        remote_video = this.remote_videos[video_num]
+        this.remote_streams[video_num] = event.stream
+        remote_video.srcObject = this.remote_streams[video_num]
+      }
+
+      t_pc.addStream(this.local_stream)
+      return t_pc
+      // if (this.is_host[video_num]){
+      //   pc.createOffer(sdp => {
+      //     this.sendMessage({
+      //       message: sdp,
+      //       study_id: 1,
+      //       from: this.user_id,
+      //       to: user_id
+      //     })
+      //   }, e => {console.log(e)})
+      // }
+      }
+    }
+  },
+
+  created() {
+    console.log('내아이디 : ', this.user_id)
   },
 
   mounted() {
@@ -205,35 +260,74 @@ export default {
       .then(this.got_stream);
 
     this.socket.on('join', message => {
-      console.log(message, 'join')
-    })
+      const user_id = message.user_id
 
+      if (user_id === this.user_id) return
+      for (let idx in this.connected_users) {
+        if (!this.connected_users[idx]) {
+          this.connected_users[idx] = user_id
+          break
+        }
+      }
+      console.log(this.connected_users)
+
+      let t_pc = this.getPeerConnection(user_id)
+      console.log(t_pc)
+      t_pc.createOffer(sdp => {
+           this.sendMessage({
+             message: sdp,
+             study_id: 1,
+             from: this.user_id,
+             to: user_id
+           })
+         }, e => {console.log(e)})
+    })
     this.socket.on('leave', message => {
-      console.log(message, 'leave')
+      const video_num = this.connected_users.indexOf(message.user_id)
+      this.connected_users[video_num] = null
+      // this.remote_videos[video_num].srcObject = null
+      this.remote_streams[video_num] = null
+      delete this.peer_connections[message.user_id]
+
+      console.log(this.connected_users)
     })
 
     this.socket.on("message", message => {
-
+      
       if (message === "get user") {
         setTimeout(() => {
           this.maybeStart();
         }, 1000);
       } else if (message.type === "offer") {
         console.log("get offer");
-        if (!this.isStarted) {
-          this.maybeStart();
+        const from = message.from
+
+        for (let idx in this.connected_users) {
+          if (!this.connected_users[idx]) {
+            this.connected_users[idx] = from
+            break
+          }
         }
-        pc.setRemoteDescription(new RTCSessionDescription(message));
-        this.doAnswer();
-      } else if (message.type === "answer" && this.isStarted) {
-        pc.setRemoteDescription(new RTCSessionDescription(message));
-        console.log("get answer", message);
+        let t_pc = this.getPeerConnection(from)
+        t_pc.setRemoteDescription(new RTCSessionDescription(message.message));
+        t_pc.createAnswer().then(sdp => {
+          this.sendMessage({
+            message: sdp,
+            study_id: 1,
+            from: this.user_id,
+            to: from
+          })
+        })
+      } else if (message.type === "answer") {
+        let t_pc = this.peer_connections[message.from]
+        t_pc.setRemoteDescription(new RTCSessionDescription(message.message));
       } else if (message.type === "candidate") {
         let candidate = new RTCIceCandidate({
-          sdpMLineIndex: message.label,
-          candidate: message.candidate
+          sdpMLineIndex: message.message.label,
+          candidate: message.message.candidate
         });
-        pc.addIceCandidate(candidate);
+        let t_pc = this.peer_connections[message.from]
+        t_pc.addIceCandidate(candidate);
       }
     });
   }
