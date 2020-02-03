@@ -9,7 +9,7 @@
     maxHeight="640"
     maxWidth="640"
   >
-    <textarea @keyup="typing" v-model = "text" id="codemirror_pad"></textarea>
+    <textarea @keyup="typing" v-model="text" id="codemirror_pad"></textarea>
     <v-textarea @keyup="typing" solo name="input-7-4" label="Solo textarea" v-model="text"></v-textarea>
   </v-card>
 </template>
@@ -17,11 +17,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
 <script>
-
-
-
 import CodeMirror from "codemirror";
-import { 
+import {
   history,
   EditorState,
   EditorSelection,
@@ -33,8 +30,8 @@ import {
   matchBrackets,
   javascript,
   specialChars,
-  multipleSelections,
-} from 'codemirror';
+  multipleSelections
+} from "codemirror";
 
 export default {
   data() {
@@ -55,7 +52,6 @@ export default {
   methods: {
     typing() {
       console.log(this.codeMirror.getValue());
-      
 
       this.socket.emit("typing", {
         study_id: 1,
@@ -66,7 +62,8 @@ export default {
   mounted() {
     this.socket.on("typing", data => {
       // console.log(data);
-      this.text = data.text;
+      let value = data.text;
+      this.codeMirror.setValue(value);
     });
 
     this.codeMirror = CodeMirror.fromTextArea(
@@ -76,7 +73,6 @@ export default {
         mode: "javascript"
       }
     );
-
 
     this.socket.on("clear", () => {
       console.log(window);
@@ -90,17 +86,20 @@ export default {
       // console.log(this.canvas.height);
     };
     console.log(this.codeMirror.onkeypress);
-    
 
-    this.codeMirror.on("keypress", ()=> {
+    this.codeMirror.on("keypress", () => {
+      let value = this.codeMirror.getValue();
       
+      this.socket.emit("typing", {
+        study_id: 1,
+        text: value
+      });
+
       console.log("change!!");
-      
-    })
-    this.codeMirror.onkeyup =()=> {
+    });
+    this.codeMirror.onkeyup = () => {
       console.log("change...");
-      
-    }
+    };
   }
 };
 </script>
