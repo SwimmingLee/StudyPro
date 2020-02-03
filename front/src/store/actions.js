@@ -1,4 +1,4 @@
-import { UID, TOKEN, ERROR_STATE, USER } from './mutation_types'
+import { UID, ERROR_STATE, USER } from './mutation_types'
 import api from '../services'
 import WbKakao from "@/social-signin/kakao/kakao";
 
@@ -11,7 +11,15 @@ let setErrorState = ({ commit }, data) => {
 }
 
 let setToken = ({ commit }, data) => {
-    commit(TOKEN, data)
+    // const store = new Vuex.Store({
+    //     mutations: {
+    //       increment (state) {
+    //         // 상태 변이
+    //         state.count++
+    //       }
+    //     }
+    //   })
+    commit('incre', data)
 }
 
 let setUser = ({ commit }, data) => {
@@ -61,8 +69,8 @@ export default {
         sessionStorage.setItem("accessToken", "");
     },
 
-    async socialLogin(store, { email, nickname, gender, platform }) {
-        let loginResponse = await api.socialLogin(email, nickname, gender, platform)
+    async socialLogin(store, payload) {
+        let loginResponse = await api.socialLogin(payload)
         processSignin(store, loginResponse)
         return store.getters.isAuth
     },

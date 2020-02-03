@@ -9,9 +9,9 @@ export default {
             console.error(err)
         }
     },
-    async socialLogin(email, nickname, gender, platform) {
+    async socialLogin(payload) {
         try {
-            const loginResponse = await axiosAPI.socialLogin(email, nickname, gender, platform)
+            const loginResponse = await axiosAPI.socialLogin(payload)
             return loginResponse
         } catch (err) {
             console.error(err)

@@ -322,7 +322,7 @@ export default {
         formData.append('gender', this.genderinput == "남성"? "M" : 'W')
         formData.append('phone', this.phone)
 
-        let signupResult = true//await this.signup(formData);
+        let signupResult = await this.signup(formData);
         if (!signupResult) {
           this.notcreated = !signupResult;
         }else{

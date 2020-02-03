@@ -14,7 +14,11 @@ const requestLogin = (email, password) => {
     })
 }
 
-const requestSocialLogin = (email, nickname, gender, platform) => {
+const requestSocialLogin = (payload) => {
+    const {
+        email, nickname, gender, platform, profile_image
+    } = payload
+    
     return axios({
         method: 'POST',
         url: 'http://15.164.245.201:8000/users/social/signin',
@@ -22,7 +26,8 @@ const requestSocialLogin = (email, nickname, gender, platform) => {
             'email': email,
             'nickname': nickname,
             'gender': gender,
-            'platform_type': platform
+            'platform_type': platform,
+            'profile_image': profile_image
         }
     })
 }
@@ -135,9 +140,9 @@ export default {
             console.error(err)
         }
     },
-    async socialLogin(email, nickname, gender, platform) {
+    async socialLogin(payload) {
         try {
-            const socialLoginResponse = await requestSocialLogin(email, nickname, gender, platform)
+            const socialLoginResponse = await requestSocialLogin(payload)
             return socialLoginResponse.data
         } catch (err) {
             console.error(err)
@@ -153,6 +158,7 @@ export default {
     },
     async signup(formData) {
         try {
+            console.log(formData)
             const singupRespone = await requestSignup(formData)
             return singupRespone.data
         } catch (err) {
