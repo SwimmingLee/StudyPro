@@ -91,7 +91,13 @@ export default {
     };
     console.log(this.codeMirror.onkeypress);
     
-    this.codeMirror.onkeypress =()=> {
+
+    this.codeMirror.on("keypress", ()=> {
+      
+      console.log("change!!");
+      
+    })
+    this.codeMirror.onkeyup =()=> {
       console.log("change...");
       
     }
