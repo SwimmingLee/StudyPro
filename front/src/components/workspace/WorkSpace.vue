@@ -88,8 +88,12 @@ export default {
       transports: ["websocket"],
       secure: true
     });
-    this.socket.emit("join", {study_id : 1, user_id: this.user_id});
 
+    this.socket.emit("join", {
+      study_id: 1,
+      user_id: 1,
+      user_nickname: 1,
+    });
 
   },
   mounted() {
