@@ -199,7 +199,7 @@ export default {
         return this.peer_connections[user_id]
       }
       let t_pc = await new RTCPeerConnection(pcConfig)
-      console.log(t_pc)
+      
       this.peer_connections[user_id] = t_pc
 
       t_pc.onicecandidate = function(event) {
@@ -215,7 +215,7 @@ export default {
             from: this.user_id,
             to: user_id
           });
-      }
+      }}
 
       t_pc.onaddstream = async function(event) {
         let remote_video;
@@ -226,19 +226,10 @@ export default {
       }
 
       t_pc.addStream(this.local_stream)
+
+      console.log(t_pc, 'created')
       return t_pc
-      // if (this.is_host[video_num]){
-      //   pc.createOffer(sdp => {
-      //     this.sendMessage({
-      //       message: sdp,
-      //       study_id: 1,
-      //       from: this.user_id,
-      //       to: user_id
-      //     })
-      //   }, e => {console.log(e)})
-      // }
       }
-    }
   },
 
   created() {
@@ -271,16 +262,18 @@ export default {
       }
       console.log(this.connected_users)
 
-      let t_pc = this.getPeerConnection(user_id)
-      console.log(t_pc)
-      t_pc.createOffer(sdp => {
-           this.sendMessage({
-             message: sdp,
-             study_id: 1,
-             from: this.user_id,
-             to: user_id
-           })
-         }, e => {console.log(e)})
+      this.getPeerConnection(user_id)
+      .then( t_pc => {
+        console.log(t_pc)
+        t_pc.createOffer(sdp => {
+          this.sendMessage({
+            message: sdp,
+            study_id: 1,
+            from: this.user_id,
+            to: user_id
+          }), e=> {console.log(e)}
+        })
+      })      
     })
     this.socket.on('leave', message => {
       const video_num = this.connected_users.indexOf(message.user_id)

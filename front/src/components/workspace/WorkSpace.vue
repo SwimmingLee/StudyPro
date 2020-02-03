@@ -50,7 +50,7 @@ export default {
   created() {
     this.user_id = Math.ceil(Math.random() * 100000)
     
-    this.socket = io.connect("http://192.168.0.23:8210", {
+    this.socket = io.connect("http://70.12.247.73:8210", {
     // this.socket = io.connect("http://70.12.247.73:3000", {
       transports: ["websocket"],
       secure: true
