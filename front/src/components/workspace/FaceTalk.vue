@@ -37,29 +37,9 @@
           </v-menu>
         </v-card>
       </v-col>
-      <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150">
-          <video playsinline id="remote_video_1" autoplay preload="metadata" width="100%" height="150"></video>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150">
-          <video playsinline id="remote_video_2" autoplay preload="metadata" width="100%" height="150"></video>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150">
-          <video playsinline id="remote_video_3" autoplay preload="metadata" width="100%" height="150"></video>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150">
-          <video playsinline id="remote_video_4" autoplay preload="metadata" width="100%" height="150"></video>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150">
-          <video playsinline id="remote_video_5" autoplay preload="metadata" width="100%" height="150"></video>
+      <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block" >
+        <v-card outlined tile flex min-height="150" :id="`remote_block_${i}`">
+          <img src="../../assets/images/pengsoo.jpg" alt="펭수"  width="100%" height="150" id="pengsoo">
         </v-card>
       </v-col>
     </v-row>
@@ -83,7 +63,7 @@ export default {
     return {
 
       // FaceTalk
-
+      post_img: null,
       local_video: null,
       local_stream: null,
 
@@ -104,13 +84,11 @@ export default {
     // FaceTalk
 
     sendMessage(message) {
-      console.log("send", message.message.type);
       this.socket.emit("message", message);
     },
 
     async get_stream(stream) {
       this.local_video = await document.getElementById("local_video");
-      console.log("gotStream");
       this.local_video.srcObject = stream;
       this.local_stream = stream;
     },
@@ -158,11 +136,20 @@ export default {
       }}
 
       t_pc.onaddstream =  (event) => {
-        let remote_video;
-
-        remote_video = this.remote_videos[video_num]
+        let remote_video = document.createElement('video') 
         this.remote_streams[video_num] = event.stream
+        
+        // remote_video.width = "100%"
+        // remote_video.height = 150
+        remote_video.playsinline = true
         remote_video.srcObject = this.remote_streams[video_num]
+        remote_video.autoplay = true
+        remote_video.style.width = "100%"
+        remote_video.style.height = "150"
+        
+        const remote_block = this.remote_videos[video_num]
+        remote_block.removeChild(this.remote_videos[video_num].childNodes[0])
+        remote_block.appendChild(remote_video)
       }
 
       t_pc.addStream(this.local_stream)
@@ -175,8 +162,10 @@ export default {
   },
 
   mounted() {
+    this.post_img = document.getElementById("pengsoo")
+
     for (let i = 1;  i <= 5; i++) {
-    this.remote_videos.push(document.getElementById(`remote_video_${i}`));
+    this.remote_videos.push(document.getElementById(`remote_block_${i}`));
     }
     this.local_video = document.getElementById("local_video");
 
@@ -217,14 +206,14 @@ export default {
     this.socket.on('leave', message => {
       const video_num = this.connected_users.indexOf(message.user_id)
       this.connected_users[video_num] = null
-      // this.remote_videos[video_num].srcObject = null
+      this.remote_videos[video_num].removeChild(this.remote_videos[video_num].childNodes[0])
+      this.remote_videos[video_num].appendChild(this.post_img)
       this.remote_streams[video_num] = null
       delete this.peer_connections[message.user_id]
     })
 
     this.socket.on("message", data => {
         if (data.message.type === "offer") {
-        console.log("get offer");
         const from = data.from
 
         for (let idx in this.connected_users) {
