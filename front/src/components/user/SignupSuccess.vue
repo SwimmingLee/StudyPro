@@ -5,15 +5,30 @@
           <v-col cols="9" class="text-center">
             <span class="display-2 font-weight-thin">Study</span>
             <span class="display-2">PRO</span>
-            <p class="mt-5">회원가입 완료 ㅇ_ㅇ</p>
+            <p class="mt-5">회원가입 되었습니다!<br>로그인해주세요.</p>
+            <v-btn text class="mr-4" color="primary" @click="signinModal = true">로그인</v-btn>
+            <v-btn text color="error" to="/home">홈으로</v-btn>
           </v-col>
         </v-row>
       </v-card>
+
+      <signin-modal :signin-modal="signinModal" v-on:close="signinClose"/>
   </v-content>
 </template>
 
 <script>
 export default {
-  name: "signupsuccess"
+  name: "signupsuccess",
+  data: () => ({
+    signinModal: false,
+  }),
+  components:{
+    signinModal: () => import('@/components/user/SigninModal')
+  },
+  methods: {
+    signinClose(){
+      this.signinModal = false
+    }
+  }
 };
 </script>

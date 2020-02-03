@@ -20,7 +20,7 @@ const requestSocialLogin = (email, nickname, gender, platform) => {
         url: 'http://15.164.245.201:8000/users/social/signin',
         data: {
             'email': email,
-            'nickname':nickname,
+            'nickname': nickname,
             'gender': gender,
             'platform_type': platform
         }
@@ -37,18 +37,12 @@ const requestCheckToken = (token) => {
     })
 }
 
-const requestSignup = (email, nickname, name, password, gender, phone) => {
+const requestSignup = (formData) => {
     return axios({
         method: 'POST',
         url: 'http://15.164.245.201:8000/users/signup',
-        data: {
-            'email': email,
-            'nickname': nickname,
-            'name': name,
-            'password': password,
-            'gender': gender,
-            'phone': phone
-        },
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
     })
 }
 
@@ -84,27 +78,27 @@ const requestGetMinorClasses = (majorClass) => {
         method: 'GET',
         url: 'http://15.164.245.201:8000/class/minor',
         params: {
-            major:majorClass
+            major: majorClass
         }
     })
 }
 
 const requestCreateGroup = (payload) => {
     const {
-        minor_class_id,	//int(11)	YES	MUL	
-        captain,	//int(11)	NO	MUL	
-        name,	//varchar(45)	NO	UNI	
-        goal,	//varchar(45)	YES		
-        description,	//longtext	NO		
-        user_limit,	//int(11)	YES		
-        start_time,	//int(11)	YES		
-        end_time,	//int(11)	YES		
-        status,	//varchar(45)	YES		
-        start_date,	//date	YES		
-        end_date,	//date	YES		
-        isopen,	//tinyint(4)	YES	
+        minor_class_id, //int(11)	YES	MUL	
+        captain, //int(11)	NO	MUL	
+        name, //varchar(45)	NO	UNI	
+        goal, //varchar(45)	YES		
+        description, //longtext	NO		
+        user_limit, //int(11)	YES		
+        start_time, //int(11)	YES		
+        end_time, //int(11)	YES		
+        status, //varchar(45)	YES		
+        start_date, //date	YES		
+        end_date, //date	YES		
+        isopen, //tinyint(4)	YES	
         days,
-        accessToken	
+        accessToken
     } = payload;
     return axios({
         method: 'POST',
@@ -113,19 +107,19 @@ const requestCreateGroup = (payload) => {
             'accessToken': accessToken
         },
         data: {
-            minor_class_id,	//int(11)	YES	MUL	
-            captain,	//int(11)	NO	MUL	
-            name,	//varchar(45)	NO	UNI	
-            goal,	//varchar(45)	YES		
-            description,	//longtext	NO		
-            user_limit,	//int(11)	YES		
-            start_time,	//int(11)	YES		
-            end_time,	//int(11)	YES		
-            status,	//varchar(45)	YES		
-            start_date,	//date	YES		
-            end_date,	//date	YES		
-            isopen,	//tinyint(4)	YES	
-            days	
+            minor_class_id, //int(11)	YES	MUL	
+            captain, //int(11)	NO	MUL	
+            name, //varchar(45)	NO	UNI	
+            goal, //varchar(45)	YES		
+            description, //longtext	NO		
+            user_limit, //int(11)	YES		
+            start_time, //int(11)	YES		
+            end_time, //int(11)	YES		
+            status, //varchar(45)	YES		
+            start_date, //date	YES		
+            end_date, //date	YES		
+            isopen, //tinyint(4)	YES	
+            days
         }
     })
 }
@@ -157,9 +151,9 @@ export default {
             console.error(err);
         }
     },
-    async signup(email, nickname, name, password, gender, phone) {
+    async signup(formData) {
         try {
-            const singupRespone = await requestSignup(email, nickname, name, password, gender, phone)
+            const singupRespone = await requestSignup(formData)
             return singupRespone.data
         } catch (err) {
             console.error(err)
@@ -209,5 +203,5 @@ export default {
         }
     }
 
-    
+
 }

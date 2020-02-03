@@ -1,13 +1,13 @@
 <template>
   <div id="singup">
-    <div v-if="!notcreated">
+    <div v-if="!created">
       <v-form>
         <v-content>
           <v-container>
             <div id="app">
               <v-app id="inspire">
                 <v-form ref="form" v-model="valid">
-                  <v-card class="mx-5" max-width="1000">
+                  <v-card max-width="1000" class="mx-auto">
                     <br />
 
                     <v-row justify="center"
@@ -108,11 +108,24 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
+
+                    <v-row justify="center">
+                        <image-input v-model="avatar" class="wrap-content">
+                          <div slot="activator" class="wrap-content pointer">
+                            <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
+                              <span>Click to add avatar</span>
+                            </v-avatar>
+                            <v-avatar size="150px" v-ripple v-else class="mb-3">
+                              <img :src="avatar.imageURL" alt="avatar">
+                            </v-avatar>
+                          </div>
+                        </image-input>
+                    </v-row>
                   </v-card>
 
                   <v-row
                     ><v-col cols="12" sm="12">
-                      <v-card class="px-5 mx-5" max-width="1000">
+                      <v-card class="px-5 mx-auto" max-width="1000">
                         <v-card-text class="pt-0" style="font-size:18px">
                           <p><br /></p>
                           관심있는 분야를 선택해 주세요.
@@ -183,7 +196,7 @@
                   ></v-row>
 
                   <v-card
-                    class="mx-5"
+                    class="mx-auto"
                     max-width="1000"
                     color="rgb(0, 0, 0, 0)"
                     elevation="0"
@@ -197,12 +210,10 @@
                       <v-btn
                         class="mr-4"
                         :disabled="!valid"
-                        color="success"
+                        color="green lighten-4"
                         @click="onSignup()"
                       >
-                        <router-link to="/home">
                           가입하기
-                        </router-link>
                       </v-btn>
                     </v-layout>
                   </v-card>
@@ -227,7 +238,7 @@ export default {
   data: () => ({
     valid: true,
 
-    id: "",
+    id: "test@naver.com",
     idRules: [
       v => !!v || "아이디를 입력해 주세요.",
       v =>
@@ -236,8 +247,8 @@ export default {
         ) || "ex) sample@example.com"
     ],
 
-    password: "",
-    confirmPassword: "",
+    password: "s12341234",
+    confirmPassword: "s12341234",
     passwordRules: [
       v => !!v || "비밀번호를 입력해 주세요.",
       v =>
@@ -256,7 +267,7 @@ export default {
       v => (v && v.length <= 50) || "최대 50자까지 입력 가능합니다."
     ],
 
-    name: "",
+    name: "Test",
     nameRules: [
       v => !!v || "이름을 입력해 주세요.",
       v => (v && v.length <= 50) || "이름이 너무 깁니다."
@@ -264,15 +275,15 @@ export default {
 
     gender: ["남성", "여성"],
     genderRules: [v => !!v || "성별을 선택해 주세요."],
-    genderinput: "",
+    genderinput: "남성",
 
-    nickname: "",
+    nickname: "Test",
     nicknameRules: [
       v => !!v || "닉네임을 입력해 주세요.",
       v => (v && v.length <= 10) || "닉네임은 최대 10자입니다."
     ],
 
-    phone: "",
+    phone: "01012341234",
     phoneRules: [
       v => !!v || "휴대전화 번호를 입력해 주세요.",
       v =>
@@ -291,30 +302,36 @@ export default {
     db: false,
     cn: false,
     cs: false,
-    notcreated: false
+    notcreated: false,
+    created: false,
+    avatar: null,
   }),
   components: {
-    SignupSuccess
+    SignupSuccess,
+    ImageInput: () => import('@/components/base/ImageInput'),
   },
   methods: {
     ...mapActions(["signup"]),
     async onSignup() {
       try {
-        let signupResult = await this.signup({
-          name: this.name,
-          nickname: this.nickname,
-          email: this.id,
-          password: this.password,
-          gender: this.genderinput == "남성" ? "M" : "W",
-          phone: this.phone
-        });
+        let formData = this.avatar.formData;
+        formData.append('email', this.id)
+        formData.append('password', this.password)
+        formData.append('name', this.name)
+        formData.append('nickname', this.nickname)
+        formData.append('gender', this.genderinput == "남성"? "M" : 'W')
+        formData.append('phone', this.phone)
+
+        let signupResult = true//await this.signup(formData);
         if (!signupResult) {
           this.notcreated = !signupResult;
+        }else{
+          this.created = true
         }
       } catch (err) {
         console.error(err);
       }
-    }
+    },
   },
   computed: {
     passwordConfirmationRule() {

@@ -6,7 +6,7 @@
       fixed
       shrink-on-scroll
       prominent
-      src="@/assets/images/IntroBackground.jpg"
+      src="@/assets/images/HeaderBackground.jpg"
       fade-img-on-scroll
       scroll-threshold="100"
     >
@@ -18,7 +18,7 @@
           <v-layout fill-height align-center aria-hidden>
             <v-flex xs12 md7 offset-xs1>
               <h1 class="display-3 headerText mb-4">
-                The Art Of Travel
+                Header
               </h1>
             </v-flex>
           </v-layout>
@@ -47,7 +47,7 @@
       </v-btn>
       <v-btn
         class="mt-1 black--text d-none d-sm-flex transparent"
-        to="/signup"
+        to="/user"
         elevation="0"
         text
         v-if="!isAuth"
@@ -185,11 +185,11 @@
       </v-container>
       <template v-slot:append>
         <v-card-actions class="justify-center" v-if="!isAuth">
-          <v-btn text class="pink--text" @click="signinModal=true">Sign in</v-btn>
-          <v-btn text class="pink--text transparent" elevation="0" to="/signup">Sign up</v-btn>
+          <v-btn text class="pink--text" @click="signinModal=true">로그인</v-btn>
+          <v-btn text class="pink--text transparent" elevation="0" to="/signup">회원가입</v-btn>
         </v-card-actions>
         <v-card-actions class="justify-center" v-else>
-          <v-btn text class="pink--text" >Sign out</v-btn>
+          <v-btn text class="pink--text" >로그아웃</v-btn>
         </v-card-actions>
       </template>
     </v-navigation-drawer>
@@ -209,12 +209,14 @@ export default {
       menus: [
         { icon: "home", title: "Home", route: "/home" },
         { icon: "group", title: "Study", route: "/study" },
-        { icon: "alarm", title: "Board", route: "/board" }
+        { icon: "alarm", title: "Board", route: "/board" },
+        { icon: "accessibility_new", title: "User", route: "/user" }
       ],
       navigations: [
         { title: "Home", route: "/home" },
         { title: "StudySearch", route: "/study" },
-        { title: "Board", route: "/board" }
+        { title: "Board", route: "/board" },
+        { title: "User", route: "/user" }
       ],
       userpages: [
         { title: "Information", route: "/myinfo" },
