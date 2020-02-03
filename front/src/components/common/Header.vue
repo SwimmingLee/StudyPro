@@ -6,7 +6,7 @@
       fixed
       shrink-on-scroll
       prominent
-      src="@/assets/images/IntroBackground.jpg"
+      src="@/assets/images/HeaderBackground.jpg"
       fade-img-on-scroll
       scroll-threshold="100"
     >
@@ -18,7 +18,7 @@
           <v-layout fill-height align-center aria-hidden>
             <v-flex xs12 md7 offset-xs1>
               <h1 class="display-3 headerText mb-4">
-                The Art Of Travel
+                Header
               </h1>
             </v-flex>
           </v-layout>
@@ -40,19 +40,19 @@
       <v-btn
         class="mt-1 d-none d-sm-flex"
         @click="signinModal = true"
-        v-if="!isAuth"
+        v-if="!currentUser"
         text
       >
-        <span>Sign In</span>
+        <span>로그인</span>
       </v-btn>
       <v-btn
         class="mt-1 black--text d-none d-sm-flex transparent"
-        to="/signup"
+        to="/user"
         elevation="0"
         text
-        v-if="!isAuth"
+        v-if="!currentUser"
       >
-        <span>Sign Up</span>
+        <span>회원가입</span>
       </v-btn>
 
       <!-- 유저 이미지 -->
@@ -64,14 +64,14 @@
           <v-avatar>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
-          <span class="mr-2 grey--text" >[nickname]</span> 
+          <span class="mr-2 grey--text" >{{currentUser.nickname}}</span> 
           <svg viewBox="0 0 451.847 451.847" width="12"><path d="M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751
 		c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0
 		c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z" fill="rgba(200,200,200,.7)"/></svg>
           <div :class="{ usermenu }" class="userdropdown">
             <ul class="pl-0">
               <li v-for="item in usermenuitems" :key="item.title">
-                <a href="item.route" target="_blank" class="black--text subtitle-1 pl-5">{{ item.title }}</a>
+                <a :href="item.route" class="black--text subtitle-1 pl-5">{{ item.title }}</a>
               </li>
             </ul>
           </div>
@@ -132,10 +132,6 @@
 
       <!-- Navigations -->
       <v-list>
-        <v-content text disabled class="grey--text text-center mx-4 pa-0"
-          >Navigations
-          <hr
-        /></v-content>
         <v-list-item
           v-for="item in navigations"
           :key="item.title"
@@ -150,11 +146,9 @@
       </v-list>
 
       <!-- User Pages -->
-      <v-container class="my-0 pa-0" v-if="isAuth">
-        <v-content text disabled class="grey--text text-center mx-4 mb-4 pa-0"
-          >User Pages
+      <v-container class="my-0 pa-0" v-if="currentUser">
           <hr
-        /></v-content>
+        />
         <v-layout column align-center>
           <v-flex>
             <router-link to="/mypage">
@@ -184,12 +178,12 @@
       <v-container v-else>
       </v-container>
       <template v-slot:append>
-        <v-card-actions class="justify-center" v-if="!isAuth">
-          <v-btn text class="pink--text" @click="signinModal=true">Sign in</v-btn>
-          <v-btn text class="pink--text transparent" elevation="0" to="/signup">Sign up</v-btn>
+        <v-card-actions class="justify-center" v-if="!currentUser">
+          <v-btn text class="pink--text" @click="signinModal=true">로그인</v-btn>
+          <v-btn text class="pink--text transparent" elevation="0" to="/signup">회원가입</v-btn>
         </v-card-actions>
         <v-card-actions class="justify-center" v-else>
-          <v-btn text class="pink--text" >Sign out</v-btn>
+          <v-btn text class="pink--text" >로그아웃</v-btn>
         </v-card-actions>
       </template>
     </v-navigation-drawer>
@@ -207,31 +201,33 @@ export default {
       usermenu: false,
       usermenuactive: false,
       menus: [
-        { icon: "home", title: "Home", route: "/home" },
-        { icon: "group", title: "Study", route: "/study" },
-        { icon: "alarm", title: "Board", route: "/board" }
+        { icon: "home", title: "홈", route: "/home" },
+        { icon: "group", title: "모임", route: "/study" },
+        { icon: "alarm", title: "게시판", route: "/board" },
+        { icon: "accessibility_new", title: "내 정보", route: this.$store.state.auth.user? "/user/mypage": "/user/signup" }
       ],
       navigations: [
-        { title: "Home", route: "/home" },
-        { title: "StudySearch", route: "/study" },
-        { title: "Board", route: "/board" }
+        { title: "홈", route: "/home" },
+        { title: "모임", route: "/study" },
+        { title: "게시판", route: "/board" },
+        { title: "내 정보", route: "/user" }
       ],
       userpages: [
-        { title: "Information", route: "/myinfo" },
-        { title: "Study Groups", route: "/mygroups" },
-        { title: "Calendar", route: "/mycalendar" }
+        { title: "정보수정", route: "/myinfo" },
+        { title: "가입목록", route: "/mygroups" },
+        { title: "일정관리", route: "/mycalendar" }
       ],
       usermenuitems: [
-        { title: "My Page", route: "/mypage"},
-        { title: "My Groups", route: "/mygroup"},
-        { title: "Calendar", route: "/calendar"},
+        { title: "정보수정", route: "/mypage"},
+        { title: "가입목록", route: "/mygroup"},
+        { title: "일정관리", route: "/calendar"},
       ]
     };
   },
   computed: {
-    isAuth: function() {
-      return this.$store.getters.isAuth;
-    },
+    currentUser(){
+      return this.$store.state.auth.user
+    }
   },
   components: {
     signinModal: () => import("@/components/user/SigninModal")
@@ -265,5 +261,4 @@ export default {
 #navDrawer {
   opacity: 0.8;
 }
-
 </style>
