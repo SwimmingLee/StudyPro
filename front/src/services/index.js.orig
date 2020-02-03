@@ -1,5 +1,5 @@
 export default {
-
+<<<<<<< HEAD
     async login(email, password) {
         try {
             const loginResponse = await axiosAPI.login(email, password)
@@ -72,5 +72,7 @@ export default {
             console.log(err)
         }
     },
+=======
+>>>>>>> 45efd705ed629cd6f128cc390b8e0c66cbed1b9d
 
 }

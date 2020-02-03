@@ -1,13 +1,22 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import intro from '@/views/Intro'
-import home from '@/views/Home'
+
+// 공통페이지
 import appHeader from '@/components/common/Header'
 import appFooter from '@/components/common/Footer'
-import study from '@/views/Study'
-import user from '@/views/User'
+
+// 인트로, 홈페이지
+import intro from '@/views/Intro'
+import home from '@/views/Home'
+
+// 유저페이지
+// import user from '@/views/User'
 import signup from '@/components/user/Signup'
-import mypage from '@/components/user/Mypage'
+// import signupSuccess from '@/components/user/SignupSuccess'
+// import mypage from '@/components/user/Mypage'
+
+// 스터디페이지
+import study from '@/views/Study'
 import studydetail from '@/components/studydetail/MainStudyDetail'
 import workspace from '@/components/workspace/WorkSpace'
 
@@ -45,17 +54,21 @@ const routes = [{
         name: 'user',
         components: {
             header: appHeader,
-            default: user,
+            default: null,
             footer: appFooter
         },
         children: [{
                 path: 'signup',
                 component: signup
             },
-            {
-                path: '/:id',
-                component: mypage
-            }
+            // {
+            //     path: 'success',
+            //     component: signupSuccess
+            // },
+            // {
+            //     path: 'mypage',
+            //     component: mypage
+            // }
         ]
     },
     {

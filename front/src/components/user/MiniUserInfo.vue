@@ -8,7 +8,7 @@
         <v-row class="text-center">
             <v-flex justify-center>
                 <span class="justify-center">Hello!! 
-                    <span class="blue--text lighten-2">{{ userNickname }}</span>
+                    <span class="blue--text lighten-2">{{ currentUser.nickname }}</span>
                 </span>  
             </v-flex>
         </v-row>
@@ -16,17 +16,11 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-    
-
 export default {
     computed: {
-        userNickname: function() {
-            return this.$store.getters.userNickname;
-        },
-    },
-    methods: {
-        ...mapActions(['logout']),
+        currentUser(){
+            return this.$store.state.auth.user
+        }
     }
 }
 </script>

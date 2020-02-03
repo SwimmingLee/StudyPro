@@ -1,5 +1,5 @@
 <template>
-  <v-content id="signupsuccess">
+  <v-content id="signupSuccess">
       <v-card class="d-flex align-stretch mx-10 mb-3" min-height="50vh">
         <v-row align="center" justify="center">
           <v-col cols="9" class="text-center">
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: "signupsuccess",
+  name: "signupSuccess",
   data: () => ({
     signinModal: false,
   }),

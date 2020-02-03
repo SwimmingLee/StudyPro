@@ -13,16 +13,16 @@
           hide-selected
           item-text="name"
           item-value="symbol"
-          label="Search"
+          label="이름으로 검색"
           solo
           @keyup.enter="loadList()"
         >
           <template v-slot:no-data>
             <v-list-item>
               <v-list-item-title>
-                Type
-                <strong>group name</strong>
-                you want to find
+                찾으실
+                <strong>모임이름</strong>
+                을 입력해주세요.
               </v-list-item-title>
             </v-list-item>
           </template>
@@ -34,7 +34,7 @@
               class="white--text"
               v-on="on"
             >
-              <v-icon left>mdi-coin</v-icon>
+              <v-icon left>people</v-icon>
               <span v-text="item.name"></span>
             </v-chip>
           </template>
@@ -47,7 +47,7 @@
               <v-list-item-title v-text="item.name"></v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
-              <v-icon>mdi-coin</v-icon>
+              <v-icon>people</v-icon>
             </v-list-item-action>
           </template>
         </v-autocomplete>
@@ -60,7 +60,7 @@
       <v-col class="col-11 col-md-9 pt-0 mx-auto">
         <v-expansion-panels>
           <v-expansion-panel hover>
-            <v-expansion-panel-header>Details</v-expansion-panel-header>
+            <v-expansion-panel-header>상세검색</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-row>
                 <v-col sm="3" class="pl-6 pb-0">
@@ -204,9 +204,10 @@
                 <v-list-item-content class="pt-0 pb-1">
                   <v-layout row class="px-3">
                     <v-layout column xs2 align-center justify-center>
-                      <v-avatar color="white ">
+                      <v-avatar color="white">
                         <v-icon size="62">mdi-account-circle</v-icon>
                       </v-avatar>
+
                     </v-layout>
 
                     <!-- 내용 -->
@@ -277,55 +278,27 @@ export default {
       minorClass: "",
       goal: ""
     },
-    recommendItems: [],
     items: [],
-    displayItems: [
-      // {
-      //   action: "build",
-      //   id: 0,
-      //   name: "Example Group",
-      //   startdate: "2020-01-25",
-      //   starttime: "18:00",
-      //   endtime: "20:00",
-      //   duration: "2 Months",
-      //   intro: "개발을 위한 샘플 그룹입니다",
-      //   days: "Mon, Wed, Fri",
-      //   locked: true
-      // }
-    ]
+    recommendItems: [],
+    displayItems: []
   }),
   components: {
     GroupModal: () => import("@/components/study/GroupModal"),
     Timeselector
   },
   watch: {
-    async searchInput() {
+    searchInput() {
       this.recommendItems = [];
-      this.displayItems = [];
-      // if (this.searchInput == "") {
-      //   this.recommendItems = this.items;
-      // } else {
-        console.log(this.items.length)
-        this.items.forEach(item => {
-          const res = item.name.includes(this.searchInput, 0);
-          if (res) {
+
+      if(this.searchInput == ''){
+        return;
+      }else{
+        for(var item of this.items){
+          if(item.name.includes(this.searchInput)){
             this.recommendItems.push(item);
           }
-          
-        });
-     // }
-      this.loadMore();
-
-      // if (this.searchInput == "" || this.searchInput == null) {
-      //   this.isLoading = false;
-      //   return;
-      // }
-      // this.isLoading = true;
-
-      // this.searchForm["name"] = this.searchInput;
-      // this.recommendItems = await this.getGroups(this.searchForm);
-
-      // this.isLoading = false;
+        }
+      }
     }
   },
   methods: {
@@ -354,8 +327,7 @@ export default {
   },
   async mounted() {
     this.items = await api.getGroups();
-    this.recommendItems = this.items.slice(0);
-    this.loadMore();
+    this.displayItems = this.items.slice(0);
     this.groupModal = false;
   }
 };
