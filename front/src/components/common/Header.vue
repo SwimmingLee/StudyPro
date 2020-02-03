@@ -268,5 +268,4 @@ export default {
 #navDrawer {
   opacity: 0.8;
 }
-
 </style>

@@ -15,5 +15,8 @@ export default {
     userPhone: (state) => {
         return state.user.phone;
     },
+    userID : (state) => {
+        return state.user.id;
+    },
     getUserNickname: state => state.getUserNickname,
 }

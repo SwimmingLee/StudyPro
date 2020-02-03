@@ -65,19 +65,67 @@ const requestGetGroup = (id, token) => {
     })
 }
 
-const requestGetGroups = (payload) => {
+const requestGetGroups = () => {
     return axios({
         method: 'GET',
-        url: 'http://15.164.245.201:8000/studies/detail',
+        url: 'http://15.164.245.201:8000/studies',
+    })
+}
+
+const requestGetMajorClasses = () => {
+    return axios({
+        method: 'GET',
+        url: 'http://15.164.245.201:8000/class/major',
+    })
+}
+
+const requestGetMinorClasses = (majorClass) => {
+    return axios({
+        method: 'GET',
+        url: 'http://15.164.245.201:8000/class/minor',
         params: {
-            'name': payload.name,
-            'start_date': payload.startdate,
-            'start_time': payload.starttime,
-            'end_time': payload.endtime,
-            'days': payload.duration,
-            'tags': payload.tags,
-            'minor_class': payload.minorClass,
-            'goal': payload.goal
+            major:majorClass
+        }
+    })
+}
+
+const requestCreateGroup = (payload) => {
+    const {
+        minor_class_id,	//int(11)	YES	MUL	
+        captain,	//int(11)	NO	MUL	
+        name,	//varchar(45)	NO	UNI	
+        goal,	//varchar(45)	YES		
+        description,	//longtext	NO		
+        user_limit,	//int(11)	YES		
+        start_time,	//int(11)	YES		
+        end_time,	//int(11)	YES		
+        status,	//varchar(45)	YES		
+        start_date,	//date	YES		
+        end_date,	//date	YES		
+        isopen,	//tinyint(4)	YES	
+        days,
+        accessToken	
+    } = payload;
+    return axios({
+        method: 'POST',
+        url: 'http://15.164.245.201:8000/studies/create',
+        headers: {
+            'accessToken': accessToken
+        },
+        data: {
+            minor_class_id,	//int(11)	YES	MUL	
+            captain,	//int(11)	NO	MUL	
+            name,	//varchar(45)	NO	UNI	
+            goal,	//varchar(45)	YES		
+            description,	//longtext	NO		
+            user_limit,	//int(11)	YES		
+            start_time,	//int(11)	YES		
+            end_time,	//int(11)	YES		
+            status,	//varchar(45)	YES		
+            start_date,	//date	YES		
+            end_date,	//date	YES		
+            isopen,	//tinyint(4)	YES	
+            days	
         }
     })
 }
@@ -133,4 +181,33 @@ export default {
             console.error(err)
         }
     },
+
+    async getMajorClasses() {
+        try {
+            const getMajorClassesReponse = await requestGetMajorClasses()
+            return getMajorClassesReponse;
+        } catch (err) {
+            console.log(err);
+        }
+    },
+
+    async getMinorClasses(payload) {
+        try {
+            const getMinorClassesReponse = await requestGetMinorClasses(payload)
+            return getMinorClassesReponse;
+        } catch (err) {
+            console.log(err);
+        }
+    },
+
+    async createGroup(payload) {
+        try {
+            const createGroupResponse = await requestCreateGroup(payload)
+            return createGroupResponse
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    
 }
