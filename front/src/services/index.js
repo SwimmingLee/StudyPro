@@ -25,9 +25,9 @@ export default {
             console.error(err);
         }
     },
-    async signup(email, nickname, name, password, gender, phone) {
+    async signup(formData) {
         try {
-            const singupRespone = await axiosAPI.signup(email, nickname, name, password, gender, phone)
+            const singupRespone = await axiosAPI.signup(formData)
             return singupRespone
         } catch (err) {
             console.error(err)

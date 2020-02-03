@@ -5,6 +5,7 @@ import home from '@/views/Home'
 import appHeader from '@/components/common/Header'
 import appFooter from '@/components/common/Footer'
 import study from '@/views/Study'
+import user from '@/views/User'
 import signup from '@/components/user/Signup'
 import mypage from '@/components/user/Mypage'
 import studydetail from '@/components/studydetail/MainStudyDetail'
@@ -40,22 +41,22 @@ const routes = [{
         }
     },
     {
-        path: '/signup',
-        name: 'signup',
+        path: '/user',
+        name: 'user',
         components: {
             header: appHeader,
-            default: signup,
+            default: user,
             footer: appFooter
-        }
-    },
-    {
-        path: '/mypage',
-        name: 'mypage',
-        components: {
-            header: appHeader,
-            default: mypage,
-            footer: appFooter
-        }
+        },
+        children: [{
+                path: 'signup',
+                component: signup
+            },
+            {
+                path: '/:id',
+                component: mypage
+            }
+        ]
     },
     {
         path: '/workspace',

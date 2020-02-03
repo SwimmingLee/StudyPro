@@ -17,7 +17,7 @@ let setToken = ({ commit }, data) => {
 let setUser = ({ commit }, data) => {
     commit(USER, data)
 }
- 
+
 let processSignin = (store, data) => {
     switch (data.state) {
         case 'fail':
@@ -54,7 +54,7 @@ export default {
         processSignin(store, loginResponse)
         return store.getters.isAuth
     },
-    
+
     async logout(store) {
         setToken(store, "");
         WbKakao.signout();
@@ -73,16 +73,14 @@ export default {
         return store.getters.isAuth
     },
 
-    async signup(store, { email, nickname, name, password, gender, phone }) {
-        console.log(email, nickname, name, password, gender, phone);
-        let signupResponse = await api.signup(email, nickname, name, password, gender, phone)
-        console.log(signupResponse)
+    async signup(store, formData) {
+        let signupResponse = await api.signup(formData)
         return processSignup(store, signupResponse)
     },
     ////////////////////////////////////////////////////////////////////////////////////
 
     async createGroup(store, { id }) {
-        let createGroupResponse = await api.createGroup({id})
+        let createGroupResponse = await api.createGroup({ id })
         return createGroupResponse
     },
 
@@ -96,7 +94,7 @@ export default {
         return getGroupsResponse
     },
 
-    async setAccessToken(store, {token}) {
+    async setAccessToken(store, { token }) {
         setToken(store, token);
     },
     //////////////////////////////////////////////////////////////////////////////////////
