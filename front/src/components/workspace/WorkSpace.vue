@@ -93,7 +93,6 @@ export default {
 
     this.socket.emit("join", {study_id : 1, user_id: `${this.user_id}`});
 
-
   },
   mounted() {
     window.onbeforeunload = () => {
