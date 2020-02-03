@@ -76,7 +76,6 @@ const pcConfig = {
   ]
 };
 
-let pc;
 
 export default {
   props: ["socket", "user_id"],
@@ -85,10 +84,6 @@ export default {
 
       // FaceTalk
       stun_server: "stun.l.google.com:19302",
-      isHost: false,
-      isStarted: false,
-      remote_video: null,
-      remote_stream: null,
 
       local_video: null,
       local_stream: null,
@@ -98,9 +93,6 @@ export default {
 
       remote_videos: [null],
       remote_streams: [null, null, null, null, null, null],
-      temp_remote_video: null,
-      temp_remote_stream: null,
-      is_host: [null, false, false, false, false, false],
 
       fav: false,
       showProfile: false,
@@ -111,61 +103,10 @@ export default {
   },
   methods: {
     // FaceTalk
-    HandlerOnAddStream(event) {
-      console.log("onAddStream");
-      this.remote_stream = event.stream;
-      this.temp_remote_video.srcObject = this.temp_remote_stream;
-    },
 
     sendMessage(message) {
-      console.log(message)
       console.log("send", message.message.type);
       this.socket.emit("message", message);
-    },
-
-    HandlerOnIceCandidate(event) {
-      console.log("oniceCandidate");
-      if (event.candidate) {
-        this.sendMessage({
-          type: "candidate",
-          label: event.candidate.sdpMLineIndex,
-          id: event.candidate.sdpMid,
-          candidate: event.candidate.candidate
-        });
-      } else {
-        console.log("no candidate");
-      }
-    },
-
-    async maybeStart() {
-      if (!this.isStarted) {
-        pc = new RTCPeerConnection(pcConfig);
-        pc.onicecandidate = this.HandlerOnIceCandidate;
-        pc.onaddstream = this.HandlerOnAddStream;
-        console.log("create Peer_connection");
-
-        pc.addStream(this.local_stream);
-        this.isStarted = true;
-
-        if (this.isHost) {
-          this.doCall();
-        }
-      }
-    },
-    setLocalAndSendMessage(sdp) {
-      pc.setLocalDescription(sdp);
-      this.sendMessage(sdp);
-    },
-    doCall() {
-      pc.createOffer(this.setLocalAndSendMessage, function(e) {
-        console.log(e);
-      });
-    },
-
-    doAnswer() {
-      pc.createAnswer().then(this.setLocalAndSendMessage, function(e) {
-        console.log(e);
-      });
     },
 
     async got_stream(stream) {
@@ -195,7 +136,6 @@ export default {
       }
 
       video_num = existed_num ? existed_num : temp_null
-      console.log(this.remote_videos, video_num)
       if (this.peer_connections[user_id]) {
         return this.peer_connections[user_id]
       }
@@ -224,7 +164,6 @@ export default {
         remote_video = this.remote_videos[video_num]
         this.remote_streams[video_num] = event.stream
         remote_video.srcObject = this.remote_streams[video_num]
-        console.log(t_pc)
       }
 
       t_pc.addStream(this.local_stream)
@@ -260,12 +199,9 @@ export default {
           break
         }
       }
-      console.log(this.connected_users)
       setTimeout(() => {
-        console.log('timeout')
         this.getPeerConnection(user_id)
         .then( t_pc => {
-          console.log(t_pc, 'created')
           t_pc.createOffer(sdp => {
             t_pc.setLocalDescription(sdp) 
             this.sendMessage({
@@ -285,17 +221,10 @@ export default {
       // this.remote_videos[video_num].srcObject = null
       this.remote_streams[video_num] = null
       delete this.peer_connections[message.user_id]
-
-      console.log(this.connected_users)
     })
 
     this.socket.on("message", message => {
-      console.log(message)
-      if (message === "get user") {
-        setTimeout(() => {
-          this.maybeStart();
-        }, 1000);
-      } else if (message.message.type === "offer") {
+        if (message.message.type === "offer") {
         console.log("get offer");
         const from = message.from
 
