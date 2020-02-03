@@ -224,16 +224,10 @@
         </v-content>
       </v-form>
     </div>
-    <div v-else>
-      <signup-success />
-    </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import SignupSuccess from "@/components/user/SignupSuccess";
-
 export default {
   data: () => ({
     valid: true,
@@ -307,27 +301,34 @@ export default {
     avatar: null,
   }),
   components: {
-    SignupSuccess,
     ImageInput: () => import('@/components/base/ImageInput'),
   },
   methods: {
-    ...mapActions(["signup"]),
     async onSignup() {
       try {
-        let formData = this.avatar.formData;
+        let formData = new FormData();
         formData.append('email', this.id)
         formData.append('password', this.password)
         formData.append('name', this.name)
         formData.append('nickname', this.nickname)
         formData.append('gender', this.genderinput == "남성"? "M" : 'W')
         formData.append('phone', this.phone)
+        formData.append('img', this.avatar.imageFile);
 
-        let signupResult = true//await this.signup(formData);
-        if (!signupResult) {
-          this.notcreated = !signupResult;
-        }else{
-          this.created = true
-        }
+        this.$store.dispatch('auth/register', formData).then(
+          (state) => {
+            if(state == 'success'){
+              this.close();
+            }else{
+              this.message = '아이디 또는 비밀번호를 잘못입력했습니다.'
+            }
+            this.isLoading = false;
+          },
+          error => {
+            this.isLoading = false
+            this.message = error.message
+          }
+        )
       } catch (err) {
         console.error(err);
       }

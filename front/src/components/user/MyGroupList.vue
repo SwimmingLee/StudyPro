@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-4" tile min-height="450px">
+  <v-card class="mx-4" tile min-height="450px" elevation="0">
     <v-card-title>
       가입한 그룹목록
       <v-spacer></v-spacer>

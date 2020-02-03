@@ -1,6 +1,6 @@
 <template>
   <div id="createGroup" class="mx-5">
-    <v-card class="pa-5 pb-2">
+    <v-card class="pa-5 pb-2" elevation="0">
       <p class="ml-5">그룹 생성</p>
       <hr />
       <v-simple-table>
