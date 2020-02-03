@@ -39,27 +39,28 @@
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
         <v-card outlined tile flex min-height="150">
-          <video
-            playsinline
-            id="remote_video"
-            autoplay
-            preload="metadata"
-            width="100%"
-            height="150"
-          ></video>
+          <video playsinline id="remote_video_1" autoplay preload="metadata" width="100%" height="150"></video>
         </v-card>
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150"></v-card>
+        <v-card outlined tile flex min-height="150">
+          <video playsinline id="remote_video_2" autoplay preload="metadata" width="100%" height="150"></video>
+        </v-card>
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150"></v-card>
+        <v-card outlined tile flex min-height="150">
+          <video playsinline id="remote_video_3" autoplay preload="metadata" width="100%" height="150"></video>
+        </v-card>
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150"></v-card>
+        <v-card outlined tile flex min-height="150">
+          <video playsinline id="remote_video_4" autoplay preload="metadata" width="100%" height="150"></video>
+        </v-card>
       </v-col>
       <v-col cols="12" md="6" class="d-none d-md-block">
-        <v-card outlined tile flex min-height="150"></v-card>
+        <v-card outlined tile flex min-height="150">
+          <video playsinline id="remote_video_5" autoplay preload="metadata" width="100%" height="150"></video>
+        </v-card>
       </v-col>
     </v-row>
   </v-card>
@@ -75,20 +76,22 @@ const pcConfig = {
   ]
 };
 
-let pc;
-let local_video = document.getElementById("local_video");
-let local_stream = null;
 
 export default {
-  props: ["socket"],
+  props: ["socket", "user_id"],
   data() {
     return {
+
       // FaceTalk
-      stun_server: "stun.l.google.com:19302",
-      isHost: false,
-      isStarted: false,
-      remote_video: null,
-      remote_stream: null,
+
+      local_video: null,
+      local_stream: null,
+
+      connected_users: [-1, null, null, null, null, null],
+      peer_connections: {},
+
+      remote_videos: [null],
+      remote_streams: [null, null, null, null, null, null],
 
       fav: false,
       showProfile: false,
@@ -99,69 +102,17 @@ export default {
   },
   methods: {
     // FaceTalk
-    HandlerOnAddStream(event) {
-      console.log("onAddStream");
-      this.remote_stream = event.stream;
-      this.remote_video.srcObject = this.remote_stream;
-    },
 
     sendMessage(message) {
-      console.log("send", message.type);
-      this.socket.emit("message", { message: message, room_id: 1 });
+      console.log("send", message.message.type);
+      this.socket.emit("message", message);
     },
 
-    HandlerOnIceCandidate(event) {
-      console.log("oniceCandidate");
-      if (event.candidate) {
-        this.sendMessage({
-          type: "candidate",
-          label: event.candidate.sdpMLineIndex,
-          id: event.candidate.sdpMid,
-          candidate: event.candidate.candidate
-        });
-      } else {
-        console.log("no candidate");
-      }
-    },
-
-    async maybeStart() {
-      if (!this.isStarted) {
-        pc = new RTCPeerConnection(pcConfig);
-        pc.onicecandidate = this.HandlerOnIceCandidate;
-        pc.onaddstream = this.HandlerOnAddStream;
-        console.log("create Peer_connection");
-
-        console.log("111111111111", local_stream);
-        pc.addStream(local_stream);
-        this.isStarted = true;
-
-        if (this.isHost) {
-          this.doCall();
-        }
-      }
-    },
-    setLocalAndSendMessage(sdp) {
-      pc.setLocalDescription(sdp);
-      this.sendMessage(sdp);
-    },
-    doCall() {
-      console.log("doCall");
-      pc.createOffer(this.setLocalAndSendMessage, function(e) {
-        console.log(e);
-      });
-    },
-
-    doAnswer() {
-      pc.createAnswer().then(this.setLocalAndSendMessage, function(e) {
-        console.log(e);
-      });
-    },
-
-    async got_stream(stream) {
-      local_video = await document.getElementById("local_video");
+    async get_stream(stream) {
+      this.local_video = await document.getElementById("local_video");
       console.log("gotStream");
-      local_video.srcObject = stream;
-      local_stream = stream;
+      this.local_video.srcObject = stream;
+      this.local_stream = stream;
     },
 
     showProfileMenu(e) {
@@ -172,42 +123,140 @@ export default {
       this.$nextTick(() => {
         this.showProfile = true;
       });
-    }
+    },
+
+    async getPeerConnection(user_id) {
+      let video_num, temp_null = 10, existed_num = null
+      for (let idx in this.connected_users) {
+        if (this.connected_users[idx] === user_id) { existed_num = idx }
+        else if (!this.connected_users[idx]) {
+          temp_null = temp_null > idx ? idx : temp_null
+        }
+      }
+
+      video_num = existed_num ? existed_num : temp_null
+      if (this.peer_connections[user_id]) {
+        return this.peer_connections[user_id]
+      }
+      let t_pc = await new RTCPeerConnection(pcConfig)
+      
+      this.peer_connections[user_id] = t_pc
+
+      t_pc.onicecandidate = (event) => {
+        if (event.candidate) {
+          this.sendMessage({
+            message : {
+              type: "candidate",
+              label: event.candidate.sdpMLineIndex,
+              id: event.candidate.sdpMid,
+              candidate: event.candidate.candidate
+            },
+            study_id: 1,
+            from: this.user_id,
+            to: user_id
+          });
+      }}
+
+      t_pc.onaddstream =  (event) => {
+        let remote_video;
+
+        remote_video = this.remote_videos[video_num]
+        this.remote_streams[video_num] = event.stream
+        remote_video.srcObject = this.remote_streams[video_num]
+      }
+
+      t_pc.addStream(this.local_stream)
+      return t_pc
+      }
+  },
+
+  created() {
+    console.log('내아이디 : ', this.user_id)
   },
 
   mounted() {
-    this.remote_video = document.getElementById("remote_video");
+    for (let i = 1;  i <= 5; i++) {
+    this.remote_videos.push(document.getElementById(`remote_video_${i}`));
+    }
+    this.local_video = document.getElementById("local_video");
 
+    
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
         video: true
       })
-      .then(this.got_stream);
-    this.socket.on("message", message => {
-      if (message === "room host") {
-        this.isHost = true;
-        console.log("나는 방장");
-      } else if (message === "get user") {
-        setTimeout(() => {
-          this.maybeStart();
-        }, 1000);
-      } else if (message.type === "offer") {
-        console.log("get offer");
-        if (!this.isStarted && !this.isHost) {
-          this.maybeStart();
+      .then(this.get_stream);
+
+    this.socket.on('join', message => {
+      const user_id = message.user_id
+
+      if (user_id === this.user_id) return
+      for (let idx in this.connected_users) {
+        if (!this.connected_users[idx]) {
+          this.connected_users[idx] = user_id
+          break
         }
-        pc.setRemoteDescription(new RTCSessionDescription(message));
-        this.doAnswer();
-      } else if (message.type === "answer" && this.isStarted) {
-        pc.setRemoteDescription(new RTCSessionDescription(message));
-        console.log("get answer", message);
-      } else if (message.type === "candidate") {
+      }
+      setTimeout(() => {
+        this.getPeerConnection(user_id)
+        .then( t_pc => {
+          t_pc.createOffer(sdp => {
+            t_pc.setLocalDescription(sdp) 
+            this.sendMessage({
+              message: sdp,
+              study_id: 1,
+              from: this.user_id,
+              to: user_id
+            })
+          }, e => {console.log(e)})
+        })      
+      }, (1000));
+
+    })
+    this.socket.on('leave', message => {
+      const video_num = this.connected_users.indexOf(message.user_id)
+      this.connected_users[video_num] = null
+      // this.remote_videos[video_num].srcObject = null
+      this.remote_streams[video_num] = null
+      delete this.peer_connections[message.user_id]
+    })
+
+    this.socket.on("message", data => {
+        if (data.message.type === "offer") {
+        console.log("get offer");
+        const from = data.from
+
+        for (let idx in this.connected_users) {
+          if (!this.connected_users[idx]) {
+            this.connected_users[idx] = from
+            break
+          }
+        }
+        this.getPeerConnection(from)
+        .then(t_pc => {
+          t_pc.setRemoteDescription(new RTCSessionDescription(data.message));
+          t_pc.createAnswer().then(sdp => {
+            t_pc.setLocalDescription(sdp)
+            this.sendMessage({
+              message: sdp,
+              study_id: 1,
+              from: this.user_id,
+              to: from
+            })
+          })
+        })
+
+      } else if (data.message.type === "answer") {
+        let t_pc = this.peer_connections[data.from]
+        t_pc.setRemoteDescription(new RTCSessionDescription(data.message));
+      } else if (data.message.type === "candidate") {
         let candidate = new RTCIceCandidate({
-          sdpMLineIndex: message.label,
-          candidate: message.candidate
+          sdpMLineIndex: data.message.label,
+          candidate: data.message.candidate
         });
-        pc.addIceCandidate(candidate);
+        let t_pc = this.peer_connections[data.from]
+        t_pc.addIceCandidate(candidate);
       }
     });
   }
