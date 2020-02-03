@@ -83,7 +83,6 @@ export default {
     return {
 
       // FaceTalk
-      stun_server: "stun.l.google.com:19302",
 
       local_video: null,
       local_stream: null,
@@ -109,7 +108,7 @@ export default {
       this.socket.emit("message", message);
     },
 
-    async got_stream(stream) {
+    async get_stream(stream) {
       this.local_video = await document.getElementById("local_video");
       console.log("gotStream");
       this.local_video.srcObject = stream;
@@ -187,7 +186,7 @@ export default {
         audio: true,
         video: true
       })
-      .then(this.got_stream);
+      .then(this.get_stream);
 
     this.socket.on('join', message => {
       const user_id = message.user_id
@@ -223,10 +222,10 @@ export default {
       delete this.peer_connections[message.user_id]
     })
 
-    this.socket.on("message", message => {
-        if (message.message.type === "offer") {
+    this.socket.on("message", data => {
+        if (data.message.type === "offer") {
         console.log("get offer");
-        const from = message.from
+        const from = data.from
 
         for (let idx in this.connected_users) {
           if (!this.connected_users[idx]) {
@@ -236,7 +235,7 @@ export default {
         }
         this.getPeerConnection(from)
         .then(t_pc => {
-          t_pc.setRemoteDescription(new RTCSessionDescription(message.message));
+          t_pc.setRemoteDescription(new RTCSessionDescription(data.message));
           t_pc.createAnswer().then(sdp => {
             t_pc.setLocalDescription(sdp)
             this.sendMessage({
@@ -248,15 +247,15 @@ export default {
           })
         })
 
-      } else if (message.message.type === "answer") {
-        let t_pc = this.peer_connections[message.from]
-        t_pc.setRemoteDescription(new RTCSessionDescription(message.message));
-      } else if (message.message.type === "candidate") {
+      } else if (data.message.type === "answer") {
+        let t_pc = this.peer_connections[data.from]
+        t_pc.setRemoteDescription(new RTCSessionDescription(data.message));
+      } else if (data.message.type === "candidate") {
         let candidate = new RTCIceCandidate({
-          sdpMLineIndex: message.message.label,
-          candidate: message.message.candidate
+          sdpMLineIndex: data.message.label,
+          candidate: data.message.candidate
         });
-        let t_pc = this.peer_connections[message.from]
+        let t_pc = this.peer_connections[data.from]
         t_pc.addIceCandidate(candidate);
       }
     });
