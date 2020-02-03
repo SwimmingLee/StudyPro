@@ -9,15 +9,38 @@
     maxHeight="640"
     maxWidth="640"
   >
+    <textarea @keyup="typing" v-model = "text" id="codemirror_pad"></textarea>
     <v-textarea @keyup="typing" solo name="input-7-4" label="Solo textarea" v-model="text"></v-textarea>
   </v-card>
 </template>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
 <script>
+
+
+
+import CodeMirror from "codemirror";
+import { 
+  history,
+  EditorState,
+  EditorSelection,
+  EditorView,
+  keymap,
+  gutter,
+  baseKeymap,
+  legacyMode,
+  matchBrackets,
+  javascript,
+  specialChars,
+  multipleSelections,
+} from 'codemirror';
+
 export default {
   data() {
     return {
-      text: ""
+      text: "",
+      codeMirror: ""
     };
   },
   props: ["socket"],
@@ -31,17 +54,29 @@ export default {
   },
   methods: {
     typing() {
+      console.log(this.codeMirror.getValue());
+      
+
       this.socket.emit("typing", {
-        room_id: 1,
+        study_id: 1,
         text: this.text
       });
     }
   },
   mounted() {
     this.socket.on("typing", data => {
-      console.log(data);
+      // console.log(data);
       this.text = data.text;
     });
+
+    this.codeMirror = CodeMirror.fromTextArea(
+      document.getElementById("codemirror_pad"),
+      {
+        lineNumbers: true,
+        mode: "javascript"
+      }
+    );
+
 
     this.socket.on("clear", () => {
       console.log(window);
@@ -54,6 +89,12 @@ export default {
       // console.log(this.canvas.width);
       // console.log(this.canvas.height);
     };
+    console.log(this.codeMirror.onkeypress);
+    
+    this.codeMirror.onkeypress =()=> {
+      console.log("change...");
+      
+    }
   }
 };
 </script>
