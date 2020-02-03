@@ -28,10 +28,7 @@ class AuthService {
     }
 
     register(formData) {
-        return axios.post(API_URL + 'signup', {
-            data: { formData },
-            headers: { 'Content-Type': 'multipart/form-data' }
-        })
+        return axios.post(API_URL + 'signup', formData)
     }
 
     handleResponse(response) {

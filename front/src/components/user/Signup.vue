@@ -318,7 +318,7 @@ export default {
         this.$store.dispatch('auth/register', formData).then(
           (state) => {
             if(state == 'success'){
-              this.close();
+              this.$router.push({path:'/user/signup/success'})
             }else{
               this.message = '아이디 또는 비밀번호를 잘못입력했습니다.'
             }
