@@ -224,9 +224,10 @@
                 <v-list-item-content class="pt-0 pb-1">
                   <v-layout row class="px-3">
                     <v-layout column xs2 align-center justify-center>
-                      <v-avatar color="white ">
+                      <v-avatar color="white">
                         <v-icon size="62">mdi-account-circle</v-icon>
                       </v-avatar>
+
                     </v-layout>
 
                     <!-- 내용 -->
