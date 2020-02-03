@@ -180,7 +180,7 @@ export default {
     this.socket.on('join', message => {
       const user_id = message.user_id
 
-      if (user_id === this.user_id) return
+      if (user_id == this.user_id) return
       for (let idx in this.connected_users) {
         if (!this.connected_users[idx]) {
           this.connected_users[idx] = user_id
