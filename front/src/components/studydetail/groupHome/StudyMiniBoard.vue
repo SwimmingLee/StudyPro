@@ -92,13 +92,7 @@ export default {
           "<span class='text--primary'>뽀로로</span> &mdash; vue 되는게 없네.."
       },
       { divider: true, inset: true },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "쉽지 않네..",
-        subtitle:
-          "<span class='text--primary'>뽀로로</span> &mdash; vue 되는게 없네.."
-      },
-      { divider: true, inset: true }
+      
     ]
   }),
   computed: {

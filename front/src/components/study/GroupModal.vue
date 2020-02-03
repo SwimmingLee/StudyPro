@@ -17,7 +17,7 @@
                 <v-content text class="py-0 font-weight-bold">카테고리</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">[카테고리명]</v-content>
+                <v-content text class="py-0">{{item.topic}}</v-content>
               </v-col>
             </v-row>
             <hr/>
@@ -42,7 +42,7 @@
                 <v-content text class="py-0 font-weight-bold">스터디 목표</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">[스터디 목표]</v-content>
+                <v-content text class="py-0">{{item.goal}}</v-content>
               </v-col>
             </v-row>
             <v-row class="py-1">
@@ -83,9 +83,21 @@
                 <v-content text class="py-0 font-weight-bold">그룹장</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">[그룹장]</v-content>
+                <v-content text class="py-0">{{item.gmaster}}</v-content>
               </v-col>
             </v-row>
+
+             <v-row class="pt-1 pb-4">
+              <v-col cols="3" class="py-0">
+                <v-content text class="py-0 font-weight-bold">멤버 수</v-content>
+              </v-col>
+              <v-col class="py-0">
+                <v-content text class="py-0">{{item.member}} / 6</v-content>
+              </v-col>
+            </v-row>
+
+
+
             <v-row class="pt-6">
               <v-col cols="12" class="py-0">
                 <v-content text class="pt-0 pb-3 font-weight-bold">가입양식</v-content>

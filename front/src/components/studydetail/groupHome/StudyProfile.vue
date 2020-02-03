@@ -1,9 +1,11 @@
 <template>
-  <v-card class="mx-auto" width="600">
+  <v-card class="mx-auto mb-2" width="600">
     <v-row justify="space-around" class="pt-10">
-      <v-avatar>
-        <img src="@/assets/images/pengsoo.jpg" />
-      </v-avatar>
+      <router-link to="/mypage">
+        <v-avatar height="120" width="130">
+          <img src="@/assets/images/pengsoo.jpg" />
+        </v-avatar>
+      </router-link>
     </v-row>
 
     <v-card-subtitle style="font-size:20px" class="pb-5">펭수</v-card-subtitle>
