@@ -79,12 +79,14 @@ export default {
   },
 
   created() {
-    this.socket = io.connect("http://70.12.246.89:8210", {
+    this.user_id = Math.ceil(Math.random() * 100000)
+    this.socket = io.connect("http://70.12.247.73:8210", {
       // this.socket = io.connect("http://70.12.247.73:3000", {
       transports: ["websocket"],
       secure: true
     });
     this.socket.emit("join", {study_id : 1, user_id: this.user_id});
+
 
   },
   mounted() {

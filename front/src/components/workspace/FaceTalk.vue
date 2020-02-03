@@ -118,7 +118,8 @@ export default {
     },
 
     sendMessage(message) {
-      console.log("send", message.type);
+      console.log(message)
+      console.log("send", message.message.type);
       this.socket.emit("message", message);
     },
 
@@ -194,7 +195,7 @@ export default {
       }
 
       video_num = existed_num ? existed_num : temp_null
-
+      console.log(this.remote_videos, video_num)
       if (this.peer_connections[user_id]) {
         return this.peer_connections[user_id]
       }
@@ -202,7 +203,7 @@ export default {
       
       this.peer_connections[user_id] = t_pc
 
-      t_pc.onicecandidate = function(event) {
+      t_pc.onicecandidate = (event) => {
         if (event.candidate) {
           this.sendMessage({
             message : {
@@ -217,17 +218,16 @@ export default {
           });
       }}
 
-      t_pc.onaddstream = async function(event) {
+      t_pc.onaddstream =  (event) => {
         let remote_video;
 
         remote_video = this.remote_videos[video_num]
         this.remote_streams[video_num] = event.stream
         remote_video.srcObject = this.remote_streams[video_num]
+        console.log(t_pc)
       }
 
       t_pc.addStream(this.local_stream)
-
-      console.log(t_pc, 'created')
       return t_pc
       }
   },
@@ -261,19 +261,23 @@ export default {
         }
       }
       console.log(this.connected_users)
+      setTimeout(() => {
+        console.log('timeout')
+        this.getPeerConnection(user_id)
+        .then( t_pc => {
+          console.log(t_pc, 'created')
+          t_pc.createOffer(sdp => {
+            t_pc.setLocalDescription(sdp) 
+            this.sendMessage({
+              message: sdp,
+              study_id: 1,
+              from: this.user_id,
+              to: user_id
+            })
+          }, e => {console.log(e)})
+        })      
+      }, (1000));
 
-      this.getPeerConnection(user_id)
-      .then( t_pc => {
-        console.log(t_pc)
-        t_pc.createOffer(sdp => {
-          this.sendMessage({
-            message: sdp,
-            study_id: 1,
-            from: this.user_id,
-            to: user_id
-          }), e=> {console.log(e)}
-        })
-      })      
     })
     this.socket.on('leave', message => {
       const video_num = this.connected_users.indexOf(message.user_id)
@@ -286,12 +290,12 @@ export default {
     })
 
     this.socket.on("message", message => {
-      
+      console.log(message)
       if (message === "get user") {
         setTimeout(() => {
           this.maybeStart();
         }, 1000);
-      } else if (message.type === "offer") {
+      } else if (message.message.type === "offer") {
         console.log("get offer");
         const from = message.from
 
@@ -301,20 +305,24 @@ export default {
             break
           }
         }
-        let t_pc = this.getPeerConnection(from)
-        t_pc.setRemoteDescription(new RTCSessionDescription(message.message));
-        t_pc.createAnswer().then(sdp => {
-          this.sendMessage({
-            message: sdp,
-            study_id: 1,
-            from: this.user_id,
-            to: from
+        this.getPeerConnection(from)
+        .then(t_pc => {
+          t_pc.setRemoteDescription(new RTCSessionDescription(message.message));
+          t_pc.createAnswer().then(sdp => {
+            t_pc.setLocalDescription(sdp)
+            this.sendMessage({
+              message: sdp,
+              study_id: 1,
+              from: this.user_id,
+              to: from
+            })
           })
         })
-      } else if (message.type === "answer") {
+
+      } else if (message.message.type === "answer") {
         let t_pc = this.peer_connections[message.from]
         t_pc.setRemoteDescription(new RTCSessionDescription(message.message));
-      } else if (message.type === "candidate") {
+      } else if (message.message.type === "candidate") {
         let candidate = new RTCIceCandidate({
           sdpMLineIndex: message.message.label,
           candidate: message.message.candidate
