@@ -74,7 +74,7 @@ export default {
       this.socket.emit("send message", {
         name: this.name,
         msg: this.msg,
-        room_id: 1
+        study_id: 1
       });
       this.resetIcon();
       this.clearMessage();
@@ -109,6 +109,7 @@ export default {
       this.name = usrName;
     });
     this.socket.on("receive message", msg => {
+      
       this.messages.push(msg);
     });
   }

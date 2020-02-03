@@ -83,7 +83,7 @@ export default {
     this.user_id = Math.ceil(Math.random() * 100000)
     this.sharing_user_id = this.user_id
     
-    this.socket = io.connect("http://70.12.247.73:8210", {
+    this.socket = io.connect("http://70.12.246.89:8210", {
       // this.socket = io.connect("http://70.12.247.73:3000", {
       transports: ["websocket"],
       secure: true
