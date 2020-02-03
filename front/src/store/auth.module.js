@@ -29,11 +29,11 @@ export const auth = {
             return AuthService.register(formData).then(
                 response => {
                     commit('registerSuccess')
-                    return Promise.resolve(response.state)
+                    return Promise.resolve(response.data.state)
                 },
                 error => {
                     commit('registerFailure')
-                    return Promise.reject(error.response.data)
+                    return Promise.reject(error.response)
                 }
             )
         }
