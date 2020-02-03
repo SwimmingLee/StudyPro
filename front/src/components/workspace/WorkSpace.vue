@@ -83,11 +83,11 @@ export default {
       transports: ["websocket"],
       secure: true
     });
-    this.socket.emit("join", 1);
+    this.socket.emit("join", {study_id :1});
   },
   mounted() {
     window.onbeforeunload = () => {
-      this.socket.emit("leave", 1);
+      this.socket.emit("leave", {study_id :1});
     };
   }
 };
