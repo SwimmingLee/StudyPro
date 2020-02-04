@@ -89,7 +89,7 @@ export default {
 
     this.codeMirror.on("keypress", () => {
       let value = this.codeMirror.getValue();
-      
+
       this.socket.emit("typing", {
         study_id: 1,
         text: value
