@@ -78,7 +78,6 @@ export default {
     FaceTalk: FaceTalk,
     Chatting: Chatting,
   },
-
   created() {
     this.user_id = Math.ceil(Math.random() * 100000)
     this.sharing_user_id = this.user_id
@@ -95,6 +94,7 @@ export default {
 
   },
   mounted() {
+    console.log('workspace mounted')
     window.onbeforeunload = () => {
       this.socket.emit('leave', {study_id : 1, user_id: `${this.user_id}`});
     };

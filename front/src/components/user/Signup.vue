@@ -1,6 +1,6 @@
 <template>
   <div id="singup">
-    <div v-if="!created">
+    <div>
       <v-form>
         <v-content>
           <v-container>
@@ -209,7 +209,7 @@
                       >
                       <v-btn
                         class="mr-4"
-                        :disabled="!valid"
+                        :disabled="!valid || isLoading"
                         color="green lighten-4"
                         @click="onSignup()"
                       >
@@ -297,8 +297,8 @@ export default {
     cn: false,
     cs: false,
     notcreated: false,
-    created: false,
     avatar: null,
+    isLoading: false,
   }),
   components: {
     ImageInput: () => import('@/components/base/ImageInput'),
@@ -306,7 +306,9 @@ export default {
   methods: {
     async onSignup() {
       try {
-        let formData = new FormData();
+        this.isLoading = true
+
+        let formData = new FormData()
         formData.append('email', this.id)
         formData.append('password', this.password)
         formData.append('name', this.name)
@@ -315,20 +317,17 @@ export default {
         formData.append('phone', this.phone)
         formData.append('img', this.avatar.imageFile);
 
-        this.$store.dispatch('auth/register', formData).then(
-          (state) => {
-            if(state == 'success'){
+        await this.$store.dispatch('auth/register', formData).then(
+          (res) => {
+            if(res){
               this.$router.push({path:'/user/signup/success'})
             }else{
-              this.message = '아이디 또는 비밀번호를 잘못입력했습니다.'
+              this.notcreated = true;
             }
-            this.isLoading = false;
-          },
-          error => {
-            this.isLoading = false
-            this.message = error.message
           }
         )
+
+        this.isLoading = false
       } catch (err) {
         console.error(err);
       }
@@ -339,6 +338,11 @@ export default {
       return () =>
         this.password === this.confirmPassword ||
         "비밀번호가 서로 일치하지 않습니다.";
+    }
+  },
+  mounted(){
+    if(this.$store.getters['auth/isAuth']){
+      this.$router.push({ name: 'home'})
     }
   }
 };

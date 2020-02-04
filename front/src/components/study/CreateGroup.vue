@@ -22,6 +22,7 @@
                     v-model="major"
                     segmented
                     dense
+                    label="대분류"
                     style="width: 200px"
                   ></v-overflow-btn>
                 </div>

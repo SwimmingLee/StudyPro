@@ -9,7 +9,7 @@
         </v-card-title>
       </v-img>
 
-      <router-link to="/workspace">
+      <router-link to="/workspace" target="_blank">
         <v-btn
           id="enterbtn"
           class="mr-4"

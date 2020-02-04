@@ -2,7 +2,7 @@
     <div>
         <v-row class="justify-end mr-2">
             <v-btn @click="logout()" class="transparent" elevation=0>
-                <span class="italic">sign out</span>
+                <span class="italic">로그아웃</span>
             </v-btn> 
         </v-row>
         <v-row class="text-center">
@@ -17,9 +17,15 @@
 
 <script>
 export default {
+    methods:{
+        logout(){
+            this.$store.dispatch('auth/logout')
+            location.reload()
+        }
+    },
     computed: {
         currentUser(){
-            return this.$store.state.auth.user
+            return this.$store.getters['auth/getUser']
         }
     }
 }
