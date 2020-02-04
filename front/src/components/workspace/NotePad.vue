@@ -84,6 +84,7 @@ export default {
       // console.log(this.canvas.height);
     };
 
+<<<<<<< HEAD
     this.codeMirror.on("change", () => {
       console.log("바뀐다");
 
@@ -96,6 +97,15 @@ export default {
         });
       }
     });
+=======
+    this.codeMirror.on("keypress", () => {
+      let value = this.codeMirror.getValue();
+
+      this.socket.emit("typing", {
+        study_id: 1,
+        text: value
+      });
+>>>>>>> b0375215c75059093dfd50f633e4c65c59372cb3
 
     this.codeMirror.on("keydown", () => {
       this.is_change = true;
