@@ -3,7 +3,7 @@
     <v-row no-gutters class="pa-0">
       <v-col cols="12" md="6" class="d-none d-md-block" @contextmenu="showProfileMenu">
         <v-card outlined tile flex min-height="150">
-          <video playsinline id="local_video" autoplay preload="metadata" width="100%" height="150"></video>
+          <video playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%"></video>
         </v-card>
       </v-col>
       <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block">
@@ -12,7 +12,7 @@
             src="../../assets/images/pengsoo.jpg"
             alt="펭수"
             width="100%"
-            height="150"
+            height="100%"
             id="pengsoo"
           />
         </v-card>
@@ -151,7 +151,7 @@ export default {
         remote_video.srcObject = this.remote_streams[video_num]
         remote_video.autoplay = true
         remote_video.style.width = "100%"
-        remote_video.style.height = "150"
+        remote_video.style.height = "100%"
         
         const remote_block = this.remote_videos[video_num]
         this.remote_videos[video_num].childNodes[0] ? remote_block.removeChild(this.remote_videos[video_num].childNodes[0]) : 0
@@ -217,7 +217,7 @@ export default {
       const post_img = document.createElement('img')
       post_img.src = pengsoo.src
       post_img.style.width = "100%"
-      post_img.style.height = 150
+      post_img.style.height = "100%"
       this.remote_videos[video_num].appendChild(post_img)
       this.remote_streams[video_num] = null
       this.$emit('connected', this.connected_users)

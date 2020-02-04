@@ -8,7 +8,7 @@
         <option v-for="user in connected_users" :value="user" :key="user">{{user}}</option>
     </select>
     <v-card>
-      <video playsinline id="view_share" autoplay preload="metadata" width="640" height="640"></video>
+      <video playsinline id="view_share" autoplay preload="metadata" width="100%" height="100%"></video>
     </v-card>
   </v-container>
 </template>
@@ -30,16 +30,19 @@ export default {
       local_stream: null,
       sharing_user_id: null,
       now_sharing: null,
+      already_sharing: false,
 
       peer_connections: {},
       received_pc: null,
     };
   },
+  created() {
+    this.socket.emit('viewsharejoin', {user_id: this.user_id})
+  },
   props: ["socket", "user_id", "connected_users"],
   watch: {
     sharing_user_id: function(change) {
         if (change == this.now_sharing) return
-        console.log('change share =>', change)
         this.socket.emit('viewsharestart', {user_id : change})
     }
   },
@@ -51,7 +54,6 @@ export default {
     },
 
     sendMessage(message) {
-      console.log("send viewshare : ", message.message.type);
       this.socket.emit("viewshare", message);
     },
 
@@ -60,7 +62,6 @@ export default {
         return this.peer_connections[user_id];
       }
       let t_pc = await new RTCPeerConnection(pcConfig);
-      console.log(t_pc)
       this.peer_connections[user_id] = t_pc;
 
       t_pc.onicecandidate = event => {
@@ -81,7 +82,6 @@ export default {
 
       t_pc.onaddstream = event => {
         if (user_id != this.user_id) this.view_share_video.srcObject = event.stream;
-        console.log(event.stream, "onaddstream");
       };
       // if (user_id == this.user_id) t_pc.addStream(this.local_stream);
       t_pc.addStream(this.local_stream);
@@ -89,6 +89,7 @@ export default {
     }
   },
   mounted() {
+    
     this.view_share_video = document.getElementById("view_share");
     navigator.mediaDevices.getUserMedia({audio:true})
     .then(stream => {
@@ -96,12 +97,11 @@ export default {
     })
     this.socket.on('viewsharestart', sharing_user_id => {
 
-      console.log('view start', sharing_user_id)
       for (let i in this.peer_connections) delete this.peer_connections[i]
+      this.sharing_user_id = sharing_user_id
       this.received_pc = null
       this.view_share_video.srcObject = null
       this.now_sharing = sharing_user_id
-      console.log(sharing_user_id == this.user_id)
       if (sharing_user_id == this.user_id) {
         navigator.mediaDevices
         .getDisplayMedia({ video: true })
@@ -128,13 +128,12 @@ export default {
     })
 
 
-    this.socket.on("join", data => {
-      this.peer_connections.push(data.user_id)
+    this.socket.on("viewsharejoin", user_id => {
+      // this.peer_connections.push(data.user_id)
 
       if (this.user_id != this.now_sharing) return
-      
 
-      const user_id = data.user_id;
+      user_id
 
       setTimeout(() => {
         this.getPeerConnection(user_id).then(t_pc => {
@@ -160,14 +159,11 @@ export default {
       if (data.user_id == this.now_sharing) {
         this.view_share_video.srcObject = null;
       }
-      delete this.peer_connections[data.user_id];
     });
 
     this.socket.on("viewshare", data => {
-      console.log(data)
       if (data.message.type === "offer") {
         const from = data.from;
-        console.log('get offer')
         this.getPeerConnection(from).then(t_pc => {
           t_pc.setRemoteDescription(new RTCSessionDescription(data.message));
           t_pc.createAnswer().then(sdp => {
@@ -182,7 +178,6 @@ export default {
         });
       } else if (data.message.type === "answer") {
         let t_pc = this.peer_connections[data.from];
-        console.log('get answer')
         t_pc.setRemoteDescription(new RTCSessionDescription(data.message));
       } else if (data.message.type === "candidate") {
         let candidate = new RTCIceCandidate({
