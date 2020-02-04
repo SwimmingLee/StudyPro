@@ -1,33 +1,27 @@
-import axios from 'axios'
-import authHeader from './auth-header'
-import dotenv from "dotenv"
+﻿import axios from 'axios'
 
-dotenv.config();
+
+function authHeader() {
+    let local = JSON.parse(localStorage.getItem('user'))
+    let session = JSON.parse(sessionStorage.getItem('user'))
+    let user = local || session
+    if (user && user.accessToken) {
+        console.log('userservice')
+        console.log(user)
+        return { accessToken: user.accessToken }
+    } else {
+        return {}
+    }
+}
 
 class UserService {
     getUserContent() {
-        return axios.get(process.env.API_URL + "token", { headers: authHeader() })
-    }
-
-
-    getUserContentById(payload) {
-        return axios.get(process.env.API_URL + "/:uid", 
-            {data:{
-                uid: payload.uid  
-        }})
-    }
-
-    requestSocialLogin = (email, nickname, gender, platform) => {
-        return axios({
-            method: 'POST',
-            url: 'http://15.164.245.201:8000/users/social/signin',
-            data: {
-                'email': email,
-                'nickname':nickname,
-                'gender': gender,
-                'platform_type': platform
-            }
-        })
+        let headers = authHeader()
+        if (!headers) return { status: {}, user: null }
+        return axios.post(API_URL + 'token', { headers: headers })
+            .then(res => {
+                return res.data
+            })
     }
 
     

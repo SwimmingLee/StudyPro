@@ -49,6 +49,11 @@ export default {
     EditProfile: () => import("@/components/mypage/EditProfile"),
     ManageStudy: () => import("@/components/mypage/ChangePassword"),
     Withdrawal: () => import("@/components/mypage/Withdrawal")
+  },
+  mounted(){
+    if(!this.$store.getters['auth/isAuth']){
+      this.$router.push({name : 'home'})
+    }
   }
 };
 </script>
