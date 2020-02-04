@@ -147,8 +147,6 @@ export default {
         let remote_video = document.createElement("video");
         this.remote_streams[video_num] = event.stream;
 
-        // remote_video.width = "100%"
-        // remote_video.height = 150
         remote_video.playsinline = true
         remote_video.srcObject = this.remote_streams[video_num]
         remote_video.autoplay = true
@@ -169,7 +167,6 @@ export default {
   created() {
     console.log("내아이디 : ", this.user_id);
   },
-
   mounted() {
     const pengsoo = document.getElementById("pengsoo")
 
@@ -188,7 +185,6 @@ export default {
     this.socket.on("join", message => {
       console.log('join')
       const user_id = message.user_id;
-
       if (user_id == this.user_id) return;
       for (let idx in this.connected_users) {
         if (!this.connected_users[idx]) {
@@ -196,6 +192,8 @@ export default {
           break;
         }
       }
+      
+      this.$emit('connected', this.connected_users)
       setTimeout(() => {
         this.getPeerConnection(user_id)
         .then( t_pc => {
@@ -215,13 +213,14 @@ export default {
     this.socket.on('leave', message => {
       const video_num = this.connected_users.indexOf(message.user_id)
       this.connected_users[video_num] = null
-      this.remote_videos[video_num].removeChild(this.remote_videos[video_num].childNodes[0])
+      this.remote_videos[video_num].childNodes[0] ? this.remote_videos[video_num].removeChild(this.remote_videos[video_num].childNodes[0]) : 0
       const post_img = document.createElement('img')
       post_img.src = pengsoo.src
       post_img.style.width = "100%"
       post_img.style.height = 150
       this.remote_videos[video_num].appendChild(post_img)
       this.remote_streams[video_num] = null
+      this.$emit('connected', this.connected_users)
       delete this.peer_connections[message.user_id]
     })
 
@@ -235,6 +234,7 @@ export default {
             break;
           }
         }
+        this.$emit('connected', this.connected_users)
         this.getPeerConnection(from).then(t_pc => {
           t_pc.setRemoteDescription(new RTCSessionDescription(data.message));
           t_pc.createAnswer().then(sdp => {
