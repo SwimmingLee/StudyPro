@@ -84,7 +84,7 @@ export default {
     this.sharing_user_id = this.user_id
     
     this.socket = io.connect("http://70.12.246.89:8210?study_id=1&user_id="+this.user_id, {
-      // this.socket = io.connect("http://70.12.247.73:3000", {
+      // this.socket = io.connect("http://70.12.247.73:8210", {
       transports: ["websocket"],
       secure: true,
       study_id : 1

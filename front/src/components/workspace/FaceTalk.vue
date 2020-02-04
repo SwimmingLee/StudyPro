@@ -37,7 +37,7 @@
           </v-menu>
         </v-card>
       </v-col>
-      <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block" >
+      <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block">
         <v-card outlined tile flex min-height="150" :id="`remote_block_${i}`">
           <img src="../../assets/images/pengsoo.jpg" alt="펭수"  width="100%" height="150" id="pengsoo">
         </v-card>
@@ -106,7 +106,7 @@ export default {
     async getPeerConnection(user_id) {
       let video_num, temp_null = 10, existed_num = null
       for (let idx in this.connected_users) {
-        if (this.connected_users[idx] === user_id) { existed_num = idx }
+        if (this.connected_users[idx] == user_id) { existed_num = idx }
         else if (!this.connected_users[idx]) {
           temp_null = temp_null > idx ? idx : temp_null
         }
@@ -148,7 +148,7 @@ export default {
         remote_video.style.height = "150"
         
         const remote_block = this.remote_videos[video_num]
-        remote_block.removeChild(this.remote_videos[video_num].childNodes[0])
+        this.remote_videos[video_num].childNodes[0] ? remote_block.removeChild(this.remote_videos[video_num].childNodes[0]) : 0
         remote_block.appendChild(remote_video)
       }
 
@@ -162,7 +162,7 @@ export default {
   },
 
   mounted() {
-    this.post_img = document.getElementById("pengsoo")
+    const pengsoo = document.getElementById("pengsoo")
 
     for (let i = 1;  i <= 5; i++) {
     this.remote_videos.push(document.getElementById(`remote_block_${i}`));
@@ -179,7 +179,6 @@ export default {
 
     this.socket.on('join', message => {
       const user_id = message.user_id
-
       if (user_id == this.user_id) return
       for (let idx in this.connected_users) {
         if (!this.connected_users[idx]) {
@@ -207,7 +206,11 @@ export default {
       const video_num = this.connected_users.indexOf(message.user_id)
       this.connected_users[video_num] = null
       this.remote_videos[video_num].removeChild(this.remote_videos[video_num].childNodes[0])
-      this.remote_videos[video_num].appendChild(this.post_img)
+      const post_img = document.createElement('img')
+      post_img.src = pengsoo.src
+      post_img.style.width = "100%"
+      post_img.style.height = 150
+      this.remote_videos[video_num].appendChild(post_img)
       this.remote_streams[video_num] = null
       delete this.peer_connections[message.user_id]
     })
