@@ -13,7 +13,7 @@
                     <v-row justify="center"
                       ><v-col cols="12" sm="10">
                         <v-card-text style="font-size:30px"
-                          >회원가입</v-card-text
+                          >?�원가??</v-card-text
                         >
                       </v-col></v-row
                     >
@@ -23,7 +23,7 @@
                         <v-text-field
                           v-model="id"
                           :rules="idRules"
-                          label="아이디"
+                          label="?�이??"
                           required
                         ></v-text-field> </v-col
                     ></v-row>
@@ -31,7 +31,7 @@
                     <v-row justify="center" align="center"
                       ><v-col cols="12" sm="10">
                         <v-text-field
-                          label="비밀번호"
+                          label="비�?번호"
                           v-model="password"
                           :rules="passwordRules"
                           type="password"
@@ -43,7 +43,7 @@
                     <v-row justify="center" align="center">
                       <v-col cols="12" sm="10">
                         <v-text-field
-                          label="비밀번호 확인"
+                          label="비�?번호 ?�인"
                           v-model="confirmPassword"
                           :rules="
                             confirmPasswordRules.concat(
@@ -60,7 +60,7 @@
                         <v-text-field
                           v-model="name"
                           :rules="nameRules"
-                          label="이름"
+                          label="?�름"
                           required
                         ></v-text-field> </v-col
                     ></v-row>
@@ -70,7 +70,7 @@
                         <v-select
                           v-model="genderinput"
                           :items="gender"
-                          label="성별"
+                          label="?�별"
                           :rules="genderRules"
                           dense
                         ></v-select> </v-col
@@ -82,7 +82,7 @@
                           v-model="nickname"
                           :counter="10"
                           :rules="nicknameRules"
-                          label="닉네임"
+                          label="?�네??"
                           required
                         ></v-text-field> </v-col
                     ></v-row>
@@ -92,7 +92,7 @@
                         <v-text-field
                           v-model="phone"
                           :rules="phoneRules"
-                          label="휴대전화 번호( - 제외하고 입력해 주세요.)"
+                          label="?��??�화 번호( - ?�외?�고 ?�력?? 주세??.)"
                           required
                         ></v-text-field> </v-col
                     ></v-row>
@@ -103,7 +103,7 @@
                           v-model="introducing"
                           :counter="50"
                           :rules="introducingRules"
-                          label="자신을 멋지게 소개해 주세요!"
+                          label="?�신?? 멋�?�? ?�개?? 주세??!"
                           required
                         ></v-text-field>
                       </v-col>
@@ -128,7 +128,7 @@
                       <v-card class="px-5 mx-auto" max-width="1000">
                         <v-card-text class="pt-0" style="font-size:18px">
                           <p><br /></p>
-                          관심있는 분야를 선택해 주세요.
+                          관?�있?? 분야�? ?�택?? 주세??.
                         </v-card-text>
 
                         <v-row justify="center" align="center">
@@ -136,7 +136,7 @@
                             ><v-checkbox
                               v-model="db"
                               class="mx-2"
-                              label="데이터베이스"
+                              label="?�이?�베?�스"
                             ></v-checkbox
                           ></v-col>
                           <v-col cols="12" sm="3"
@@ -150,14 +150,14 @@
                             ><v-checkbox
                               v-model="al"
                               class="mx-2"
-                              label="알고리즘"
+                              label="?�고리즘"
                             ></v-checkbox
                           ></v-col>
                           <v-col cols="12" sm="3"
                             ><v-checkbox
                               v-model="os"
                               class="mx-2"
-                              label="운영체제"
+                              label="?�영체제"
                             ></v-checkbox
                           ></v-col>
                         </v-row>
@@ -167,28 +167,28 @@
                             ><v-checkbox
                               v-model="ai"
                               class="mx-2"
-                              label="인공지능"
+                              label="?�공지??"
                             ></v-checkbox
                           ></v-col>
                           <v-col cols="12" sm="3"
                             ><v-checkbox
                               v-model="ad"
                               class="mx-2"
-                              label="자율주행"
+                              label="?�율주행"
                             ></v-checkbox
                           ></v-col>
                           <v-col cols="12" sm="3"
                             ><v-checkbox
                               v-model="cs"
                               class="mx-2"
-                              label="컴퓨터보안"
+                              label="컴퓨?�보??"
                             ></v-checkbox
                           ></v-col>
                           <v-col cols="12" sm="3"
                             ><v-checkbox
                               v-model="cn"
                               class="mx-2"
-                              label="컴퓨터통신"
+                              label="컴퓨?�통??"
                             ></v-checkbox
                           ></v-col>
                         </v-row>
@@ -205,7 +205,7 @@
                       <span
                         class="red--text lighten-1 mr-10 pt-2"
                         v-show="notcreated"
-                        >아이디가 이미 존재합니다.</span
+                        >?�이?��? ?��? 존재?�니??.</span
                       >
                       <v-btn
                         class="mr-4"
@@ -213,7 +213,7 @@
                         color="green lighten-4"
                         @click="onSignup()"
                       >
-                          가입하기
+                          가?�하�?
                       </v-btn>
                     </v-layout>
                   </v-card>
@@ -234,7 +234,7 @@ export default {
 
     id: "test@naver.com",
     idRules: [
-      v => !!v || "아이디를 입력해 주세요.",
+      v => !!v || "?�이?��? ?�력?? 주세??.",
       v =>
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
           v
@@ -244,48 +244,48 @@ export default {
     password: "s12341234",
     confirmPassword: "s12341234",
     passwordRules: [
-      v => !!v || "비밀번호를 입력해 주세요.",
+      v => !!v || "비�?번호�? ?�력?? 주세??.",
       v =>
         (v && v.length >= 8) ||
-        "문자 / 숫자 혼용 8자리 이상으로 만들어 주세요.",
+        "문자 / ?�자 ?�용 8?�리 ?�상?�로 만들?? 주세??.",
       v =>
         /(?=.*[a-zA-Z])/.test(v) ||
-        "문자 / 숫자 혼용 8자리 이상으로 만들어 주세요.",
+        "문자 / ?�자 ?�용 8?�리 ?�상?�로 만들?? 주세??.",
       v =>
-        /(?=.*\d)/.test(v) || "문자 / 숫자 혼용 8자리 이상으로 만들어 주세요."
+        /(?=.*\d)/.test(v) || "문자 / ?�자 ?�용 8?�리 ?�상?�로 만들?? 주세??."
     ],
-    confirmPasswordRules: [v => !!v || "비밀번호를 한 번 더 입력해 주세요."],
+    confirmPasswordRules: [v => !!v || "비�?번호�? ?? �? ?? ?�력?? 주세??."],
     introducing: "",
     introducingRules: [
-      v => !!v || "하고싶은 말을 자유롭게 작성해 보세요!",
-      v => (v && v.length <= 50) || "최대 50자까지 입력 가능합니다."
+      v => !!v || "?�고?��? 말을 ?�유�?�� ?�성?? 보세??!",
+      v => (v && v.length <= 50) || "최�? 50?�까지 ?�력 가?�합?�다."
     ],
 
     name: "Test",
     nameRules: [
-      v => !!v || "이름을 입력해 주세요.",
-      v => (v && v.length <= 50) || "이름이 너무 깁니다."
+      v => !!v || "?�름?? ?�력?? 주세??.",
+      v => (v && v.length <= 50) || "?�름?? ?�무 깁니??."
     ],
 
-    gender: ["남성", "여성"],
-    genderRules: [v => !!v || "성별을 선택해 주세요."],
-    genderinput: "남성",
+    gender: ["?�성", "?�성"],
+    genderRules: [v => !!v || "?�별?? ?�택?? 주세??."],
+    genderinput: "?�성",
 
     nickname: "Test",
     nicknameRules: [
-      v => !!v || "닉네임을 입력해 주세요.",
-      v => (v && v.length <= 10) || "닉네임은 최대 10자입니다."
+      v => !!v || "?�네?�을 ?�력?? 주세??.",
+      v => (v && v.length <= 10) || "?�네?��? 최�? 10?�입?�다."
     ],
 
     phone: "01012341234",
     phoneRules: [
-      v => !!v || "휴대전화 번호를 입력해 주세요.",
+      v => !!v || "?��??�화 번호�? ?�력?? 주세??.",
       v =>
         (v && v.length >= 10 && v.length <= 11) ||
-        "전화번호 형식이 올바르지 않습니다.",
+        "?�화번호 ?�식?? ?�바르�? ?�습?�다.",
       v =>
         !/(?=.*[a-zA-Z!@#$%^&*()_+=-?/'";{}])/.test(v) ||
-        "전화번호 형식이 올바르지 않습니다."
+        "?�화번호 ?�식?? ?�바르�? ?�습?�다."
     ],
 
     ai: false,
@@ -311,16 +311,17 @@ export default {
         formData.append('password', this.password)
         formData.append('name', this.name)
         formData.append('nickname', this.nickname)
-        formData.append('gender', this.genderinput == "남성"? "M" : 'W')
+        formData.append('gender', this.genderinput == "?�성"? "M" : 'W')
         formData.append('phone', this.phone)
         formData.append('img', this.avatar.imageFile);
+
 
         this.$store.dispatch('auth/register', formData).then(
           (state) => {
             if(state == 'success'){
               this.$router.push({path:'/user/signup/success'})
             }else{
-              this.message = '아이디 또는 비밀번호를 잘못입력했습니다.'
+              this.message = '?�이?? ?�는 비�?번호�? ?�못?�력?�습?�다.'
             }
             this.isLoading = false;
           },
@@ -329,6 +330,7 @@ export default {
             this.message = error.message
           }
         )
+
       } catch (err) {
         console.error(err);
       }
@@ -338,7 +340,7 @@ export default {
     passwordConfirmationRule() {
       return () =>
         this.password === this.confirmPassword ||
-        "비밀번호가 서로 일치하지 않습니다.";
+        "비�?번호가 ?�로 ?�치?��? ?�습?�다.";
     }
   }
 };
