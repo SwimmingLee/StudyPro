@@ -152,7 +152,9 @@
 import VDaterange from "@/components/base/VDaterange";
 import Timeselector from "vue-timeselector";
 import { mapActions } from "vuex";
-import api from "@/services";
+import ClassService from "@/services/class.service";
+import StudyService from '@/services/study.service'
+//import api from "@/services";
 
 
 export default {
@@ -212,7 +214,8 @@ export default {
 
     async major() {
       this.minorItems = [];
-      const minor_classes = await api.getMinorClasses(this.major);
+    
+      const minor_classes = await ClassService.getMinorClass(this.major);
       for (let i = 0; i < minor_classes.data.length; i++) {
         this.minorItems.push({
           value: minor_classes.data[i].id,
@@ -234,7 +237,7 @@ export default {
     async createGroup() {
       const studyInfo = {
         minor_class_id: this.minor, //int(11)	YES	MUL
-        captain: this.userID, //int(11)	NO	MUL
+        captain: 1,//this.userID, //int(11)	NO	MUL
         name: this.groupName, //varchar(45)	NO	UNI
         goal: this.groupTarget, //varchar(45)	YES
         description: this.regText, //longtext	NO
@@ -249,7 +252,8 @@ export default {
         accessToken: this.accessToken
       };
       console.log("days", this.dayofweek);
-      const res = await api.createGroup(studyInfo);
+      console.log(studyInfo)
+      const res = await StudyService.createStudy(studyInfo);
       console.log(res, "결과값 ");
     }
   },
@@ -263,7 +267,7 @@ export default {
     }
 
     this.majorItems = [];
-    const getMajorRes = await api.getMajorClasses();
+    const getMajorRes = await ClassService.getAllMajorClass() //await api.getMajorClasses();
     for (let i = 0; i < getMajorRes.data.length; i++) {
       this.majorItems.push({
         value: getMajorRes.data[i].id,

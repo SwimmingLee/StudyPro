@@ -254,7 +254,7 @@
 <script>
 import { mapActions } from "vuex";
 import Timeselector from "vue-timeselector";
-import api from "@/services";
+//import api from "@/services";
 
 export default {
   data: () => ({
@@ -326,7 +326,7 @@ export default {
     }
   },
   async mounted() {
-    this.items = await api.getGroups();
+    this.items = 1//await api.getGroups();
     this.displayItems = this.items.slice(0);
     this.groupModal = false;
   }

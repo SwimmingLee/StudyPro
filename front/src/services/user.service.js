@@ -5,7 +5,15 @@ const API_URL = 'http://15.164.245.201:8000/users/'
 
 class UserService {
     getUserContent() {
-        return axios.get(API_URL + { headers: authHeader() })
+        return axios.get(API_URL + "token", { headers: authHeader() })
+    }
+
+    
+    getUserContentById(payload) {
+        return axios.get(API_URL + "/:uid", 
+            {data:{
+                uid: payload.uid  
+        }})
     }
 }
 
