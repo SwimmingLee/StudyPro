@@ -32,7 +32,10 @@ export default {
 
   mounted() {
     axios
-      .get("http://localhost:8000/posts/list?board=study")
+      .get(process.env.VUE_APP_API_URL + "posts/list?board=study", {
+        study_id: 8,
+        type: "study"
+      })
       .then(function(res) {
         console.log(res);
       })

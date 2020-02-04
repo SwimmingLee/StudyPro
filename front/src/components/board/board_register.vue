@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import PostService from "@/services/post.service"
+
 export default {
   data() {
     return {
@@ -73,8 +75,8 @@ export default {
 
       postData: {
         type: "study",
-        study_id: "1",
-        writer: "1",
+        study_id: "8",
+        writer: "24",
         title: "",
         content: "",
         board: ""
@@ -89,7 +91,8 @@ export default {
 
   methods: {
     create() {
-        console.log(this.postData);
+        PostService.createPost(this.postData);
+        // console.log(this.postData);
     }
   }
 };
