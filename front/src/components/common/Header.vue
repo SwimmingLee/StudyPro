@@ -40,17 +40,17 @@
       <v-btn
         class="mt-1 d-none d-sm-flex"
         @click="signinModal = true"
-        v-if="!currentUser"
+        v-if="!isAuth"
         text
       >
         <span>로그인</span>
       </v-btn>
       <v-btn
         class="mt-1 black--text d-none d-sm-flex transparent"
-        to="/user"
+        to="/user/signup"
         elevation="0"
         text
-        v-if="!currentUser"
+        v-if="!isAuth"
       >
         <span>회원가입</span>
       </v-btn>
@@ -71,7 +71,9 @@
           <div :class="{ usermenu }" class="userdropdown">
             <ul class="pl-0">
               <li v-for="item in usermenuitems" :key="item.title">
-                <a :href="item.route" class="black--text subtitle-1 pl-5">{{ item.title }}</a>
+                <v-btn text @click="clickUserMenu(item.name)" class="usermenubtn">
+                  <span class="usermenu">{{ item.title }}</span>
+                </v-btn>
               </li>
             </ul>
           </div>
@@ -146,7 +148,7 @@
       </v-list>
 
       <!-- User Pages -->
-      <v-container class="my-0 pa-0" v-if="currentUser">
+      <v-container class="my-0 pa-0" v-if="isAuth">
           <hr
         />
         <v-layout column align-center>
@@ -178,12 +180,12 @@
       <v-container v-else>
       </v-container>
       <template v-slot:append>
-        <v-card-actions class="justify-center" v-if="!currentUser">
+        <v-card-actions class="justify-center" v-if="!isAuth">
           <v-btn text class="pink--text" @click="signinModal=true">로그인</v-btn>
           <v-btn text class="pink--text transparent" elevation="0" to="/signup">회원가입</v-btn>
         </v-card-actions>
         <v-card-actions class="justify-center" v-else>
-          <v-btn text class="pink--text" >로그아웃</v-btn>
+          <v-btn text class="pink--text" @click="signout">로그아웃</v-btn>
         </v-card-actions>
       </template>
     </v-navigation-drawer>
@@ -218,15 +220,20 @@ export default {
         { title: "일정관리", route: "/mycalendar" }
       ],
       usermenuitems: [
-        { title: "정보수정", route: "/mypage"},
-        { title: "가입목록", route: "/mygroup"},
-        { title: "일정관리", route: "/calendar"},
-      ]
+        { title: "정보수정", name: "info"},
+        { title: "가입목록", name: "groups"},
+        { title: "일정관리", name: "calendar"},
+        { title: "로그아웃", name: "signout"}
+      ],
+      userInfo: {},
     };
   },
   computed: {
     currentUser(){
       return this.$store.state.auth.user
+    },
+    isAuth(){
+      return this.$store.getters['auth/isAuth']
     }
   },
   components: {
@@ -236,10 +243,22 @@ export default {
     signinClose() {
       this.signinModal = false;
     },
-    userMenu(){
-      console.log("hello")
+    signout(){
+      this.$store.dispatch('auth/logout')
+    },
+    clickUserMenu(name){
+      if(name == 'info'){
+        this.$router.push({path: '/user/mypage'})
+      }else if(name == 'groups'){
+        this.$router.push({path: '/user/groups'})
+      }else if(name == 'calendar'){
+        this.$router.push({path: '/user/calendar'})
+      }else if(name == 'signout'){
+        this.signout();
+        location.reload();
+      }
     }
-  }
+  },
 };
 </script>
 
@@ -260,5 +279,14 @@ export default {
 
 #navDrawer {
   opacity: 0.8;
+}
+
+.usermenu {
+  font-size: 13px;
+  color: rgba(0,0,0,.7) !important;
+}
+.usermenubtn{
+  width: 100%;
+  justify-content: start;
 }
 </style>

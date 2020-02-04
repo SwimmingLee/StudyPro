@@ -1,7 +1,7 @@
 <template>
     <v-row>
-        <v-col cols="12 pa-0 pb-2">
-            <mini-signin v-if="!currentUser"/>
+        <v-col cols="12 pa-0">
+            <mini-signin v-if="!isAuth"/>
             <mini-user-info v-else/>
         </v-col>
     </v-row>
@@ -15,9 +15,9 @@ export default {
         MiniUserInfo: () => import('@/components/user/MiniUserInfo')
     },
     computed: {
-        currentUser(){
-            return this.$store.state.auth.user
+        isAuth(){
+            return this.$store.getters['auth/isAuth']
         }
-    }
+    },
 }
 </script>

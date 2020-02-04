@@ -33,6 +33,6 @@ export default {
     TopLeft: () => import("@/components/home/TopLeft"),
     TopRight: () => import("@/components/home/TopRight"),
     Middle: () => import("@/components/home/Middle")
-  }
+  },
 };
 </script>

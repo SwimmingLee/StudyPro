@@ -29,6 +29,11 @@ export default {
     signinClose(){
       this.signinModal = false
     }
+  },
+  mounted(){
+    if(this.$store.getters['auth/isAuth']){
+      this.$router.push({name:'home'})
+    }
   }
 };
 </script>

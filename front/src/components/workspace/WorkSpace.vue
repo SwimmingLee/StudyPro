@@ -76,8 +76,8 @@ export default {
     FaceTalk: FaceTalk,
     Chatting: Chatting,
   },
-
   created() {
+    console.log('workspace created')
     this.socket = io.connect("http://70.12.246.89:8210", {
       // this.socket = io.connect("http://70.12.247.73:3000", {
       transports: ["websocket"],
@@ -86,6 +86,7 @@ export default {
     this.socket.emit("join", 1);
   },
   mounted() {
+    console.log('workspace mounted')
     window.onbeforeunload = () => {
       this.socket.emit("leave", 1);
     };

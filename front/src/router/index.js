@@ -10,10 +10,10 @@ import intro from '@/views/Intro'
 import home from '@/views/Home'
 
 // 유저페이지
-// import user from '@/views/User'
+import user from '@/views/User'
 import signup from '@/components/user/Signup'
-// import signupSuccess from '@/components/user/SignupSuccess'
-// import mypage from '@/components/user/Mypage'
+import signupSuccess from '@/components/user/SignupSuccess'
+import mypage from '@/components/user/Mypage'
 
 // 스터디페이지
 import study from '@/views/Study'
@@ -54,21 +54,21 @@ const routes = [{
         name: 'user',
         components: {
             header: appHeader,
-            default: null,
+            default: user,
             footer: appFooter
         },
         children: [{
                 path: 'signup',
                 component: signup
             },
-            // {
-            //     path: 'success',
-            //     component: signupSuccess
-            // },
-            // {
-            //     path: 'mypage',
-            //     component: mypage
-            // }
+            {
+                path: 'signup/success',
+                component: signupSuccess
+            },
+            {
+                path: 'mypage',
+                component: mypage
+            }
         ]
     },
     {

@@ -10,6 +10,8 @@
 
 <script>
 export default {
-
+  mounted(){
+    this.$store.dispatch('auth/checkUserDefault')
+  }
 };
 </script>
