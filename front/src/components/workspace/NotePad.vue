@@ -70,27 +70,26 @@ export default {
     // Helper to get hash from end of URL or generate a random one.
     getExampleRef() {
       let ref = firebase.database().ref();
-      console.log(window.location);
       
-      let hash = window.location.hash.replace(/#/g, "");
+      // let hash = window.location.hash.replace(/#/g, "");
+      // if (hash) {
+      //   ref = ref.child(1);
 
-      if (hash) {
-        ref = ref.child(hash);
-      } else {
-        ref = ref.push(); // generate unique location.
-        window.location = window.location + "#" + ref.key; // add it as a hash to the URL.
-      }
-      if (typeof console !== "undefined") {
-        console.log("Firebase data: ", ref.toString());
-      }
+      // } else {
+      //   // ref = ref.push(); // generate unique location.
+      //   ref = ref.child(1);
+      //   // window.location = window.location + "#" + ref.key; // add it as a hash to the URL.
+      // }
+      ref = ref.child(1);
+      // if (typeof console !== "undefined") {
+      //   console.log("Firebase data: ", ref.toString());
+      // }
       return ref;
     }
   },
-
   mounted() {
     this.init();
   },
-
   created() {
   }
 };
