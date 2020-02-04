@@ -52,9 +52,6 @@
 import Swatches from "vue-swatches";
 import "vue-swatches/dist/vue-swatches.min.css";
 
-window.onsize = function() {
-  alert("!");
-};
 
 export default {
   components: {
@@ -166,7 +163,7 @@ export default {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     });
     window.onsize = function() {
-      // console.log("??");
+      // console.log(document.getElementById("canvas"));
     };
   }
 };

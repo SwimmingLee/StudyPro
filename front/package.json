@@ -13,6 +13,8 @@
         "codemirror-addon-infotip": "^1.0.0",
         "core-js": "^3.4.4",
         "date-fns": "^2.9.0",
+        "firebase": "^7.8.0",
+        "grpc": "^1.24.2",
         "material-design-icons-iconfont": "^5.0.1",
         "register-service-worker": "^1.6.2",
         "socket.io": "^2.3.0",
