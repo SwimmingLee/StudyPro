@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "axios": "^0.19.1",
+        "codemirror": "^5.51.0",
         "core-js": "^3.4.4",
         "date-fns": "^2.9.0",
         "material-design-icons-iconfont": "^5.0.1",
