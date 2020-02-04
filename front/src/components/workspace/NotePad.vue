@@ -9,104 +9,98 @@
     maxHeight="640"
     maxWidth="640"
   >
-    <textarea @keyup="typing" v-model="text" id="codemirror_pad"></textarea>
-    <!-- <v-textarea @keyup="typing" solo name="input-7-4" label="Solo textarea" v-model="text"></v-textarea> -->
+    <div id="firepad-container"></div>
   </v-card>
 </template>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase.js"></script>
+<!-- CodeMirror -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/codemirror.js"></script>
+<!-- Firepad -->
+<script src="https://cdn.firebase.com/libs/firepad/1.2.0/firepad.min.js"></script>
+
+
 <script>
-import CodeMirror from "codemirror"
-import dialog from "codemirror"
-import mode from "codemirror"
-import javascript from "codemirror"
-
-
-
-console.log(mode);
-
 
 export default {
   data() {
-    return {
-      text: "",
-      codeMirror: "",
-      is_change: false
-    };
+    return {};
   },
   props: ["socket"],
-  watch: {
-    // text() {
-    //   this.socket.emit("typing", {
-    //     room_id : 1,
-    //     text : this.text
-    //   });
-    // }
-  },
-  methods: {
-    typing() {
-      console.log(this.codeMirror.getValue());
+  watch: {},
 
-      // this.socket.emit("typing", {
-      //   study_id: 1,
-      //   text: this.text
+  methods: {
+    init() {
+      //// Initialize Firebase.
+      //// TODO: replace with your Firebase project configuration.
+      let config = {
+        apiKey: "AIzaSyDnygAqF2W5nl956P1iCskUqOQFi6GkP8Y",
+        authDomain: "my-firepad-61bea.firebaseapp.com",
+        databaseURL: "https://my-firepad-61bea.firebaseio.com"
+      };
+
+      firebase.initializeApp(config);
+
+      //// Get Firebase Database reference.
+      let firepadRef = this.getExampleRef();
+
+      //// Create CodeMirror (with lineWrapping on).
+      let codeMirror = CodeMirror(
+        document.getElementById("firepad-container"),
+        { lineWrapping: true }
+      );  
+      
+      let editorWrapper = codeMirror.getWrapperElement();
+
+      //// Create Firepad (with rich text toolbar and shortcuts enabled).
+      let firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+        richTextToolbar: true,
+        richTextShortcuts: true
+      });
+
+      //// Initialize contents.
+      // firepad.on('ready', function() {
+      //   if (firepad.isHistoryEmpty()) {
+      //     firepad.setHtml('<span style="font-size: 24px;">Rich-text editing with <span style="color: red">Firepad!</span></span><br/><br/>Collaborative-editing made easy.\n');
+      //   }
       // });
-      alert("안돼!");
+    },
+
+    // Helper to get hash from end of URL or generate a random one.
+    getExampleRef() {
+      let ref = firebase.database().ref();
+      console.log(window.location);
+      
+      let hash = window.location.hash.replace(/#/g, "");
+
+      if (hash) {
+        ref = ref.child(hash);
+      } else {
+        ref = ref.push(); // generate unique location.
+        window.location = window.location + "#" + ref.key; // add it as a hash to the URL.
+      }
+      if (typeof console !== "undefined") {
+        console.log("Firebase data: ", ref.toString());
+      }
+      return ref;
     }
   },
+
   mounted() {
-    this.socket.on("typing", data => {
-      console.log("받은거", data);
-      let value = data.text;
-      this.codeMirror.setValue(value);
-      let line_count = this.codeMirror.lineCount();
-      this.codeMirror.setCursor(line_count);
-    });
+    this.init();
+  },
 
-    this.codeMirror = CodeMirror.fromTextArea(
-      document.getElementById("codemirror_pad"),
-      {
-        lineNumbers: true,
-        mode: "javascript"
-      }
-    );
-
-    this.socket.on("clear", () => {
-      console.log(window);
-    });
-
-    window.onresize = () => {
-      // console.log(this.$refs.board);
-      // this.canvas.width = document.getElementById("canvas_card").offsetWidth;
-      // this.canvas.height = document.getElementById("canvas_card").offsetHeight;
-      // console.log(this.canvas.width);
-      // console.log(this.canvas.height);
-    };
-
-    this.codeMirror.on("change", () => {
-      console.log("바뀐다");
-
-      // console.log("보낸거   ", value);
-      if (this.is_change) {
-        let value = this.codeMirror.getValue();
-        this.socket.emit("typing", {
-          study_id: 1,
-          text: value
-        });
-      }
-    });
-
-    this.codeMirror.on("keydown", () => {
-      this.is_change = true;
-    });
-
-    this.codeMirror.on("keyup", () => {
-      this.is_change = false;
-    });
+  created() {
   }
 };
 </script>
 
 <style scoped>
+#firepad-container {
+  width: 640px;
+  height: 640px;
+}
+
+
 </style>

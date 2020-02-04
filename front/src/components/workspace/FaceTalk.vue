@@ -186,6 +186,7 @@ export default {
       .then(this.get_stream);
 
     this.socket.on("join", message => {
+      console.log('join')
       const user_id = message.user_id;
 
       if (user_id == this.user_id) return;
