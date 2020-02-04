@@ -1,6 +1,5 @@
-import axios from 'axios'
+﻿import axios from 'axios'
 
-const API_URL = 'http://15.164.245.201:8000/users/'
 
 function authHeader() {
     let local = JSON.parse(localStorage.getItem('user'))
@@ -24,6 +23,8 @@ class UserService {
                 return res.data
             })
     }
+
+    
 }
 
 export default new UserService()

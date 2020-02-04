@@ -1,6 +1,5 @@
-<template>
+﻿<template>
   <div id="singup">
-    <div>
       <v-form>
         <v-content>
           <v-container>
@@ -306,9 +305,6 @@ export default {
   methods: {
     async onSignup() {
       try {
-        this.isLoading = true
-
-        let formData = new FormData()
         formData.append('email', this.id)
         formData.append('password', this.password)
         formData.append('name', this.name)
@@ -317,12 +313,14 @@ export default {
         formData.append('phone', this.phone)
         formData.append('img', this.avatar.imageFile);
 
-        await this.$store.dispatch('auth/register', formData).then(
-          (res) => {
-            if(res){
+        this.$store.dispatch('auth/register', formData).then(
+          (state) => {
+            if(state == 'success'){
               this.$router.push({path:'/user/signup/success'})
             }else{
+              this.message = '아이디 또는 비밀번호를 잘못입력했습니다.'
               this.notcreated = true;
+        
             }
           }
         )

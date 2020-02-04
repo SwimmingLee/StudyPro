@@ -9,6 +9,9 @@ import appFooter from '@/components/common/Footer'
 import intro from '@/views/Intro'
 import home from '@/views/Home'
 
+// 게시판
+import board from '@/components/board/board'
+
 // 유저페이지
 import user from '@/views/User'
 import signup from '@/components/user/Signup'
@@ -46,6 +49,15 @@ const routes = [{
         components: {
             header: appHeader,
             default: study,
+            footer: appFooter
+        }
+    },
+    {
+        path: '/board',
+        name: 'board',
+        components: {
+            header: appHeader,
+            default: board,
             footer: appFooter
         }
     },
