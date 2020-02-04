@@ -17,6 +17,10 @@
               NotePad
               <v-icon>event_note</v-icon>
             </v-tab>
+            <v-tab href="#Help">
+              Help
+              <v-icon>help_outline</v-icon>
+            </v-tab>
             <v-tab-item id="Board">
               <v-card outlined>
                 <Board :socket="socket" />
@@ -32,11 +36,16 @@
                 <ViewShare :socket="socket" :user_id="user_id" :sharing_user_id="sharing_user_id" />
               </v-card>
             </v-tab-item>
+            <v-tab-item id="Help">
+              <v-card outlined>
+                
+              </v-card>
+            </v-tab-item>
           </v-tabs>
         </v-col>
         <v-col align="center" justify="center">
           <v-card outlined tile>
-            <v-row no-gutters class="pa-0">
+            <v-row no-gutters hidden class="pa-0">
               <FaceTalk :socket="socket" :user_id="user_id" />
             </v-row>
             <v-row no-gutters>
@@ -67,7 +76,7 @@ export default {
       tabs: null,
       socket: "",
       user_id: null,
-      sharing_user_id: null,
+      sharing_user_id: null
     };
   },
 
@@ -76,7 +85,7 @@ export default {
     ViewShare: ViewShare,
     NotePad: NotePad,
     FaceTalk: FaceTalk,
-    Chatting: Chatting,
+    Chatting: Chatting
   },
 
   created() {
@@ -91,12 +100,21 @@ export default {
     });
 
 
-    this.socket.emit("join", {study_id : 1, user_id: `${this.user_id}`});
+    this.socket = io.connect(
+      "http://70.12.246.89:8210?study_id=1&user_id=" + this.user_id,
+      {
+        // this.socket = io.connect("http://70.12.247.73:3000", {
+        transports: ["websocket"],
+        secure: true,
+        study_id: 1
+      }
+    );
 
+    this.socket.emit("join", { study_id: 1, user_id: `${this.user_id}` });
   },
   mounted() {
     window.onbeforeunload = () => {
-      this.socket.emit('leave', {study_id : 1, user_id: `${this.user_id}`});
+      this.socket.emit("leave", { study_id: 1, user_id: `${this.user_id}` });
     };
   }
 };

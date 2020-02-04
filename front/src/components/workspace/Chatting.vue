@@ -3,7 +3,8 @@
     <v-card outlined class="pt-3 px-3">
       <v-card height="200" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus align="left">
         <v-list ref="chat" outlined v-for="(data, index) in messages" :key="index">
-          {{ data.user_nickname }}<v-card outlined class="ma-0 pa-1">{{ data.message }}</v-card>
+          {{ data.user_nickname }}
+          <v-card outlined class="ma-0 pa-1">{{ data.message }}</v-card>
         </v-list>
       </v-card>
       <v-text-field
@@ -77,7 +78,7 @@ export default {
       this.iconIndex === this.icons.length - 1
         ? (this.iconIndex = 0)
         : this.iconIndex++;
-    },
+    }
   },
   computed: {
     icon() {
@@ -91,7 +92,7 @@ export default {
   mounted() {
     this.socket.on("receive message", data => {
       let tmp = data.user_nickname;
-      if(data.user_nickname === this.prvUsr) {
+      if (data.user_nickname === this.prvUsr) {
         data.user_nickname = "";
       }
       this.prvUsr = tmp;
