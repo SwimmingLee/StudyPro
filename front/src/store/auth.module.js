@@ -12,7 +12,6 @@ export const auth = {
         // 초기 유저정보 업데이트
         checkUserDefault({ commit }) {
             if (!initialState.user) return
-
             AuthService.checkUserDefault(initialState.user).then(
                 res => {
                     if (res.state == 'success') {
@@ -26,13 +25,10 @@ export const auth = {
 
         // 로그인
         async login({ commit }, user) {
-            console.log('auth.moudel')
             return await AuthService.login(user).then(
                 res => {
                     if (res) {
                         commit('loginSuccess', res.user)
-                        console.log(res)
-                        console.log(this)
                         return true
                     } else {
                         commit('loginFailure')

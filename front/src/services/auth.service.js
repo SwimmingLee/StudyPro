@@ -29,7 +29,6 @@ class AuthService {
             .then(this.handleResponse)
             .then(
                 response => {
-                    console.log('sdfasdf', response.data)
                     if (response.data.state == 'success') {
                         if (user.loginRemain) {
                             localStorage.setItem('user', JSON.stringify(response.data.user))
@@ -62,6 +61,7 @@ class AuthService {
         )
     }
 
+    // 응답에 에러가 있으면 로그아웃 시킨다.
     handleResponse(response) {
         if (response.status === 401) {
             this.logout()

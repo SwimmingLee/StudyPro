@@ -56,7 +56,7 @@
           <v-btn class="mx-1 error">
             <v-icon left dark>keyboard_backspace</v-icon>이전으로
           </v-btn>
-          <v-btn class="mx-1 primary" @click="create">
+          <v-btn class="mx-1 primary" @click="createPost">
             <v-icon left dark>create</v-icon>글 작성
           </v-btn>
         </v-col>
@@ -76,7 +76,7 @@ export default {
       postData: {
         type: "study",
         study_id: "8",
-        writer: "24",
+        writer: this.user,
         title: "",
         content: "",
         board: ""
@@ -88,10 +88,17 @@ export default {
       ]
     };
   },
-
+  computed: {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
   methods: {
-    create() {
-        PostService.createPost(this.postData);
+    createPost() {
+      if (this.user) {
+        window.alert("로그인하셔야 됩니다.")
+      }
+      PostService.createPost(this.postData);
         // console.log(this.postData);
     }
   }
