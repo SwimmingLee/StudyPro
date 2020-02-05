@@ -25,7 +25,8 @@ import workspace from '@/components/workspace/WorkSpace'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+    {
         path: '/',
         name: 'intro',
         components: {
@@ -59,7 +60,12 @@ const routes = [{
             header: appHeader,
             default: board,
             footer: appFooter
-        }
+        },
+        props: (route) => ({
+            board: route.board,
+            post_id: route.post_id,
+        })
+        ,
     },
     {
         path: '/user',
@@ -70,17 +76,17 @@ const routes = [{
             footer: appFooter
         },
         children: [{
-                path: 'signup',
-                component: signup
-            },
-            {
-                path: 'signup/success',
-                component: signupSuccess
-            },
-            {
-                path: 'mypage',
-                component: mypage
-            }
+            path: 'signup',
+            component: signup
+        },
+        {
+            path: 'signup/success',
+            component: signupSuccess
+        },
+        {
+            path: 'mypage',
+            component: mypage
+        }
         ]
     },
     {
@@ -100,14 +106,14 @@ const routes = [{
             default: studydetail,
             footer: appFooter
         }
-    }
+    },
 ]
 
 const router = new VueRouter({
     mode: 'history',
     linkExactActiveClass: "active",
     base: process.env.BASE_URL,
-    routes
+    routes,
 })
 
 export default router
