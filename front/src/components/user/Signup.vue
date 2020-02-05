@@ -223,7 +223,6 @@
         </v-content>
       </v-form>
     </div>
-  </div>
 </template>
 
 <script>
@@ -305,6 +304,7 @@ export default {
   methods: {
     async onSignup() {
       try {
+        let formData = new formData()
         formData.append('email', this.id)
         formData.append('password', this.password)
         formData.append('name', this.name)
