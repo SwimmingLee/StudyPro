@@ -119,7 +119,6 @@ export default {
                   to: peer_id
                 })
               }, e => console.log(e))
-              console.log('send offer to', peer_id )
             })
           }
         });
@@ -129,7 +128,6 @@ export default {
 
 
     this.socket.on("viewsharejoin", user_id => {
-      // this.peer_connections.push(data.user_id)
 
       if (this.user_id != this.now_sharing) return
 
