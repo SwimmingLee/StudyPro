@@ -97,6 +97,7 @@ export default {
       secure: true,
     });
     this.socket.emit("join", { study_id: 1, user_id: `${this.user_id}` });
+
   
   },
   mounted() {
