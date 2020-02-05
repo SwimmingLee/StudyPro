@@ -157,8 +157,9 @@ export default {
 
   methods: {
     create() {
+      console.log("created");
       PostService.createPost(this.postData);
-      // console.log(this.postData);
+      console.log(this.postData);
     },
   }
 };
