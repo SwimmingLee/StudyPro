@@ -95,9 +95,10 @@ export default {
   },
   methods: {
     createPost() {
-      if (this.user) {
+      if (!this.user) {
         window.alert("로그인하셔야 됩니다.")
       }
+      this.PostData.writer = this.user.uid;
       PostService.createPost(this.postData);
         // console.log(this.postData);
     }
