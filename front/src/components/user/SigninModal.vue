@@ -99,26 +99,24 @@ export default {
       console.log(this.$router.currentRoute)
       location.reload()
     },
-    signin() {
+    async signin() {
       this.isLoading = true;
-      console.log('signin')
       if(this.user.email && this.user.password){
-        console.log('inner')
-        this.$store.dispatch('auth/login', this.user).then(
+        await this.$store.dispatch('auth/login', this.user).then(
           (res) => {
             if(res){
               this.logged();
             }else{
               this.message = '아이디 또는 비밀번호를 잘못입력했습니다.'
             }
-            this.isLoading = false;
           },
           error => {
-            this.isLoading = false
             this.message = error.message
           }
         )
       }
+
+      this.isLoading = false;
     },
     async AuthKakaoSignin() {
       const user_info = await WbKakao.signinForm();
@@ -136,19 +134,18 @@ export default {
           profile_image,
           platform: "kakao"
         });
-        console.log(loginResult);
+        console.log(loginResult)
       } catch (err) {
         console.log(err);
       }
+
     },
     AuthLogout() {
       this.logout();
       // 카카오 로그인 버튼을 생성합니다.
     },
     mounted(){
-      console.log('hello')
       if(this.$store.getters['auth/isAuth']){
-        console.log('close')
         this.close();
       }
     }

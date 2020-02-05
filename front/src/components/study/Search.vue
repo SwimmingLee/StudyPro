@@ -326,7 +326,7 @@ export default {
     }
   },
   async mounted() {
-    this.items = 1//await api.getGroups();
+    this.items = []//await api.getGroups();
     this.displayItems = this.items.slice(0);
     this.groupModal = false;
   }
