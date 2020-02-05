@@ -84,7 +84,7 @@ const routes = [{
         ]
     },
     {
-        path: '/workspace',
+        path: '/workspace/:id',
         name: 'workspace',
         components: {
             header: null,
