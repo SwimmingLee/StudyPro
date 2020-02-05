@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid class="pa-2">
+  <!-- <v-container fluid class="pa-2"> -->
     <v-card class="px-4 customTheme lighten-2">
       <v-row>
-        <v-col cols="12" md="8">
+        <v-col :cols="talk ? 8 : 12" id="col" >
           <v-tabs grow icons-and-text centered dark color="cyan">
             <v-tabs-slider color="red"></v-tabs-slider>
             <v-tab href="#Board">
@@ -19,6 +19,10 @@
             </v-tab>
             <v-tab href="#Help">
               Help
+              <v-icon>help_outline</v-icon>
+            </v-tab>
+              <v-tab href="#" @click="collapse()">
+                Collapse
               <v-icon>help_outline</v-icon>
             </v-tab>
             <v-tab-item id="Board">
@@ -38,12 +42,11 @@
             </v-tab-item>
             <v-tab-item id="Help">
               <v-card outlined>
-                
               </v-card>
             </v-tab-item>
           </v-tabs>
         </v-col>
-        <v-col align="center" justify="center">
+        <v-col align="center" justify="center" v-if="talk">
           <v-card outlined tile>
             <v-row no-gutters hidden class="pa-0">
               <FaceTalk :socket="socket" :user_id="user_id" :study_id="study_id" @connected="connected" />
@@ -59,7 +62,7 @@
         </v-col>
       </v-row>
     </v-card>
-  </v-container>
+  <!-- </v-container> -->
 </template>
 
 <script>
@@ -77,6 +80,8 @@ export default {
       socket: "",
       user_id: null,
       connected_users: [],
+
+      talk: true,
     };
   },
 
@@ -114,6 +119,13 @@ export default {
     })
   },
   methods: {
+    async collapse() {
+      this.talk = !this.talk
+      // const col = await document.getElementById('col')
+      // console.log(col)
+      // col.class = "col col-12"
+    },
+
     connected(connected_users) {
       this.connected_users = connected_users.filter(user => user && user != -1)
     }
