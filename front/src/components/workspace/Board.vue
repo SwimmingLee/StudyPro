@@ -57,7 +57,7 @@ export default {
     Swatches
   },
 
-  props: ["socket"],
+  props: ["socket","study_id"],
 
   data() {
     return {
@@ -82,7 +82,7 @@ export default {
       this.old_y = event.offsetY;
 
       this.socket.emit("draw", {
-        room_id: 1,
+        study_id: this.study_id,
         width: this.width,
         color: this.color,
         x1: this.old_x,
@@ -121,7 +121,7 @@ export default {
       this.new_y = event.offsetY;
 
       this.socket.emit("draw", {
-        study_id: 1,
+        study_id: this.study_id,
         width: width,
         color: color,
         x1: this.old_x,
@@ -138,7 +138,7 @@ export default {
     },
     clear() {
       this.socket.emit("clear", {
-        room_id: 1
+        study_id: this.study_id
       });
     }
   },

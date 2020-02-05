@@ -95,7 +95,7 @@ export const connect = () => {
         });
         
         socket.on('clear', function (data) {
-            let study_id = 1;
+            let study_id = data.sutdy_id;
             io.sockets.to(study_id).emit('clear', data);
         });
 
