@@ -1,12 +1,12 @@
 <template>
   <v-card class="pa-0">
     <v-row no-gutters class="pa-0">
-      <v-col cols="12" md="6" class="d-none d-md-block" @contextmenu="showProfileMenu">
+      <v-col cols="12" md="6" class="d-none d-md-block" >
         <v-card outlined tile flex min-height="150">
-          <video playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%"></video>
+          <video playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%" @contextmenu="showProfileMenu($event, 0)"></video>
         </v-card>
       </v-col>
-      <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block">
+      <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block" @contextmenu="showProfileMenu($event, i)">
         <v-card class="ma-0 pa-0" outlined tile flex min-height="150" :id="`remote_block_${i}`">
           <img
             src="../../assets/images/pengsoo.jpg"
@@ -72,7 +72,7 @@ export default {
       local_video: null,
       local_stream: null,
 
-      connected_users: [-1, null, null, null, null, null],
+      connected_users: [this.user_id, null, null, null, null, null],
       peer_connections: {},
 
       remote_videos: [null],
@@ -98,7 +98,8 @@ export default {
       this.local_stream = stream;
     },
 
-    showProfileMenu(e) {
+    showProfileMenu(e,i) {
+      console.log(i)
       e.preventDefault();
       this.showProfile = false;
       this.x = e.clientX;
@@ -183,7 +184,6 @@ export default {
       .then(this.get_stream);
 
     this.socket.on("join", message => {
-      console.log('join')
       const user_id = message.user_id;
       if (user_id == this.user_id) return;
       for (let idx in this.connected_users) {

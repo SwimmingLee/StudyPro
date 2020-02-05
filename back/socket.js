@@ -90,12 +90,10 @@ export const connect = () => {
         
         //보드
         socket.on('draw', function (data) {
-            let study_id = data.study_id;
             io.sockets.to(study_id).emit('line', data);
         });
         
         socket.on('clear', function (data) {
-            let study_id = data.sutdy_id;
             io.sockets.to(study_id).emit('clear', data);
         });
 
@@ -111,12 +109,10 @@ export const connect = () => {
 
         //채팅
         socket.on('send message', function (data) {
-            let study_id = data.study_id;
             io.sockets.to(study_id).emit('receive message', data);
         });
         //화상채팅
         socket.on('message', data => {
-            // let study_id = 1;
             let t_socket;
             const idx = rooms[study_id].members.indexOf(data.to)
             
@@ -129,23 +125,18 @@ export const connect = () => {
         //노트패드
         socket.on('typing', data => {
 
-            let study_id = data.study_id;
             socket.broadcast.to(study_id).emit('typing', data);
         })
-        console.log('rooms : ', rooms)
         
         //화면공유
         socket.on('viewsharestart', data => {
-            let study_id = 1
             
             io.sockets.to(study_id).emit('viewsharestart', data.user_id)
         })
         socket.on('viewsharejoin', data => {
-            let study_id = 1
             socket.to(study_id).emit('viewsharejoin', data.user_id)
         })
         socket.on('viewshare', data => {
-            // let study_id = 1;
             let t_socket;
             const idx = rooms[study_id].members.indexOf(data.to)
             
