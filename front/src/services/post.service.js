@@ -32,7 +32,8 @@ class PostService {
             params:{
                 board: payload.board,
                 type: payload.type,
-                study_id: payload.study_id
+                study_id: payload.study_id,
+                offset: payload.offset
             }
         })
     }

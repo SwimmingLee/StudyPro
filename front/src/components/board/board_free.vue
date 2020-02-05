@@ -29,27 +29,41 @@ export default {
       page: 1,
       lastpage: 1,
       post_number: 0,
-      post_list: [],
+      post_list: []
     };
   },
 
-  async mounted() {
-    let tmp = await PostService.getPostNumber({
-      type: "study",
-      board: "free",
-      study_id: 8
-    });
-    this.lastpage =
-      parseInt(tmp.data.post_number / 10) +
-      (tmp.data.post_number % 10 === 0 ? 0 : 1);
+  mounted() {
+    this.postUpdate();
+  },
 
-    tmp = await PostService.getAllPost({
-      type: "study",
-      board: "free",
-      study_id: 8,
-      offset: (this.page - 1) * 10,
-    });
-    this.post_list = tmp.data;
+  watch: {
+    page() {
+      console.log(this.page)
+      this.postUpdate();
+    }
+  },
+
+  methods: {
+    async postUpdate() {
+      let tmp = await PostService.getPostNumber({
+        type: "study",
+        board: "free",
+        study_id: 8
+      });
+      this.lastpage =
+        parseInt(tmp.data.post_number / 10) +
+        (tmp.data.post_number % 10 === 0 ? 0 : 1);
+
+      tmp = await PostService.getAllPost({
+        type: "study",
+        board: "free",
+        study_id: 8,
+        offset: (this.page - 1) * 10
+      });
+      this.$set(this.post_list, 0, tmp.data);
+      
+    }
   }
 };
 </script>

@@ -5,7 +5,7 @@
     </v-flex>
     <v-row justify="center">
       <v-expansion-panels class="pa-3" multiple popout>
-        <v-expansion-panel v-for="(item, index) in post_list" :key="index">
+        <v-expansion-panel v-for="(item, index) in postList" :key="index">
           <v-expansion-panel-header>{{ item.title }}</v-expansion-panel-header>
           <v-expansion-panel-content>
             <span v-html="item.content"></span>
@@ -33,23 +33,46 @@ export default {
     };
   },
 
-  async mounted() {
-    let tmp = await PostService.getPostNumber({
-      type: "study",
-      board: "study",
-      study_id: 8
-    });
-    this.lastpage =
-      parseInt(tmp.data.post_number / 10) +
-      (tmp.data.post_number % 10 === 0 ? 0 : 1);
+  created() {
+    this.postUpdate();
+  },
 
-    tmp = await PostService.getAllPost({
-      type: "study",
-      board: "study",
-      study_id: 8,
-      offset: (this.page - 1) * 10
-    });
-    this.post_list = tmp.data;
+  watch: {
+    page() {
+      this.postUpdate();
+    }
+  },
+
+  computed: {
+    postList: function() {
+      console.log(this.post_list)
+      return this.post_list;
+    }
+  },
+
+  methods: {
+    async postUpdate() {
+      const nPost = await PostService.getPostNumber({
+        type: "study",
+        board: "study",
+        study_id: 8
+      });
+      this.lastpage =
+        parseInt(nPost.data.post_number / 10) +
+        (nPost.data.post_number % 10 === 0 ? 0 : 1);
+
+      const postList = await PostService.getAllPost({
+        type: "study",
+        board: "study",
+        study_id: 8,
+        offset: (this.page - 1) * 10
+      });
+
+      console.log("comoued", postList.data)
+      this.post_list = postList.data;
+      //return postList.data;
+      //this.set(this.post_list, 1, postList.data);
+    }
   }
 };
 </script>
