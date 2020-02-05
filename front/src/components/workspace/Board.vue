@@ -13,15 +13,15 @@
       height="640"
     ></canvas>
 
-      <swatches
-        v-model="color"
-        shapes="circles"
-        colors="text-basic"
-        row-length="6"
-        popover-to="right"
-        :exceptions="exceptions"
-        exception-mode="hidden"
-      />
+    <swatches
+      v-model="color"
+      shapes="circles"
+      colors="text-basic"
+      row-length="6"
+      popover-to="right"
+      :exceptions="exceptions"
+      exception-mode="hidden"
+    />
 
     <v-container class="pa-0">
       <v-menu absolute :close-on-content-click="false" :nudge-width="200" offset-y>
@@ -41,11 +41,10 @@
           </v-container>
         </v-card>
       </v-menu>
-      
     </v-container>
     <v-btn absolute class="mt-1" fab dark small color="primary" @click="clear">
-        <v-icon dark>mdi-delete</v-icon>
-      </v-btn>
+      <v-icon dark>mdi-delete</v-icon>
+    </v-btn>
   </v-card>
 </template>
 
@@ -53,16 +52,12 @@
 import Swatches from "vue-swatches";
 import "vue-swatches/dist/vue-swatches.min.css";
 
-window.onsize = function() {
-  alert("!");
-};
-
 export default {
   components: {
     Swatches
   },
 
-  props: ["socket"],
+  props: ["socket","study_id"],
 
   data() {
     return {
@@ -87,7 +82,7 @@ export default {
       this.old_y = event.offsetY;
 
       this.socket.emit("draw", {
-        room_id: 1,
+        study_id: this.study_id,
         width: this.width,
         color: this.color,
         x1: this.old_x,
@@ -126,7 +121,7 @@ export default {
       this.new_y = event.offsetY;
 
       this.socket.emit("draw", {
-        room_id: 1,
+        study_id: this.study_id,
         width: width,
         color: color,
         x1: this.old_x,
@@ -139,10 +134,11 @@ export default {
     },
     mouse_out() {
       this.isDown = false;
+      this.isClear = false;
     },
     clear() {
       this.socket.emit("clear", {
-        room_id: 1
+        study_id: this.study_id
       });
     }
   },
@@ -162,13 +158,32 @@ export default {
     });
 
     this.socket.on("clear", () => {
-      // console.log('on clear');
-
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     });
+
+    this.socket.on("load_image", data => {
+
+      let image_data = this.canvas.toDataURL();
+      
+      this.socket.emit("send_image", {
+        socket_id: data,
+        image_data: image_data
+      });
+    });
+
+    this.socket.on("send_image", (data) => {
+      
+      let image = new Image();
+      image.onload = ()=>{
+        this.context.drawImage(image,0,0);
+      }
+      image.src = data.image_data;
+      
+    });
+
     window.onsize = function() {
-      // console.log("??");
+      // console.log(document.getElementById("canvas"));
     };
-  },
+  }
 };
 </script>

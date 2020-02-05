@@ -9,7 +9,7 @@
         </v-card-title>
       </v-img>
 
-      <router-link to="/workspace" target="_blank">
+      <router-link :to="`/workspace/${study_id}`" target="_blank">
         <v-btn
           id="enterbtn"
           class="mr-4"
@@ -82,6 +82,9 @@ export default {
     StudySchedule: () => import("@/components/studydetail/StudySchedule"),
     StudyBoard: () => import("@/components/studydetail/StudyBoard"),
     StudyMember: () => import("@/components/studydetail/StudyMember")
+  },
+  created() {
+    this.study_id = window.location.href.split('studydetail/')[1]
   }
 };
 </script>
