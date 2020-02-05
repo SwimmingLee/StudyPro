@@ -1,106 +1,81 @@
 <template>
-  <!-- <v-container> -->
-  <v-row>
-    <v-col cols="12" lg="9" md="12" sm="12">
-      <div class="tabs">
-        <v-tabs>
-          <v-tab @click="tabSwitch('ng')">신설 스터디</v-tab>
-          <v-tab @click="tabSwitch('np')">New Posts</v-tab>
-          <v-tab v-if="isAuth">My Groups</v-tab>
-        </v-tabs>
+  <div class="tabs">
+    <v-tabs>
+      <v-tab @click="tabSwitch('rx')">받은 쪽지함</v-tab>
+      <v-tab @click="tabSwitch('tx')">보낸 쪽지함</v-tab>
+      <v-tab @click="tabSwitch('send')">메세지</v-tab>
+      <!-- <v-tab v-if="isAuth">My Groups</v-tab> -->
+    </v-tabs>
 
-        <v-slide-group
-          v-if="current === 'ng'"
-          class="pa-4"
-          multiple
-          show-arrows
-        >
+    <v-list three-line v-if="current === 'rx'">
+      <v-list-item v-for="item in rxBox" :key="item.title">
+        <!-- <v-divider
+          v-if="item.divider"
+          :key="item.title"
+          :inset="item.inset"
+        ></v-divider>
+       -->
+        <!-- <template v-for="item in rxBox">
+        <v-divider
+          v-if="item.divider"
+          :key="item.title"
+          :inset="item.inset"
+        ></v-divider>
 
+        <v-list-item v-else :key="item.title"> -->
+        <v-card elevation="0" width="1500" @click="viewDetail(item)">
+          <v-row justify="center" align="center">
+            <v-col>
+              <p style="font-size:15px" class="ma-0">{{ item.sender }}</p>
+            </v-col>
 
-        
-
-
-
-
-          <v-slide-item v-for="n in 5" :key="n" v-slot:default="{ active }">
-
-
-            
-
-
-
-
-
-            <!-- <v-card
-              color="grey lighten-1"
-              class="ma-4"
-              height="300"
-              width="200"
-              @click="studyEnter()"
-            >
-              <v-row class="fill-height" align="center" justify="center">
-                <v-scale-transition>
-                  <v-icon
-                    v-if="active"
-                    color="white"
-                    size="48"
-                    v-text="'mdi-close-circle-outline'"
-                  ></v-icon>
-                </v-scale-transition>
-              </v-row>
-            </v-card> -->
-
-            <v-card class="ma-4" max-width="300" @click="studyEnter()">
-              <v-img
-                class="white--text align-end"
-                height="100px"
-                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-              >
-                <v-card-title>Top 10 Australian beaches</v-card-title>
-              </v-img>
-
-              <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
-
-              <v-card-text class="text--primary">
-                <div>Whitehaven Beach</div>
-
-                <div>Whitsunday Island, Whitsunday Islands</div>
-              </v-card-text>
+            <v-col>
+              <p style="font-size:15px" class="ma-0">
+                <v-icon v-if="item.isRead" style="color:grey">mdi-email</v-icon> 
+                <v-icon v-else style="color:black">mdi-email</v-icon>
+                {{ item.title }}
+              </p>
+            </v-col>
 
 
 
 
 
-              <!-- <v-card-actions>
-                <v-btn color="orange" text>
-                  Share
-                </v-btn>
-
-                <v-btn color="orange" text>
-                  Explore
-                </v-btn>
-              </v-card-actions> -->
-            </v-card>
-          </v-slide-item>
-        </v-slide-group>
-
-        <v-list three-line v-else-if="current === 'np'">
 
 
-          <template v-for="(item, index) in items">
-            <v-subheader
-              v-if="item.header"
-              :key="item.header"
-              v-text="item.header"
-            ></v-subheader>
 
-            <v-divider
-              v-else-if="item.divider"
-              :key="index"
-              :inset="item.inset"
-            ></v-divider>
+            <v-col offset-md="7" md="2">
+              <p style="font-size:15px" class="ma-0">
+                {{ item.year }}-{{ item.month }}-{{ item.day }}
+                {{ item.hour }}:{{ item.minute }}
+              </p>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-list-item>
+      <template>
+        <group-modal
+          :group-modal="groupModal"
+          :item="item"
+          v-on:close="modalClose"
+          v-on:clickRes="modalReload"
+        />
+      </template>
 
-            <v-list-item v-else :key="item.title">
+      <!-- </template> -->
+    </v-list>
+
+    <v-list three-line v-else-if="current === 'tx'">
+      <template v-for="(item, index) in txBox">
+        <v-divider
+          v-if="item.divider"
+          :key="index"
+          :inset="item.inset"
+        ></v-divider>
+
+        <v-list-item v-else :key="item.title">
+          <v-row
+            ><v-col>
               <v-list-item-avatar>
                 <v-img :src="item.avatar"></v-img>
               </v-list-item-avatar>
@@ -109,46 +84,76 @@
                 <v-list-item-subtitle
                   v-html="item.subtitle"
                 ></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-
-
-        </v-list>
-      </div>
-    </v-col>
-  </v-row>
-  <!-- </v-container> -->
+              </v-list-item-content> </v-col
+          ></v-row>
+        </v-list-item>
+      </template>
+    </v-list>
+  </div>
 </template>
 
 <script>
 export default {
   name: "tabs",
   data: () => ({
-    current: "ng",
-    items: [
-      { header: "Today" },
+    current: "rx",
+    groupModal: false,
+    item: {},
+    rxBox: [
       {
+        msgID: "",
+        isRead:false,
         avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        title: "Brunch this weekend?",
-        subtitle:
-          "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
+        title: "질문있습니다.",
+        sender: "아이유",
+        receiver: "윤찬희",
+        detail:
+          "사실은 질문이 없었습니다.ㅈㄷㄻㄹㄴㅇㄻㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ",
+        year: "2020",
+        month: "01",
+        day: "22",
+        hour: "10",
+        minute: "51",
+        second: "08",
+        date: "2020-02-04"
       },
-      { divider: true, inset: true },
+      // { divider: true, inset: true },
       {
+        msgID: "",
+        isRead:true,
         avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-        subtitle:
-          "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend."
+        title: "찬물나옴",
+        sender: "신민아",
+        receiver: "윤찬희",
+        detail: "아니에요. 잘 나와여.",
+        year: "2020",
+        month: "01",
+        day: "12",
+        hour: "10",
+        minute: "51",
+        second: "08",
+        date: "2020-01-22"
       },
-      { divider: true, inset: true },
+      // { divider: true, inset: true },
       {
+        msgID: "",
+        isRead:false,
         avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "Oui oui",
-        subtitle:
-          "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?"
-      },
-      { divider: true, inset: true },
+        title: "지금 몇시인가요",
+        sender: "이지은",
+        receiver: "윤찬희",
+        detail: "시계가 없어요.",
+        year: "2020",
+        month: "03",
+        day: "22",
+        hour: "10",
+        minute: "51",
+        second: "08",
+        date: "2019-12-15"
+      }
+    ],
+
+    txBox: [
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
         title: "Birthday gift",
@@ -164,17 +169,30 @@ export default {
       }
     ]
   }),
+
   computed: {
     isAuth: function() {
       return this.$store.getters.isAuth;
     }
   },
+  components: {
+    GroupModal: () => import("@/components/studydetail/MsgReceiveModal")
+  },
+
   methods: {
-    studyEnter() {
-      console.log("Clicked...");
-    },
     tabSwitch(target) {
       this.current = target;
+    },
+    viewDetail(item) {
+      this.groupModal = true;
+      this.item = item;
+    },
+    modalClose() {
+      this.groupModal = false;
+    },
+    modalReload() {
+      this.groupModal = false;
+      this.groupModal = true;
     }
   }
 };
