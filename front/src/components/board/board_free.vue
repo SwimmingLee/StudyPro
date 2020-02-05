@@ -19,8 +19,9 @@
 </template>
 
 <script>
-import axios from "axios";
+import PostService from "@/services/post.service"
 // import VueAxious from 'vue-axios'
+
 
 export default {
   data() {
@@ -30,15 +31,17 @@ export default {
     };
   },
 
-  mounted() {
-    axios
-      .get("http://localhost:8000/posts/list?board=study")
-      .then(function(res) {
-        console.log(res);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+  async mounted() {
+    const tmp = {
+      type: "study",
+      board: "free",
+      study_id: 8
+    }
+    console.log("WHy")
+    const number = await PostService.getPostNumber(tmp)
+    console.log("AA", number);
+    const postList = await PostService.getAllPost(tmp)
+    console.log("Hello", postList)
   }
 };
 </script>

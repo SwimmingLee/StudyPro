@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     
     <!-- <p v-for="user in connected_users" :key="user" :value="user">{{user}}</p> -->
     <select v-model="sharing_user_id" style = "border : 1px solid #000000">
