@@ -11,6 +11,7 @@ import home from '@/views/Home'
 
 // 게시판
 import board from '@/components/board/board'
+import postRegister from '@/components/board/post_register'
 
 // 유저페이지
 import user from '@/views/User'
@@ -61,11 +62,19 @@ const routes = [
             default: board,
             footer: appFooter
         },
-        props: (route) => ({
-            board: route.board,
-            post_id: route.post_id,
-        })
-        ,
+        // props: (route) => ({
+        //     board: route.board,
+        //     post_id: route.post_id,
+        // }),
+    },
+    {
+        path: '/board/register',
+        name: 'post_register',
+        components: {
+            header: appHeader,
+            default: postRegister,
+            footer: appFooter
+        },
     },
     {
         path: '/user',
