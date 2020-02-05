@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 class PostService {
     createPost(payload) {
         return axios.post(process.env.VUE_APP_API_URL + "posts/detail",
@@ -13,8 +14,27 @@ class PostService {
     //     //return axios.get
 
     // }
-    getAllPost() {
-        return axios.get(process.env.VUE_APP_API_URL + "posts/list")
+    getPostNumber(payload) {
+        return axios.get(process.env.VUE_APP_API_URL + "posts/number",
+        {
+            params: {
+                board: payload.board,
+                type: payload.type,
+                study_id: payload.study_id
+            }
+        })
+    }
+
+
+    getAllPost(payload) {
+        return axios.get(process.env.VUE_APP_API_URL + "posts/list",
+        {
+            params:{
+                board: payload.board,
+                type: payload.type,
+                study_id: payload.study_id
+            }
+        })
     }
 }
 
