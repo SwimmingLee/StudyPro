@@ -241,8 +241,8 @@ export default {
     },
     reset() {
       // Reset Picker Values
-      this.pickerStart = "";
-      this.pickerEnd = "";
+      this.pickerStart = format(new Date(), 'yyyy-MM-dd');
+      this.pickerEnd = format(new Date(), 'yyyy-MM-dd');
       this.highlightDates = [];
       this.highlightClasses = {};
       this.emitRange();
@@ -264,7 +264,7 @@ export default {
       }
     },
     pickerStart: "highlight",
-    pickerEnd: "highlight"
+    pickerEnd: "highlight",
   }
 };
 </script>

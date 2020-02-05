@@ -24,6 +24,9 @@ import study from '@/views/Study'
 import studydetail from '@/components/studydetail/MainStudyDetail'
 import workspace from '@/components/workspace/WorkSpace'
 
+//쪽지함 접근(임시)
+import msgbox from '@/components/user/messenger/MessageHome'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -99,7 +102,7 @@ const routes = [
         ]
     },
     {
-        path: '/workspace',
+        path: '/workspace/:id',
         name: 'workspace',
         components: {
             header: null,
@@ -116,6 +119,15 @@ const routes = [
             footer: appFooter
         }
     },
+    {
+        path: '/msgbox',
+        name: 'msgbox',
+        components: {
+            header: appHeader,
+            default: msgbox,
+            footer: appFooter
+        }
+    },
 ]
 
 const router = new VueRouter({
@@ -123,6 +135,9 @@ const router = new VueRouter({
     linkExactActiveClass: "active",
     base: process.env.BASE_URL,
     routes,
+    scrollBehavior() {
+        return { x: 0, y: 0 }
+    }
 })
 
 export default router

@@ -3,13 +3,14 @@
     <v-dialog v-model="open" max-width="40%">
       <v-card id="lgiModal" class="px-0 pt-0">
         <v-card-title class="customTheme darken-2 white--text pb-3">
-          <span class="headline">{{ item.title }}</span>
+          <span class="headline">[제목]  {{ item.title }}</span>
         </v-card-title>
         <v-card-text class="py-0 px-7">
           <v-container class="pb-0">
             <v-row class="justify-center">
               <v-avatar size="140" color="white">
-                <v-icon size="140">mdi-account-circle</v-icon>
+                <v-img :src="item.avatar"></v-img>
+                <!-- <v-icon size="140">mdi-account-circle</v-icon> -->
               </v-avatar>
             </v-row>
             <v-row class="py-4">
@@ -46,7 +47,7 @@
             </v-row>
 
             <hr />
-            <v-row class="pt-1 pb-4">
+            <v-row class="pt-3 pb-4">
               <v-col cols="3" class="py-0">
                 <v-content text class="py-0 font-weight-bold"
                   >메시지 내용</v-content
@@ -62,14 +63,13 @@
         <div v-show="showResponse">
           <v-divider></v-divider>
 
-          <v-row class="pt-6">
+          <v-row class="pt-6, ma-0">
             <v-col cols="12" class="pa-0">
               <v-textarea
                 class="px-10"
                 label="보낼 메시지"
                 outlined
                 single-line
-                height="150px"
                 v-model="regText"
                 counter
                 maxlength="100"

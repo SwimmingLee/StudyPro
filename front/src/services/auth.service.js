@@ -1,12 +1,12 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:8000/users/'
+const URL = process.env.VUE_APP_API_URL + 'users/'
 
 class AuthService {
     // 초기 유저 정보업데이트
     checkUserDefault(user) {
         this.changeHeadersToken(user.accessToken)
-        return axios.post(API_URL + 'token')
+        return axios.post(URL + 'token')
             .then(this.handleResponse)
             .then(res => {
                 this.changeHeadersToken(res.data.user.accessToken)
@@ -22,7 +22,7 @@ class AuthService {
     // 로그인
     login(user) {
         return axios
-            .post(API_URL + 'signin', {
+            .post(URL + 'signin', {
                 email: user.email,
                 password: user.password
             })
@@ -51,7 +51,7 @@ class AuthService {
     }
 
     register(formData) {
-        return axios.post(API_URL + 'signup', formData).then(
+        return axios.post(URL + 'signup', formData).then(
             res => {
                 if (res.data.state == 'success') {
                     return Promise.resolve(res.data)
