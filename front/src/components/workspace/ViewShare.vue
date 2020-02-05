@@ -37,13 +37,13 @@ export default {
     };
   },
   created() {
-    this.socket.emit('viewsharejoin', {user_id: this.user_id})
+    this.socket.emit('viewsharejoin', {user_id: this.user_id, study_id: this.study_id})
   },
-  props: ["socket", "user_id", "connected_users"],
+  props: ["socket", "user_id", "study_id", "connected_users"],
   watch: {
     sharing_user_id: function(change) {
         if (change == this.now_sharing) return
-        this.socket.emit('viewsharestart', {user_id : change})
+        this.socket.emit('viewsharestart', {user_id : change, study_id: this.study_id})
     }
   },
   methods: {
@@ -73,7 +73,7 @@ export default {
               id: event.candidate.sdpMid,
               candidate: event.candidate.candidate
             },
-            study_id: 1,
+            study_id: this.study_id,
             from: this.user_id,
             to: user_id
           });
@@ -114,7 +114,7 @@ export default {
                 t_pc.setLocalDescription(sdp) 
                 this.sendMessage({
                   message: sdp,
-                  study_id: 1,
+                  study_id: this.study_id,
                   from: this.user_id,
                   to: peer_id
                 })
@@ -142,7 +142,7 @@ export default {
               t_pc.setLocalDescription(sdp);
               this.sendMessage({
                 message: sdp,
-                study_id: 1,
+                study_id: this.study_id,
                 from: this.user_id,
                 to: user_id
               });
@@ -170,7 +170,7 @@ export default {
             t_pc.setLocalDescription(sdp);
             this.sendMessage({
               message: sdp,
-              study_id: 1,
+              study_id: this.study_id,
               from: this.user_id,
               to: from
             });
