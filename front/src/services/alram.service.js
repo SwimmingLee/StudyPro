@@ -1,26 +1,25 @@
 import axios from 'axios'
 
-const API_URL = 'http://15.164.245.201:8000/alram/'
-
 class AlramService {
     getReceivedAlarmByUid(payload) {
-        return axios.get(API_URL, {
+        return axios.get(process.env.VUE_APP_API_URL + "alarms/", {
             params: {
-                to: payload.uid
+                direction: "toUser"
             }
         })
     }
 
     getSendAlarmByUid(payload) {
-        return axios.get(API_URL, {
+        return axios.get(process.env.VUE_APP_API_URL + "alarms/", {
             params: {
-                from: payload.uid
+                direction: "fromUser"
             }
         })
     }
 
-    sendAlaram(payload) {
-        const { from, to , title, content} = payload
+    sendAlarm(payload) {
+
+        const { to , title, content} = payload
         return axios.post(API_URL, {
             data: {
                 from, to, title, content
