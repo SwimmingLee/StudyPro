@@ -20,15 +20,15 @@ $white: #ffffff;
 }
 
 .userdropdown {
-    transform: translatex(20%) rotatex(90deg) scale(0);
+    transform: translatex(10%) rotatex(90deg) scale(0);
     transform-origin: 0 0;
     border-radius: 0.35em;
-    background-color: rgba($white, 0.85);
+    background-color: rgba($white, 0.75);
     visibility: hidden;
     transition: all 200ms linear;
     width: 160px;
     &.usermenu {
-        transform: translatex(20%);
+        transform: translatex(10%);
         visibility: visible;
     }
     ul>li {

@@ -95,14 +95,19 @@ export default {
     close() {
       this.$emit("close");
     },
-    async signin() {
+    logged(){
+      console.log(this.$router.currentRoute)
+      location.reload()
+    },
+    signin() {
       this.isLoading = true;
-      
+      console.log('signin')
       if(this.user.email && this.user.password){
+        console.log('inner')
         this.$store.dispatch('auth/login', this.user).then(
-          (state) => {
-            if(state == 'success'){
-              this.close();
+          (res) => {
+            if(res){
+              this.logged();
             }else{
               this.message = '아이디 또는 비밀번호를 잘못입력했습니다.'
             }
@@ -118,7 +123,7 @@ export default {
     async AuthKakaoSignin() {
       const user_info = await WbKakao.signinForm();
       let {
-        properties: { nickname },
+        properties: { nickname, profile_image },
         kakao_account: { email, gender }
       } = user_info;
 
@@ -128,6 +133,7 @@ export default {
           email,
           nickname,
           gender,
+          profile_image,
           platform: "kakao"
         });
         console.log(loginResult);
@@ -138,8 +144,15 @@ export default {
     AuthLogout() {
       this.logout();
       // 카카오 로그인 버튼을 생성합니다.
+    },
+    mounted(){
+      console.log('hello')
+      if(this.$store.getters['auth/isAuth']){
+        console.log('close')
+        this.close();
+      }
     }
-  }
+  },
 };
 </script>
 

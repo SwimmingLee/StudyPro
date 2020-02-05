@@ -87,11 +87,10 @@ export default {
     FaceTalk: FaceTalk,
     Chatting: Chatting
   },
-
   created() {
     this.user_id = `${Math.ceil(Math.random() * 100000)}`
     
-    // this.socket = io.connect("http://70.12.246.89:8210?study_id=1&user_id="+this.user_id, {
+    // this.socket = io.connect("http://70.12.246.89:8000?study_id=1&user_id="+this.user_id, {
     this.socket = io.connect("http://70.12.247.73:8210?study_id=1&user_id="+this.user_id, {
       // this.socket = io.connect("http://70.12.247.73:8210", {
       transports: ["websocket"],
@@ -109,7 +108,6 @@ export default {
   methods: {
     connected(connected_users) {
       this.connected_users = connected_users.filter(user => user && user != -1)
-      console.log(this.connected_users, 'connected')
     }
   }
 };
