@@ -20,11 +20,19 @@
         <v-col cols="12" class="py-0">
           <v-subheader>내용 :</v-subheader>
         </v-col>
+      </v-row>
+      <v-row style="min-height: 500px">
         <v-col class="py-0">
-          <v-textarea v-model="postData.content" outlined auto-grow rows="15"></v-textarea>
+          <tiptap-vuetify
+            placeholder="내용을 입력하세요..."
+            v-model="postData.content"
+            :extensions="extensions"
+            :toolbar-attributes="{ color: 'customTheme', dark: true }"
+          />
+          <!-- <v-textarea v-model="postData.content" outlined auto-grow rows="15"></v-textarea> -->
         </v-col>
       </v-row>
-      <v-divider />
+      <v-divider class="mt-5 mb-3" />
       <v-row>
         <v-col>
           <v-file-input
@@ -66,9 +74,42 @@
 </template>
 
 <script>
-import PostService from "@/services/post.service"
+import PostService from "@/services/post.service";
+
+import Vue from "vue";
+import Vuetify from "vuetify";
+
+import {
+  TiptapVuetifyPlugin,
+  TiptapVuetify,
+  Heading,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Paragraph,
+  BulletList,
+  OrderedList,
+  ListItem,
+  Link,
+  Code,
+  Blockquote,
+  HardBreak,
+  HorizontalRule,
+  History
+} from "tiptap-vuetify";
+import "tiptap-vuetify/dist/main.css";
+import "vuetify/dist/vuetify.min.css";
+
+const vuetify = new Vuetify();
+Vue.use(Vuetify);
+Vue.use(TiptapVuetifyPlugin, {
+  vuetify,
+  iconGroup: "md"
+});
 
 export default {
+  components: { TiptapVuetify },
   data() {
     return {
       items: ["study", "free", "notice"],
@@ -85,18 +126,44 @@ export default {
       files: [],
       rules: [
         value => value.size < 5000000 || "File size should be less than 5 MB"
+      ],
+
+      extensions: [
+        History,
+        Blockquote,
+        Bold,
+        Underline,
+        Strike,
+        Italic,
+        ListItem,
+        BulletList,
+        OrderedList,
+        [
+          Heading,
+          {
+            options: {
+              levels: [1, 2, 3]
+            }
+          }
+        ],
+        Link,
+        Code,
+        HorizontalRule,
+        Paragraph,
+        HardBreak
       ]
     };
   },
 
   methods: {
     create() {
-        PostService.createPost(this.postData);
-        // console.log(this.postData);
-    }
+      PostService.createPost(this.postData);
+      // console.log(this.postData);
+    },
   }
 };
 </script>
 
 <style scoped>
+
 </style>
