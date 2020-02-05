@@ -37,3 +37,4 @@ export const onlyPrivate = (req, res, next) => {
         res.redirect(routes.home);
     }
 }
+

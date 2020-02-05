@@ -64,7 +64,7 @@ const pcConfig = {
 };
 
 export default {
-  props: ["socket", "user_id"],
+  props: ["socket", "user_id", "study_id",],
   data() {
     return {
       // FaceTalk
@@ -136,7 +136,7 @@ export default {
               id: event.candidate.sdpMid,
               candidate: event.candidate.candidate
             },
-            study_id: 1,
+            study_id: this.study_id,
             from: this.user_id,
             to: user_id
           });
@@ -201,7 +201,7 @@ export default {
             t_pc.setLocalDescription(sdp) 
             this.sendMessage({
               message: sdp,
-              study_id: 1,
+              study_id: this.study_id,
               from: this.user_id,
               to: user_id
             })
@@ -241,7 +241,7 @@ export default {
             t_pc.setLocalDescription(sdp);
             this.sendMessage({
               message: sdp,
-              study_id: 1,
+              study_id: this.study_id,
               from: this.user_id,
               to: from
             });
