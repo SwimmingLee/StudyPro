@@ -13,7 +13,7 @@ export const auth = {
         checkUserDefault({ commit }) {
             if (!initialState.user) return
 
-            AuthService.checkUserDefault(initialState.user).then(
+            AuthService.checkUserDefault().then(
                 res => {
                     if (res.state == 'success') {
                         commit('loginSuccess', res.user)

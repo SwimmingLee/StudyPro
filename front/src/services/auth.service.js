@@ -1,15 +1,17 @@
 import axios from 'axios'
+import AuthHeader from './auth.header'
 
-const URL = process.env.VUE_APP_API_URL + 'users/'
+const URL = process.env.VUE_APP_LOCAL_URL + 'users/'
 
 class AuthService {
     // 초기 유저 정보업데이트
-    checkUserDefault(user) {
-        this.changeHeadersToken(user.accessToken)
+    checkUserDefault() {
+        this.changeHeadersToken(AuthHeader.getToken())
         return axios.post(URL + 'token')
             .then(this.handleResponse)
             .then(res => {
                 this.changeHeadersToken(res.data.user.accessToken)
+                this.setToken(res.data.user)
                 return res.data
             })
     }
@@ -31,11 +33,7 @@ class AuthService {
                 response => {
                     console.log('sdfasdf', response.data)
                     if (response.data.state == 'success') {
-                        if (user.loginRemain) {
-                            localStorage.setItem('user', JSON.stringify(response.data.user))
-                        } else {
-                            sessionStorage.setItem('user', JSON.stringify(response.data.user))
-                        }
+
 
                         return response.data.user;
                     } else {
@@ -72,6 +70,14 @@ class AuthService {
         }
 
         return Promise.resolve(response)
+    }
+
+    setToken(user) {
+        if (user.loginRemain) {
+            localStorage.setItem('user', JSON.stringify(user))
+        } else {
+            sessionStorage.setItem('user', JSON.stringify(user))
+        }
     }
 }
 

@@ -1,10 +1,18 @@
 import axios from 'axios'
+import AuthHeader from './auth.header'
 
-const URL = process.env.VUE_APP_API_URL + 'studies/'
+const URL = process.env.VUE_APP_LOCAL_URL + 'studies/'
 
 class StudyService {
     getAllStudy() {
-        return axios.get(process.env.VUE_APP_API_URL + "studies")
+        this.changeHeadersToken(AuthHeader.getToken())
+        return axios.get(URL)
+            .then(res => {
+                    return Promise.resolve(res.data)
+                },
+                error => {
+                    return Promise.reject(error.data)
+                })
     }
 
     // // 스터디 검색에 들어가는 내용들이 있어야 한다.
@@ -14,7 +22,7 @@ class StudyService {
 
     // }
 
-    createStudy = (payload, token) => {
+    createStudy = (payload) => {
         // const {
         //     minor_class_id,	
         //     captain,		
@@ -31,7 +39,7 @@ class StudyService {
         //     days,
         //     accessToken	
         // } = payload;
-        this.changeHeadersToken(token)
+        this.changeHeadersToken(AuthHeader.getToken())
         return axios.post(URL + "create",
                 payload
             )
