@@ -26,13 +26,10 @@ export const auth = {
 
         // 로그인
         async login({ commit }, user) {
-            console.log('auth.moudel')
             return await AuthService.login(user).then(
                 res => {
                     if (res) {
                         commit('loginSuccess', res.user)
-                        console.log(res)
-                        console.log(this)
                         return true
                     } else {
                         commit('loginFailure')
@@ -92,6 +89,9 @@ export const auth = {
         },
         getUser: (state) => {
             return state.user
+        },
+        getToken: (state) => {
+            return state.user.accessToken
         }
     }
 }

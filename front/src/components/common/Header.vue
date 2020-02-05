@@ -71,7 +71,11 @@
           <div :class="{ usermenu }" class="userdropdown">
             <ul class="pl-0">
               <li v-for="item in usermenuitems" :key="item.title">
-                <v-btn text @click="clickUserMenu(item.name)" class="usermenubtn">
+                <v-btn 
+                  text 
+                  @click.prevent="clickUserMenu(item.name)" 
+                  class="usermenubtn"
+                  :disabled="isLoading">
                   <span class="usermenu">{{ item.title }}</span>
                 </v-btn>
               </li>
@@ -140,7 +144,7 @@
           :to="item.route"
         >
           <v-list-item-content>
-            <v-list-item-title class="white--text">{{
+            <v-list-item-title class="white--text" >{{
               item.title
             }}</v-list-item-title>
           </v-list-item-content>
@@ -226,6 +230,7 @@ export default {
         { title: "로그아웃", name: "signout"}
       ],
       userInfo: {},
+      isLoading: false,
     };
   },
   computed: {
@@ -244,7 +249,9 @@ export default {
       this.signinModal = false;
     },
     signout(){
+      this.isLoading = true
       this.$store.dispatch('auth/logout')
+      this.isLoading = false
     },
     clickUserMenu(name){
       if(name == 'info'){

@@ -158,6 +158,37 @@
                   </v-col>
                 </v-row>
 
+<<<<<<< HEAD
+                  <v-card
+                    class="mx-auto"
+                    max-width="1000"
+                    color="rgb(0, 0, 0, 0)"
+                    elevation="0"
+                  >
+                    <v-layout row right justify-end>
+                      <span
+                        class="red--text lighten-1 mr-10 pt-2"
+                        v-show="notcreated"
+                        >아이디가 이미 존재합니다.</span
+                      >
+                      <v-btn
+                        class="mr-4"
+                        :disabled="!valid || isLoading"
+                        color="green lighten-4"
+                        @click="onSignup()"
+                      >
+                          가입하기
+                      </v-btn>
+                    </v-layout>
+                  </v-card>
+                </v-form>
+              </v-app>
+            </div>
+          </v-container>
+        </v-content>
+      </v-form>
+    </div>
+=======
                 <v-card class="mx-auto" max-width="1000" color="rgb(0, 0, 0, 0)" elevation="0">
                   <v-layout row right justify-end>
                     <span class="red--text lighten-1 mr-10 pt-2" v-show="notcreated">아이디가 이미 존재합니다.</span>
@@ -176,6 +207,7 @@
       </v-content>
     </v-form>
   </div>
+>>>>>>> f6c5c62cca99f1ccb010cd95175d98522890c41f
 </template>
 
 <script>
@@ -258,6 +290,15 @@ export default {
     async onSignup() {
       try {
         let formData = new FormData();
+<<<<<<< HEAD
+        formData.append('email', this.id)
+        formData.append('password', this.password)
+        formData.append('name', this.name)
+        formData.append('nickname', this.nickname)
+        formData.append('gender', this.genderinput == "남성"? "M" : 'W')
+        formData.append('phone', this.phone)
+        formData.append('img', this.avatar.imageFile);
+=======
         formData.append("email", this.id);
         formData.append("password", this.password);
         formData.append("name", this.name);
@@ -265,6 +306,7 @@ export default {
         formData.append("gender", this.genderinput == "남성" ? "M" : "W");
         formData.append("phone", this.phone);
         formData.append("img", this.avatar.imageFile);
+>>>>>>> f6c5c62cca99f1ccb010cd95175d98522890c41f
 
         this.$store.dispatch("auth/register", formData).then(state => {
           if (state == "success") {
