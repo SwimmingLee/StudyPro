@@ -13,15 +13,15 @@
       height="640"
     ></canvas>
 
-      <swatches
-        v-model="color"
-        shapes="circles"
-        colors="text-basic"
-        row-length="6"
-        popover-to="right"
-        :exceptions="exceptions"
-        exception-mode="hidden"
-      />
+    <swatches
+      v-model="color"
+      shapes="circles"
+      colors="text-basic"
+      row-length="6"
+      popover-to="right"
+      :exceptions="exceptions"
+      exception-mode="hidden"
+    />
 
     <v-container class="pa-0">
       <v-menu absolute :close-on-content-click="false" :nudge-width="200" offset-y>
@@ -41,11 +41,10 @@
           </v-container>
         </v-card>
       </v-menu>
-      
     </v-container>
     <v-btn absolute class="mt-1" fab dark small color="primary" @click="clear">
-        <v-icon dark>mdi-delete</v-icon>
-      </v-btn>
+      <v-icon dark>mdi-delete</v-icon>
+    </v-btn>
   </v-card>
 </template>
 
@@ -53,9 +52,6 @@
 import Swatches from "vue-swatches";
 import "vue-swatches/dist/vue-swatches.min.css";
 
-window.onsize = function() {
-  alert("!");
-};
 
 export default {
   components: {
@@ -167,8 +163,8 @@ export default {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     });
     window.onsize = function() {
-      // console.log("??");
+      // console.log(document.getElementById("canvas"));
     };
-  },
+  }
 };
 </script>

@@ -17,6 +17,10 @@
               NotePad
               <v-icon>event_note</v-icon>
             </v-tab>
+            <v-tab href="#Help">
+              Help
+              <v-icon>help_outline</v-icon>
+            </v-tab>
             <v-tab-item id="Board">
               <v-card outlined>
                 <Board :socket="socket" />
@@ -29,15 +33,20 @@
             </v-tab-item>
             <v-tab-item id="ViewShare">
               <v-card outlined>
-                <ViewShare :socket="socket" :user_id="user_id" :sharing_user_id="sharing_user_id" />
+                <ViewShare :socket="socket" :user_id="user_id" :connected_users="connected_users" />
+              </v-card>
+            </v-tab-item>
+            <v-tab-item id="Help">
+              <v-card outlined>
+                
               </v-card>
             </v-tab-item>
           </v-tabs>
         </v-col>
         <v-col align="center" justify="center">
           <v-card outlined tile>
-            <v-row no-gutters class="pa-0">
-              <FaceTalk :socket="socket" :user_id="user_id" />
+            <v-row no-gutters hidden class="pa-0">
+              <FaceTalk :socket="socket" :user_id="user_id" @connected="connected" />
             </v-row>
             <v-row no-gutters>
               <v-col cols="12">
@@ -67,7 +76,7 @@ export default {
       tabs: null,
       socket: "",
       user_id: null,
-      sharing_user_id: null,
+      connected_users: [],
     };
   },
 
@@ -76,28 +85,30 @@ export default {
     ViewShare: ViewShare,
     NotePad: NotePad,
     FaceTalk: FaceTalk,
-    Chatting: Chatting,
+    Chatting: Chatting
   },
   created() {
-    this.user_id = Math.ceil(Math.random() * 100000)
-    this.sharing_user_id = this.user_id
+    this.user_id = `${Math.ceil(Math.random() * 100000)}`
     
-    this.socket = io.connect("http://70.12.246.89:8210?study_id=1&user_id="+this.user_id, {
-      // this.socket = io.connect("http://70.12.247.73:3000", {
+    // this.socket = io.connect("http://70.12.246.89:8000?study_id=1&user_id="+this.user_id, {
+    this.socket = io.connect("http://70.12.247.73:8210?study_id=1&user_id="+this.user_id, {
+      // this.socket = io.connect("http://70.12.247.73:8210", {
       transports: ["websocket"],
       secure: true,
       study_id : 1
     });
-
-
-    this.socket.emit("join", {study_id : 1, user_id: `${this.user_id}`});
-
+    this.socket.emit("join", { study_id: 1, user_id: `${this.user_id}` });
+  
   },
   mounted() {
-    console.log('workspace mounted')
     window.onbeforeunload = () => {
-      this.socket.emit('leave', {study_id : 1, user_id: `${this.user_id}`});
+      this.socket.emit("leave", { study_id: 1, user_id: `${this.user_id}` });
     };
+  },
+  methods: {
+    connected(connected_users) {
+      this.connected_users = connected_users.filter(user => user && user != -1)
+    }
   }
 };
 </script>
