@@ -16,24 +16,32 @@ class PostService {
     // }
     getPostNumber(payload) {
         return axios.get(process.env.VUE_APP_API_URL + "posts/number",
-        {
-            params: {
-                board: payload.board,
-                type: payload.type,
-                study_id: payload.study_id
-            }
-        })
+            {
+                params: {
+                    board: payload.board,
+                    type: payload.type,
+                    study_id: payload.study_id
+                }
+            })
     }
-
 
     getAllPost(payload) {
         return axios.get(process.env.VUE_APP_API_URL + "posts/list",
-        {
-            params:{
-                board: payload.board,
+            {
+                params: {
+                    board: payload.board,
+                    type: payload.type,
+                    study_id: payload.study_id,
+                    offset: payload.offset,
+                }
+            })
+    }
+
+    getPostContents(payload) {
+        return axios.get(process.env.VUE_APP_API_URL + "posts", {
+            params: {
                 type: payload.type,
-                study_id: payload.study_id,
-                offset: payload.offset,
+                post_id: payload.post_id,
             }
         })
     }

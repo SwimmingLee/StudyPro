@@ -1,15 +1,25 @@
 <template>
   <v-content>
-    <v-card>{{this.post_contents.id}}</v-card>
+      <v-card class="mx-3 my-2">
+    <v-row>
+      <v-col cols="12" class="px-7 py-3">
+
+              <p>제목 : {{ this.defaultPost }} {{ this.post_id }}</p>
+
+        
+      </v-col>
+    </v-row>
+    </v-card>
   </v-content>
 </template>
 
 <script>
-import axios from "axios";
+import PostService from "@/services/post.service";
 
 export default {
   data() {
     return {
+      defaultPost: "게시글을 선택하세요",
       post_id: "",
       post_contents: []
     };
@@ -17,15 +27,24 @@ export default {
 
   created() {
     this.post_id = this.$route.params.post_id;
-    this.getPostContents();
+    this.getPost();
+    console.log("created");
+  },
+
+  watch: {
+    $route() {
+      this.post_id = this.$route.params.post_id;
+      this.getPost();
+      console.log("route");
+    }
   },
 
   methods: {
-    getPostContents(post_id) {
-      const tmp = axios.get(process.env.VUE_APP_API_URL + "posts", {
+    async getPost() {
+      const tmp = await PostService.getPostContents({
         params: {
           type: "study",
-          post_id: post_id
+          post_id: this.post_id
         }
       });
       this.post_contents = tmp;

@@ -6,9 +6,9 @@
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
           </v-toolbar>
-          <v-row>
-            <v-col cols="3" md="3" sm="4">
-              <v-card outlined>
+          <v-row no-gutters>
+            <v-col style="max-width: 200px;">
+              <v-card flat>
                 <v-list flat>
                   <v-list-item-group>
                     <v-list-item
@@ -27,8 +27,8 @@
                 </v-list>
               </v-card>
             </v-col>
-            <v-col cols="9" md="9" sm="8">
-              <v-card>
+            <v-col>
+              <v-card class="ma-2">
                 <boardList :board="boardList" />
               </v-card>
             </v-col>

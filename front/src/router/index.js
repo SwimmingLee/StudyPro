@@ -78,7 +78,7 @@ const routes = [
         props: true,
         children: [
             {
-                path: 'id=:post_id',
+                path: '?id=:post_id',
                 name: 'post_id',
                 component: postContent,
             }
