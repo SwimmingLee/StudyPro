@@ -39,7 +39,7 @@
           <v-col align-self="center" cols="2">
             <span style="font-size:15px" class="ma-0">
               {{ item.year }}-{{ item.month }}-{{ item.day }} {{ item.hour }}:{{
-                item.minute
+              item.minute
               }}
             </span>
           </v-col>
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import AlarmService from "@/services/alarm.service"
 export default {
   data: () => ({
     groupModal: false,
@@ -66,7 +67,8 @@ export default {
       {
         msgID: "",
         isRead: false,
-        avatar: "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BBXklQl.img?h=208&w=270&m=6&q=60&o=f&l=f&x=293&y=183",
+        avatar:
+          "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BBXklQl.img?h=208&w=270&m=6&q=60&o=f&l=f&x=293&y=183",
         title: "질문있습니다.",
         sender: "아이유",
         receiver: "윤찬희",
@@ -83,7 +85,8 @@ export default {
       {
         msgID: "",
         isRead: true,
-        avatar: "http://img.etoday.co.kr/pto_db/2017/01/20170123024249_1009466_600_900.jpg",
+        avatar:
+          "http://img.etoday.co.kr/pto_db/2017/01/20170123024249_1009466_600_900.jpg",
         title: "찬물나옴",
         sender: "신민아",
         receiver: "윤찬희",
@@ -99,7 +102,8 @@ export default {
       {
         msgID: "",
         isRead: false,
-        avatar: "http://file3.instiz.net/data/file3/2018/03/22/b/f/3/bf3955e2f653ea718547f0d2dc1f13aa.gif",
+        avatar:
+          "http://file3.instiz.net/data/file3/2018/03/22/b/f/3/bf3955e2f653ea718547f0d2dc1f13aa.gif",
         title: "지금 몇시인가요",
         sender: "김다현",
         receiver: "윤찬희",
@@ -126,7 +130,7 @@ export default {
         minute: "12",
         second: "19"
       }
-    ],
+    ]
   }),
 
   computed: {
@@ -150,6 +154,11 @@ export default {
       this.groupModal = false;
       this.groupModal = true;
     }
+  },
+  async created() {
+    const rsvMsg = await AlarmService.getReceivedAlarm();
+    //console.log(rsvMsg.data)
+    this.rxBox = rsvMsg.data;
   }
 };
 </script>

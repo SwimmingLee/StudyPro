@@ -1,7 +1,5 @@
 ﻿import axios from 'axios'
 
-const URL = process.env.VUE_APP_API_URL + 'users/'
-
 function authHeader() {
     let local = JSON.parse(localStorage.getItem('user'))
     let session = JSON.parse(sessionStorage.getItem('user'))

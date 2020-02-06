@@ -5,7 +5,7 @@ class AuthService {
     // 초기 유저 정보업데이트
     checkUserDefault(user) {
         this.changeHeadersToken(user.accessToken)
-        return axios.post(process.env.VUE_APP_API_URL + 'token')
+        return axios.post(process.env.VUE_APP_API_URL + 'users/token')
             .then(this.handleResponse)
             .then(res => {
                 this.changeHeadersToken(res.data.user.accessToken)
