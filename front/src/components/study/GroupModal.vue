@@ -9,7 +9,8 @@
           <v-container class="pb-0">
             <v-row class="justify-center">
               <v-avatar size="140" color="white">
-                <v-icon size="140">mdi-account-circle</v-icon>
+                <!-- <v-icon size="140">mdi-account-circle</v-icon> -->
+                  <v-img :src="item.imgsrc"></v-img>
               </v-avatar>
             </v-row>
             <v-row class="py-4">
@@ -100,13 +101,14 @@
 
             <v-row class="pt-6">
               <v-col cols="12" class="py-0">
-                <v-content text class="pt-0 pb-3 font-weight-bold">가입양식</v-content>
-                <v-text-field
+                <!-- <v-content text class="pt-0 pb-3 font-weight-bold">가입양식</v-content> -->
+                <v-textarea
                   label="가입인사"
                   outlined
                   height="150px"
                   v-model="regText"
-                ></v-text-field>
+                  single-line
+                ></v-textarea>
               </v-col>
             </v-row>
           </v-container>
