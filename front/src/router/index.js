@@ -58,13 +58,24 @@ const routes = [
         }
     },
     {
-        path: '/board',
+        path: '/board/:boardid',
         name: 'board',
         components: {
             header: appHeader,
             default: board,
-            footer: appFooter
+            footer: appFooter,
         },
+        props: true,
+        // children: [
+        //     {
+        //         path: ':postID',
+        //         component: board
+        //     },
+
+        //     {
+                
+        //     }
+        // ]
         // props: (route) => ({
         //     board: route.board,
         //     post_id: route.post_id,
