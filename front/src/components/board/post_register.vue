@@ -71,9 +71,9 @@
             <v-row>
               <v-col class="text-end">
                 <v-btn class="mx-1 error">
-                  <v-icon left dark @click="history.back()">keyboard_backspace</v-icon>이전으로
+                  <v-icon left dark @click="history.go(-1)">keyboard_backspace</v-icon>이전으로
                 </v-btn>
-                <v-btn class="mx-1 primary" @click="create">
+                <v-btn class="mx-1 primary" @click="router.go(-1)">
                   <v-icon left dark>create</v-icon>글 작성
                 </v-btn>
               </v-col>

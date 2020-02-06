@@ -58,6 +58,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATEONLY,
       allowNull: true
     },
+    end_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
     isopen: {
       type: DataTypes.INTEGER,
       allowNull: true

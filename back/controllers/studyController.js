@@ -28,12 +28,14 @@ export const create_study = async function(req, res) {
         res.send(result)
         if (data.days) {
             // day모델에 추가하는 과정
-            const input_days = data.days.replace('[', '').replace(']', '').replace(/ /g,'').split(',')
+            //const input_days = data.days.replace('[', '').replace(']', '').replace(/ /g,'').split(',')
+            const input_days = data.days;
             days.create_days(created_study_id, input_days)
         }
         if (data.tags) {
             // tag모델에 추가하는 과정
-            const input_tags = data.tags.replace('[', '').replace(']', '').replace(/#/g, '').replace(/ /g,'').split(',')
+            //const input_tags = data.tags.replace('[', '').replace(']', '').replace(/#/g, '').replace(/ /g,'').split(',')
+            const input_tags = data.tags
             for (const tag of input_tags) {
                 const temp_tag = await tags.findOne({where :{name:tag}})
                 if (temp_tag) {
@@ -80,6 +82,11 @@ export const update_study = async function(req, res) {
 
     const result = await studies.update_study(study_id, req.body, user_id)
     res.send(result)
+}
+
+export const read_studies = async function(req, res) {
+    const result = await studies.findAll();
+    res.send(result);
 }
 
 export const read_study = async function(req, res) {
