@@ -289,10 +289,8 @@ export default {
   },
   computed:{
     display() {
-      console.log('display Enter')
       this.loadDeaultList()
       console.log(this.displayItems)
-      console.log('display Enter return')
       return this.displayItems
     },
 
@@ -313,7 +311,7 @@ export default {
           }
         }
       }
-    }
+    },
   },
   methods: {
     async loadDeaultList() {
@@ -341,9 +339,6 @@ export default {
       this.groupModal = false;
     }
   },
-  mounted() {
-    this.groupModal = false;
-  }
 };
 </script>
 

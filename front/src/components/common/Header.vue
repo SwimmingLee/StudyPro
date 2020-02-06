@@ -235,7 +235,7 @@ export default {
   },
   computed: {
     currentUser(){
-      return this.$store.state.auth.user
+      return this.$store.getters['auth/getUser']
     },
     isAuth(){
       return this.$store.getters['auth/isAuth']

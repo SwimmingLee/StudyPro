@@ -7,22 +7,28 @@
             <v-app id="inspire">
               <v-form ref="form" v-model="valid">
                 <v-card max-width="1000" class="mx-auto">
+                      <v-toolbar flat color="customTheme" dark>
+                  <v-row>
+                    <v-col class="py-0" offset="1">
+                        <v-toolbar-title>회원가입</v-toolbar-title>
+                    </v-col>
+                  </v-row>
+                      </v-toolbar>
                   <br />
 
-                  <v-row justify="center">
-                    <v-col cols="12" sm="10">
-                      <v-card-text style="font-size:30px">회원가입</v-card-text>
+                  <v-row justify="center" align="center">
+                    <v-col cols="10">
+                      <v-text-field
+                        v-model="id"
+                        :rules="idRules"
+                        label="아이디"
+                        required
+                      ></v-text-field>
                     </v-col>
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
-                      <v-text-field v-model="id" :rules="idRules" label="아이디" required></v-text-field>
-                    </v-col>
-                  </v-row>
-
-                  <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-text-field
                         label="비밀번호"
                         v-model="password"
@@ -34,15 +40,13 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-text-field
                         label="비밀번호 확인"
                         v-model="confirmPassword"
                         :rules="
-                            confirmPasswordRules.concat(
-                              passwordConfirmationRule
-                            )
-                          "
+                          confirmPasswordRules.concat(passwordConfirmationRule)
+                        "
                         type="password"
                         required
                       ></v-text-field>
@@ -50,13 +54,18 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
-                      <v-text-field v-model="name" :rules="nameRules" label="이름" required></v-text-field>
+                    <v-col cols="10">
+                      <v-text-field
+                        v-model="name"
+                        :rules="nameRules"
+                        label="이름"
+                        required
+                      ></v-text-field>
                     </v-col>
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-select
                         v-model="genderinput"
                         :items="gender"
@@ -68,7 +77,7 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-text-field
                         v-model="nickname"
                         :counter="10"
@@ -80,7 +89,7 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-text-field
                         v-model="phone"
                         :rules="phoneRules"
@@ -91,7 +100,7 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-text-field
                         v-model="introducing"
                         :counter="50"
@@ -105,7 +114,12 @@
                   <v-row justify="center">
                     <image-input v-model="avatar" class="wrap-content">
                       <div slot="activator" class="wrap-content pointer">
-                        <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
+                        <v-avatar
+                          size="150px"
+                          v-ripple
+                          v-if="!avatar"
+                          class="grey lighten-3 mb-3"
+                        >
                           <span>Click to add avatar</span>
                         </v-avatar>
                         <v-avatar size="150px" v-ripple v-else class="mb-3">
@@ -122,71 +136,104 @@
                       <v-card-text class="pt-0" style="font-size:18px">
                         <p>
                           <br />
-                        </p>관심있는 분야를 선택해 주세요.
+                        </p>
+                        관심있는 분야를 선택해 주세요.
                       </v-card-text>
 
                       <v-row justify="center" align="center">
-                        <v-col cols="12" sm="3">
-                          <v-checkbox v-model="db" class="mx-2" label="데이터베이스"></v-checkbox>
+                        <v-col cols="6" sm="3">
+                          <v-checkbox
+                            v-model="db"
+                            class="mx-2"
+                            label="데이터베이스"
+                          ></v-checkbox>
                         </v-col>
-                        <v-col cols="12" sm="3">
-                          <v-checkbox v-model="bc" class="mx-2" label="블록체인"></v-checkbox>
+                        <v-col cols="6" sm="3">
+                          <v-checkbox
+                            v-model="bc"
+                            class="mx-2"
+                            label="블록체인"
+                          ></v-checkbox>
                         </v-col>
-                        <v-col cols="12" sm="3">
-                          <v-checkbox v-model="al" class="mx-2" label="알고리즘"></v-checkbox>
+                        <v-col cols="6" sm="3">
+                          <v-checkbox
+                            v-model="al"
+                            class="mx-2"
+                            label="알고리즘"
+                          ></v-checkbox>
                         </v-col>
-                        <v-col cols="12" sm="3">
-                          <v-checkbox v-model="os" class="mx-2" label="운영체제"></v-checkbox>
+                        <v-col cols="6" sm="3">
+                          <v-checkbox
+                            v-model="os"
+                            class="mx-2"
+                            label="운영체제"
+                          ></v-checkbox>
                         </v-col>
                       </v-row>
 
                       <v-row justify="center" align="center">
-                        <v-col cols="12" sm="3">
-                          <v-checkbox v-model="ai" class="mx-2" label="인공지능"></v-checkbox>
+                        <v-col cols="6" sm="3">
+                          <v-checkbox
+                            v-model="ai"
+                            class="mx-2"
+                            label="인공지능"
+                          ></v-checkbox>
                         </v-col>
-                        <v-col cols="12" sm="3">
-                          <v-checkbox v-model="ad" class="mx-2" label="자율주행"></v-checkbox>
+                        <v-col cols="6" sm="3">
+                          <v-checkbox
+                            v-model="ad"
+                            class="mx-2"
+                            label="자율주행"
+                          ></v-checkbox>
                         </v-col>
-                        <v-col cols="12" sm="3">
-                          <v-checkbox v-model="cs" class="mx-2" label="컴퓨터보안"></v-checkbox>
+                        <v-col cols="6" sm="3">
+                          <v-checkbox
+                            v-model="cs"
+                            class="mx-2"
+                            label="컴퓨터보안"
+                          ></v-checkbox>
                         </v-col>
-                        <v-col cols="12" sm="3">
-                          <v-checkbox v-model="cn" class="mx-2" label="컴퓨터통신"></v-checkbox>
+                        <v-col cols="6" sm="3">
+                          <v-checkbox
+                            v-model="cn"
+                            class="mx-2"
+                            label="컴퓨터통신"
+                          ></v-checkbox>
                         </v-col>
                       </v-row>
                     </v-card>
                   </v-col>
                 </v-row>
 
-                  <v-card
-                    class="mx-auto"
-                    max-width="1000"
-                    color="rgb(0, 0, 0, 0)"
-                    elevation="0"
-                  >
-                    <v-layout row right justify-end>
-                      <span
-                        class="red--text lighten-1 mr-10 pt-2"
-                        v-show="notcreated"
-                        >아이디가 이미 존재합니다.</span
-                      >
-                      <v-btn
-                        class="mr-4"
-                        :disabled="!valid || isLoading"
-                        color="green lighten-4"
-                        @click="onSignup()"
-                      >
-                          가입하기
-                      </v-btn>
-                    </v-layout>
-                  </v-card>
-                </v-form>
-              </v-app>
-            </div>
-          </v-container>
-        </v-content>
-      </v-form>
-    </div>
+                <v-card
+                  class="mx-auto"
+                  max-width="1000"
+                  color="rgb(0, 0, 0, 0)"
+                  elevation="0"
+                >
+                  <v-layout row right justify-end>
+                    <span
+                      class="red--text lighten-1 mr-10 pt-2"
+                      v-show="notcreated"
+                      >아이디가 이미 존재합니다.</span
+                    >
+                    <v-btn
+                      class="mr-4"
+                      :disabled="!valid || isLoading"
+                      color="green lighten-4"
+                      @click="onSignup()"
+                    >
+                      가입하기
+                    </v-btn>
+                  </v-layout>
+                </v-card>
+              </v-form>
+            </v-app>
+          </div>
+        </v-container>
+      </v-content>
+    </v-form>
+  </div>
 </template>
 
 <script>

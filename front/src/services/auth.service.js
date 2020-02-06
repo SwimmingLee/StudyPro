@@ -10,9 +10,13 @@ class AuthService {
         return axios.post(URL + 'token')
             .then(this.handleResponse)
             .then(res => {
+                console.log(res.data)
                 this.changeHeadersToken(res.data.user.accessToken)
-                this.setToken(res.data.user)
-                return res.data
+                if (res.data.user) {
+                    this.setToken(res.data.user)
+                } else {
+                    return res.data
+                }
             })
     }
 
@@ -31,14 +35,7 @@ class AuthService {
             .then(this.handleResponse)
             .then(
                 response => {
-                    console.log('sdfasdf', response.data)
-                    if (response.data.state == 'success') {
-
-
-                        return response.data.user;
-                    } else {
-                        return {}
-                    }
+                    return response.data.user;
                 })
     }
 

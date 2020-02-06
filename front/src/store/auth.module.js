@@ -29,6 +29,7 @@ export const auth = {
             return await AuthService.login(user).then(
                 res => {
                     if (res) {
+                        console.log('module ', res)
                         commit('loginSuccess', res.user)
                         return true
                     } else {
