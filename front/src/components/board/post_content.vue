@@ -39,10 +39,8 @@ export default {
   methods: {
     async getPost() {
       const tmp = await PostService.getPostContents({
-        params: {
-          type: "study",
-          post_id: this.post_id
-        }
+        type: "study",
+        post_id: this.post_id
       });
       this.post_contents = tmp;
       console.log(this.post_contents);
