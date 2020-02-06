@@ -11,7 +11,7 @@
               <v-card outlined>
                 <v-list flat>
                   <v-list-item-group>
-                    <v-list-item v-for="(menu, index) in menus" :key="index" @click="go(menu.route)">
+                    <v-list-item v-for="(menu, index) in menus" :key="index" @click="go($route.params.boardID, menu.route)">
                       <v-list-item-icon>
                         <v-icon>{{ menu.icon }}</v-icon>
                       </v-list-item-icon>
@@ -25,8 +25,10 @@
             </v-col>
             <v-col cols="9" md="9" sm="8">
               <v-card outlined>
-                <board-list :board="boardCurrent"/>
-                <post-content :post-id="postID"/>
+                <board-list 
+                  :board="$route.params.boardID" 
+                  v-if="!$route.params.postID"/>
+                <post-content v-else/>
               </v-card>
             </v-col>
           </v-row>
@@ -50,22 +52,18 @@ export default {
         { icon: "notifications_none", text: "공지사항", route: "notice" }
       ],
       boardCurrent: '',
-      postID: '',
+      isBoard: true
     };
   },
   components: {
     boardList,
     postContent,
   },
-  mounted(){
-    console.log($router)
-    this.boardCurrent = this.$router.params.boardid
-    console.log(this.boardCurrent)
-  },
   methods:{
-    go(route){
-      this.$router.push({path: 'board/'+ route})
-    },
+    go(boardID, route){
+      if(boardID == route)  return
+      this.$router.push({name:'board', params: {boardID : route}})
+    }
   },
 };
 </script>

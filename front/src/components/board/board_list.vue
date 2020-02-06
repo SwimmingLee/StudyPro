@@ -22,7 +22,7 @@
           </v-row>
           <v-divider class="ma-2" />
 
-          <v-card flat to="board/register" v-for="(post, index) in postList" :key="index">
+          <v-card flat :to="board + '/' + post.id" v-for="(post, index) in post_list" :key="index">
             <!-- <v-card  v-for="(post, index) in postList" :key="index"> -->
             <v-row>
               <v-col cols="1" class="mx-3 pa-2 px-3">{{ post.id }}</v-col>
@@ -56,8 +56,6 @@ export default {
   props: ["board"],
   data() {
     return {
-      board_name: "study",
-
       page: 1,
       lastpage: 1,
       post_number: 0,
@@ -72,25 +70,15 @@ export default {
     page() {
       this.postUpdate();
     },
-    board_name() {
-      this.postUpdate();
-    },
     board(){
       this.postUpdate();
-      console.log('list ',this.board)
-    }
-  },
-  computed: {
-    postList: function() {
-      return this.post_list;
     }
   },
   methods: {
     async postUpdate() {
-      console.log('post')
       const post_num = await PostService.getPostNumber({
         type: "study",
-        board: this.board_name,
+        board: this.board,
         study_id: 8
       });
       this.lastpage =
@@ -104,8 +92,7 @@ export default {
         offset: (this.page - 1) * 10
       });
       this.post_list = post_list.data;
-      console.log(post_list);
-    }
+    },
   }
 };
 </script>
