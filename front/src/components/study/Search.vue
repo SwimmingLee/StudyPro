@@ -173,10 +173,11 @@
         infinite-scroll-distance="10"
       >
         <v-list-group
-          v-for="item in displayItems"
+          v-for="item in display"
           :key="item.id"
           v-model="item.active"
           :prepend-icon="item.action"
+          :disabled="disLoading"
           no-action
         >
           <template v-slot:activator>
@@ -252,7 +253,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 import Timeselector from "vue-timeselector";
 //import api from "@/services";
 
@@ -280,11 +280,25 @@ export default {
     },
     items: [],
     recommendItems: [],
-    displayItems: []
+    displayItems: [],
+    disLoading: false,
   }),
   components: {
     GroupModal: () => import("@/components/study/GroupModal"),
     Timeselector
+  },
+  computed:{
+    display() {
+      console.log('display Enter')
+      this.loadDeaultList()
+      console.log(this.displayItems)
+      console.log('display Enter return')
+      return this.displayItems
+    },
+
+    autocomplete() {
+      return 1
+    }
   },
   watch: {
     searchInput() {
@@ -302,9 +316,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["getGroups"]),
-    async loadList() {
-
+    async loadDeaultList() {
+      if(this.items.length == 0){
+        this.items = await this.$store.dispatch('study/getAllStudy')
+        this.displayItems = this.items.slice(0)
+      }
     },
     loadMore: function() {
       this.busy = true;
@@ -325,9 +341,7 @@ export default {
       this.groupModal = false;
     }
   },
-  async mounted() {
-    this.items = 1//await api.getGroups();
-    this.displayItems = this.items.slice(0);
+  mounted() {
     this.groupModal = false;
   }
 };
