@@ -1,6 +1,6 @@
 <template>
   <div id="groupmodal">
-    <v-dialog v-model="open" max-width="40%">
+    <v-dialog v-model="open" persistent max-width="40%">
       <v-card id="lgiModal" class="px-0 pt-0">
         <v-card-title class="customTheme darken-2 white--text pb-3">
           <span class="headline">[받는 사람] {{ item.receiver }}</span>
@@ -63,14 +63,33 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+
+    
+
+    <template>
+      <check-modal
+        :check-modal="checkModal"
+        :item="item"
+        :titleText="titleText"
+        :mainText="mainText"
+        v-on:sendNo="sendNo"
+        v-on:sendYes="sendYes"
+
+      />
+    </template>
+
+
+
   </div>
 </template>
 
 <script>
 export default {
-  show: false,
   name: "groupmodal",
+
   data: () => ({
+    checkModal:false,
     open: false,
     mainText: "",
     titleText: ""
@@ -82,22 +101,41 @@ export default {
     },
     open() {
       if (this.open == false) {
-        this.showResponse = false;
         this.$emit("close");
       }
-    }
+    },
+  },
+   components: {
+    CheckModal: () => import("@/components/user/messenger/CheckModal")
   },
   methods: {
+     sendNo(){
+      this.checkModal = false;
+    },
+    sendYes(){
+      this.mainText = "";
+      this.titleText = "";
+      this.checkModal = false;
+      this.open = false;
+    },
+
     clickExit() {
       this.mainText = "";
       this.titleText = "";
       this.open = false;
     },
-    async clickSend() {
+
+    clickSend() {
+      
+      //체크모달 열기
+      this.checkModal=true;
+
+
+
       //보내는 통신
-      this.open = false;
-      this.mainText = "";
-      this.titleText = "";
+      //  this.open = false;
+      // this.mainText = "";
+      // this.titleText = "";
     }
   }
 };

@@ -28,7 +28,7 @@
         :group-modal="groupModal"
         :item="item"
         v-on:close="modalClose"
-        v-on:clickRes="modalReload"
+       
       />
     </template>
   </v-list>

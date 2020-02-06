@@ -1,9 +1,9 @@
 <template>
   <div id="groupmodal">
-    <v-dialog v-model="open" max-width="40%">
+    <v-dialog v-model="open" persistent max-width="40%">
       <v-card id="lgiModal" class="px-0 pt-0">
         <v-card-title class="customTheme darken-2 white--text pb-3">
-          <span class="headline">[제목]  {{ item.title }}</span>
+          <span class="headline">[제목] {{ item.title }}</span>
         </v-card-title>
         <v-card-text class="py-0 px-7">
           <v-container class="pb-0">
@@ -104,6 +104,19 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <template>
+      <check-modal
+        :check-modal="checkModal"
+        :item="item"
+        :titleText="`[회신] ` + item.title"
+        :mainText="regText"
+        v-on:sendNo="sendNo"
+        v-on:sendYes="sendYes"
+      >
+        reText=""
+      </check-modal>
+    </template>
   </div>
 </template>
 
@@ -111,7 +124,9 @@
 export default {
   show: false,
   name: "groupmodal",
+
   data: () => ({
+    checkModal: false,
     open: false,
     regText: "",
     showResponse: false
@@ -128,7 +143,18 @@ export default {
       }
     }
   },
+  components: {
+    CheckModal: () => import("@/components/user/messenger/CheckModal")
+  },
   methods: {
+    sendNo() {
+      this.checkModal = false;
+    },
+    sendYes() {
+      this.regText = "";
+      // this.checkModal = false;
+      this.open = false;
+    },
     clickResponse() {
       this.showResponse = true;
       this.$emit("clickRes");
@@ -137,10 +163,11 @@ export default {
       this.regText = "";
       this.open = false;
     },
-    async clickSend() {
+    clickSend() {
+      this.checkModal = true;
+      //  this.regText = "";
       //보내는 통신
-      this.open = false;
-      this.regText = "";
+      // this.open = false;
     }
   }
 };
