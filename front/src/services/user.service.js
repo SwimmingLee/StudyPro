@@ -13,7 +13,7 @@ class UserService {
             })
     }
 
-    
+
     getAllUser() {
         return axios.get(URL)
     }

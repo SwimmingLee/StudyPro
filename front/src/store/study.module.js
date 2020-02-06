@@ -24,10 +24,8 @@ export const study = {
 
         // 스터디모임 전체 목록요청
         getAllStudy() {
-            console.log('module enter')
             return StudyService.getAllStudy()
                 .then(res => {
-                    console.log('module ', res)
                     return res
                 })
         }

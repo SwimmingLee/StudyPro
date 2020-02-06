@@ -11,7 +11,7 @@ import home from '@/views/Home'
 
 // 게시판
 import board from '@/components/board/board'
-import postRegister from '@/components/board/post_register'
+// import postRegister from '@/components/board/post_register'
 
 // 유저페이지
 import user from '@/views/User'
@@ -29,8 +29,7 @@ import msgbox from '@/components/user/messenger/MessageHome'
 
 Vue.use(VueRouter)
 
-const routes = [
-    {
+const routes = [{
         path: '/',
         name: 'intro',
         components: {
@@ -58,26 +57,19 @@ const routes = [
         }
     },
     {
-        path: '/board',
+        path: '/board/:boardID',
         name: 'board',
         components: {
             header: appHeader,
             default: board,
-            footer: appFooter
+            footer: appFooter,
         },
-        // props: (route) => ({
-        //     board: route.board,
-        //     post_id: route.post_id,
-        // }),
-    },
-    {
-        path: '/board/register',
-        name: 'post_register',
-        components: {
-            header: appHeader,
-            default: postRegister,
-            footer: appFooter
-        },
+        props: true,
+        children: [{
+            path: ':postID',
+
+            component: board
+        }, ]
     },
     {
         path: '/user',
@@ -88,17 +80,17 @@ const routes = [
             footer: appFooter
         },
         children: [{
-            path: 'signup',
-            component: signup
-        },
-        {
-            path: 'signup/success',
-            component: signupSuccess
-        },
-        {
-            path: 'mypage',
-            component: mypage
-        }
+                path: 'signup',
+                component: signup
+            },
+            {
+                path: 'signup/success',
+                component: signupSuccess
+            },
+            {
+                path: 'mypage',
+                component: mypage
+            }
         ]
     },
     {

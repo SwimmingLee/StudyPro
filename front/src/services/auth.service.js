@@ -10,15 +10,13 @@ class AuthService {
         return axios.post(URL + 'token')
             .then(this.handleResponse)
             .then(res => {
-                this.changeHeadersToken(res.data.user.accessToken)
-                this.setToken(res.data.user)
-                return res.data
+                AuthHeader.changeHeadersToken()
+                if (res.data.user) {
+                    this.setToken(res.data.user)
+                } else {
+                    return res.data.user
+                }
             })
-    }
-
-    // 헤더에 포함되는 토큰 업데이트
-    changeHeadersToken(token) {
-        axios.defaults.headers.common['Authorization'] = token;
     }
 
     // 로그인
@@ -33,14 +31,18 @@ class AuthService {
                 response => {
                     if (response.data.state == 'success') {
                         this.setToken(response.data.user)
+<<<<<<< HEAD
                         return response.data;
+=======
+                        return response.data.user;
+>>>>>>> a096de8b2117e4c3d9148c2d049a542938edf4ac
                     } else {
                         return {}
                     }
                 })
     }
 
-    
+
 
     // 로그아웃
     logout() {
@@ -49,7 +51,7 @@ class AuthService {
     }
 
     register(formData) {
-        return axios.post(process.env.VUE_APP_API_URL + 'users/signup', formData).then(
+        return axios.post(URL + 'signup', formData).then(
             res => {
                 if (res.data.state == 'success') {
                     return Promise.resolve(res.data)
