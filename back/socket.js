@@ -1,7 +1,7 @@
 import app from "./app"
 import fs from "fs"
 const option = {
-    key: fs.readFileSync('../T02A106.pem').toString(),
+    key: fs.readFileSync('../T02A106.pem'),
     // cert: fs.readFileSync('../T02A106.pem')
 }
 export const server = require('https').createServer(option ,app)
