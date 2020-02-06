@@ -6,7 +6,7 @@ const URL = process.env.VUE_APP_API_URL + 'users/'
 class AuthService {
     // 초기 유저 정보업데이트
     checkUserDefault() {
-        this.changeHeadersToken(AuthHeader.getToken())
+        AuthHeader.changeHeadersToken(AuthHeader.getToken())
         return axios.post(URL + 'token')
             .then(this.handleResponse)
             .then(res => {
@@ -29,6 +29,7 @@ class AuthService {
             .then(this.handleResponse)
             .then(
                 response => {
+                    console.log(response)
                     if (response.data.state == 'success') {
                         this.setToken(response.data.user)
                         return response.data.user;

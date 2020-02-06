@@ -89,7 +89,9 @@ export default {
     }
   },
   async created() {
+    console.log("sebdMsg-created")
     const sendMsg = await AlarmService.getSendAlarm()
+    console.log(sendMsg)
     this.txBox = sendMsg.data
   }
 };

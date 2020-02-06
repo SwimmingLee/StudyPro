@@ -104,6 +104,7 @@ export default {
         await this.$store.dispatch('auth/login', this.user).then(
           (res) => {
             if(res){
+              console.log("signinmodel", res)
               this.close();
             }else{
               this.message = '아이디 또는 비밀번호를 잘못입력했습니다.'
