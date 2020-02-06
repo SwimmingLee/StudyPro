@@ -15,8 +15,8 @@ export const auth = {
 
             AuthService.checkUserDefault().then(
                 res => {
-                    if (res.state == 'success') {
-                        commit('loginSuccess', res.user)
+                    if (res) {
+                        commit('loginSuccess', res)
                     } else {
                         commit('loginFailure')
                     }
@@ -29,7 +29,6 @@ export const auth = {
             return await AuthService.login(user).then(
                 res => {
                     if (res) {
-                        console.log('module ', res)
                         commit('loginSuccess', res.user)
                         return true
                     } else {

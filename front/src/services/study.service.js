@@ -5,7 +5,7 @@ const URL = process.env.VUE_APP_LOCAL_URL + 'studies/'
 
 class StudyService {
     getAllStudy() {
-        this.changeHeadersToken(AuthHeader.getToken())
+        AuthHeader.changeHeadersToken()
         return axios.get(URL)
             .then(res => {
                     return Promise.resolve(res.data)
@@ -39,18 +39,13 @@ class StudyService {
         //     days,
         //     accessToken	
         // } = payload;
-        this.changeHeadersToken(AuthHeader.getToken())
+        AuthHeader.changeHeadersToken()
         return axios.post(URL + "create",
                 payload
             )
             .then(res => {
                 return Promise.resolve(res.data)
             })
-    }
-
-    // 헤더에 포함되는 토큰 업데이트
-    changeHeadersToken(token) {
-        axios.defaults.headers.common['Authorization'] = token;
     }
 }
 

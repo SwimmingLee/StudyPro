@@ -3,14 +3,14 @@
     <v-dialog v-model="open" max-width="40%">
       <v-card id="lgiModal" class="px-0 pt-0">
         <v-card-title class="customTheme darken-2 white--text pb-3">
-          <span class="headline">[받는 사람] {{ item.receiver }}</span>
+          <span class="headline">[받는 사람] {{ item.nickname }}</span>
         </v-card-title>
 
         <v-card-text class="py-0 px-7">
           <v-container class="pb-0">
             <v-row class="justify-center">
               <v-avatar size="140" color="white" class="ma-5">
-                <v-img :src="item.avatar"></v-img>
+                <v-img :src="item.profile_url"></v-img>
                 <!-- <v-icon size="140">mdi-account-circle</v-icon> -->
               </v-avatar>
             </v-row>
@@ -58,7 +58,7 @@
             color="primary--text transparent"
             elevation="0"
             @click="clickSend"
-            >보내기</v-btn
+            >보내기!!</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -67,6 +67,9 @@
 </template>
 
 <script>
+import AlarmService from "@/services/alarm.service"
+
+
 export default {
   show: false,
   name: "groupmodal",
@@ -95,9 +98,17 @@ export default {
     },
     async clickSend() {
       //보내는 통신
-      this.open = false;
+      const msg = {
+        to: this.item.id,
+        title: this.titleText,
+        content: this.mainText
+      }
+      const res = await AlarmService.sendAlarm(msg)
+      console.log(res)
+
       this.mainText = "";
       this.titleText = "";
+      this.open = false;
     }
   }
 };

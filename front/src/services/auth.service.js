@@ -10,34 +10,35 @@ class AuthService {
         return axios.post(URL + 'token')
             .then(this.handleResponse)
             .then(res => {
-                console.log(res.data)
-                this.changeHeadersToken(res.data.user.accessToken)
+                AuthHeader.changeHeadersToken()
                 if (res.data.user) {
                     this.setToken(res.data.user)
                 } else {
-                    return res.data
+                    return res.data.user
                 }
             })
-    }
-
-    // 헤더에 포함되는 토큰 업데이트
-    changeHeadersToken(token) {
-        axios.defaults.headers.common['Authorization'] = token;
     }
 
     // 로그인
     login(user) {
         return axios
-            .post(URL + 'signin', {
+            .post(URL + 'signin', { //(process.env.VUE_APP_API_URL + 'users/signin', {
                 email: user.email,
                 password: user.password
             })
             .then(this.handleResponse)
             .then(
                 response => {
-                    return response.data.user;
+                    if (response.data.state == 'success') {
+                        this.setToken(response.data.user)
+                        return response.data.user;
+                    } else {
+                        return {}
+                    }
                 })
     }
+
+
 
     // 로그아웃
     logout() {
@@ -46,7 +47,7 @@ class AuthService {
     }
 
     register(formData) {
-        return axios.post(URL + 'signup', formData).then(
+        return axios.post(process.env.VUE_APP_API_URL + 'users/signup', formData).then(
             res => {
                 if (res.data.state == 'success') {
                     return Promise.resolve(res.data)
@@ -57,6 +58,7 @@ class AuthService {
         )
     }
 
+    // 응답에 에러가 있으면 로그아웃 시킨다.
     handleResponse(response) {
         if (response.status === 401) {
             this.logout()

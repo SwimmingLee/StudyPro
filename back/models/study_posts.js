@@ -157,18 +157,21 @@ module.exports = function(sequelize, DataTypes) {
     return result;
   }
 
-  study_posts.list_study_post = async function(study_id,board){
+  study_posts.list_study_post = async function(study_id,board, offset){
     let result;
     
     result = await this.findAll(
-      {
-        where : 
-        {
+      { offset: offset,
+        limit: 10,
+        where : {
           study_id : study_id,
           board : board
         }
-      }
-    )
+    }).map(post => {
+      delete post.dataValues.content
+      return post
+    })
+    //console.log(result)
     return result;
   }
 
