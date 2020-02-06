@@ -1,7 +1,7 @@
 import axios from 'axios'
 import AuthHeader from './auth.header'
 
-const URL = process.env.VUE_APP_LOCAL_URL + 'studies/'
+const URL = process.env.VUE_APP_API_URL + 'studies/'
 
 class StudyService {
     getAllStudy() {

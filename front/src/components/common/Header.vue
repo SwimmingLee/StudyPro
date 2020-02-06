@@ -37,6 +37,7 @@
           <v-icon left>open_in_new</v-icon>
           <span>WorkSpace</span>
         </v-btn> -->
+
       <v-btn
         class="mt-1 d-none d-sm-flex"
         @click="signinModal = true"
@@ -197,6 +198,7 @@
 </template>
 
 <script>
+
 export default {
   name: "appHeader",
   data() {

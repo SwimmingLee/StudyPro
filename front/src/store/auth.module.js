@@ -26,21 +26,26 @@ export const auth = {
 
         // 로그인
         async login({ commit }, user) {
-            return await AuthService.login(user).then(
+            let complete = await AuthService.login(user).then(
                 res => {
                     if (res) {
-                        commit('loginSuccess', res.user)
-                        return true
+                        return res
                     } else {
-                        commit('loginFailure')
-                        return false
+                        return res
                     }
                 },
                 () => { // error
-                    commit('loginFailure')
                     return false
                 }
             )
+
+            if (complete) {
+                commit('loginSuccess', complete)
+                return true
+            } else {
+                commit('loginFailure')
+                return false
+            }
         },
 
         // 로그아웃
