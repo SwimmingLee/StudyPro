@@ -17,11 +17,11 @@ export const connect = () => {
         //join 
         if (room) {
             //방이 존재 할때
-            if (room.member_cnt >= 6 || room.members.indexOf(user_id) != -1) {
-                socket.emit('alreadyexist')
-                console.log('겹침')
-                return;
-            }
+            // if (room.member_cnt >= 6 || room.members.indexOf(user_id) != -1) {
+            //     socket.emit('alreadyexist')
+            //     console.log('겹침')
+            //     return;
+            // }
             room.members.push(user_id);
 
             room.sockets.push(socket);
@@ -30,9 +30,7 @@ export const connect = () => {
             user_num = room.member_cnt;
             user = 'user ' + user_num;
             
-            let load_socket = room.sockets[0];
-            load_socket.emit('load_image', socket.id);
-            
+
         } else {
             
             //존재하지 않을때
@@ -57,7 +55,7 @@ export const connect = () => {
             member_cnt: room.member_cnt
 
         });
-        
+
         socket.on('disconnect', function (data) {
             // socket_id = socket.id;
             console.log(rooms)
@@ -67,7 +65,7 @@ export const connect = () => {
             // let study_id = 1;
             let user_id = data.user_id;
             let socket_id = socket.id;
-            
+
             let room = rooms[study_id];
             if (room.member_cnt == 1) {
                 delete rooms[study_id];
@@ -77,34 +75,37 @@ export const connect = () => {
 
                 let user_num = room.member_cnt;
                 room.member_cnt -= 1;
-                
-                
+
+
                 io.sockets.to(study_id).emit('leave', {
                     user_id: user_id,
                     user_num: user_num
                 });
             }
             //이후 방과 아이디로 방을 찾아 관리
-            
+
         })
-        
+
         //보드
         socket.on('draw', function (data) {
             io.sockets.to(study_id).emit('line', data);
         });
-        
+
         socket.on('clear', function (data) {
             io.sockets.to(study_id).emit('clear', data);
         });
 
-        socket.on('send_image',(data)=>{
-            
-            let socket_id = data.socket_id;
-            let image_data = data.image_data;
+        socket.on('load_image', data => {
+            let study_id = data.study_id;
+            if(rooms[study_id].member_cnt <=1)  return;
 
-            io.to(socket_id).emit('send_image',{
-                image_data : image_data
-            })
+            let load_socket = room.sockets[0];
+            load_socket.emit('load_image', socket.id);
+        })
+
+        socket.on('send_image', (data) => {
+            let socket_id = data.socket_id;
+            io.to(socket_id).emit('send_image', data)
         })
 
         //채팅
@@ -115,22 +116,40 @@ export const connect = () => {
         socket.on('message', data => {
             let t_socket;
             const idx = rooms[study_id].members.indexOf(data.to)
-            
+
             t_socket = rooms[study_id].sockets[idx]
             // console.log(rooms[study_id].sockets)
             if (!t_socket) return
             t_socket.emit('message', data)
         })
-        
-        //노트패드
-        socket.on('typing', data => {
 
+        //노트패드
+
+        
+        socket.on('typing', data => {
+            let study_id = data.study_id;
             socket.broadcast.to(study_id).emit('typing', data);
         })
         
+        socket.on('load_pad', data => {
+            let study_id = data.study_id;
+            if(rooms[study_id].member_cnt <=1)  return;
+
+            let load_socket = room.sockets[0];
+            load_socket.emit('load_pad', socket.id);
+        })
+        
+        socket.on('send_pad', (data) => {
+            console.log("서버 받았어..", data);
+            let socket_id = data.socket_id;
+            io.to(socket_id).emit('send_pad', data)
+        })
+
+
+
         //화면공유
         socket.on('viewsharestart', data => {
-            
+
             io.sockets.to(study_id).emit('viewsharestart', data.user_id)
         })
         socket.on('viewsharejoin', data => {
@@ -139,11 +158,11 @@ export const connect = () => {
         socket.on('viewshare', data => {
             let t_socket;
             const idx = rooms[study_id].members.indexOf(data.to)
-            
+
             t_socket = rooms[study_id].sockets[idx]
             if (!t_socket) return
             t_socket.emit('viewshare', data)
-            
+
         })
     });
 }
