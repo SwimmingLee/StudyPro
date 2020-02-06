@@ -96,7 +96,7 @@ export default {
       this.$emit("close");
     },
     logged(){
-      location.reload()
+      console.log(this.$store.getters['auth/getUser'])
     },
     async signin() {
       this.isLoading = true;
