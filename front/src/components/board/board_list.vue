@@ -67,7 +67,6 @@ export default {
 
   created() {
     this.postUpdate();
-    this.board_name = this.board;
   },
   watch: {
     page() {
@@ -75,6 +74,10 @@ export default {
     },
     board_name() {
       this.postUpdate();
+    },
+    board(){
+      this.postUpdate();
+      console.log('list ',this.board)
     }
   },
   computed: {
@@ -84,6 +87,7 @@ export default {
   },
   methods: {
     async postUpdate() {
+      console.log('post')
       const post_num = await PostService.getPostNumber({
         type: "study",
         board: this.board_name,
@@ -95,7 +99,7 @@ export default {
 
       const post_list = await PostService.getAllPost({
         type: "study",
-        board: this.board_name,
+        board: this.board,
         study_id: 8,
         offset: (this.page - 1) * 10
       });
