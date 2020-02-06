@@ -1,14 +1,11 @@
 <template>
   <v-content>
-      <v-card class="mx-3 my-2">
-    <v-row>
-      <v-col cols="12" class="px-7 py-3">
-
-              <p>제목 : {{ this.defaultPost }} {{ this.post_id }}</p>
-
-        
-      </v-col>
-    </v-row>
+    <v-card class="mx-3 my-2">
+      <v-row>
+        <v-col cols="12" class="px-7 py-3">
+          <p>제목 : {{ this.defaultPost }} {{ this.post_id }}</p>
+        </v-col>
+      </v-row>
     </v-card>
   </v-content>
 </template>
