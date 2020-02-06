@@ -24,14 +24,13 @@ class AuthService {
     // 로그인
     login(user) {
         return axios
-            .post(URL + 'signin', {
+            .post(process.env.VUE_APP_API_URL + 'users/signin', {
                 email: user.email,
                 password: user.password
             })
             .then(this.handleResponse)
             .then(
                 response => {
-                    console.log('sdfasdf', response.data)
                     if (response.data.state == 'success') {
 
 
@@ -42,6 +41,8 @@ class AuthService {
                 })
     }
 
+    
+
     // 로그아웃
     logout() {
         localStorage.removeItem('user')
@@ -49,7 +50,7 @@ class AuthService {
     }
 
     register(formData) {
-        return axios.post(URL + 'signup', formData).then(
+        return axios.post(process.env.VUE_APP_API_URL + 'users/signup', formData).then(
             res => {
                 if (res.data.state == 'success') {
                     return Promise.resolve(res.data)
@@ -60,6 +61,7 @@ class AuthService {
         )
     }
 
+    // 응답에 에러가 있으면 로그아웃 시킨다.
     handleResponse(response) {
         if (response.status === 401) {
             this.logout()
