@@ -12,7 +12,8 @@ export const auth = {
         // 초기 유저정보 업데이트
         checkUserDefault({ commit }) {
             if (!initialState.user) return
-            AuthService.checkUserDefault(initialState.user).then(
+
+            AuthService.checkUserDefault().then(
                 res => {
                     if (res.state == 'success') {
                         commit('loginSuccess', res.user)
