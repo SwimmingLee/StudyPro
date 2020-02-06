@@ -96,8 +96,7 @@ export default {
       this.$emit("close");
     },
     logged(){
-      console.log(this.$router.currentRoute)
-      location.reload()
+      console.log(this.$store.getters['auth/getUser'])
     },
     async signin() {
       this.isLoading = true;
@@ -105,7 +104,7 @@ export default {
         await this.$store.dispatch('auth/login', this.user).then(
           (res) => {
             if(res){
-              this.logged();
+              this.close();
             }else{
               this.message = '아이디 또는 비밀번호를 잘못입력했습니다.'
             }

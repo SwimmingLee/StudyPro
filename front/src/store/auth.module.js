@@ -15,8 +15,8 @@ export const auth = {
 
             AuthService.checkUserDefault().then(
                 res => {
-                    if (res.state == 'success') {
-                        commit('loginSuccess', res.user)
+                    if (res) {
+                        commit('loginSuccess', res)
                     } else {
                         commit('loginFailure')
                     }

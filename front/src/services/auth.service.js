@@ -1,7 +1,7 @@
 import axios from 'axios'
 import AuthHeader from './auth.header'
 
-const URL = process.env.VUE_APP_LOCAL_URL + 'users/'
+const URL = process.env.VUE_APP_API_URL + 'users/'
 
 class AuthService {
     // 초기 유저 정보업데이트
@@ -10,21 +10,19 @@ class AuthService {
         return axios.post(URL + 'token')
             .then(this.handleResponse)
             .then(res => {
-                this.changeHeadersToken(res.data.user.accessToken)
-                this.setToken(res.data.user)
-                return res.data
+                AuthHeader.changeHeadersToken()
+                if (res.data.user) {
+                    this.setToken(res.data.user)
+                } else {
+                    return res.data.user
+                }
             })
-    }
-
-    // 헤더에 포함되는 토큰 업데이트
-    changeHeadersToken(token) {
-        axios.defaults.headers.common['Authorization'] = token;
     }
 
     // 로그인
     login(user) {
         return axios
-            .post(process.env.VUE_APP_API_URL + 'users/signin', {
+            .post(URL + 'signin', {
                 email: user.email,
                 password: user.password
             })
@@ -32,8 +30,7 @@ class AuthService {
             .then(
                 response => {
                     if (response.data.state == 'success') {
-
-
+                        this.setToken(response.data.user)
                         return response.data.user;
                     } else {
                         return {}
@@ -41,7 +38,7 @@ class AuthService {
                 })
     }
 
-    
+
 
     // 로그아웃
     logout() {
@@ -50,7 +47,7 @@ class AuthService {
     }
 
     register(formData) {
-        return axios.post(process.env.VUE_APP_API_URL + 'users/signup', formData).then(
+        return axios.post(URL + 'signup', formData).then(
             res => {
                 if (res.data.state == 'success') {
                     return Promise.resolve(res.data)
