@@ -1,38 +1,38 @@
 <template>
   <v-content id="board">
     <v-row justify="center">
-      <v-col cols="12" md="10">
+      <v-col cols="10">
         <v-card>
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
           </v-toolbar>
-          <v-tabs vertical>
-            <v-tab href="#studyBoard">
-              <v-icon left>menu_book</v-icon>Study
-            </v-tab>
-            <v-tab href="#freeBoard">
-              <v-icon left>style</v-icon>Free
-            </v-tab>
-            <v-tab href="#noticeBoard">
-              <v-icon left>notifications_none</v-icon>Notice
-            </v-tab>
-
-            <v-tab-item id="studyBoard">
+          <v-row>
+            <v-col cols="3" md="3" sm="4">
               <v-card outlined>
-                <boardList :board="`study`" />
+                <v-list flat>
+                  <v-list-item-group>
+                    <v-list-item
+                      v-for="(menu, index) in menus"
+                      :key="index"
+                      @click="routeTo(menu.route)"
+                    >
+                      <v-list-item-icon>
+                        <v-icon>{{ menu.icon }}</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title>{{ menu.text }}</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
               </v-card>
-            </v-tab-item>
-            <v-tab-item id="freeBoard">
-              <v-card outlined>
-                <boardList :board="`free`" />
+            </v-col>
+            <v-col cols="9" md="9" sm="8">
+              <v-card>
+                <boardList :board="boardList" />
               </v-card>
-            </v-tab-item>
-            <v-tab-item id="noticeBoard">
-              <v-card outlined>
-                <boardList :board="`notice`" />
-              </v-card>
-            </v-tab-item>
-          </v-tabs>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
     </v-row>
@@ -40,16 +40,52 @@
 </template>
 
 <script>
-import board_list from "@/components/board/board_list";
+import boardList from "@/components/board/board_list";
+// import postContent from "@/components/board/post_content";
 
 export default {
   name: "board",
   data() {
-    return {};
+    return {
+      defaultRoute: "/board/",
+      board_list: "study",
+      menus: [
+        { icon: "menu_book", text: "스터디 게시판", route: "study" },
+        { icon: "style", text: "자유 게시판", route: "free" },
+        { icon: "notifications_none", text: "공지사항", route: "notice" }
+      ]
+    };
+  },
+
+  created() {
+    if (this.$route.params.board) {
+      this.board_list = this.$route.params.board;
+    }
+  },
+
+  computed: {
+    boardList: function() {
+      return this.board_list;
+    }
+  },
+
+  watch: {
+    $route() {
+      if (this.$route.params.board !== null) {
+        this.board_list = this.$route.params.board;
+      }
+    }
+  },
+
+  methods: {
+    routeTo(route) {
+      this.$router.push({ name: "board", params: { board: route } });
+    }
   },
 
   components: {
-    boardList: board_list,
+    boardList
+    // postContent
   }
 };
 </script>

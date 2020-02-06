@@ -6,6 +6,11 @@
         <v-icon class="mr-3" dark>create</v-icon>글 작성
       </v-btn>
     </v-flex>
+    <v-row>
+      <v-col>
+        <router-view class="pa-0"/>
+      </v-col>
+    </v-row>
     <v-divider class="ma-3" />
     <v-row justify="center">
       <v-col>
@@ -22,7 +27,7 @@
           </v-row>
           <v-divider class="ma-2" />
 
-          <v-card flat to="board/register" v-for="(post, index) in postList" :key="index">
+          <v-card flat v-for="(post, index) in postList" :key="index" @click="routeTo(post.id)">
             <!-- <v-card  v-for="(post, index) in postList" :key="index"> -->
             <v-row>
               <v-col cols="1" class="mx-3 pa-2 px-3">{{ post.id }}</v-col>
@@ -73,6 +78,9 @@ export default {
     page() {
       this.postUpdate();
     },
+    board() {
+      this.board_name = this.board;
+    },
     board_name() {
       this.postUpdate();
     }
@@ -100,7 +108,12 @@ export default {
         offset: (this.page - 1) * 10
       });
       this.post_list = post_list.data;
-      console.log(post_list);
+    },
+    routeTo(post_id) {
+      this.$router.push({
+        name : "post_id",
+        params: { post_id: post_id }
+      });
     }
   }
 };

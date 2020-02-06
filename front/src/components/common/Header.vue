@@ -209,13 +209,13 @@ export default {
       menus: [
         { icon: "home", title: "홈", route: "/home" },
         { icon: "group", title: "모임", route: "/study" },
-        { icon: "alarm", title: "게시판", route: "/board" },
+        { icon: "alarm", title: "게시판", route: "/board/study" },
         { icon: "accessibility_new", title: "내 정보", route: this.$store.state.auth.user? "/user/mypage": "/user/signup" }
       ],
       navigations: [
         { title: "홈", route: "/home" },
         { title: "모임", route: "/study" },
-        { title: "게시판", route: "/board" },
+        { title: "게시판", route: "/board/study" },
         { title: "내 정보", route: "/user" }
       ],
       userpages: [
