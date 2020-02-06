@@ -217,7 +217,7 @@ export default {
       navigations: [
         { title: "홈", route: "/home" },
         { title: "모임", route: "/study" },
-        { title: "게시판", route: "/board" },
+        { title: "게시판", route: "/board/study" },
         { title: "내 정보", route: "/user" }
       ],
       userpages: [

@@ -11,7 +11,8 @@ import home from '@/views/Home'
 
 // 게시판
 import board from '@/components/board/board'
-// import postRegister from '@/components/board/post_register'
+import postContent from '@/components/board/post_content'
+import postRegister from '@/components/board/post_register'
 
 // 유저페이지
 import user from '@/views/User'
@@ -57,19 +58,34 @@ const routes = [{
         }
     },
     {
-        path: '/board/:boardID',
+        path: '/board/register',
+        name: 'post_register',
+        components: {
+            header: appHeader,
+            default: postRegister,
+            footer: appFooter
+        },
+    },
+    {
+        path: '/board/:board',
         name: 'board',
         components: {
             header: appHeader,
             default: board,
-            footer: appFooter,
+            footer: appFooter
         },
         props: true,
-        children: [{
-            path: ':postID',
-
-            component: board
-        }, ]
+        children: [
+            {
+                path: '?id=:post_id',
+                name: 'post_id',
+                component: postContent,
+            }
+        ]
+        // props: (route) => ({
+        //     board: route.board,
+        //     post_id: route.post_id,
+        // }),
     },
     {
         path: '/user',
