@@ -31,11 +31,7 @@ class AuthService {
                 response => {
                     if (response.data.state == 'success') {
                         this.setToken(response.data.user)
-<<<<<<< HEAD
-                        return response.data;
-=======
                         return response.data.user;
->>>>>>> a096de8b2117e4c3d9148c2d049a542938edf4ac
                     } else {
                         return {}
                     }
