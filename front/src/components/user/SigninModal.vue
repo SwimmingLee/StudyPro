@@ -97,7 +97,7 @@ export default {
     },
     logged(){
       console.log(this.$router.currentRoute)
-      location.reload()
+      //location.reload()
     },
     async signin() {
       this.isLoading = true;

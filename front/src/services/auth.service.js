@@ -1,7 +1,7 @@
 import axios from 'axios'
 import AuthHeader from './auth.header'
 
-const URL = process.env.VUE_APP_LOCAL_URL + 'users/'
+const URL = process.env.VUE_APP_API_URL + 'users/'
 
 class AuthService {
     // 초기 유저 정보업데이트
@@ -24,7 +24,7 @@ class AuthService {
     // 로그인
     login(user) {
         return axios
-            .post(process.env.VUE_APP_API_URL + 'users/signin', {
+            .post(URL + 'signin', {
                 email: user.email,
                 password: user.password
             })
@@ -32,9 +32,8 @@ class AuthService {
             .then(
                 response => {
                     if (response.data.state == 'success') {
-
-
-                        return response.data.user;
+                        this.setToken(response.data.user)
+                        return response.data;
                     } else {
                         return {}
                     }
