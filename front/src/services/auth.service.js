@@ -1,7 +1,7 @@
 import axios from 'axios'
 import AuthHeader from './auth.header'
 
-const URL = process.env.VUE_APP_LOCAL_URL + 'users/'
+const URL = process.env.VUE_APP_API_URL + 'users/'
 
 class AuthService {
     // 초기 유저 정보업데이트
@@ -22,7 +22,7 @@ class AuthService {
     // 로그인
     login(user) {
         return axios
-            .post(URL + 'signin', { //(process.env.VUE_APP_API_URL + 'users/signin', {
+            .post(URL + 'signin', {
                 email: user.email,
                 password: user.password
             })
@@ -47,7 +47,7 @@ class AuthService {
     }
 
     register(formData) {
-        return axios.post(process.env.VUE_APP_API_URL + 'users/signup', formData).then(
+        return axios.post(URL + 'signup', formData).then(
             res => {
                 if (res.data.state == 'success') {
                     return Promise.resolve(res.data)
