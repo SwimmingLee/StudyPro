@@ -1,9 +1,9 @@
 <template>
   <v-card class="pa-0">
-    <v-row no-gutters class="pa-0">
+    <v-row no-gutters class="pa-0" border="0px">
       <v-col cols="12" md="6" class="d-none d-md-block" >
-        <v-card outlined tile flex min-height="150">
-          <video playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%" @contextmenu="showProfileMenu($event, 0)"></video>
+        <v-card position="relative" outlined tile flex min-height="150" id="remote_block_0">
+          <video position="absolute" playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%" @contextmenu="showProfileMenu($event, 0)"></video>
         </v-card>
       </v-col>
       <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block" @contextmenu="showProfileMenu($event, i)">
@@ -18,42 +18,12 @@
         </v-card>
       </v-col>
     </v-row>
-
-    <v-menu v-model="showProfile" :position-x="x" :position-y="y" offset-y absolute>
-      <v-card width="300">
-        <v-list class="pa-0">
-          <v-list-item>
-            <v-list-item-avatar>
-              <img src="@/assets/images/pengsoo.jpg" alt="PengSoo" />
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>PengSoo</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
-                <v-icon>favorite</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-        <v-divider />
-        <v-list>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-subtitle>I'm PengSoo. 친구추가 하지마세요 진짜로 ㅋㅋㅋㅋㅋ</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-card-actions>
-          <v-btn class="ml-auto" color="error" text @click="showProfile = false">닫기</v-btn>
-          <v-btn class="ml-0" color="primary" text @click="showProfile = false">친구 추가</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-menu>
+    <profile :profile="profile"></profile>
   </v-card>
 </template>
 
 <script>
+import profile from './Profile'
 const stun_server = "stun.l.google.com:19302";
 const pcConfig = {
   iceServers: [
@@ -64,7 +34,7 @@ const pcConfig = {
 };
 
 export default {
-  props: ["socket", "user_id", "study_id",],
+  props: ["socket", "user_id", "study_id", "sharing_id"],
   data() {
     return {
       // FaceTalk
@@ -77,13 +47,26 @@ export default {
 
       remote_videos: [null],
       remote_streams: [null, null, null, null, null, null],
-
-      fav: false,
-      showProfile: false,
-      x: 0,
-      y: 0,
-      items: [{ title: "Hello" }]
+      profile : {
+        fav: false,
+        showProfile: false,
+        x: 0,
+        y: 0,
+        items: [{ title: "Hello" }]
+      }
     };
+  },
+  watch: {
+    sharing_id: function(change_id, before_id) {
+      
+      const video_num = this.connected_users.indexOf(change_id)
+      for (let i in this.connected_users) {
+        i == video_num ? this.makeBorder(i) : this.deleteBorder(i, before_id)
+      }
+    }
+  },
+  components: {
+    profile: profile
   },
   methods: {
     // FaceTalk
@@ -101,11 +84,11 @@ export default {
     showProfileMenu(e,i) {
       console.log(i)
       e.preventDefault();
-      this.showProfile = false;
-      this.x = e.clientX;
-      this.y = e.clientY;
+      this.profile.showProfile = false;
+      this.profile.x = e.clientX;
+      this.profile.y = e.clientY;
       this.$nextTick(() => {
-        this.showProfile = true;
+        this.profile.showProfile = true;
       });
     },
 
@@ -147,21 +130,50 @@ export default {
       t_pc.onaddstream = event => {
         let remote_video = document.createElement("video");
         this.remote_streams[video_num] = event.stream;
-
         remote_video.playsinline = true
         remote_video.srcObject = this.remote_streams[video_num]
         remote_video.autoplay = true
         remote_video.style.width = "100%"
         remote_video.style.height = "100%"
+        remote_video.style.zIndex = "1"
+        remote_video.style.left = "0"
         
         const remote_block = this.remote_videos[video_num]
-        this.remote_videos[video_num].childNodes[0] ? remote_block.removeChild(this.remote_videos[video_num].childNodes[0]) : 0
+        for (let i of this.remote_videos[video_num].childNodes) this.remote_videos[video_num].removeChild(i)
         remote_block.appendChild(remote_video)
       }
 
 
       t_pc.addStream(this.local_stream);
       return t_pc;
+    },
+
+    makeBorder(video_num) {    
+      this.remote_videos[video_num].style.border = '3px'
+      this.remote_videos[video_num].style.borderStyle = 'solid'
+      this.remote_videos[video_num].style.borderColor = '#f4ff00'
+      this.remote_videos[video_num].appendChild(this.createEye())
+      this.remote_videos[video_num].childNodes[1].style.left = "25%"
+      this.remote_videos[video_num].childNodes[1].style.top = "25%"
+
+
+    },
+
+    deleteBorder(video_num, before_id) {
+      if (this.connected_users[video_num] !== before_id) return
+      this.remote_videos[video_num].style.border = '0px'
+      this.remote_videos[video_num].removeChild(this.remote_videos[video_num].childNodes[1])
+    },
+
+    createEye() {
+      const eye = document.createElement('img')
+      eye.src = require('../../assets/images/eye.png')
+      eye.style.width = "50%"
+      eye.style.position = "absolute"
+      eye.style.zIndex = "3"
+
+
+      return eye
     }
   },
 
@@ -169,13 +181,14 @@ export default {
     console.log("내아이디 : ", this.user_id);
   },
   mounted() {
-    const pengsoo = document.getElementById("pengsoo")
+
 
     for (let i = 1; i <= 5; i++) {
       this.remote_videos.push(document.getElementById(`remote_block_${i}`));
     }
     this.local_video = document.getElementById("local_video");
-
+    this.remote_videos[0] = document.getElementById('remote_block_0')
+    console.log(this.remote_videos[1])
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
@@ -213,9 +226,9 @@ export default {
     this.socket.on('leave', message => {
       const video_num = this.connected_users.indexOf(message.user_id)
       this.connected_users[video_num] = null
-      this.remote_videos[video_num].childNodes[0] ? this.remote_videos[video_num].removeChild(this.remote_videos[video_num].childNodes[0]) : 0
+      for (let i of this.remote_videos[video_num].childNodes) this.remote_videos[video_num].removeChild(i)
       const post_img = document.createElement('img')
-      post_img.src = pengsoo.src
+      post_img.src = require('../../assets/images/pengsoo.jpg')
       post_img.style.width = "100%"
       post_img.style.height = "100%"
       this.remote_videos[video_num].appendChild(post_img)
