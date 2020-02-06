@@ -275,7 +275,7 @@ export default {
         days: this.dayofweek,
       };
 
-      const res = await this.$store.dispatch('study/createStudy', [studyInfo, this.$store.getters['auth/getToken']]);
+      const res = await this.$store.dispatch('study/createStudy', studyInfo);
       if(res.state == 'success'){
         this.created = res.detail.id
       }else{

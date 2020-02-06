@@ -37,6 +37,7 @@
           <v-icon left>open_in_new</v-icon>
           <span>WorkSpace</span>
         </v-btn> -->
+
       <v-btn
         class="mt-1 d-none d-sm-flex"
         @click="signinModal = true"
@@ -197,6 +198,7 @@
 </template>
 
 <script>
+
 export default {
   name: "appHeader",
   data() {
@@ -235,7 +237,7 @@ export default {
   },
   computed: {
     currentUser(){
-      return this.$store.state.auth.user
+      return this.$store.getters['auth/getUser']
     },
     isAuth(){
       return this.$store.getters['auth/isAuth']

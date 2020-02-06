@@ -1,22 +1,22 @@
 import axios from 'axios'
+import AuthHeader from './auth.header'
 
 const URL = process.env.VUE_APP_API_URL + 'users/'
 
 class AuthService {
     // 초기 유저 정보업데이트
-    checkUserDefault(user) {
-        this.changeHeadersToken(user.accessToken)
+    checkUserDefault() {
+        AuthHeader.changeHeadersToken()
         return axios.post(URL + 'token')
             .then(this.handleResponse)
             .then(res => {
-                this.changeHeadersToken(res.data.user.accessToken)
-                return res.data
+                AuthHeader.changeHeadersToken()
+                if (res.data.user) {
+                    this.setToken(res.data.user)
+                } else {
+                    return res.data.user
+                }
             })
-    }
-
-    // 헤더에 포함되는 토큰 업데이트
-    changeHeadersToken(token) {
-        axios.defaults.headers.common['Authorization'] = token;
     }
 
     // 로그인
@@ -29,20 +29,17 @@ class AuthService {
             .then(this.handleResponse)
             .then(
                 response => {
-                    console.log('sdfasdf', response.data)
+                    console.log(response)
                     if (response.data.state == 'success') {
-                        if (user.loginRemain) {
-                            localStorage.setItem('user', JSON.stringify(response.data.user))
-                        } else {
-                            sessionStorage.setItem('user', JSON.stringify(response.data.user))
-                        }
-
+                        this.setToken(response.data.user)
                         return response.data.user;
                     } else {
                         return {}
                     }
                 })
     }
+
+
 
     // 로그아웃
     logout() {
@@ -62,6 +59,7 @@ class AuthService {
         )
     }
 
+    // 응답에 에러가 있으면 로그아웃 시킨다.
     handleResponse(response) {
         if (response.status === 401) {
             this.logout()
@@ -72,6 +70,14 @@ class AuthService {
         }
 
         return Promise.resolve(response)
+    }
+
+    setToken(user) {
+        if (user.loginRemain) {
+            localStorage.setItem('user', JSON.stringify(user))
+        } else {
+            sessionStorage.setItem('user', JSON.stringify(user))
+        }
     }
 }
 

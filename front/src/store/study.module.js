@@ -6,6 +6,7 @@ export const study = {
     actions: {
         // 대분류 요청
         getMajorClass() {
+            console.log('module')
             return ClassService.getAllMajorClass()
         },
 
@@ -18,7 +19,15 @@ export const study = {
         // 스터디 생성
         createStudy({ dummy }, payload) {
             console.log('createStudy ', dummy)
-            return StudyService.createStudy(payload[0], payload[1])
+            return StudyService.createStudy(payload)
+        },
+
+        // 스터디모임 전체 목록요청
+        getAllStudy() {
+            return StudyService.getAllStudy()
+                .then(res => {
+                    return res
+                })
         }
     }
 }

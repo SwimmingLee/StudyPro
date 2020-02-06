@@ -1,23 +1,11 @@
 ﻿import axios from 'axios'
+import AuthHeader from './auth.header'
 
 const URL = process.env.VUE_APP_API_URL + 'users/'
 
-function authHeader() {
-    let local = JSON.parse(localStorage.getItem('user'))
-    let session = JSON.parse(sessionStorage.getItem('user'))
-    let user = local || session
-    if (user && user.accessToken) {
-        console.log('userservice')
-        console.log(user)
-        return { accessToken: user.accessToken }
-    } else {
-        return {}
-    }
-}
-
 class UserService {
     getUserContent() {
-        let headers = authHeader()
+        let headers = AuthHeader.getToken()
         if (!headers) return { status: {}, user: null }
         return axios.post(URL + 'token', { headers: headers })
             .then(res => {
@@ -26,6 +14,9 @@ class UserService {
     }
 
 
+    getAllUser() {
+        return axios.get(URL)
+    }
 }
 
 export default new UserService()

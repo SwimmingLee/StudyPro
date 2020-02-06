@@ -30,8 +30,7 @@ import msgbox from '@/components/user/messenger/MessageHome'
 
 Vue.use(VueRouter)
 
-const routes = [
-    {
+const routes = [{
         path: '/',
         name: 'intro',
         components: {
@@ -97,17 +96,17 @@ const routes = [
             footer: appFooter
         },
         children: [{
-            path: 'signup',
-            component: signup
-        },
-        {
-            path: 'signup/success',
-            component: signupSuccess
-        },
-        {
-            path: 'mypage',
-            component: mypage
-        }
+                path: 'signup',
+                component: signup
+            },
+            {
+                path: 'signup/success',
+                component: signupSuccess
+            },
+            {
+                path: 'mypage',
+                component: mypage
+            }
         ]
     },
     {

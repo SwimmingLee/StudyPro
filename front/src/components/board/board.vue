@@ -82,7 +82,6 @@ export default {
       this.$router.push({ name: "board", params: { board: route } });
     }
   },
-
   components: {
     boardList
     // postContent
