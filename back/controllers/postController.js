@@ -1,6 +1,32 @@
 import {common_posts as common_post_model, common_post_likes as common_post_like_model} from "../models"
 import {study_posts as study_post_model, study_post_likes as study_post_like_model} from "../models"
 
+export const number_post = async function(req, res) {
+    try {
+        const {board, type, study_id} = req.query;
+        let nPost;
+
+        if(type === "common"){
+            nPost = await common_post_model.count({where:
+                {
+                    study_id : study_id,
+                    board : board
+                }
+            })
+        } else if (type === "study") {
+            nPost = await study_post_model.count({where:
+                {
+                    study_id : study_id,
+                    board : board
+                }
+            })
+        }
+        res.json({post_number: nPost})
+    } catch (err) {
+        console.log(err)
+        res.send('err')
+    }
+}
 
 export const create_post = async function(req, res) {
     try {
@@ -102,15 +128,13 @@ export const delete_post = async function(req, res) {
 
 export const list_post = async function(req, res) {
     try{
-        const {board} = req.query;
-        const {type, study_id} = req.body;
-        console.log(board, type);
-        
+        const {board, type, study_id, offset} = req.query;
+        console.log(board, type, study_id, offset);
         let result;
         if(type === "common"){
-            result = await common_post_model.list_common_post(board)
+            result = await common_post_model.list_common_post(board, offset)
         }else if(type === "study"){
-            result = await study_post_model.list_study_post(study_id,board)
+            result = await study_post_model.list_study_post(study_id,board, offset)
         }
         res.send(result);
     }catch(error){

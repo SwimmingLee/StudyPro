@@ -108,6 +108,7 @@
 </template>
 
 <script>
+import AlarmService from "@/services/alarm.service"
 export default {
   show: false,
   name: "groupmodal",
@@ -139,6 +140,14 @@ export default {
     },
     async clickSend() {
       //보내는 통신
+      const msg = {
+        to : this.item.id,
+        title: "[답장]" + this.item.title,
+        content: this.regText
+      }
+      
+      AlarmService.sendAlarm(msg);
+
       this.open = false;
       this.regText = "";
     }

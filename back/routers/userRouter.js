@@ -1,5 +1,6 @@
 import express from "express"
 import routes from "../routes"
+import path from "path"
 import { 
     read_users, 
     read_user, 
@@ -8,11 +9,13 @@ import {
     signup, 
     signin,
     social_signin,
-    check_token
-} from "../controllers/userController";
+    check_token,
+    profile_upload
+} from "../controllers/userController"
 
 const userRouter = express.Router();
-userRouter.post(routes.signup, signup);
+
+userRouter.post(routes.signup, profile_upload.single('img'), signup);
 userRouter.post(routes.signin, signin);
 userRouter.post(routes.social_signin, social_signin);
 userRouter.post(routes.check_token, check_token);
