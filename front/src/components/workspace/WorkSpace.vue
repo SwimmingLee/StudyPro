@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid class="pa-2">
+  <!-- <v-container fluid class="pa-2"> -->
     <v-card class="px-4 customTheme lighten-2">
       <v-row>
-        <v-col cols="12" md="8">
+        <v-col :cols="talk ? 8 : 12" id="col" >
           <v-tabs grow icons-and-text centered dark color="cyan">
             <v-tabs-slider color="red"></v-tabs-slider>
             <v-tab href="#Board">
@@ -21,37 +21,40 @@
               Help
               <v-icon>help_outline</v-icon>
             </v-tab>
+              <v-tab href="#" @click="collapse()">
+                Collapse
+              <v-icon>help_outline</v-icon>
+            </v-tab>
             <v-tab-item id="Board">
               <v-card outlined>
-                <Board :socket="socket" />
+                <Board :socket="socket" :study_id="study_id" />
               </v-card>
             </v-tab-item>
             <v-tab-item id="NotePad">
               <v-card outlined>
-                <NotePad :socket="socket" />
+                <NotePad :socket="socket" :study_id="study_id" />
               </v-card>
             </v-tab-item>
             <v-tab-item id="ViewShare">
               <v-card outlined>
-                <ViewShare :socket="socket" :user_id="user_id" :connected_users="connected_users" />
+                <ViewShare :socket="socket" :user_id="user_id" :study_id="study_id" :connected_users="connected_users" />
               </v-card>
             </v-tab-item>
             <v-tab-item id="Help">
               <v-card outlined>
-                
               </v-card>
             </v-tab-item>
           </v-tabs>
         </v-col>
-        <v-col align="center" justify="center">
+        <v-col align="center" justify="center" v-if="talk">
           <v-card outlined tile>
             <v-row no-gutters hidden class="pa-0">
-              <FaceTalk :socket="socket" :user_id="user_id" @connected="connected" />
+              <FaceTalk :socket="socket" :user_id="user_id" :study_id="study_id" @connected="connected" />
             </v-row>
             <v-row no-gutters>
               <v-col cols="12">
                 <v-card outlined>
-                  <Chatting class="pa-0 ma-0" :socket="socket" />
+                  <Chatting class="pa-0 ma-0" :socket="socket" :study_id="study_id" />
                 </v-card>
               </v-col>
             </v-row>
@@ -59,7 +62,7 @@
         </v-col>
       </v-row>
     </v-card>
-  </v-container>
+  <!-- </v-container> -->
 </template>
 
 <script>
@@ -77,6 +80,8 @@ export default {
       socket: "",
       user_id: null,
       connected_users: [],
+
+      talk: true,
     };
   },
 
@@ -89,23 +94,38 @@ export default {
   },
   created() {
     this.user_id = `${Math.ceil(Math.random() * 100000)}`
-    
-    // this.socket = io.connect("http://70.12.246.89:8000?study_id=1&user_id="+this.user_id, {
-    this.socket = io.connect("http://70.12.247.73:8210?study_id=1&user_id="+this.user_id, {
+    this.study_id = window.location.href.split('workspace/')[1]
+    this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    // this.socket = io.connect(`http://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
       // this.socket = io.connect("http://70.12.247.73:8210", {
       transports: ["websocket"],
       secure: true,
-      study_id : 1
     });
     this.socket.emit("join", { study_id: 1, user_id: `${this.user_id}` });
+
   
   },
   mounted() {
+
     window.onbeforeunload = () => {
       this.socket.emit("leave", { study_id: 1, user_id: `${this.user_id}` });
     };
+
+    this.socket.on('alreadyexist', () => {
+      alert('못들어온단다 아가야')
+
+      // window.opener = window.location.href; self.close()
+      window.open('about:blank','_self')
+    })
   },
   methods: {
+    async collapse() {
+      this.talk = !this.talk
+      // const col = await document.getElementById('col')
+      // console.log(col)
+      // col.class = "col col-12"
+    },
+
     connected(connected_users) {
       this.connected_users = connected_users.filter(user => user && user != -1)
     }

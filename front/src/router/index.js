@@ -11,6 +11,7 @@ import home from '@/views/Home'
 
 // 게시판
 import board from '@/components/board/board'
+import postRegister from '@/components/board/post_register'
 
 // 유저페이지
 import user from '@/views/User'
@@ -22,6 +23,9 @@ import mypage from '@/components/user/Mypage'
 import study from '@/views/Study'
 import studydetail from '@/components/studydetail/MainStudyDetail'
 import workspace from '@/components/workspace/WorkSpace'
+
+//쪽지함 접근(임시)
+import msgbox from '@/components/user/messenger/MessageHome'
 
 Vue.use(VueRouter)
 
@@ -61,11 +65,19 @@ const routes = [
             default: board,
             footer: appFooter
         },
-        props: (route) => ({
-            board: route.board,
-            post_id: route.post_id,
-        })
-        ,
+        // props: (route) => ({
+        //     board: route.board,
+        //     post_id: route.post_id,
+        // }),
+    },
+    {
+        path: '/board/register',
+        name: 'post_register',
+        components: {
+            header: appHeader,
+            default: postRegister,
+            footer: appFooter
+        },
     },
     {
         path: '/user',
@@ -90,7 +102,7 @@ const routes = [
         ]
     },
     {
-        path: '/workspace',
+        path: '/workspace/:id',
         name: 'workspace',
         components: {
             header: null,
@@ -107,6 +119,15 @@ const routes = [
             footer: appFooter
         }
     },
+    {
+        path: '/msgbox',
+        name: 'msgbox',
+        components: {
+            header: appHeader,
+            default: msgbox,
+            footer: appFooter
+        }
+    },
 ]
 
 const router = new VueRouter({
@@ -114,6 +135,9 @@ const router = new VueRouter({
     linkExactActiveClass: "active",
     base: process.env.BASE_URL,
     routes,
+    scrollBehavior() {
+        return { x: 0, y: 0 }
+    }
 })
 
 export default router

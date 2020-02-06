@@ -33,7 +33,7 @@ class PostService {
                 board: payload.board,
                 type: payload.type,
                 study_id: payload.study_id,
-                offset: payload.offset
+                offset: payload.offset,
             }
         })
     }

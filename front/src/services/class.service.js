@@ -4,21 +4,26 @@ import axios from 'axios'
 class ClassService {
     getAllMajorClass() {
         return axios.get(process.env.VUE_APP_API_URL + 'class/major')
+            .then(res => {
+                return Promise.resolve(res.data)
+            })
     }
 
-    getMinorClass(payload) {
-        const major_calss_id = payload;
-        return axios.get(process.env.VUE_APP_API_URL + 'class/minor',{
-            params:{
-                major:major_calss_id,
-            }
-        })
+    getMinorClass(majorID) {
+        return axios.get(process.env.VUE_APP_API_URL + 'class/minor', {
+                params: {
+                    major: majorID
+                }
+            })
+            .then(res => {
+                return Promise.resolve(res.data)
+            })
     }
 
     getMinorClassByUid(payload) {
         return axios.get(process.env.VUE_APP_API_URL + 'minor', {
             params: {
-                uid : payload.uid
+                uid: payload.uid
             }
         })
     }

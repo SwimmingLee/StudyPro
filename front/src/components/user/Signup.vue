@@ -158,24 +158,35 @@
                   </v-col>
                 </v-row>
 
-                <v-card class="mx-auto" max-width="1000" color="rgb(0, 0, 0, 0)" elevation="0">
-                  <v-layout row right justify-end>
-                    <span class="red--text lighten-1 mr-10 pt-2" v-show="notcreated">아이디가 이미 존재합니다.</span>
-                    <v-btn
-                      class="mr-4"
-                      :disabled="!valid || isLoading"
-                      color="green lighten-4"
-                      @click="onSignup()"
-                    >가입하기</v-btn>
-                  </v-layout>
-                </v-card>
-              </v-form>
-            </v-app>
-          </div>
-        </v-container>
-      </v-content>
-    </v-form>
-  </div>
+                  <v-card
+                    class="mx-auto"
+                    max-width="1000"
+                    color="rgb(0, 0, 0, 0)"
+                    elevation="0"
+                  >
+                    <v-layout row right justify-end>
+                      <span
+                        class="red--text lighten-1 mr-10 pt-2"
+                        v-show="notcreated"
+                        >아이디가 이미 존재합니다.</span
+                      >
+                      <v-btn
+                        class="mr-4"
+                        :disabled="!valid || isLoading"
+                        color="green lighten-4"
+                        @click="onSignup()"
+                      >
+                          가입하기
+                      </v-btn>
+                    </v-layout>
+                  </v-card>
+                </v-form>
+              </v-app>
+            </div>
+          </v-container>
+        </v-content>
+      </v-form>
+    </div>
 </template>
 
 <script>
@@ -270,7 +281,6 @@ export default {
           if (state == "success") {
             this.$router.push({ path: "/user/signup/success" });
           } else {
-            this.message = "아이디 또는 비밀번호를 잘못입력했습니다.";
             this.notcreated = true;
           }
         });

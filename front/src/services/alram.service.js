@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 class AlramService {
-    getReceivedAlarmByUid(payload) {
+    getReceivedAlarmByUid() {
         return axios.get(process.env.VUE_APP_API_URL + "alarms/", {
             params: {
                 direction: "toUser"
@@ -9,7 +9,7 @@ class AlramService {
         })
     }
 
-    getSendAlarmByUid(payload) {
+    getSendAlarmByUid() {
         return axios.get(process.env.VUE_APP_API_URL + "alarms/", {
             params: {
                 direction: "fromUser"
