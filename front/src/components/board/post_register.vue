@@ -23,13 +23,7 @@
                   ></v-select>
                 </v-col>
                 <v-col cols="12" md="9" sm="8" class="py-0">
-                  <v-text-field
-                    v-model="postData.title"
-                    clearable
-                    label="제목을 입력하세요"
-                    outlined
-                    dense
-                  ></v-text-field>
+                  <v-text-field v-model="postData.title" clearable label="제목을 입력하세요" outlined dense></v-text-field>
                 </v-col>
               </v-row>
               <v-divider />
@@ -65,18 +59,11 @@
                     :show-size="1000"
                   >
                     <template v-slot:selection="{ index, text }">
-                      <v-chip
-                        v-if="index < 5"
-                        color="deep-purple accent-4"
-                        dark
-                        label
-                        >{{ text }}</v-chip
-                      >
+                      <v-chip v-if="index < 5" color="deep-purple accent-4" dark label>{{ text }}</v-chip>
                       <span
                         v-else-if="index === 5"
                         class="overline grey--text text--darken-3 mx-2"
-                        >+{{ files.length - 5 }} File(s)</span
-                      >
+                      >+{{ files.length - 5 }} File(s)</span>
                     </template>
                   </v-file-input>
                 </v-col>
@@ -205,10 +192,7 @@ export default {
     clickBack() {
       this.$router.go(-1);
     },
-    isAuth() {
-      return this.$store.getters["auth/isAuth"];
-    },
-    getUser() {
+    user() {
       return this.$store.getters["auth/getUser"];
     }
   }

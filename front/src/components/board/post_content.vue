@@ -5,7 +5,6 @@
         <v-row no-gutters>
           <v-col style="max-width: 50px;">제목 :</v-col>
           <v-col>{{ this.post_contents.title }}</v-col>
-          
         </v-row>
 
         <v-divider class="my-2" />

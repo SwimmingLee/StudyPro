@@ -138,7 +138,7 @@ Vue.use(TiptapVuetifyPlugin, {
 });
 
 export default {
-  props: [ "board", "post_id", ],
+  props: ["board", "post_id"],
   components: { TiptapVuetify },
   data() {
     return {

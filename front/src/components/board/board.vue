@@ -29,7 +29,7 @@
             </v-col>
             <v-col>
               <v-card class="ma-2">
-                <boardList :board="boardList"/>
+                <boardList :board="boardList" />
               </v-card>
             </v-col>
           </v-row>
@@ -49,12 +49,12 @@ export default {
     return {
       defaultRoute: "/board/",
       board_list: "study",
-      
+
       menus: [
         { icon: "menu_book", text: "스터디 게시판", route: "study" },
         { icon: "style", text: "자유 게시판", route: "free" },
         { icon: "notifications_none", text: "공지사항", route: "notice" }
-      ],
+      ]
     };
   },
 
@@ -67,7 +67,7 @@ export default {
   computed: {
     boardList: function() {
       return this.board_list;
-    },
+    }
   },
 
   watch: {
@@ -80,7 +80,7 @@ export default {
 
   methods: {
     routeTo(route) {
-      this.$router.push({ name: "board", params: { board: route, } });
+      this.$router.push({ name: "board", params: { board: route } });
     }
   },
 
