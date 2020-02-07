@@ -148,6 +148,7 @@ export default {
   data() {
     return {
       items: ["study", "free", "notice"],
+      dialog: false,
 
       postData: {
         type: "study",
@@ -155,7 +156,7 @@ export default {
         writer: "24",
         title: "",
         content: "",
-        board: ""
+        board: "study"
       },
 
       files: [],
@@ -198,8 +199,13 @@ export default {
   methods: {
     create() {
       PostService.createPost(this.postData);
-    }
-  }
+      this.$router.go(-1);
+    },
+    clickBack() {
+      this.$router.go(-1);
+    },
+  },
+  
 };
 </script>
 

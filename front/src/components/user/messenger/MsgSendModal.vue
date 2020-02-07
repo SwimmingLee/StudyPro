@@ -1,6 +1,6 @@
 <template>
   <div id="groupmodal">
-    <v-dialog v-model="open" max-width="40%">
+    <v-dialog v-model="open" persistent max-width="40%">
       <v-card id="lgiModal" class="px-0 pt-0">
         <v-card-title class="customTheme darken-2 white--text pb-3">
           <span class="headline">[받는 사람] {{ item.nickname }}</span>
@@ -63,6 +63,24 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+
+    
+
+    <template>
+      <check-modal
+        :check-modal="checkModal"
+        :item="item"
+        :titleText="titleText"
+        :mainText="mainText"
+        v-on:sendNo="sendNo"
+        v-on:sendYes="sendYes"
+
+      />
+    </template>
+
+
+
   </div>
 </template>
 
@@ -71,9 +89,10 @@ import AlarmService from "@/services/alarm.service"
 
 
 export default {
-  show: false,
   name: "groupmodal",
+
   data: () => ({
+    checkModal:false,
     open: false,
     mainText: "",
     titleText: ""
@@ -85,15 +104,21 @@ export default {
     },
     open() {
       if (this.open == false) {
-        this.showResponse = false;
         this.$emit("close");
       }
-    }
+    },
+  },
+   components: {
+    CheckModal: () => import("@/components/user/messenger/CheckModal")
   },
   methods: {
-    clickExit() {
+     sendNo(){
+      this.checkModal = false;
+    },
+    sendYes(){
       this.mainText = "";
       this.titleText = "";
+      this.checkModal = false;
       this.open = false;
     },
     async clickSend() {

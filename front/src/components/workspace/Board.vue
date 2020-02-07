@@ -145,6 +145,12 @@ export default {
   mounted() {
     // console.log(this.$refs.canvas);
     // this.ctx = this.$refs.canvas.getContext('2d');
+
+      this.socket.emit("load_image", {
+        study_id : this.study_id
+      });
+
+
     this.canvas = document.getElementById("canvas");
     this.context = this.canvas.getContext("2d");
     this.socket.on("line", data => {
