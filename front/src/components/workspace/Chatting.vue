@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  props: ["socket"],
+  props: ["socket", "user_id", "study_id"],
   data() {
     return {
       name: this.$store.getters.userNickname,
@@ -61,9 +61,9 @@ export default {
     sendMessage() {
       if (this.message.length === 0) return;
       this.socket.emit("send message", {
-        user_nickname: "김현철",
+        user_nickname: this.user_id,
         message: this.message,
-        study_id: 1
+        study_id: this.study_id
       });
       this.resetIcon();
       this.clearMessage();
