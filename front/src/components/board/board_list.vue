@@ -3,14 +3,14 @@
     <v-flex class="ma-2">
       <v-icon large class="mr-2" color="black">{{ menuIcon }}</v-icon>
       {{ menuText }}
-        <v-btn
-          style="float: right;"
-          to="/board/register"
-          class="mx-1 green white--text"
-          v-show="showBtn"
-        >
-          <v-icon class="mr-3" dark>create</v-icon>글 작성
-        </v-btn>
+      <v-btn
+        style="float: right;"
+        to="/board/register"
+        class="mx-1 green white--text"
+        v-show="showBtn"
+      >
+        <v-icon class="mr-3" dark>create</v-icon>글 작성
+      </v-btn>
     </v-flex>
     <v-divider class="mx-3 mt-5" />
     <v-row>
@@ -34,28 +34,29 @@
           </v-row>
           <v-divider class="ma-2" />
 
-          <v-card
-            flat
-            v-for="(post, index) in post_list"
-            :key="index"
-            @click="routeTo(post.id)"
-          >
+          <v-card flat v-for="(post, index) in post_list" :key="index" @click="routeTo(post.id)">
             <!-- <v-card  v-for="(post, index) in postList" :key="index"> -->
             <v-row>
-              <v-col align="center" cols="1" class="pa-2 px-3">{{
+              <v-col align="center" cols="1" class="pa-2 px-3">
+                {{
                 post.id
-              }}</v-col>
+                }}
+              </v-col>
               <v-divider class="my-2" vertical />
               <v-col cols="6" class="pa-2 pl-5">{{ post.title }}</v-col>
               <v-spacer />
 
               <v-divider class="my-2" vertical />
-              <v-col align="center" cols="2" class="pa-2 px-3">{{
+              <v-col align="center" cols="2" class="pa-2 px-3">
+                {{
                 post.writer
-              }}</v-col>
-              <v-col align="center" cols="1" class="pa-2 px-3">{{
+                }}
+              </v-col>
+              <v-col align="center" cols="1" class="pa-2 px-3">
+                {{
                 post.view
-              }}</v-col>
+                }}
+              </v-col>
               <v-col align="center" cols="1" class="pa-2 px-3">0</v-col>
             </v-row>
           </v-card>
@@ -66,19 +67,15 @@
 
     <v-row justify="center" class="my-3 mx-1">
       <v-col>
-        <v-pagination
-          v-model="page"
-          :length="lastpage"
-          :total-visible="10"
-        ></v-pagination>
-          <v-btn
-            style="float: right;"
-            to="/board/register"
-            class="mx-1 green white--text"
-            v-show="showBtn"
-          >
-            <v-icon class="mr-3" dark>create</v-icon>글 작성
-          </v-btn>
+        <v-pagination v-model="page" :length="lastpage" :total-visible="10"></v-pagination>
+        <v-btn
+          style="float: right;"
+          to="/board/register"
+          class="mx-1 green white--text"
+          v-show="showBtn"
+        >
+          <v-icon class="mr-3" dark>create</v-icon>글 작성
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -99,16 +96,12 @@ export default {
       lastpage: 1,
       post_number: 0,
       post_list: [],
-<<<<<<< front/src/components/board/board_list.vue
-      notice: false
-=======
 
       menus: [
         { icon: "menu_book", text: "스터디 게시판", route: "study" },
         { icon: "style", text: "자유 게시판", route: "free" },
         { icon: "notifications_none", text: "공지사항", route: "notice" }
       ]
->>>>>>> front/src/components/board/board_list.vue
     };
   },
 
@@ -138,22 +131,19 @@ export default {
     postList: function() {
       return this.post_list;
     },
-<<<<<<< front/src/components/board/board_list.vue
-    showBtn(){
+    showBtn() {
       // let user = this.$store.getters['auth/getUser']
       // if(user['isAdmin'] != null){
       //   return true
       // }else{
-        console.log(this.board_name)
-      if(this.board_name == 'notice'){
-        return false
+      console.log(this.board_name);
+      if (this.board_name == "notice") {
+        return false;
       }
       // }
-      return true
+      return true;
       // return this.$store.getters['auth/getUser'].isAdmin
     }
-=======
->>>>>>> front/src/components/board/board_list.vue
   },
   methods: {
     async postUpdate() {
