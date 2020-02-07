@@ -51,7 +51,7 @@ export default {
     studySearch: () => import("@/components/study/Search"),
     createGroup: () => import("@/components/study/CreateGroup"),
     groupList: () => import("@/components/user/MyGroupList"),
-    requestSignin: () => import('@/components/study/RequestSignin')
+    requestSignin: () => import('@/components/base/RequestSignin')
   },
   computed:{
     isAuth(){

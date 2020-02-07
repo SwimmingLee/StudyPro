@@ -218,7 +218,7 @@ export default {
         { title: "홈", route: "/home" },
         { title: "모임", route: "/study" },
         { title: "게시판", route: "/board/study" },
-        { title: "내 정보", route: "/user" }
+        { title: "내 정보", route: "/user/mypage" }
       ],
       userpages: [
         { title: "정보수정", route: "/myinfo" },
