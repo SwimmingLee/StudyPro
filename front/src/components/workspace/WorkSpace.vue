@@ -107,18 +107,17 @@ export default {
     this.study_id = window.location.href.split('workspace/')[1]
     // this.socket = io.connect(`http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
     this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-    // this.socket = io.connect(`http://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-      // this.socket = io.connect("http://70.12.247.73:8210", {
+    // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    // this.socket = io.connect(`https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    // this.socket = io.connect(`wss://us-central1-test-back-24347.cloudfunctions.net/server/?study_id=${this.study_id}&user_id=${this.user_id}`, {
       transports: ["websocket"],
       secure: true,
     });
-    this.socket.emit("join", { study_id: 1, user_id: `${this.user_id}` });
-
-  
+    this.socket.emit("join", { study_id: this.study_id, user_id: `${this.user_id}` });
   },
   mounted() {
     window.onbeforeunload = () => {
-      this.socket.emit("leave", { study_id: 1, user_id: `${this.user_id}` });
+      this.socket.emit("leave", { study_id: this.study_id, user_id: `${this.user_id}` });
     };
 
     this.socket.on('alreadyexist', () => {

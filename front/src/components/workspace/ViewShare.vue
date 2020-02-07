@@ -113,7 +113,7 @@ export default {
       this.local_stream = stream
     })
     this.socket.on('viewsharestart', sharing_user_id => {
-
+      console.log('111')
       for (let i in this.peer_connections) delete this.peer_connections[i]
       this.sharing_user_id = sharing_user_id
       this.now_sharing = sharing_user_id
