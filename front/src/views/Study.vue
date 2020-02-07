@@ -31,7 +31,11 @@
               <v-card flat>
                 <create-group v-if="isAuth"
                   v-on:moveGroups="moveGroups"/>
-                <request-signin v-else/>
+                <request-signin v-else>
+                  <template v-slot:title>
+                  <p>모임을 생성하려면 로그인이 필요합니다.<br>로그인해주세요.</p>
+                  </template>
+                </request-signin>
               </v-card>
             </v-tab-item>
           </v-tabs>
@@ -51,7 +55,7 @@ export default {
     studySearch: () => import("@/components/study/Search"),
     createGroup: () => import("@/components/study/CreateGroup"),
     groupList: () => import("@/components/user/MyGroupList"),
-    requestSignin: () => import('@/components/study/RequestSignin')
+    requestSignin: () => import('@/components/base/RequestSignin')
   },
   computed:{
     isAuth(){

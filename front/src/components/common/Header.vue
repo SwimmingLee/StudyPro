@@ -154,8 +154,7 @@
 
       <!-- User Pages -->
       <v-container class="my-0 pa-0" v-if="isAuth">
-          <hr
-        />
+        <hr/>
         <v-layout column align-center>
           <v-flex>
             <router-link to="/mypage">
@@ -212,13 +211,13 @@ export default {
         { icon: "home", title: "홈", route: "/home" },
         { icon: "group", title: "모임", route: "/study" },
         { icon: "alarm", title: "게시판", route: "/board/study" },
-        { icon: "accessibility_new", title: "내 정보", route: this.$store.state.auth.user? "/user/mypage": "/user/signup" }
+        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" }
       ],
       navigations: [
         { title: "홈", route: "/home" },
         { title: "모임", route: "/study" },
         { title: "게시판", route: "/board/study" },
-        { title: "내 정보", route: "/user" }
+        { title: "내 정보", route: "/user/mypage" }
       ],
       userpages: [
         { title: "정보수정", route: "/myinfo" },
@@ -263,8 +262,8 @@ export default {
       }else if(name == 'calendar'){
         this.$router.push({path: '/user/calendar'})
       }else if(name == 'signout'){
-        this.signout();
-        location.reload();
+        this.signout()
+        location.reload()
       }
     }
   },
