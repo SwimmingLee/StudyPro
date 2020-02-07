@@ -323,9 +323,8 @@ export default {
         formData.append("gender", this.genderinput == "남성" ? "M" : "W");
         formData.append("phone", this.phone);
         formData.append("img", this.avatar.imageFile);
-
-        this.$store.dispatch("auth/register", formData).then(state => {
-          if (state == "success") {
+        await this.$store.dispatch("auth/register", formData).then(state => {
+          if (state) {
             this.$router.push({ path: "/user/signup/success" });
           } else {
             this.notcreated = true;

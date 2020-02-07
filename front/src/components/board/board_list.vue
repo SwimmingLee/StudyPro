@@ -136,7 +136,6 @@ export default {
       // if(user['isAdmin'] != null){
       //   return true
       // }else{
-      console.log(this.board_name);
       if (this.board_name == "notice") {
         return false;
       }
