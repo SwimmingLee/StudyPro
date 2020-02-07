@@ -132,17 +132,10 @@ export default {
       return this.post_list;
     },
     showBtn() {
-      // let user = this.$store.getters['auth/getUser']
-      // if(user['isAdmin'] != null){
-      //   return true
-      // }else{
-      console.log(this.board_name);
       if (this.board_name == "notice") {
         return false;
       }
-      // }
       return true;
-      // return this.$store.getters['auth/getUser'].isAdmin
     }
   },
   methods: {
