@@ -75,17 +75,15 @@ const routes = [{
             footer: appFooter,
         },
         props: true,
-        children: [
-            {
+        children: [{
                 path: '?id=:post_id',
                 name: 'post_id',
                 component: postContent,
-            }
-        ]
-        // props: (route) => ({
-        //     board: route.board,
-        //     post_id: route.post_id,
-        // }),
+            }]
+            // props: (route) => ({
+            //     board: route.board,
+            //     post_id: route.post_id,
+            // }),
     },
     {
         path: '/user',
@@ -96,6 +94,10 @@ const routes = [{
             footer: appFooter
         },
         children: [{
+                path: 'mypage',
+                component: mypage
+            },
+            {
                 path: 'signup',
                 component: signup
             },
@@ -103,10 +105,6 @@ const routes = [{
                 path: 'signup/success',
                 component: signupSuccess
             },
-            {
-                path: 'mypage',
-                component: mypage
-            }
         ]
     },
     {

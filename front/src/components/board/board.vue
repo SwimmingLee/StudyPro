@@ -14,7 +14,7 @@
                     <v-list-item
                       v-for="(menu, index) in menus"
                       :key="index"
-                      @click="routeTo(menu.route)"
+                      @click="routeTo(menu)"
                     >
                       <v-list-item-icon>
                         <v-icon>{{ menu.icon }}</v-icon>
@@ -29,7 +29,11 @@
             </v-col>
             <v-col>
               <v-card class="ma-2">
-                <boardList :board="boardList" />
+                <boardList :board="boardList">
+                  <template v-slot:registerbtn v-if="!isAuth && isNotice">
+                      <span></span>
+                  </template>
+                </boardList>
               </v-card>
             </v-col>
           </v-row>
@@ -53,7 +57,8 @@ export default {
         { icon: "menu_book", text: "스터디 게시판", route: "study" },
         { icon: "style", text: "자유 게시판", route: "free" },
         { icon: "notifications_none", text: "공지사항", route: "notice" }
-      ]
+      ],
+      isNotice: false,
     };
   },
 
@@ -66,6 +71,10 @@ export default {
   computed: {
     boardList: function() {
       return this.board_list;
+    },
+
+    isAdmin(){
+      return this.$store.getters['auth/getUser'].isAdmin
     }
   },
 
@@ -79,6 +88,11 @@ export default {
 
   methods: {
     routeTo(route) {
+      if(route == 'notice'){
+        this.isNotice = true
+      }else{
+        this.isNotice = false
+      }
       this.$router.push({ name: "board", params: { board: route } });
     }
   },

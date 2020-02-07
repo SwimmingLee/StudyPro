@@ -2,9 +2,15 @@
   <v-container flex>
     <v-flex class="ma-2">
       <v-icon large class="mr-2" color="black">menu_book</v-icon>스터디 게시판
-      <v-btn style="float: right;" to="/board/register" class="mx-1 green white--text">
-        <v-icon class="mr-3" dark>create</v-icon>글 작성
-      </v-btn>
+      <slot name="registerbtn">
+        <v-btn
+          style="float: right;"
+          to="/board/register"
+          class="mx-1 green white--text"
+        >
+          <v-icon class="mr-3" dark>create</v-icon>글 작성
+        </v-btn>
+      </slot>
     </v-flex>
     <v-divider class="mx-3 mt-5" />
     <v-row>
@@ -28,17 +34,28 @@
           </v-row>
           <v-divider class="ma-2" />
 
-          <v-card flat v-for="(post, index) in post_list" :key="index" @click="routeTo(post.id)">
+          <v-card
+            flat
+            v-for="(post, index) in post_list"
+            :key="index"
+            @click="routeTo(post.id)"
+          >
             <!-- <v-card  v-for="(post, index) in postList" :key="index"> -->
             <v-row>
-              <v-col align="center" cols="1" class="pa-2 px-3">{{ post.id }}</v-col>
+              <v-col align="center" cols="1" class="pa-2 px-3">{{
+                post.id
+              }}</v-col>
               <v-divider class="my-2" vertical />
               <v-col cols="6" class="pa-2 pl-5">{{ post.title }}</v-col>
               <v-spacer />
 
               <v-divider class="my-2" vertical />
-              <v-col align="center" cols="2" class="pa-2 px-3">{{ post.writer }}</v-col>
-              <v-col align="center" cols="1" class="pa-2 px-3">{{ post.view }}</v-col>
+              <v-col align="center" cols="2" class="pa-2 px-3">{{
+                post.writer
+              }}</v-col>
+              <v-col align="center" cols="1" class="pa-2 px-3">{{
+                post.view
+              }}</v-col>
               <v-col align="center" cols="1" class="pa-2 px-3">0</v-col>
             </v-row>
           </v-card>
@@ -49,10 +66,20 @@
 
     <v-row justify="center" class="my-3 mx-1">
       <v-col>
-        <v-pagination v-model="page" :length="lastpage" :total-visible="10"></v-pagination>
-        <v-btn style="float: right;" to="/board/register" class="mx-1 green white--text">
-          <v-icon class="mr-3" dark>create</v-icon>글 작성
-        </v-btn>
+        <v-pagination
+          v-model="page"
+          :length="lastpage"
+          :total-visible="10"
+        ></v-pagination>
+        <slot name="registerbtn">
+          <v-btn
+            style="float: right;"
+            to="/board/register"
+            class="mx-1 green white--text"
+          >
+            <v-icon class="mr-3" dark>create</v-icon>글 작성
+          </v-btn>
+        </slot>
       </v-col>
     </v-row>
   </v-container>
@@ -70,7 +97,8 @@ export default {
       page: 1,
       lastpage: 1,
       post_number: 0,
-      post_list: []
+      post_list: [],
+      notice: false
     };
   },
 
@@ -123,5 +151,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
