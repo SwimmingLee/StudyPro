@@ -154,8 +154,7 @@
 
       <!-- User Pages -->
       <v-container class="my-0 pa-0" v-if="isAuth">
-          <hr
-        />
+        <hr/>
         <v-layout column align-center>
           <v-flex>
             <router-link to="/mypage">
@@ -263,8 +262,8 @@ export default {
       }else if(name == 'calendar'){
         this.$router.push({path: '/user/calendar'})
       }else if(name == 'signout'){
-        this.signout();
-        location.reload();
+        this.signout()
+        location.reload()
       }
     }
   },

@@ -72,7 +72,7 @@ const routes = [{
         components: {
             header: appHeader,
             default: board,
-            footer: appFooter
+            footer: appFooter,
         },
         props: true,
         children: [
