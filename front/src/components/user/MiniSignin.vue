@@ -7,7 +7,7 @@
     </v-row>
     <v-row>
       <v-col class="text-center pt-1 pb-0">
-        <v-btn to="/signup" text small>Create Acount</v-btn>
+        <v-btn to="user/signup" text small>Create Acount</v-btn>
       </v-col>
     </v-row>
 
@@ -30,7 +30,7 @@ export default {
   methods: {
     signinClose(){
       this.signinModal = false
-    }
+    },
   },
 }
 </script>

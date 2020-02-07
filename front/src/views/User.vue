@@ -1,7 +1,7 @@
 <template>
-    <div id="user">
-        <router-view></router-view>
-    </div>
+  <div id="user">
+    <router-view/>
+  </div>
 </template>
 
 <script>

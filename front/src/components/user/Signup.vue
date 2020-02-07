@@ -241,7 +241,7 @@ export default {
   data: () => ({
     valid: true,
 
-    id: "test@naver.com",
+    id: "",
     idRules: [
       v => !!v || "아이디를 입력해 주세요.",
       v =>
@@ -250,8 +250,8 @@ export default {
         ) || "ex) sample@example.com"
     ],
 
-    password: "s12341234",
-    confirmPassword: "s12341234",
+    password: "",
+    confirmPassword: "",
     passwordRules: [
       v => !!v || "비밀번호를 입력해 주세요.",
       v =>
@@ -270,7 +270,7 @@ export default {
       v => (v && v.length <= 50) || "최대 50자까지 입력 가능합니다."
     ],
 
-    name: "Test",
+    name: "",
     nameRules: [
       v => !!v || "이름을 입력해 주세요.",
       v => (v && v.length <= 50) || "이름이 너무 깁니다."
@@ -278,15 +278,15 @@ export default {
 
     gender: ["남성", "여성"],
     genderRules: [v => !!v || "성별을 선택해 주세요."],
-    genderinput: "남성",
+    genderinput: "",
 
-    nickname: "Test",
+    nickname: "",
     nicknameRules: [
       v => !!v || "닉네임을 입력해 주세요.",
       v => (v && v.length <= 10) || "닉네임은 최대 10자입니다."
     ],
 
-    phone: "01012341234",
+    phone: "",
     phoneRules: [
       v => !!v || "휴대전화 번호를 입력해 주세요.",
       v =>
@@ -323,9 +323,8 @@ export default {
         formData.append("gender", this.genderinput == "남성" ? "M" : "W");
         formData.append("phone", this.phone);
         formData.append("img", this.avatar.imageFile);
-
-        this.$store.dispatch("auth/register", formData).then(state => {
-          if (state == "success") {
+        await this.$store.dispatch("auth/register", formData).then(state => {
+          if (state) {
             this.$router.push({ path: "/user/signup/success" });
           } else {
             this.notcreated = true;
@@ -349,6 +348,16 @@ export default {
     if (this.$store.getters["auth/isAuth"]) {
       this.$router.push({ name: "home" });
     }
+
+    this.id = ''
+    this.password = ''
+    this.confirmPassword = ''
+    this.name = ''
+    this.nickname = ''
+    this.phone = ''
+    this.genderinput = ''
+    this.introducing = ''
+    this.avatar = null
   }
 };
 </script>

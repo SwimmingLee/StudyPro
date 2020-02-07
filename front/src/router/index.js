@@ -13,6 +13,7 @@ import home from '@/views/Home'
 import board from '@/components/board/board'
 import postContent from '@/components/board/post_content'
 import postRegister from '@/components/board/post_register'
+import postModify from '@/components/board/post_modify'
 
 // 유저페이지
 import user from '@/views/User'
@@ -67,25 +68,32 @@ const routes = [{
         },
     },
     {
+        path: '/board/modify',
+        name: 'post_modify',
+        components: {
+            header: appHeader,
+            default: postModify,
+            footer: appFooter
+        },
+    },
+    {
         path: '/board/:board',
         name: 'board',
         components: {
             header: appHeader,
             default: board,
-            footer: appFooter
+            footer: appFooter,
         },
         props: true,
-        children: [
-            {
+        children: [{
                 path: '?id=:post_id',
                 name: 'post_id',
                 component: postContent,
-            }
-        ]
-        // props: (route) => ({
-        //     board: route.board,
-        //     post_id: route.post_id,
-        // }),
+            }]
+            // props: (route) => ({
+            //     board: route.board,
+            //     post_id: route.post_id,
+            // }),
     },
     {
         path: '/user',
@@ -96,6 +104,10 @@ const routes = [{
             footer: appFooter
         },
         children: [{
+                path: 'mypage',
+                component: mypage
+            },
+            {
                 path: 'signup',
                 component: signup
             },
@@ -103,10 +115,6 @@ const routes = [{
                 path: 'signup/success',
                 component: signupSuccess
             },
-            {
-                path: 'mypage',
-                component: mypage
-            }
         ]
     },
     {

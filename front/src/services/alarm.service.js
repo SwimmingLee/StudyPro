@@ -21,14 +21,17 @@ class AlarmService {
 
     sendAlarm(payload) {
         const { to , title, content} = payload
-        console.log(to, title, content)
         return axios.post(URL, {
             to, title, content
         })
         
     }
 
-
+    checkAlarm(payload) {
+        return axios.put(URL, {
+            alarm_id: payload.alarm_id
+        })
+    }
 }
 
 export default new AlarmService()

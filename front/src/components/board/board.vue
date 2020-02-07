@@ -49,6 +49,7 @@ export default {
     return {
       defaultRoute: "/board/",
       board_list: "study",
+
       menus: [
         { icon: "menu_book", text: "스터디 게시판", route: "study" },
         { icon: "style", text: "자유 게시판", route: "free" },
