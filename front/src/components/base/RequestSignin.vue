@@ -1,35 +1,47 @@
 <template>
-  <v-container id="signupSuccess">
-        <v-row justify="center">
-          <v-col cols="9" class="text-center">
-            <span class="display-2 font-weight-thin">Study</span>
-            <span class="display-2">PRO</span>
-            <p class="mt-5">모임을 생성하려면 로그인이 필요합니다.<br>로그인해주세요.</p>
-            <v-btn text class="mr-4" color="primary" @click="signinModal = true">로그인</v-btn>
-          </v-col>
-        </v-row>
+  <v-container id="requestsignin">
+    <v-row justify="center">
+      <v-col cols="12" class="text-center">
+        <span class="display-2 font-weight-thin">Study</span>
+        <span class="display-2">PRO</span>
+      </v-col>
+      <v-row>
+        <v-col cols="12" class="text-center">
+          <slot name="text"></slot>
+          <v-btn text class="mr-4" color="primary" @click="signinModal = true"
+            >로그인</v-btn
+          >
+          <v-btn text class="mr-4" color="green lighten-2" @click="moveSignup"
+            >회원가입</v-btn
+          >
+        </v-col>
+      </v-row>
+    </v-row>
 
-      <signin-modal :signin-modal="signinModal" v-on:close="signinClose"/>
+    <signin-modal :signin-modal="signinModal" v-on:close="signinClose" />
   </v-container>
 </template>
 
 <script>
 export default {
-  name: "signupSuccess",
+  name: "requestsignin",
   data: () => ({
-    signinModal: false,
+    signinModal: false
   }),
-  components:{
-    signinModal: () => import('@/components/user/SigninModal')
+  components: {
+    signinModal: () => import("@/components/user/SigninModal")
   },
   methods: {
-    signinClose(){
-      this.signinModal = false
+    signinClose() {
+      this.signinModal = false;
+    },
+    moveSignup(){
+      this.$router.push({path:'signup'})
     }
   },
-  mounted(){
-    if(this.$store.getters['auth/isAuth']){
-      this.$router.push({name:'home'})
+  mounted() {
+    if (this.$store.getters["auth/isAuth"]) {
+      this.$router.push({ name: "home" });
     }
   }
 };

@@ -202,9 +202,6 @@ export default {
   },
 
   mounted() {
-    if(!this.$store.getters['auth/isAuth']){
-      this.$router.push({path:'signup'})
-    }
     this.id = this.userEmail;
     this.nickname = this.userNickname;
     this.name = this.userName;
