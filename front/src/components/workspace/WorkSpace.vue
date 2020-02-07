@@ -21,10 +21,15 @@
               Help
               <v-icon>help_outline</v-icon>
             </v-tab>
-              <v-tab href="#" @click="collapse()">
-                Collapse
-              <v-icon>help_outline</v-icon>
-            </v-tab>
+            <v-card>
+              <v-btn mx-2 @click="collapse">
+                <v-icon v-if="talk">arrow_forward</v-icon>
+                <v-icon v-else>arrow_back</v-icon>
+            </v-btn> <br>
+            <v-btn width="100%" @click="exit">
+              <v-icon>power_settings_new</v-icon>
+            </v-btn>
+            </v-card>
             <v-tab-item id="Board">
               <v-card outlined>
                 <Board :socket="socket" :study_id="study_id" />
@@ -37,7 +42,7 @@
             </v-tab-item>
             <v-tab-item id="ViewShare">
               <v-card outlined>
-                <ViewShare :socket="socket" :user_id="user_id" :study_id="study_id" :connected_users="connected_users" />
+                <ViewShare :socket="socket" :user_id="user_id" :study_id="study_id" :connected_users="connected_users" @changeView="changeView" />
               </v-card>
             </v-tab-item>
             <v-tab-item id="Help">
@@ -46,15 +51,15 @@
             </v-tab-item>
           </v-tabs>
         </v-col>
-        <v-col align="center" justify="center" v-if="talk">
+        <v-col align="center" justify="center" v-show="talk">
           <v-card outlined tile>
             <v-row no-gutters hidden class="pa-0">
-              <FaceTalk :socket="socket" :user_id="user_id" :study_id="study_id" @connected="connected" />
+              <FaceTalk :socket="socket" :user_id="user_id" :study_id="study_id" @connected="connected" :sharing_id="sharing_id" />
             </v-row>
             <v-row no-gutters>
               <v-col cols="12">
                 <v-card outlined>
-                  <Chatting class="pa-0 ma-0" :socket="socket" :study_id="study_id" />
+                  <Chatting class="pa-0 ma-0" :socket="socket" :study_id="study_id" :user_id="user_id" />
                 </v-card>
               </v-col>
             </v-row>
@@ -72,6 +77,10 @@ import NotePad from "@/components/workspace/NotePad";
 import ViewShare from "@/components/workspace/ViewShare";
 import FaceTalk from "@/components/workspace/FaceTalk";
 import Chatting from "@/components/workspace/Chatting";
+// import fs from 'fs'
+// const option = {
+//   key: fs.readFileSync('../../../T02A106.pem'),
+// }
 
 export default {
   data() {
@@ -80,6 +89,7 @@ export default {
       socket: "",
       user_id: null,
       connected_users: [],
+      sharing_id: "no one",
 
       talk: true,
     };
@@ -95,6 +105,7 @@ export default {
   created() {
     this.user_id = `${Math.ceil(Math.random() * 100000)}`
     this.study_id = window.location.href.split('workspace/')[1]
+    // this.socket = io.connect(`http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
     this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
     // this.socket = io.connect(`http://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
       // this.socket = io.connect("http://70.12.247.73:8210", {
@@ -106,7 +117,6 @@ export default {
   
   },
   mounted() {
-
     window.onbeforeunload = () => {
       this.socket.emit("leave", { study_id: 1, user_id: `${this.user_id}` });
     };
@@ -114,16 +124,20 @@ export default {
     this.socket.on('alreadyexist', () => {
       alert('못들어온단다 아가야')
 
-      // window.opener = window.location.href; self.close()
-      window.open('about:blank','_self')
+      window.opener.closechild()
     })
   },
   methods: {
+    changeView(change_id) {
+      this.sharing_id = change_id
+    },
+
     async collapse() {
       this.talk = !this.talk
-      // const col = await document.getElementById('col')
-      // console.log(col)
-      // col.class = "col col-12"
+    },
+
+    exit() {
+      window.opener.closechild()
     },
 
     connected(connected_users) {

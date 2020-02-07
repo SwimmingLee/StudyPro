@@ -1,104 +1,106 @@
 <template>
-  <v-card
-    id="notepad_card"
-    class="notepad_card"
-    ref="board"
-    oncontextmenu="return false"
-    ondragstart="return false"
-    onselectstart="return false"
-    maxHeight="640"
-    maxWidth="640"
-  >
-    <div id="firepad-container"></div>
+  <v-card>
+    <div id="editor" />
+    <button id="download">저장하기</button>
   </v-card>
 </template>
-
-<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/codemirror.js"></script>
-<script src="https://cdn.firebase.com/libs/firepad/1.2.0/firepad.min.js"></script>
-
-
 <script>
+import "tui-editor/dist/tui-editor.css";
+import "tui-editor/dist/tui-editor-contents.css";
+import "codemirror/lib/codemirror.css";
+import "highlight.js/styles/github.css";
+import Editor from "tui-editor";
 
 export default {
-  data() {
-    return {};
-  },
   props: ["socket", "study_id"],
-  watch: {},
 
+  data() {
+    return {
+      editor :"",
+      editorText: "",
+      is_change: false
+    };
+  },
   methods: {
-    init() {
-      //// Initialize Firebase.
-      //// TODO: replace with your Firebase project configuration.
+    
+    saveToFile_Chrome(fileName, content) {
+      let blob = new Blob([content], { type: "text/plain" });
+      let objURL = window.URL.createObjectURL(blob);
       
-      let config = {
-        apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
-        authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
-        databaseURL: process.env.VUE_APP_FIREABASE_URL
-      };
-      console.log(config);
-
-      firebase.initializeApp(config);
-
-      //// Get Firebase Database reference.
-      let firepadRef = this.getExampleRef();
-
-      //// Create CodeMirror (with lineWrapping on).
-      let codeMirror = CodeMirror(
-        document.getElementById("firepad-container"),
-        { lineWrapping: true }
-      );  
-      
-      let editorWrapper = codeMirror.getWrapperElement();
-
-      //// Create Firepad (with rich text toolbar and shortcuts enabled).
-      let firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
-        richTextToolbar: true,
-        richTextShortcuts: true
-      });
-
-      //// Initialize contents.
-      // firepad.on('ready', function() {
-      //   if (firepad.isHistoryEmpty()) {
-      //     firepad.setHtml('<span style="font-size: 24px;">Rich-text editing with <span style="color: red">Firepad!</span></span><br/><br/>Collaborative-editing made easy.\n');
-      //   }
-      // });
-    },
-
-    // Helper to get hash from end of URL or generate a random one.
-    getExampleRef() {
-      let ref = firebase.database().ref();
-      
-      // let hash = window.location.hash.replace(/#/g, "");
-      // if (hash) {
-      //   ref = ref.child(1);
-
-      // } else {
-      //   // ref = ref.push(); // generate unique location.
-      //   ref = ref.child(1);
-      //   // window.location = window.location + "#" + ref.key; // add it as a hash to the URL.
-      // }
-      ref = ref.child(this.study_id);
-      // if (typeof console !== "undefined") {
-      //   console.log("Firebase data: ", ref.toString());
-      // }
-      return ref;
+      // 이전에 생성된 메모리 해제
+      if (window.__Xr_objURL_forCreatingFile__) {
+        window.URL.revokeObjectURL(window.__Xr_objURL_forCreatingFile__);
+      }
+      window.__Xr_objURL_forCreatingFile__ = objURL;
+      // let down = document.getElementById("download");
+      let down = document.createElement('a');
+      down.download = fileName;
+      down.href = objURL;
+      down.click();
     }
   },
   mounted() {
-    this.init();
-  },
-  created() {
+    let editor = new Editor({
+      // 에디터 인스턴스 생성
+      el: document.querySelector("#editor"),
+      initialEditType: "markdown",
+      previewStyle: "vertical",
+      height: "500px"
+    });
+
+    document.getElementById("editor").onload = () => {
+      this.is_change = true;
+    };
+
+    // this.editor = document.getElementById("editor");
+    // this.editor.tuiEditor('on', 'focus');
+    editor.on("change", () => {
+      // console.log("보낸거   ", value);
+
+      if (this.is_change) {
+        this.socket.emit("typing", {
+          study_id: this.study_id,
+          text: editor.getHtml()
+        });
+      }
+    });
+
+    // editor.on("keydown", () => {
+    //   this.is_change = true;
+    // });
+
+    // editor.on("keyup", () => {
+    //   this.is_change = false;
+    // });
+
+    this.socket.on("typing", data => {
+      this.is_change = false;
+      editor.setHtml(data.text);
+      this.is_change = true;
+    });
+
+    this.socket.emit("load_pad", {
+      study_id: this.study_id
+    });
+
+    this.socket.on("load_pad", data => {
+      let pad_data = editor.getHtml();
+      this.socket.emit("send_pad", {
+        socket_id: data,
+        pad_data: pad_data
+      });
+    });
+
+    this.socket.on("send_pad", data => {
+      this.is_change = false;
+      editor.setHtml(data.pad_data);
+      this.is_change = true;
+    });
+
+    document.getElementById("download").onclick=()=>{
+      this.saveToFile_Chrome("123123",editor.getMarkdown())
+    }
+    
   }
 };
 </script>
-
-<style scoped>
-#firepad-container {
-  width: 640px;
-  height: 640px;
-}
-
-
-</style>

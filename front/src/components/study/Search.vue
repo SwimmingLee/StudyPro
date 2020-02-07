@@ -7,15 +7,13 @@
           :items="recommendItems"
           :loading="isLoading"
           :search-input.sync="searchInput"
-          chips
           clearable
           hide-details
-          hide-selected
           item-text="name"
           item-value="symbol"
           label="이름으로 검색"
           solo
-          @keyup.enter="loadList()"
+          @keyup.enter="searchEnter()"
         >
           <template v-slot:no-data>
             <v-list-item>
@@ -26,23 +24,12 @@
               </v-list-item-title>
             </v-list-item>
           </template>
-          <template v-slot:selection="{ attr, on, item, selected }">
-            <v-chip
-              v-bind="attr"
-              :input-value="selected"
-              color="blue-grey"
-              class="white--text"
-              v-on="on"
-            >
-              <v-icon left>people</v-icon>
-              <span v-text="item.name"></span>
-            </v-chip>
-          </template>
-          <template v-slot:item="{ item }">
+          <template v-slot:item="{ item }" @click="selectAuto(item.name)">
             <v-list-item-avatar
               color="indigo"
               class="headline font-weight-light white--text"
-            >{{ item.name.charAt(0) }}</v-list-item-avatar>
+              >{{ item.name.charAt(0) }}</v-list-item-avatar
+            >
             <v-list-item-content>
               <v-list-item-title v-text="item.name"></v-list-item-title>
             </v-list-item-content>
@@ -85,14 +72,21 @@
                         class="pt-0"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="searchForm.startdate" no-title scrollable>
+                    <v-date-picker
+                      v-model="searchForm.startdate"
+                      no-title
+                      scrollable
+                    >
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="calendar = false">Cancel</v-btn>
+                      <v-btn text color="primary" @click="calendar = false"
+                        >Cancel</v-btn
+                      >
                       <v-btn
                         text
                         color="primary"
                         @click="$refs.calendar.save(searchForm.startdate)"
-                      >OK</v-btn>
+                        >OK</v-btn
+                      >
                     </v-date-picker>
                   </v-menu>
                 </v-col>
@@ -103,13 +97,19 @@
                   <span>시간</span>
                 </v-col>
                 <v-col cols="4" sm="3" class="pb-0 pr-0">
-                  <timeselector v-model="searchForm.starttime" class="grey lighten-4" />
+                  <timeselector
+                    v-model="searchForm.starttime"
+                    class="grey lighten-4"
+                  />
                 </v-col>
                 <v-col cols="1" class="pb-0 px-0 text-center">
                   <span>~</span>
                 </v-col>
                 <v-col cols="4" sm="3" class="pb-0 pl-0">
-                  <timeselector v-model="searchForm.endtime" class="grey lighten-4" />
+                  <timeselector
+                    v-model="searchForm.endtime"
+                    class="grey lighten-4"
+                  />
                 </v-col>
                 <v-spacer />
               </v-row>
@@ -119,7 +119,12 @@
                   <span>요일</span>
                 </v-col>
                 <v-col sm="9" class="pb-0 pt-1 pl-0">
-                  <v-btn-toggle v-model="searchForm.dayofweek" multiple dense group>
+                  <v-btn-toggle
+                    v-model="searchForm.dayofweek"
+                    multiple
+                    dense
+                    group
+                  >
                     <v-btn>Mon</v-btn>
                     <v-btn>Tue</v-btn>
                     <v-btn>Wed</v-btn>
@@ -166,7 +171,9 @@
       <v-toolbar color="blue lighten-2" dark>
         <v-toolbar-title>Search Results</v-toolbar-title>
       </v-toolbar>
-
+      <v-content v-if="noResult" class="text-center pt-10">
+        <span>검색 대상을 찾지 못했습니다.</span>
+      </v-content>
       <v-list
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="busy"
@@ -182,20 +189,26 @@
         >
           <template v-slot:activator>
             <v-list-item-content>
-              <v-layout row>
-                <v-flex column xs7 class="pl-3">
-                  <v-list-item-title v-text="item.name"></v-list-item-title>
-                </v-flex>
-                <v-flex column xs2>
+              <v-row>
+                <v-col cols="6" class="pl-3">
+                  <v-list-item-title 
+                    v-text="item.name"
+                    class="text-overflow">
+                  </v-list-item-title>
+                </v-col>
+                <v-col cols="2">
                   <span>Mon, Fri</span>
-                </v-flex>
+                </v-col>
                 <v-flex column xs2>
-                  <span>08:00 ~ 12:00</span>
+                  <span>{{ item.start_time+'/'+item.end_time | times}}</span>
                 </v-flex>
                 <v-flex column xs1 text-center>
-                  <v-icon class="mdi mdi-lock" v-if="item.locked"></v-icon>
+                  <span>{{ 0 +'/'+ item.user_limit | limit}}</span>
                 </v-flex>
-              </v-layout>
+                <v-flex column xs1 text-center v-if="item.isopen">
+                  <v-icon class="mdi mdi-lock"></v-icon>
+                </v-flex>
+              </v-row>
             </v-list-item-content>
           </template>
           <!-- 펼쳤을 때 화면 -->
@@ -203,47 +216,69 @@
             <v-layout class="ma-2" row>
               <v-list-item :key="item.id">
                 <v-list-item-content class="pt-0 pb-1">
-                  <v-layout row class="px-3">
-                    <v-layout column xs2 align-center justify-center>
+                  <v-row class="px-2">
+                    <v-col cols="12" md="5" class="align-center justify-center">
                       <v-avatar color="white">
                         <v-icon size="62">mdi-account-circle</v-icon>
                       </v-avatar>
-
-                    </v-layout>
+                    </v-col>
 
                     <!-- 내용 -->
-                    <v-flex column xs10 class="pl-4">
+                    <v-col cols="12" md="7" class="pl-4">
                       <!-- 스터디 소개글 -->
-                      <v-layout row class="pb-2">
-                        <v-flex column xs2 class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold">스터디 소개</v-content>
-                        </v-flex>
-                        <v-flex column xs9 class="pl-2">{{ item.intro }}</v-flex>
-                      </v-layout>
+                      <v-row class="pb-2">
+                        <v-col cols="4" md="5" class="text-end pr-3">
+                          <v-content text class="pt-0 font-weight-bold"
+                            >스터디 목표</v-content
+                          >
+                        </v-col>
+                        <v-col cols="8" md="7" class="pl-2">{{
+                          item.goal
+                        }}</v-col>
+                      </v-row>
                       <!-- 시작시간 -->
-                      <v-layout row class="pb-2 pt-4">
-                        <v-flex column xs2 class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold">시작날짜</v-content>
-                        </v-flex>
-                        <v-flex column xs9 class="pl-2">{{ item.startdate }}</v-flex>
-                      </v-layout>
+                      <v-row class="pb-2 pt-4">
+                        <v-col cols="4" md="5" class="text-end pr-3">
+                          <v-content text class="pt-0 font-weight-bold"
+                            >시작날짜</v-content
+                          >
+                        </v-col>
+                        <v-col cols="8" md="7" class="pl-2">{{
+                          item.start_date
+                        }}</v-col>
+                      </v-row>
                       <!-- 스터디기간 -->
-                      <v-layout row class="pt-4">
-                        <v-flex column xs2 class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold">스터디기간</v-content>
-                        </v-flex>
-                        <v-flex column xs9 class="pl-2">{{ item.duration }}</v-flex>
-                      </v-layout>
-                    </v-flex>
-                  </v-layout>
-                  <v-layout column xs1 justify-center class="pt-4">
-                    <v-btn class="white lighten-3" elevation="1" @click="viewDetail(item.id)">
-                      <span class="dark--text">view detail</span>
-                    </v-btn>
-                  </v-layout>
+                      <v-row class="pt-4">
+                        <v-col cols="4" md="5" class="text-end pr-3">
+                          <v-content text class="pt-0 font-weight-bold"
+                            >스터디기간</v-content
+                          >
+                        </v-col>
+                        <v-col cols="8" md="7" class="pl-2">{{
+                          item.start_date + '/' + item.end_date | duration
+                        }}</v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" class="justify-center pa-0">
+                      <v-btn
+                        class="white lighten-3"
+                        elevation="1"
+                        @click="viewDetail(item.id)"
+                      >
+                        <span class="dark--text">view detail</span>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
                 </v-list-item-content>
               </v-list-item>
-              <group-modal :group-modal="groupModal" :id="id" :item="item" v-on:close="modalClose" />
+              <group-modal
+                :group-modal="groupModal"
+                :id="id"
+                :item="item"
+                v-on:close="modalClose"
+              />
             </v-layout>
           </template>
         </v-list-group>
@@ -279,36 +314,38 @@ export default {
       goal: ""
     },
     items: [],
+    copyItems: [],
     recommendItems: [],
     displayItems: [],
+    searchedItems: [],
     disLoading: false,
+    noResult: false,
   }),
   components: {
     GroupModal: () => import("@/components/study/GroupModal"),
     Timeselector
   },
-  computed:{
+  computed: {
     display() {
-      console.log('display Enter')
-      this.loadDeaultList()
-      console.log(this.displayItems)
-      console.log('display Enter return')
-      return this.displayItems
+      if(this.items.length == 0){
+        this.loadDeaultList()
+      }
+      return this.displayItems;
     },
 
     autocomplete() {
-      return 1
-    }
+      return 1;
+    },
   },
   watch: {
     searchInput() {
       this.recommendItems = [];
 
-      if(this.searchInput == ''){
+      if (this.searchInput == "") {
         return;
-      }else{
-        for(var item of this.items){
-          if(item.name.includes(this.searchInput)){
+      } else {
+        for (var item of this.items) {
+          if (item.name.includes(this.searchInput)) {
             this.recommendItems.push(item);
           }
         }
@@ -317,12 +354,17 @@ export default {
   },
   methods: {
     async loadDeaultList() {
-      if(this.items.length == 0){
-        this.items = await this.$store.dispatch('study/getAllStudy')
-        this.displayItems = this.items.slice(0)
+      this.items = await this.$store.dispatch("study/getAllStudy");
+      this.copyItems = this.items.slice(0);
+
+      this.displayItems = [];
+      let len = this.copyItems.length < 20 ? this.copyItems.length : 20;
+      for (var i = 0; i < len; i++) {
+        this.displayItems.push(this.copyItems.shift());
       }
     },
-    loadMore: function() {
+
+    loadMore() {
       this.busy = true;
       setTimeout(() => {
         let len = 10;
@@ -330,9 +372,41 @@ export default {
         for (var i = 0; i < len; i++) {
           this.displayItems.push(this.recommendItems.shift());
         }
-      }, 100);
+      }, 1000);
       this.busy = false;
     },
+
+    async searchEnter() {
+      this.busy = true
+      this.displayItems = []
+      this.noResult = false
+      if (!this.searchInput) {
+        await this.loadDeaultList();
+        this.busy = false;
+        return;
+      } else {
+        for (var item of this.items) {
+          if (item.name.includes(this.searchInput)) {
+            this.searchedItems.push(item);
+          }
+        }
+        let len = this.searchedItems.length < 20 ? this.searchedItems.length : 20;
+        for (var i = 0; i < len; i++) {
+          this.displayItems.push(this.searchedItems.shift());
+        }
+      }
+      console.log(this.displayItems)
+      this.searchInput = ''
+      if (this.displayItems.length == 0) {
+        this.noResult = true
+      }
+      this.busy = false;
+    },
+
+    selectAuto(name) {
+      this.searchInput = name;
+    },
+
     viewDetail(id) {
       this.id = id;
       this.groupModal = true;
@@ -341,8 +415,35 @@ export default {
       this.groupModal = false;
     }
   },
-  mounted() {
-    this.groupModal = false;
+  filters: {
+    duration(value){
+      let arr = value.split('/')
+      let start = arr[0].trim().split('-')
+      let end = arr[1].trim().split('-')
+      let year = end[0] - start[0]
+      let month = end[1] - start[1]
+      let day = end[2] - start[2]
+      let result = ''
+      if(year != 0)  result += year+'년 '
+      if(month != 0)  result += month+'월 '
+      if(day != 0)  result += day+'일'
+      
+      if(result == '')  return '기간미지정'
+      else  return result
+    },
+    times(value){
+      let arr = value.split('/')
+      let start = [Math.floor(arr[0]/100), arr[0]%100]
+      let end = [Math.floor(arr[1]/100), arr[1]%100]
+      return start[0]+':'+start[1]+' ~ '+end[0]+':'+end[1]
+    },
+    limit(value){
+      let arr = value.split('/')
+      if(arr[0] == arr[1]){
+        return '무제한'
+      }
+      return value
+    }
   }
 };
 </script>
@@ -350,5 +451,8 @@ export default {
 <style>
 .v-text-field__details {
   display: none;
+}
+.v-list-item__icon{
+  min-width: 24px !important;
 }
 </style>

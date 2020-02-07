@@ -1,39 +1,45 @@
 <template>
   <v-container flex>
-    <v-flex class="ma-2 mb-5">
+    <v-flex class="ma-2">
       <v-icon large class="mr-2" color="black">menu_book</v-icon>스터디 게시판
-      <v-btn to="/board/register" class="mx-1 green white--text">
+      <v-btn style="float: right;" to="/board/register" class="mx-1 green white--text">
         <v-icon class="mr-3" dark>create</v-icon>글 작성
       </v-btn>
     </v-flex>
-    <v-divider class="ma-3" />
+    <v-divider class="mx-3 mt-5" />
+    <v-row>
+      <v-col>
+        <router-view class="pa-0" />
+      </v-col>
+    </v-row>
+    <v-divider class="mx-3 mb-3" />
     <v-row justify="center">
       <v-col>
         <v-card outlined class="px-3 py-2 mx-3" elevation="3">
           <v-row>
-            <v-col cols="1" class="mx-3 pa-1 px-3">No.</v-col>
+            <v-col align="center" cols="1" class="pa-1 px-3">No.</v-col>
             <v-divider class="my-2" vertical />
-            <v-col cols="7" class="pa-2 pl-5">제목</v-col>
+            <v-col cols="6" class="pa-2 pl-5">제목</v-col>
             <v-spacer />
             <v-divider class="my-2" vertical />
-            <v-col cols="1" class="pa-2 px-3">작성자</v-col>
-            <v-col cols="1" class="pa-2 px-3">조회</v-col>
-            <v-col cols="1" class="pa-2 px-3">추천</v-col>
+            <v-col align="center" cols="2" class="pa-2 px-3">작성자</v-col>
+            <v-col align="center" cols="1" class="pa-2 px-3">조회</v-col>
+            <v-col align="center" cols="1" class="pa-2 px-3">추천</v-col>
           </v-row>
           <v-divider class="ma-2" />
 
-          <v-card flat to="board/register" v-for="(post, index) in postList" :key="index">
+          <v-card flat v-for="(post, index) in post_list" :key="index" @click="routeTo(post.id)">
             <!-- <v-card  v-for="(post, index) in postList" :key="index"> -->
             <v-row>
-              <v-col cols="1" class="mx-3 pa-2 px-3">{{ post.id }}</v-col>
+              <v-col align="center" cols="1" class="pa-2 px-3">{{ post.id }}</v-col>
               <v-divider class="my-2" vertical />
-              <v-col cols="7" class="pa-2 pl-5">{{ post.title }}</v-col>
+              <v-col cols="6" class="pa-2 pl-5">{{ post.title }}</v-col>
               <v-spacer />
 
               <v-divider class="my-2" vertical />
-              <v-col cols="1" class="pa-2 px-3">{{ post.writer }}</v-col>
-              <v-col cols="1" class="pa-2 px-3">{{ post.view }}</v-col>
-              <v-col cols="1" class="pa-2 px-3">0</v-col>
+              <v-col align="center" cols="2" class="pa-2 px-3">{{ post.writer }}</v-col>
+              <v-col align="center" cols="1" class="pa-2 px-3">{{ post.view }}</v-col>
+              <v-col align="center" cols="1" class="pa-2 px-3">0</v-col>
             </v-row>
           </v-card>
         </v-card>
@@ -41,9 +47,12 @@
     </v-row>
     <v-divider class="ma-3" />
 
-    <v-row justify="center" class="ma-3">
+    <v-row justify="center" class="my-3 mx-1">
       <v-col>
         <v-pagination v-model="page" :length="lastpage" :total-visible="10"></v-pagination>
+        <v-btn style="float: right;" to="/board/register" class="mx-1 green white--text">
+          <v-icon class="mr-3" dark>create</v-icon>글 작성
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -73,6 +82,9 @@ export default {
     page() {
       this.postUpdate();
     },
+    board() {
+      this.board_name = this.board;
+    },
     board_name() {
       this.postUpdate();
     }
@@ -100,8 +112,16 @@ export default {
         offset: (this.page - 1) * 10
       });
       this.post_list = post_list.data;
-      console.log(post_list);
+    },
+    routeTo(post_id) {
+      this.$router.push({
+        name: "post_id",
+        params: { post_id: post_id }
+      });
     }
   }
 };
 </script>
+
+<style scoped>
+</style>

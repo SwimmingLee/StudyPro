@@ -5,9 +5,11 @@
     "scripts": {
         "serve": "vue-cli-service serve --mode development",
         "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
+        "lint": "vue-cli-service lint",
+        "syuba": "vue-cli-service serve --mode local"
     },
     "dependencies": {
+        "@toast-ui/vue-editor": "^1.1.1",
         "axios": "^0.19.1",
         "codemirror": "^5.51.0",
         "codemirror-addon-infotip": "^1.0.0",
@@ -17,7 +19,9 @@
         "grpc": "^1.24.2",
         "material-design-icons-iconfont": "^5.0.1",
         "register-service-worker": "^1.6.2",
+        "simplemd": "^0.1.1",
         "socket.io": "^2.3.0",
+        "tui-editor": "^1.4.10",
         "tiptap-vuetify": "^2.11.1",
         "v-calendar": "^1.0.0-beta.23",
         "vue": "^2.6.10",

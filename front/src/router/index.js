@@ -11,6 +11,7 @@ import home from '@/views/Home'
 
 // 게시판
 import board from '@/components/board/board'
+import postContent from '@/components/board/post_content'
 import postRegister from '@/components/board/post_register'
 
 // 유저페이지
@@ -29,8 +30,7 @@ import msgbox from '@/components/user/messenger/MessageHome'
 
 Vue.use(VueRouter)
 
-const routes = [
-    {
+const routes = [{
         path: '/',
         name: 'intro',
         components: {
@@ -58,19 +58,6 @@ const routes = [
         }
     },
     {
-        path: '/board',
-        name: 'board',
-        components: {
-            header: appHeader,
-            default: board,
-            footer: appFooter
-        },
-        // props: (route) => ({
-        //     board: route.board,
-        //     post_id: route.post_id,
-        // }),
-    },
-    {
         path: '/board/register',
         name: 'post_register',
         components: {
@@ -78,6 +65,27 @@ const routes = [
             default: postRegister,
             footer: appFooter
         },
+    },
+    {
+        path: '/board/:board',
+        name: 'board',
+        components: {
+            header: appHeader,
+            default: board,
+            footer: appFooter
+        },
+        props: true,
+        children: [
+            {
+                path: '?id=:post_id',
+                name: 'post_id',
+                component: postContent,
+            }
+        ]
+        // props: (route) => ({
+        //     board: route.board,
+        //     post_id: route.post_id,
+        // }),
     },
     {
         path: '/user',
@@ -88,17 +96,17 @@ const routes = [
             footer: appFooter
         },
         children: [{
-            path: 'signup',
-            component: signup
-        },
-        {
-            path: 'signup/success',
-            component: signupSuccess
-        },
-        {
-            path: 'mypage',
-            component: mypage
-        }
+                path: 'signup',
+                component: signup
+            },
+            {
+                path: 'signup/success',
+                component: signupSuccess
+            },
+            {
+                path: 'mypage',
+                component: mypage
+            }
         ]
     },
     {
