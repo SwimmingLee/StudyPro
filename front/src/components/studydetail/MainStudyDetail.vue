@@ -9,7 +9,7 @@
         </v-card-title>
       </v-img>
 
-      <router-link :to="`/workspace/${study_id}`" target="_blank">
+      <!-- <router-link :to="`/workspace/${study_id}`" target="_blank"> -->
         <v-btn
           id="enterbtn"
           class="mr-4"
@@ -19,10 +19,11 @@
           absolute
           x-large
           right
+          @click="child"
         >
           입장하기
         </v-btn>
-      </router-link>
+      <!-- </router-link> -->
     </v-card>
 
     <v-card>
@@ -75,6 +76,8 @@
 </template>
 
 <script>
+// import io from "socket.io-client";
+
 export default {
   name: "studydetail",
   components: {
@@ -84,8 +87,17 @@ export default {
     StudyMember: () => import("@/components/studydetail/StudyMember")
   },
   created() {
+    window.closechild = () => {
+      this.workspace.close()
+    }
+
     this.study_id = window.location.href.split('studydetail/')[1]
-  }
+  },
+  methods:{
+    child() {
+      this.workspace = window.open(`/workspace/${this.study_id}`)
+    }
+  },
 };
 </script>
 
