@@ -34,7 +34,7 @@ class AuthService {
                         this.setToken(response.data.user)
                         return response.data.user;
                     } else {
-                        return {}
+                        return response.data.user;
                     }
                 })
     }
