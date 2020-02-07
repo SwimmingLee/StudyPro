@@ -1,10 +1,10 @@
 <template>
-  <v-content id="boardRegister">
+  <v-content id="boardModify">
     <v-row justify="center">
       <v-col cols="12" md="10">
         <v-card class="pa-5">
           <v-flex class="ma-2 mb-5">
-            <v-icon large class="mr-2" color="black">edit</v-icon>새 글 작성
+            <v-icon large class="mr-2" color="black">refresh</v-icon>수정하기
           </v-flex>
           <v-card class="pa-3 px-5" outlined>
             <v-row justify="center">
@@ -70,11 +70,28 @@
             <v-divider />
             <v-row>
               <v-col class="text-end">
-                <v-btn class="mx-1 error">
-                  <v-icon left dark @click="history.back()">keyboard_backspace</v-icon>이전으로
-                </v-btn>
-                <v-btn class="mx-1 primary" @click="create">
-                  <v-icon left dark>create</v-icon>글 작성
+                <v-dialog v-model="dialog" persistent max-width="290">
+                  <template v-slot:activator="{ on }">
+                    <v-btn class="mx-1 error" v-on="on">
+                      <v-icon left dark>keyboard_backspace</v-icon>이전으로
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title class="error white--text pa-2 pl-5">경고</v-card-title>
+                    <v-card-text class="pa-4 pb-2">
+                      작성 중이던 내용이 사라집니다.
+                      <br />이전 페이지로 이동하시겠습니까?
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" text @click="dialog = false">계속 작업하기</v-btn>
+                      <v-btn color="green darken-1" text @click="clickBack">이전으로</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+
+                <v-btn class="mx-1 primary" @click="modify">
+                  <v-icon left dark>refresh</v-icon>수정하기
                 </v-btn>
               </v-col>
             </v-row>
@@ -121,19 +138,12 @@ Vue.use(TiptapVuetifyPlugin, {
 });
 
 export default {
+  props: [ "board", "post_id", ],
   components: { TiptapVuetify },
   data() {
     return {
       items: ["study", "free", "notice"],
-
-      postData: {
-        type: "study",
-        study_id: "8",
-        writer: "24",
-        title: "",
-        content: "",
-        board: ""
-      },
+      dialog: false,
 
       files: [],
       rules: [
@@ -168,9 +178,23 @@ export default {
   },
 
   methods: {
-    create() {
+    modify() {
       PostService.createPost(this.postData);
+      this.$router.go(-1);
     },
+    clickBack() {
+      this.$router.go(-1);
+    },
+    async getPost() {
+      const tmp = await PostService.getPostContents({
+        type: this.board,
+        post_id: this.post_id
+      });
+      this.post_contents = tmp.data;
+    }
   }
 };
 </script>
+
+<style scoped>
+</style>

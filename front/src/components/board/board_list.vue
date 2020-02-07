@@ -1,7 +1,8 @@
 <template>
   <v-container flex>
     <v-flex class="ma-2">
-      <v-icon large class="mr-2" color="black">menu_book</v-icon>스터디 게시판
+      <v-icon large class="mr-2" color="black">{{ menuIcon }}</v-icon>
+      {{ menuText }}
       <v-btn style="float: right;" to="/board/register" class="mx-1 green white--text">
         <v-icon class="mr-3" dark>create</v-icon>글 작성
       </v-btn>
@@ -66,11 +67,19 @@ export default {
   data() {
     return {
       board_name: "study",
+      menuIcon: "menu_book",
+      menuText: "스터디 게시판",
 
       page: 1,
       lastpage: 1,
       post_number: 0,
-      post_list: []
+      post_list: [],
+
+      menus: [
+        { icon: "menu_book", text: "스터디 게시판", route: "study" },
+        { icon: "style", text: "자유 게시판", route: "free" },
+        { icon: "notifications_none", text: "공지사항", route: "notice" }
+      ]
     };
   },
 
@@ -84,6 +93,13 @@ export default {
     },
     board() {
       this.board_name = this.board;
+      for (let i = 0; i < this.menus.length; i++) {
+        if (this.menus[i].route === this.board_name) {
+          this.menuIcon = this.menus[i].icon;
+          this.menuText = this.menus[i].text;
+        }
+      }
+      this.page = 1;
     },
     board_name() {
       this.postUpdate();
@@ -92,7 +108,7 @@ export default {
   computed: {
     postList: function() {
       return this.post_list;
-    }
+    },
   },
   methods: {
     async postUpdate() {

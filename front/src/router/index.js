@@ -13,6 +13,7 @@ import home from '@/views/Home'
 import board from '@/components/board/board'
 import postContent from '@/components/board/post_content'
 import postRegister from '@/components/board/post_register'
+import postModify from '@/components/board/post_modify'
 
 // 유저페이지
 import user from '@/views/User'
@@ -63,6 +64,15 @@ const routes = [{
         components: {
             header: appHeader,
             default: postRegister,
+            footer: appFooter
+        },
+    },
+    {
+        path: '/board/modify',
+        name: 'post_modify',
+        components: {
+            header: appHeader,
+            default: postModify,
             footer: appFooter
         },
     },
