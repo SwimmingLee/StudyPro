@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import AlarmService from "@/services/alarm.service"
+
 export default {
   name: "checkmodal",
   data: () => ({
@@ -82,7 +84,7 @@ export default {
     subalert: false,
     isSuccess: true
   }),
-  props: ["checkModal", "item", "titleText", "mainText"],
+  props: ["checkModal", "to", "mainText", "titleText"],
   watch: {
     checkModal() {
       this.subopen = this.checkModal;
@@ -110,28 +112,32 @@ export default {
     },
 
     async clickYes() {
-      //통신 시도
-
+      
       this.subalert = true;
       this.subopen = false;
+      //통신 시도
+      const msg = {
+        to : this.to,
+        title: this.titleText,
+        content: this.mainText
+      }
+   
+      console.log(msg)
+      AlarmService.sendAlarm(msg);
 
-      // 통신 성공
-
+      // 통신 성공 실패 여부
       this.isSuccess = true;
 
+      //통신 성공
       if (this.isSuccess) {
         this.subopen = false;
         this.$emit("sendYes");
-
-
-
       }
 
-      //  //통신 실패
-      // else if(!this.isSuccess){
-      //      this.$emit("sendNo")
-
-      // }
+      //통신 실패
+      else if(!this.isSuccess){
+        this.$emit("sendNo")
+      }
 
       // this.$emit("sendYes")
     }
