@@ -4,6 +4,7 @@
             <v-col>
             <v-btn to='/msgbox' elevation="0" color='white'>
                     <v-icon style="color:black">mdi-email</v-icon>
+                    <span>쪽지함</span>
             </v-btn>
             </v-col>
             <v-col>
