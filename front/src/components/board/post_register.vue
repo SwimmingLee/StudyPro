@@ -188,7 +188,7 @@ export default {
     create() {
       this.postData.writer = this.user().uid;
       PostService.createPost(this.postData);
-      // this.$router.go(-1);
+      this.$router.go(-1);
     },
     clickBack() {
       this.$router.go(-1);
