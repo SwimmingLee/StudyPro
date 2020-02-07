@@ -59,7 +59,7 @@
             <v-row no-gutters>
               <v-col cols="12">
                 <v-card outlined>
-                  <Chatting class="pa-0 ma-0" :socket="socket" :study_id="study_id" />
+                  <Chatting class="pa-0 ma-0" :socket="socket" :study_id="study_id" :user_id="user_id" />
                 </v-card>
               </v-col>
             </v-row>
