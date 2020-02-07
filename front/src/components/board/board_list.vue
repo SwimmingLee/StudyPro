@@ -108,6 +108,10 @@ export default {
   created() {
     this.postUpdate();
     this.board_name = this.board;
+
+    if (this.$router.params.post_id) {
+      this.routeTo(this.$router.params.post_id);
+    }
   },
   watch: {
     page() {
