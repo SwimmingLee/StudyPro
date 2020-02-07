@@ -27,7 +27,7 @@
           <v-col align-self="center" cols="8">
             <v-row>
               <span style="font-size:15px" class="ma-0">
-                <v-icon v-if="msg.check" style="color:grey">mdi-email</v-icon>
+                <v-icon v-if="msg.check" style="color:grey">mdi-email-open</v-icon>
                 <v-icon v-else style="color:black">mdi-email</v-icon>
                 {{ msg.title }}
               </span>
