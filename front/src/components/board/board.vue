@@ -14,7 +14,7 @@
                     <v-list-item
                       v-for="(menu, index) in menus"
                       :key="index"
-                      @click="routeTo(menu)"
+                      @click="routeTo(menu.route)"
                     >
                       <v-list-item-icon>
                         <v-icon>{{ menu.icon }}</v-icon>
