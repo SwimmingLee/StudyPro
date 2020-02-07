@@ -2,15 +2,14 @@
   <v-container flex>
     <v-flex class="ma-2">
       <v-icon large class="mr-2" color="black">menu_book</v-icon>스터디 게시판
-      <slot name="registerbtn">
         <v-btn
           style="float: right;"
           to="/board/register"
           class="mx-1 green white--text"
+          v-show="showBtn"
         >
           <v-icon class="mr-3" dark>create</v-icon>글 작성
         </v-btn>
-      </slot>
     </v-flex>
     <v-divider class="mx-3 mt-5" />
     <v-row>
@@ -71,15 +70,14 @@
           :length="lastpage"
           :total-visible="10"
         ></v-pagination>
-        <slot name="registerbtn">
           <v-btn
             style="float: right;"
             to="/board/register"
             class="mx-1 green white--text"
+            v-show="showBtn"
           >
             <v-icon class="mr-3" dark>create</v-icon>글 작성
           </v-btn>
-        </slot>
       </v-col>
     </v-row>
   </v-container>
@@ -120,6 +118,19 @@ export default {
   computed: {
     postList: function() {
       return this.post_list;
+    },
+    showBtn(){
+      // let user = this.$store.getters['auth/getUser']
+      // if(user['isAdmin'] != null){
+      //   return true
+      // }else{
+        console.log(this.board_name)
+      if(this.board_name == 'notice'){
+        return false
+      }
+      // }
+      return true
+      // return this.$store.getters['auth/getUser'].isAdmin
     }
   },
   methods: {
