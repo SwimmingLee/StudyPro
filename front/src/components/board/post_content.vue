@@ -10,9 +10,9 @@
         <v-divider class="my-2" />
         <v-row no-gutters>
           <v-col style="max-width: 60px;">작성자 :</v-col>
-          <v-col>{{this.post_contents.writer}}</v-col>
+          <v-col>{{ this.post_contents.writer }}</v-col>
           <v-col style="max-width: 45px;">조회 :</v-col>
-          <v-col style="max-width: 40px;">{{this.post_contents.view}}</v-col>
+          <v-col style="max-width: 40px;">{{ this.post_contents.view }}</v-col>
           <v-col style="max-width: 45px;">추천 :</v-col>
           <v-col style="max-width: 30px;">0</v-col>
         </v-row>
