@@ -58,7 +58,7 @@
             color="primary--text transparent"
             elevation="0"
             @click="clickSend"
-            >보내기!!</v-btn
+            >보내기</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import AlarmService from "@/services/alarm.service"
+// import AlarmService from "@/services/alarm.service"
 
 
 export default {
@@ -121,19 +121,27 @@ export default {
       this.checkModal = false;
       this.open = false;
     },
-    async clickSend() {
-      //보내는 통신
-      const msg = {
-        to: this.item.id,
-        title: this.titleText,
-        content: this.mainText
-      }
-      const res = await AlarmService.sendAlarm(msg)
-      console.log(res)
-
+     clickExit() {
       this.mainText = "";
       this.titleText = "";
       this.open = false;
+    },
+    async clickSend() {
+
+      this.checkModal=true;
+      //보내는 통신
+      
+      // const msg = {
+      //   to: this.item.id,
+      //   title: this.titleText,
+      //   content: this.mainText
+      // }
+      // const res = await AlarmService.sendAlarm(msg)
+      // console.log(res)
+
+      // this.mainText = "";
+      // this.titleText = "";
+      // this.open = false;
     }
   }
 };

@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import AlarmService from "@/services/alarm.service"
+//import AlarmService from "@/services/alarm.service"
 export default {
   data: () => ({
     groupModal: false,
@@ -155,11 +155,11 @@ export default {
       this.groupModal = true;
     }
   },
-  async created() {
-    console.log("rsvMsg-created")
-    const rsvMsg = await AlarmService.getReceivedAlarm();
-    this.rxBox = rsvMsg.data;
-    console.log(rsvMsg.data)
-  }
+  // async created() {
+  //   console.log("rsvMsg-created")
+  //   const rsvMsg = await AlarmService.getReceivedAlarm();
+  //   this.rxBox = rsvMsg.data;
+  //   console.log(rsvMsg.data)
+  // }
 };
 </script>

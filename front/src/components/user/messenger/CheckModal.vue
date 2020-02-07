@@ -110,28 +110,34 @@ export default {
     },
 
     async clickYes() {
-      //통신 시도
-
+      
       this.subalert = true;
       this.subopen = false;
 
-      // 통신 성공
+      //통신 시도
 
-      this.isSuccess = true;
 
+
+
+      // 통신 성공 실패 여부
+      this.isSuccess = false;
+
+
+
+
+
+      //통신 성공
       if (this.isSuccess) {
         this.subopen = false;
         this.$emit("sendYes");
 
-
-
       }
 
-      //  //통신 실패
-      // else if(!this.isSuccess){
-      //      this.$emit("sendNo")
+      //통신 실패
+      else if(!this.isSuccess){
+        this.$emit("sendNo")
 
-      // }
+      }
 
       // this.$emit("sendYes")
     }
