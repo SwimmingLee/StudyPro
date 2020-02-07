@@ -59,7 +59,7 @@
             <v-row no-gutters>
               <v-col cols="12">
                 <v-card outlined>
-                  <Chatting class="pa-0 ma-0" :socket="socket" :study_id="study_id" />
+                  <Chatting class="pa-0 ma-0" :socket="socket" :study_id="study_id" :user_id="user_id" />
                 </v-card>
               </v-col>
             </v-row>
@@ -77,7 +77,10 @@ import NotePad from "@/components/workspace/NotePad";
 import ViewShare from "@/components/workspace/ViewShare";
 import FaceTalk from "@/components/workspace/FaceTalk";
 import Chatting from "@/components/workspace/Chatting";
-
+// import fs from 'fs'
+// const option = {
+//   key: fs.readFileSync('../../../T02A106.pem'),
+// }
 
 export default {
   data() {
@@ -102,8 +105,8 @@ export default {
   created() {
     this.user_id = `${Math.ceil(Math.random() * 100000)}`
     this.study_id = window.location.href.split('workspace/')[1]
-    this.socket = io.connect(`http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-    // this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    // this.socket = io.connect(`http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
     // this.socket = io.connect(`http://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
       // this.socket = io.connect("http://70.12.247.73:8210", {
       transports: ["websocket"],

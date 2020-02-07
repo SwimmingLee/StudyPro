@@ -1,8 +1,13 @@
 import app from "./app"
-
-export const server = require('http').createServer(app)
+import fs from "fs"
+const option = {
+    key: fs.readFileSync('../T02A106.pem'),
+    // cert: fs.readFileSync('../T02A106.pem')
+}
+export const server = require('http').createServer(option, app)
 const io = require('socket.io')(server)
 
+// console.log(option)
 let rooms = {};
 export const connect = () => {
     try {
@@ -177,6 +182,5 @@ export const connect = () => {
             })
         });
     } catch (error) {
-        console.error(error)
     }
 }
