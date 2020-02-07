@@ -190,24 +190,24 @@
           <template v-slot:activator>
             <v-list-item-content>
               <v-row>
-                <v-col cols="6" class="pl-3">
+                <v-col cols="12" md="5" class="pl-3 text-center">
                   <v-list-item-title 
                     v-text="item.name"
                     class="text-overflow">
                   </v-list-item-title>
                 </v-col>
-                <v-col cols="2">
+                <v-col cols="6" sm="4" md="2" class="text-center">
                   <span>Mon, Fri</span>
                 </v-col>
-                <v-flex column xs2>
+                <v-col cols="6" sm="4" md="2" class="text-center">
                   <span>{{ item.start_time+'/'+item.end_time | times}}</span>
-                </v-flex>
-                <v-flex column xs1 text-center>
+                </v-col>
+                <v-col cols="6" sm="2" md="2" class="text-center">
                   <span>{{ 0 +'/'+ item.user_limit | limit}}</span>
-                </v-flex>
-                <v-flex column xs1 text-center v-if="item.isopen">
+                </v-col>
+                <v-col cols="6" sm="2" md="1" class="text-center pr-3" v-if="item.isopen">
                   <v-icon class="mdi mdi-lock"></v-icon>
-                </v-flex>
+                </v-col>
               </v-row>
             </v-list-item-content>
           </template>
@@ -237,7 +237,7 @@
                         }}</v-col>
                       </v-row>
                       <!-- 시작시간 -->
-                      <v-row class="pb-2 pt-4">
+                      <v-row class="pb-2">
                         <v-col cols="4" md="5" class="text-end pr-3">
                           <v-content text class="pt-0 font-weight-bold"
                             >시작날짜</v-content
@@ -248,7 +248,7 @@
                         }}</v-col>
                       </v-row>
                       <!-- 스터디기간 -->
-                      <v-row class="pt-4">
+                      <v-row>
                         <v-col cols="4" md="5" class="text-end pr-3">
                           <v-content text class="pt-0 font-weight-bold"
                             >스터디기간</v-content
