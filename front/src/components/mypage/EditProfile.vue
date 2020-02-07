@@ -250,6 +250,6 @@ export default {
         this.validate();
       }
     }
-  },
+  }
 };
 </script>
