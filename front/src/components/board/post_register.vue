@@ -143,11 +143,12 @@ export default {
     return {
       items: ["study", "free", "notice"],
       dialog: false,
+      loginDialog: false,
 
       postData: {
         type: "study",
         study_id: "8",
-        writer: "24",
+        writer: "",
         title: "",
         content: "",
         board: "study"
@@ -193,8 +194,13 @@ export default {
     clickBack() {
       this.$router.go(-1);
     },
-  },
-  
+    isAuth() {
+      return this.$store.getters["auth/isAuth"];
+    },
+    getUser() {
+      return this.$store.getters["auth/getUser"];
+    }
+  }
 };
 </script>
 
