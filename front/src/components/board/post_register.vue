@@ -186,7 +186,7 @@ export default {
 
   methods: {
     create() {
-      this.postData.writer = this.user();
+      this.postData.writer = this.user().uid;
       PostService.createPost(this.postData);
       this.$router.go(-1);
     },
