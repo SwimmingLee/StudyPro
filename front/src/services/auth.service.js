@@ -29,6 +29,7 @@ class AuthService {
             .then(this.handleResponse)
             .then(
                 response => {
+                    console.log(response)
                     if (response.data.state == 'success') {
                         this.setToken(response.data.user)
                         return response.data.user;

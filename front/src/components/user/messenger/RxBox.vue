@@ -156,9 +156,10 @@ export default {
     }
   },
   async created() {
+    console.log("rsvMsg-created")
     const rsvMsg = await AlarmService.getReceivedAlarm();
-    //console.log(rsvMsg.data)
     this.rxBox = rsvMsg.data;
+    console.log(rsvMsg.data)
   }
 };
 </script>
