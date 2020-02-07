@@ -27,13 +27,11 @@ export default {
   },
   methods: {
     signinClose(){
+      if(this.$store.getters['auth/isAuth']){
+        this.$router.push({name:'home'})
+      }
       this.signinModal = false
     }
   },
-  mounted(){
-    if(this.$store.getters['auth/isAuth']){
-      this.$router.push({name:'home'})
-    }
-  }
 };
 </script>
