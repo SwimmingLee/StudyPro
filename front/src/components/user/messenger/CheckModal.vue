@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import AlarmService from "@/services/alarm.service"
+import AlarmService from "@/services/alarm.service";
 
 export default {
   name: "checkmodal",
@@ -112,17 +112,16 @@ export default {
     },
 
     async clickYes() {
-      
       this.subalert = true;
       this.subopen = false;
       //통신 시도
       const msg = {
-        to : this.to,
+        to: this.to,
         title: this.titleText,
         content: this.mainText
-      }
-   
-      console.log(msg)
+      };
+
+      console.log(msg);
       AlarmService.sendAlarm(msg);
 
       // 통신 성공 실패 여부
@@ -135,8 +134,8 @@ export default {
       }
 
       //통신 실패
-      else if(!this.isSuccess){
-        this.$emit("sendNo")
+      else if (!this.isSuccess) {
+        this.$emit("sendNo");
       }
 
       // this.$emit("sendYes")

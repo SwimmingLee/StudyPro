@@ -20,12 +20,14 @@
             <v-avatar size="40px" class="ma-0">
               <img :src="msg.from.profile_url" />
             </v-avatar>
-            <p style="font-size:14px" class="ma-0 pt-2">{{ msg.from.nickname }}</p>
+            <p style="font-size:14px" class="ma-0 pt-2">
+              {{ msg.from.nickname }}
+            </p>
           </v-col>
           <v-col align-self="center" cols="8">
             <v-row>
               <span style="font-size:15px" class="ma-0">
-                <v-icon v-if="msg.check" style="color:grey">mdi-email</v-icon>
+                <v-icon v-if="msg.check" style="color:grey">mdi-email-open</v-icon>
                 <v-icon v-else style="color:black">mdi-email</v-icon>
                 {{ msg.title }}
               </span>
@@ -33,8 +35,8 @@
           </v-col>
           <v-col align-self="center" cols="2">
             <span style="font-size:15px" class="ma-0">
-              {{msg.created_date.substr(0, 10)}}
-              {{msg.created_date.substr(11, 5)}}
+              {{ msg.created_date.substr(0, 10) }}
+              {{ msg.created_date.substr(11, 5) }}
             </span>
           </v-col>
         </v-row>
@@ -52,7 +54,7 @@
   </v-list>
 </template>
 <script>
-import AlarmService from "@/services/alarm.service"
+import AlarmService from "@/services/alarm.service";
 export default {
   data: () => ({
     groupModal: false,
@@ -65,8 +67,8 @@ export default {
     isAuth: function() {
       return this.$store.getters.isAuth;
     },
-    rsvMsg : function() {
-      return this.rxBox
+    rsvMsg: function() {
+      return this.rxBox;
     }
   },
   components: {
@@ -92,12 +94,12 @@ export default {
     this.rxBox = rsvMsg.data;
   },
   watch: {
-      async tab(t){
-        if (t === 0) {
-          const rsvMsg = await AlarmService.getReceivedAlarm();
-          this.rxBox = rsvMsg.data;
-        }
+    async tab(t) {
+      if (t === 0) {
+        const rsvMsg = await AlarmService.getReceivedAlarm();
+        this.rxBox = rsvMsg.data;
       }
+    }
   }
 };
 </script>

@@ -20,7 +20,9 @@
             <v-avatar size="40px" class="ma-0">
               <img :src="msg.to.profile_url" />
             </v-avatar>
-            <p style="font-size:14px" class="ma-0 pt-2">{{ msg.to.nickname }}</p>
+            <p style="font-size:14px" class="ma-0 pt-2">
+              {{ msg.to.nickname }}
+            </p>
           </v-col>
           <v-col align-self="center" cols="8">
             <v-row>
@@ -29,8 +31,8 @@
           </v-col>
           <v-col align-self="center" cols="2">
             <span style="font-size:15px" class="ma-0">
-              {{msg.created_date.substr(0, 10)}}
-              {{msg.created_date.substr(11, 5)}}
+              {{ msg.created_date.substr(0, 10) }}
+              {{ msg.created_date.substr(11, 5) }}
             </span>
           </v-col>
         </v-row>
@@ -61,8 +63,8 @@ export default {
     isAuth: function() {
       return this.$store.getters.isAuth;
     },
-    sendMsg : function() {
-      return this.txBox
+    sendMsg: function() {
+      return this.txBox;
     }
   },
   components: {
@@ -81,18 +83,18 @@ export default {
       this.groupModal = true;
     }
   },
-  watch: {
-      async tab(t){
-        if (t === 1) {
-          const sendMsg = await AlarmService.getSendAlarm();
-          this.txBox = sendMsg.data
-          console.log(this.txBox)
-        }
-      }
-  },
   async created() {
-    const sendMsg = await AlarmService.getSendAlarm()
-    this.txBox = sendMsg.data
-  }
+    const sendMsg = await AlarmService.getSendAlarm();
+    this.txBox = sendMsg.data;
+  },
+  watch: {
+    async tab(t) {
+      if (t === 1) {
+        const sendMsg = await AlarmService.getSendAlarm();
+        this.txBox = sendMsg.data;
+        // console.log(this.txBox);
+      }
+    }
+  }  
 };
 </script>
