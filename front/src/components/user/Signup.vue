@@ -355,7 +355,7 @@ export default {
     this.name = ''
     this.nickname = ''
     this.phone = ''
-    this.gender = ''
+    this.genderinput = ''
     this.introducing = ''
     this.avatar = null
   }
