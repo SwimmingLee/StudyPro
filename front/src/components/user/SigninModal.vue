@@ -115,11 +115,11 @@ export default {
   },
   methods: {
     close() {
-      (this.user = {
+      this.user = {
         email: "",
         password: "",
         loginRemain: false
-      }),
+      }
       this.$emit("close");
     },
 
