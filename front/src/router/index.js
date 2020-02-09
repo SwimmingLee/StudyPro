@@ -29,6 +29,10 @@ import workspace from '@/components/workspace/WorkSpace'
 //쪽지함 접근(임시)
 import msgbox from '@/components/user/messenger/MessageHome'
 
+// 일정관리 페이지
+import calendar from '@/views/Calendar'
+import mycal from '@/components/calendar/MyCalendar'
+
 Vue.use(VueRouter)
 
 const routes = [{
@@ -144,6 +148,23 @@ const routes = [{
             footer: appFooter
         }
     },
+
+    {
+        path: '/calendar',
+        name: 'calendar',
+        components:{
+            header: appHeader,
+            default: calendar,
+            footer: appFooter
+        },
+        children:[
+            {
+                path: 'mycal',
+                name: 'mycal',
+                component: mycal,
+            }
+        ]
+    }
 ]
 
 const router = new VueRouter({

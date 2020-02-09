@@ -180,7 +180,7 @@ export default {
   },
   mounted() {
     if (this.$store.getters["auth/isAuth"]) {
-      this.close();
+      this.$emit('close')
     }
   }
 };

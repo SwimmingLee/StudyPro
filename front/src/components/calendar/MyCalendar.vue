@@ -3,22 +3,23 @@
     <div v-if="!isAuth">
       <v-row class="fill-height" justify="center">
         <v-col cols="11" class="mx-2">
-          <v-card class="py-0">
-            <v-toolbar flat class="d-block d-sm-none">
+          <v-card>
+            <v-toolbar flat color="customTheme" dark>
+              <v-toolbar-title class="ml-5">내 일정관리</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn
-                class="customTheme mr-2 pa-0"
+                class="primary mr-2 pa-0 d-flex d-sm-none"
                 elevation="0"
                 @click="loadAddModal()"
               >
                 <span class="white--text px-2">+</span>
-                <span class="white--text pr-2">일정추가</span>
+                <span class="pr-2">일정추가</span>
               </v-btn>
             </v-toolbar>
 
             <!-- 달력 -->
-            <v-row class="fill-height pt-0">
-              <v-col class="pt-0">
+            <v-row class="fill-height">
+              <v-col>
                 <v-sheet height="64">
                   <v-toolbar flat color="white">
                     <v-btn
@@ -38,12 +39,12 @@
                     <v-toolbar-title>{{ title }}</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-btn
-                      class="customTheme mr-2 pa-0 d-none d-sm-flex"
+                      class="primary mr-2 pa-0 d-none d-sm-flex"
                       elevation="0"
                       @click="loadAddModal()"
                     >
                       <span class="white--text px-2">+</span>
-                      <span class="white--text pr-2">일정추가</span>
+                      <span class="pr-2">일정추가</span>
                     </v-btn>
                     <v-menu bottom right>
                       <template v-slot:activator="{ on }">
@@ -137,20 +138,20 @@
                           <v-card class="py-2 px-3">
                             <p>정말 삭제하시겠습니까?</p>
                             <v-row justify="end">
-                            <v-btn
-                              text
-                              color="dark lighten-2"
-                              @click="delOpen = false"
-                            >
-                              Cancel
-                            </v-btn>
-                            <v-btn
-                              text
-                              color="error"
-                              @click="eventDelete(selectedEvent)"
-                            >
-                              Ok
-                            </v-btn>
+                              <v-btn
+                                text
+                                color="dark lighten-2"
+                                @click="delOpen = false"
+                              >
+                                Cancel
+                              </v-btn>
+                              <v-btn
+                                text
+                                color="error"
+                                @click="eventDelete(selectedEvent)"
+                              >
+                                Ok
+                              </v-btn>
                             </v-row>
                           </v-card>
                         </v-dialog>
@@ -182,7 +183,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <study-cal-modal
+      <add-modal
         :add-modal="addModal"
         :is-update="isUpdate"
         :prop-event="propEvent"
@@ -239,14 +240,13 @@ export default {
     addModal: false,
     detail: false,
     detailMenus: [
-      { title: "가져오기", value: "movemycal" },
       { title: "일정수정", value: "update" },
       { title: "삭제", value: "delete" }
     ],
     delOpen: false
   }),
   components: {
-    studyCalModal: () => import("./StudyCalModal"),
+    AddModal: () => import("./AddModal"),
     requestSignin: () => import("@/components/base/RequestSignin")
   },
   computed: {
@@ -297,8 +297,7 @@ export default {
       end: "2020-02-13 18:00",
       group: "테스트그룹",
       color: "pink",
-      event_id: 0,
-      group_id: 0
+      event_id: 0
     });
 
     // 마운트시 내 일정 엑시오스 요청
@@ -398,8 +397,7 @@ export default {
         end: event.end,
         group: event.group,
         color: event.color,
-        event_id: 0,
-        group_id: 0
+        event_id: 0
       };
       //테스트라인
       this.events.push(newEvent);
@@ -412,9 +410,6 @@ export default {
       console.log("clickDetailMenu Method in MyCalendar.vue");
 
       switch (value) {
-        case "movemycal":
-          this.moveMyCal(event);
-          break;
         case "update":
           this.loadAddModal(event);
           break;
@@ -431,15 +426,7 @@ export default {
 
       //삭제 엑시오스 요청
 
-      this.delOpen = false
-      this.$refs.calendar.checkChange();
-    },
-
-    moveMyCal(event) {
-      console.log(event);
-
-      // 엑시오스 요청
-
+      this.delOpen = false;
       this.$refs.calendar.checkChange();
     }
   }
