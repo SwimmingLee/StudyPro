@@ -101,13 +101,15 @@
 
                   <v-row justify="center" align="center">
                     <v-col cols="10">
-                      <v-text-field
-                        v-model="introducing"
-                        :counter="50"
-                        :rules="introducingRules"
-                        label="자신을 멋지게 소개해 주세요!"
-                        required
-                      ></v-text-field>
+                      <v-textarea
+                  label="소개"
+                  outlined
+                  height="150px"
+                  v-model="introducing"
+                  single-line
+                  :rules="introducingRules"
+                  :counter="50"
+                ></v-textarea>
                     </v-col>
                   </v-row>
 

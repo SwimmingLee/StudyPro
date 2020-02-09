@@ -60,19 +60,18 @@
       <!-- <v-container class="align-right"> -->
       <template v-else>
         <a
-          @click="(usermenu = !usermenu), (usermenuactive = !usermenuactive)"
-          :class="{ usermenuactive }"
-          class="userPanel d-none d-sm-block"
+          @click="(usermenu = !usermenu)"
+          class="dropPanel d-none d-sm-block"
         >
           <v-avatar size="30" class="mr-2">
             <v-img
               :src="currentUser.profile_url"
-              v-if="currentUser.profile_url"
+              v-if="currentUser && currentUser.profile_url"
             >
             </v-img>
             <v-icon v-else>mdi-account-circle</v-icon>
           </v-avatar>
-          <span class="mr-2" style="color:rgba(70,80,255,.8);">
+          <span class="mr-2" style="color:rgba(70,80,255,.8);" v-if="currentUser">
             {{ currentUser.nickname }}
           </span>
           <svg viewBox="0 0 451.847 451.847" width="12">
@@ -83,7 +82,7 @@
               fill="rgba(200,200,200,.7)"
             />
           </svg>
-          <div :class="{ usermenu }" class="userdropdown">
+          <div :class="{ menu:usermenu }" class="dropdown">
             <ul class="pl-0">
               <li v-for="item in usermenuitems" :key="item.title">
                 <v-btn
@@ -225,11 +224,11 @@ export default {
       signinModal: false,
       checkbox: false,
       usermenu: false,
-      usermenuactive: false,
       menus: [
         { icon: "home", title: "스터디홈", route: "/home" },
         { icon: "group", title: "스터디검색", route: "/study" },
         { icon: "alarm", title: "게시판", route: "/board/study" },
+        { icon: "calendar_today", title: "일정관리", route: "/calendar/mycal" },
         { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" }
       ],
       navigations: [
@@ -284,7 +283,7 @@ export default {
         this.signout();
         location.reload();
       }
-    }
+    },
   }
 };
 </script>
