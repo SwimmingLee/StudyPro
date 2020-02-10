@@ -4,10 +4,10 @@
         <v-list class="pa-0">
           <v-list-item>
             <v-list-item-avatar>
-              <img src="@/assets/images/pengsoo.jpg" alt="PengSoo" />
+              <img :src="user.profile_url" alt="PengSoo" />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>PengSoo</v-list-item-title>
+              <v-list-item-title>{{user.nickname}}</v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn :class="profile.fav ? 'red--text' : ''" icon @click="profile.fav = !profile.fav">
@@ -20,7 +20,7 @@
         <v-list>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-subtitle>I'm PengSoo. 친구추가 하지마세요 진짜로 ㅋㅋㅋㅋㅋ</v-list-item-subtitle>
+              <v-list-item-subtitle>{{user.about}}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -33,8 +33,32 @@
 </template>
 
 <script>
+import UserService from "@/services/user.service"
+
 export default {
-    props: ["profile"]
+    data() {
+      return {
+        user: {},
+      }
+    },
+    props: ["profile", "show_profile_id", "debuging"],
+    mounted() {
+      this.debuging ? 
+      this.getDummyData():
+      UserService.getUserById(this.show_profile_id)
+      .then(data => {
+        this.user.nickname= data.data.nickname
+        this.user.profile_url = data.data.profile_url
+        this.user.about = data.data.about
+      })
+    },
+    methods: {
+      getDummyData() {
+        this.user.nickname = 'Pengsoo'
+        this.user.profile_url = require("@/assets/images/pengsoo.jpg")
+        this.user.about = '친추 하지 마세요 진짜 ㅋㅋㅋ'
+      }
+    },
 }
 </script>
 
