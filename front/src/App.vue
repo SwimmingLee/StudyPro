@@ -1,9 +1,7 @@
 <template>
   <v-app id="app">
     <router-view name="header" />
-    <v-fade-transition>
-      <router-view class="mainView fill-height" />
-    </v-fade-transition>
+      <router-view class="mainView fill-height pt-8" />
     <router-view name="footer" />
   </v-app>
 </template>

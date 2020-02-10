@@ -15,26 +15,58 @@
           multiple
           show-arrows
         >
-          <v-slide-item v-for="item in items" :key="item.gid">
+          <v-slide-item v-for="studyInfo in studyList" :key="studyInfo.id">
+            
+            
+            
             <v-card
               color="white"
               class="ma-4"
               height="auto"
               width="200"
-              @click="viewDetail(item)"
+              @click="viewDetail(studyInfo)"
             >
-              <v-img
+
+         <v-img
+         
+         color="rgb(255, 0, 0, 0.2)"
+      class="white--text align-end"
+      height="auto"
+      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+    >
+    <v-row class="pt-4" justify="center">
+      <v-avatar size="100" class="mr-2">
+                  <v-img
+                    
+                     :src="studyInfo.captain.profile_url"
+                  >
+                  </v-img>
+                </v-avatar>
+    </v-row>
+
+     
+
+
+
+
+      <v-card-title style="font-size:30px">{{ studyInfo.name }}</v-card-title>
+      <v-card-title style="font-size:15px">{{ studyInfo.description }}</v-card-title>
+      <v-card-title style="font-size:15px"> 시간 : {{ studyInfo.start_time }} - {{ studyInfo.end_time }}</v-card-title>
+      
+    </v-img>
+
+              <!-- <v-img
                 class="white--text align-end"
                 height="150px"
                 :src="item.imgsrc"
-              ></v-img>
+              ></v-img> -->
 
-              <v-row justify="center">
-                <p id="istudyname" class="mt-3">{{ item.name }}</p>
+              <!-- <v-row justify="center">
+                <p id="istudyname" class="mt-3">{{ studyInfo.name }}</p>
               </v-row>
 
               <v-row justify="center">
-                <p id="istudytopic">{{ item.topic }}</p>
+                <p id="istudytopic">{{ studyInfo.description }}</p>
               </v-row>
 
               <v-row justify="center">
@@ -43,13 +75,13 @@
 
               <v-row justify="center">
                 <p style="font-size:15px">
-                  시간 : {{ item.starttime }} - {{ item.endtime }}
+                  시간 : {{ studyInfo.start_time }} - {{ studyInfo.end_time }}
                 </p>
               </v-row>
 
               <v-row justify="center">
                 <p style="font-size:15px">인원 : {{ item.member }} / 6</p>
-              </v-row>
+              </v-row> -->
             </v-card>
           </v-slide-item>
           <template>
@@ -95,10 +127,21 @@
 </template>
 
 <script>
+
+
+import StudyService from "@/services/study.service"
+
 export default {
   name: "tabs",
   data: () => ({
     current: "ng",
+
+    studyList:[],
+    studyInfo:{},
+
+
+
+
 
     groupModal: false,
     item: {},
@@ -179,6 +222,10 @@ export default {
       }
     ]
   }),
+  async created() {
+    this.studyList = await StudyService.getAllStudy();
+    console.log(this.studyList);
+  },
   computed: {
     isAuth: function() {
       return this.$store.getters.isAuth;

@@ -1,5 +1,5 @@
 <template>
-  <v-form>
+  <v-form >
     <v-container>
       <div id="app">
         <v-app id="inspire">

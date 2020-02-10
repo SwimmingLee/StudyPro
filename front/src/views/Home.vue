@@ -1,6 +1,8 @@
 <template>
   <v-content id="home">
+   <v-img src="@/assets/images/back11.jpg" aspect-ratio="9"/>
     <v-container>
+       
       <v-row>
         <v-col cols="12" lg="9" md="12" sm="12">
           <v-card class="pa-1" outlined tile>
@@ -25,7 +27,6 @@
 </template>
 
 <script>
-
 
 export default {
   name: "home",

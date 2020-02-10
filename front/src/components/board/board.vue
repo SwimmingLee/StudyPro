@@ -1,5 +1,6 @@
 <template>
   <v-content id="board">
+    <v-img src="@/assets/images/back12.jpg" aspect-ratio="9"/>
     <v-row justify="center">
       <v-col cols="12" sm="10">
         <v-card>
