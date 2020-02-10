@@ -204,7 +204,6 @@ export default {
           break;
         }
       }
-      console.log(this.connected_users)
       this.$emit('connected', this.connected_users)
       setTimeout(() => {
         this.getPeerConnection(user_id)

@@ -77,10 +77,6 @@ import NotePad from "@/components/workspace/NotePad";
 import ViewShare from "@/components/workspace/ViewShare";
 import FaceTalk from "@/components/workspace/FaceTalk";
 import Chatting from "@/components/workspace/Chatting";
-// import fs from 'fs'
-// const option = {
-//   key: fs.readFileSync('../../../T02A106.pem'),
-// }
 
 export default {
   data() {
