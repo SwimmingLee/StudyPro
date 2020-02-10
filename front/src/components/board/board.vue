@@ -29,7 +29,7 @@
             </v-col>
             <v-col>
               <v-card class="ma-2">
-                <boardList :board="boardList" />
+                <boardList :board="boardList" :post_id="post_id" />
               </v-card>
             </v-col>
           </v-row>
@@ -61,6 +61,10 @@ export default {
   created() {
     if (this.$route.params.board) {
       this.board_list = this.$route.params.board;
+    }
+
+    if (this.$route.params.post_id) {
+      this.post_id = this.$route.params.post_id
     }
   },
 
