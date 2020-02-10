@@ -41,7 +41,6 @@
 
 <script>
 import boardList from "@/components/board/board_list";
-// import postContent from "@/components/board/post_content";
 
 export default {
   name: "board",
@@ -61,6 +60,10 @@ export default {
   created() {
     if (this.$route.params.board) {
       this.board_list = this.$route.params.board;
+    }
+
+    if (this.$route.params.post_id) {
+      this.post_id = this.$route.params.post_id
     }
   },
 
