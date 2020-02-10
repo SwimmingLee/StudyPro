@@ -188,7 +188,6 @@ export default {
     }
     this.local_video = document.getElementById("local_video");
     this.remote_videos[0] = document.getElementById('remote_block_0')
-    console.log(this.remote_videos[1])
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
@@ -205,7 +204,6 @@ export default {
           break;
         }
       }
-      
       this.$emit('connected', this.connected_users)
       setTimeout(() => {
         this.getPeerConnection(user_id)
