@@ -7,13 +7,13 @@
             <v-app id="inspire">
               <v-form ref="form" v-model="valid">
                 <v-card max-width="1000" class="mx-auto">
-                      <v-toolbar flat color="customTheme" dark>
-                  <v-row>
-                    <v-col class="py-0" offset="1">
+                  <v-toolbar flat color="customTheme" dark>
+                    <v-row>
+                      <v-col class="py-0" offset="1">
                         <v-toolbar-title>회원가입</v-toolbar-title>
-                    </v-col>
-                  </v-row>
-                      </v-toolbar>
+                      </v-col>
+                    </v-row>
+                  </v-toolbar>
                   <br />
 
                   <v-row justify="center" align="center">
@@ -101,13 +101,15 @@
 
                   <v-row justify="center" align="center">
                     <v-col cols="10">
-                      <v-text-field
-                        v-model="introducing"
-                        :counter="50"
-                        :rules="introducingRules"
-                        label="자신을 멋지게 소개해 주세요!"
-                        required
-                      ></v-text-field>
+                      <v-textarea
+                  label="소개"
+                  outlined
+                  height="150px"
+                  v-model="introducing"
+                  single-line
+                  :rules="introducingRules"
+                  :counter="50"
+                ></v-textarea>
                     </v-col>
                   </v-row>
 
@@ -322,7 +324,11 @@ export default {
         formData.append("nickname", this.nickname);
         formData.append("gender", this.genderinput == "남성" ? "M" : "W");
         formData.append("phone", this.phone);
-        formData.append("img", this.avatar.imageFile);
+        if(this.avatar){
+          formData.append("img", this.avatar.imageFile);
+        }else{
+          formData.append("img", null)
+        }
         await this.$store.dispatch("auth/register", formData).then(state => {
           if (state) {
             this.$router.push({ path: "/user/signup/success" });
@@ -330,7 +336,6 @@ export default {
             this.notcreated = true;
           }
         });
-
         this.isLoading = false;
       } catch (err) {
         console.error(err);
@@ -349,15 +354,15 @@ export default {
       this.$router.push({ name: "home" });
     }
 
-    this.id = ''
-    this.password = ''
-    this.confirmPassword = ''
-    this.name = ''
-    this.nickname = ''
-    this.phone = ''
-    this.genderinput = ''
-    this.introducing = ''
-    this.avatar = null
+    this.id = "";
+    this.password = "";
+    this.confirmPassword = "";
+    this.name = "";
+    this.nickname = "";
+    this.phone = "";
+    this.genderinput = "";
+    this.introducing = "";
+    this.avatar = null;
   }
 };
 </script>

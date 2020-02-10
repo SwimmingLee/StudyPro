@@ -17,9 +17,9 @@
         >
           <v-layout fill-height align-center aria-hidden>
             <v-flex xs12 md7 offset-xs1>
-              <h1 class="display-3 headerText mb-4">
+              <span class="display-3 headerText mb-4">
                 Header
-              </h1>
+              </span>
             </v-flex>
           </v-layout>
         </v-img>
@@ -59,24 +59,38 @@
       <!-- 유저 이미지 -->
       <!-- <v-container class="align-right"> -->
       <template v-else>
-        <a 
-          @click="usermenu = !usermenu, usermenuactive = !usermenuactive"
-          :class="{ usermenuactive }" class="userPanel">
-          <v-avatar>
-            <v-icon>mdi-account-circle</v-icon>
+        <a
+          @click="(usermenu = !usermenu)"
+          class="dropPanel d-none d-sm-block"
+        >
+          <v-avatar size="30" class="mr-2">
+            <v-img
+              :src="currentUser.profile_url"
+              v-if="currentUser && currentUser.profile_url"
+            >
+            </v-img>
+            <v-icon v-else>mdi-account-circle</v-icon>
           </v-avatar>
-          <span class="mr-2 grey--text" >{{currentUser.nickname}}</span> 
-          <svg viewBox="0 0 451.847 451.847" width="12"><path d="M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751
+          <span class="mr-2" style="color:rgba(70,80,255,.8);" v-if="currentUser">
+            {{ currentUser.nickname }}
+          </span>
+          <svg viewBox="0 0 451.847 451.847" width="12">
+            <path
+              d="M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751
 		c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0
-		c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z" fill="rgba(200,200,200,.7)"/></svg>
-          <div :class="{ usermenu }" class="userdropdown">
+		c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z"
+              fill="rgba(200,200,200,.7)"
+            />
+          </svg>
+          <div :class="{ menu:usermenu }" class="dropdown">
             <ul class="pl-0">
               <li v-for="item in usermenuitems" :key="item.title">
-                <v-btn 
-                  text 
-                  @click.prevent="clickUserMenu(item.name)" 
+                <v-btn
+                  text
+                  @click.prevent="clickUserMenu(item.name)"
                   class="usermenubtn"
-                  :disabled="isLoading">
+                  :disabled="isLoading"
+                >
                   <span class="usermenu">{{ item.title }}</span>
                 </v-btn>
               </li>
@@ -87,19 +101,20 @@
       <!-- </v-container> -->
       <!-- 유저 이미지 끝 -->
 
-      <v-app-bar-nav-icon @click="drawer = true"
-        class="d-block d-sm-none"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click="drawer = true"
+        class="d-block d-sm-none"
+      ></v-app-bar-nav-icon>
 
       <!-- Menu Tab -->
       <template v-slot:extension>
-        <v-tabs
-          background-color="transparent"
-          class="d-none d-sm-block"
-        >
-          <v-tab :to="menu.route"
+        <v-tabs background-color="transparent" class="d-none d-sm-block">
+          <v-tab
+            :to="menu.route"
             class="mx-auto"
             v-for="menu in menus"
-            :key="menu.title">
+            :key="menu.title"
+          >
             <v-icon left>{{ menu.icon }}</v-icon>
             {{ menu.title }}
           </v-tab>
@@ -145,7 +160,7 @@
           :to="item.route"
         >
           <v-list-item-content>
-            <v-list-item-title class="white--text" >{{
+            <v-list-item-title class="white--text">{{
               item.title
             }}</v-list-item-title>
           </v-list-item-content>
@@ -154,7 +169,7 @@
 
       <!-- User Pages -->
       <v-container class="my-0 pa-0" v-if="isAuth">
-        <hr/>
+        <hr />
         <v-layout column align-center>
           <v-flex>
             <router-link to="/mypage">
@@ -173,7 +188,8 @@
             <v-list-item-content
               v-for="item in userpages"
               :key="item.title"
-              :to="item.route">
+              :to="item.route"
+            >
               <v-list-item-title class="white--text underlined">{{
                 item.title
               }}</v-list-item-title>
@@ -181,12 +197,15 @@
           </v-list-item>
         </v-list>
       </v-container>
-      <v-container v-else>
-      </v-container>
+      <v-container v-else> </v-container>
       <template v-slot:append>
         <v-card-actions class="justify-center" v-if="!isAuth">
-          <v-btn text class="pink--text" @click="signinModal=true">로그인</v-btn>
-          <v-btn text class="pink--text transparent" elevation="0" to="/signup">회원가입</v-btn>
+          <v-btn text class="pink--text" @click="signinModal = true"
+            >로그인</v-btn
+          >
+          <v-btn text class="pink--text transparent" elevation="0" to="/signup"
+            >회원가입</v-btn
+          >
         </v-card-actions>
         <v-card-actions class="justify-center" v-else>
           <v-btn text class="pink--text" @click="signout">로그아웃</v-btn>
@@ -197,7 +216,6 @@
 </template>
 
 <script>
-
 export default {
   name: "appHeader",
   data() {
@@ -206,16 +224,16 @@ export default {
       signinModal: false,
       checkbox: false,
       usermenu: false,
-      usermenuactive: false,
       menus: [
-        { icon: "home", title: "홈", route: "/home" },
-        { icon: "group", title: "모임", route: "/study" },
+        { icon: "home", title: "스터디홈", route: "/home" },
+        { icon: "group", title: "스터디검색", route: "/study" },
         { icon: "alarm", title: "게시판", route: "/board/study" },
+        { icon: "calendar_today", title: "일정관리", route: "/calendar/mycal" },
         { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" }
       ],
       navigations: [
-        { title: "홈", route: "/home" },
-        { title: "모임", route: "/study" },
+        { title: "스터디홈", route: "/home" },
+        { title: "스터디검색", route: "/study" },
         { title: "게시판", route: "/board/study" },
         { title: "내 정보", route: "/user/mypage" }
       ],
@@ -225,21 +243,21 @@ export default {
         { title: "일정관리", route: "/mycalendar" }
       ],
       usermenuitems: [
-        { title: "정보수정", name: "info"},
-        { title: "가입목록", name: "groups"},
-        { title: "일정관리", name: "calendar"},
-        { title: "로그아웃", name: "signout"}
+        { title: "정보수정", name: "info" },
+        { title: "가입목록", name: "groups" },
+        { title: "일정관리", name: "calendar" },
+        { title: "로그아웃", name: "signout" }
       ],
       userInfo: {},
-      isLoading: false,
+      isLoading: false
     };
   },
   computed: {
-    currentUser(){
-      return this.$store.getters['auth/getUser']
+    currentUser() {
+      return this.$store.getters["auth/getUser"];
     },
-    isAuth(){
-      return this.$store.getters['auth/isAuth']
+    isAuth() {
+      return this.$store.getters["auth/isAuth"];
     }
   },
   components: {
@@ -249,29 +267,28 @@ export default {
     signinClose() {
       this.signinModal = false;
     },
-    signout(){
-      this.isLoading = true
-      this.$store.dispatch('auth/logout')
-      this.isLoading = false
+    signout() {
+      this.isLoading = true;
+      this.$store.dispatch("auth/logout");
+      this.isLoading = false;
     },
-    clickUserMenu(name){
-      if(name == 'info'){
-        this.$router.push({path: '/user/mypage'})
-      }else if(name == 'groups'){
-        this.$router.push({path: '/user/groups'})
-      }else if(name == 'calendar'){
-        this.$router.push({path: '/user/calendar'})
-      }else if(name == 'signout'){
-        this.signout()
-        location.reload()
+    clickUserMenu(name) {
+      if (name == "info") {
+        this.$router.push({ path: "/user/mypage" });
+      } else if (name == "groups") {
+        this.$router.push({ path: "/user/groups" });
+      } else if (name == "calendar") {
+        this.$router.push({ path: "/user/calendar" });
+      } else if (name == "signout") {
+        this.signout();
+        location.reload();
       }
-    }
-  },
+    },
+  }
 };
 </script>
 
 <style scoped>
-
 .v-application a {
   color: gray;
   text-decoration: none;
@@ -291,9 +308,9 @@ export default {
 
 .usermenu {
   font-size: 13px;
-  color: rgba(0,0,0,.7) !important;
+  color: rgba(0, 0, 0, 0.7) !important;
 }
-.usermenubtn{
+.usermenubtn {
   width: 100%;
   justify-content: start;
 }

@@ -3,7 +3,7 @@
 // }
 $black: #212529;
 $white: #ffffff;
-.userPanel {
+.dropPanel {
     display: block;
     text-decoration: none;
     transition: all 200ms ease;
@@ -19,16 +19,35 @@ $white: #ffffff;
     }
 }
 
-.userdropdown {
-    transform: translatex(10%) rotatex(90deg) scale(0);
+.dropdown {
+    transform: translatex(0%) rotatex(90deg) scale(0);
     transform-origin: 0 0;
     border-radius: 0.35em;
     background-color: rgba($white, 0.75);
     visibility: hidden;
     transition: all 200ms linear;
     width: 160px;
-    &.usermenu {
-        transform: translatex(10%);
+    &.menu {
+        transform: translatex(0%);
+        visibility: visible;
+    }
+    ul>li {
+        &:hover {
+            background-color: rgba(200, 200, 200, 0.55);
+        }
+    }
+}
+
+.detaildrop {
+    transform: translatex(-40%) rotatex(90deg) scale(0);
+    transform-origin: 0 0;
+    border-radius: 0.35em;
+    background-color: rgba($white, 1);
+    visibility: hidden;
+    transition: all 200ms linear;
+    width: 160px;
+    &.menu {
+        transform: translatex(-40%);
         visibility: visible;
     }
     ul>li {
@@ -75,4 +94,14 @@ input[type=number]::-webkit-inner-spin-button {
 .justify-center {
     display: flex;
     justify-content: center;
+}
+
+.justify-start {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.justify-end {
+    display: flex;
+    justify-content: flex-end;
 }

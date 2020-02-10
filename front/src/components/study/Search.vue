@@ -168,7 +168,7 @@
 
     <!-- 결과 테이블 -->
     <v-card class="col-10 offset-1">
-      <v-toolbar color="blue lighten-2" dark>
+      <v-toolbar color="customTheme" dark>
         <v-toolbar-title>Search Results</v-toolbar-title>
       </v-toolbar>
       <v-content v-if="noResult" class="text-center pt-10">

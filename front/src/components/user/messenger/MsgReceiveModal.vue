@@ -178,13 +178,13 @@ export default {
   },
   computed: {
     to: function() {
-      let toUser
-      if (this.tab === 'tx') {
-        toUser = this.msg.to ? this.msg.to.id : null
-      } else if (this.tab === 'rx') {
-        toUser = this.msg.from ? this.msg.from.id : null
+      let toUser;
+      if (this.tab === "tx") {
+        toUser = this.msg.to ? this.msg.to.id : null;
+      } else if (this.tab === "rx") {
+        toUser = this.msg.from ? this.msg.from.id : null;
       }
-      return toUser
+      return toUser;
     }
   }
 };

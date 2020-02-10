@@ -13,13 +13,19 @@
             <v-row></v-row>
           </v-col>
           <v-col align-self="center" cols="2">
-            <v-btn color="green lighten-4" @click="viewDetail(user)">쪽지 보내기</v-btn>
+            <v-btn color="green lighten-4" @click="viewDetail(user)"
+              >쪽지 보내기</v-btn
+            >
           </v-col>
         </v-row>
       </v-card>
     </v-list-item>
     <template>
-      <group-modal :group-modal="groupModal" :user="user" v-on:close="modalClose" />
+      <group-modal
+        :group-modal="groupModal"
+        :user="user"
+        v-on:close="modalClose"
+      />
     </template>
   </v-list>
 </template>
