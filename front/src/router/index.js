@@ -13,6 +13,7 @@ import home from '@/views/Home'
 import board from '@/components/board/board'
 import postContent from '@/components/board/post_content'
 import postRegister from '@/components/board/post_register'
+import postModify from '@/components/board/post_modify'
 
 // 유저페이지
 import user from '@/views/User'
@@ -27,6 +28,10 @@ import workspace from '@/components/workspace/WorkSpace'
 
 //쪽지함 접근(임시)
 import msgbox from '@/components/user/messenger/MessageHome'
+
+// 일정관리 페이지
+import calendar from '@/views/Calendar'
+import mycal from '@/components/calendar/MyCalendar'
 
 Vue.use(VueRouter)
 
@@ -67,25 +72,32 @@ const routes = [{
         },
     },
     {
+        path: '/board/modify',
+        name: 'post_modify',
+        components: {
+            header: appHeader,
+            default: postModify,
+            footer: appFooter
+        },
+    },
+    {
         path: '/board/:board',
         name: 'board',
         components: {
             header: appHeader,
             default: board,
-            footer: appFooter
+            footer: appFooter,
         },
         props: true,
-        children: [
-            {
+        children: [{
                 path: '?id=:post_id',
                 name: 'post_id',
                 component: postContent,
-            }
-        ]
-        // props: (route) => ({
-        //     board: route.board,
-        //     post_id: route.post_id,
-        // }),
+            }]
+            // props: (route) => ({
+            //     board: route.board,
+            //     post_id: route.post_id,
+            // }),
     },
     {
         path: '/user',
@@ -96,6 +108,10 @@ const routes = [{
             footer: appFooter
         },
         children: [{
+                path: 'mypage',
+                component: mypage
+            },
+            {
                 path: 'signup',
                 component: signup
             },
@@ -103,10 +119,6 @@ const routes = [{
                 path: 'signup/success',
                 component: signupSuccess
             },
-            {
-                path: 'mypage',
-                component: mypage
-            }
         ]
     },
     {
@@ -136,6 +148,23 @@ const routes = [{
             footer: appFooter
         }
     },
+
+    {
+        path: '/calendar',
+        name: 'calendar',
+        components:{
+            header: appHeader,
+            default: calendar,
+            footer: appFooter
+        },
+        children:[
+            {
+                path: 'mycal',
+                name: 'mycal',
+                component: mycal,
+            }
+        ]
+    }
 ]
 
 const router = new VueRouter({

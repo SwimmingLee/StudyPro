@@ -13,6 +13,7 @@
                 type="email"
                 :rules="idRules"
                 v-model="user.email"
+                @keyup.enter="clickEnter"
               >
                 <template v-slot:label>
                   <strong>
@@ -28,6 +29,7 @@
                 :rules="passwordRules"
                 type="password"
                 v-model="user.password"
+                @keyup.enter="clickEnter"
               >
                 <template v-slot:label>
                   <strong>
@@ -115,11 +117,11 @@ export default {
   },
   methods: {
     close() {
-      (this.user = {
+      this.user = {
         email: "",
         password: "",
         loginRemain: false
-      }),
+      }
       this.$emit("close");
     },
 
@@ -138,6 +140,10 @@ export default {
             this.message = error.message;
           }
         );
+      }else if(!this.user.email){
+        this.message="아이디를 입력해주세요"
+      }else{
+        this.message="비밀번호를 입력해주세요"
       }
 
       this.isLoading = false;
@@ -167,10 +173,14 @@ export default {
       this.logout();
       // 카카오 로그인 버튼을 생성합니다.
     },
-    mounted() {
-      if (this.$store.getters["auth/isAuth"]) {
-        this.close();
-      }
+
+    clickEnter(){
+      this.signin()
+    }
+  },
+  mounted() {
+    if (this.$store.getters["auth/isAuth"]) {
+      this.$emit('close')
     }
   }
 };

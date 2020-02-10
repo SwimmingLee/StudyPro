@@ -1,8 +1,14 @@
 <template>
   <v-container flex>
     <v-flex class="ma-2">
-      <v-icon large class="mr-2" color="black">menu_book</v-icon>스터디 게시판
-      <v-btn style="float: right;" to="/board/register" class="mx-1 green white--text">
+      <v-icon large class="mr-2" color="black">{{ menuIcon }}</v-icon>
+      {{ menuText }}
+      <v-btn
+        style="float: right;"
+        to="/board/register"
+        class="mx-1 green white--text"
+        v-show="showBtn"
+      >
         <v-icon class="mr-3" dark>create</v-icon>글 작성
       </v-btn>
     </v-flex>
@@ -31,14 +37,26 @@
           <v-card flat v-for="(post, index) in post_list" :key="index" @click="routeTo(post.id)">
             <!-- <v-card  v-for="(post, index) in postList" :key="index"> -->
             <v-row>
-              <v-col align="center" cols="1" class="pa-2 px-3">{{ post.id }}</v-col>
+              <v-col align="center" cols="1" class="pa-2 px-3">
+                {{
+                post.id
+                }}
+              </v-col>
               <v-divider class="my-2" vertical />
               <v-col cols="6" class="pa-2 pl-5">{{ post.title }}</v-col>
               <v-spacer />
 
               <v-divider class="my-2" vertical />
-              <v-col align="center" cols="2" class="pa-2 px-3">{{ post.writer }}</v-col>
-              <v-col align="center" cols="1" class="pa-2 px-3">{{ post.view }}</v-col>
+              <v-col align="center" cols="2" class="pa-2 px-3">
+                {{
+                post.writer
+                }}
+              </v-col>
+              <v-col align="center" cols="1" class="pa-2 px-3">
+                {{
+                post.view
+                }}
+              </v-col>
               <v-col align="center" cols="1" class="pa-2 px-3">0</v-col>
             </v-row>
           </v-card>
@@ -50,7 +68,12 @@
     <v-row justify="center" class="my-3 mx-1">
       <v-col>
         <v-pagination v-model="page" :length="lastpage" :total-visible="10"></v-pagination>
-        <v-btn style="float: right;" to="/board/register" class="mx-1 green white--text">
+        <v-btn
+          style="float: right;"
+          to="/board/register"
+          class="mx-1 green white--text"
+          v-show="showBtn"
+        >
           <v-icon class="mr-3" dark>create</v-icon>글 작성
         </v-btn>
       </v-col>
@@ -66,17 +89,29 @@ export default {
   data() {
     return {
       board_name: "study",
+      menuIcon: "menu_book",
+      menuText: "스터디 게시판",
 
       page: 1,
       lastpage: 1,
       post_number: 0,
-      post_list: []
+      post_list: [],
+
+      menus: [
+        { icon: "menu_book", text: "스터디 게시판", route: "study" },
+        { icon: "style", text: "자유 게시판", route: "free" },
+        { icon: "notifications_none", text: "공지사항", route: "notice" }
+      ]
     };
   },
 
   created() {
     this.postUpdate();
     this.board_name = this.board;
+
+    if (this.$router.params.post_id) {
+      this.routeTo(this.$router.params.post_id);
+    }
   },
   watch: {
     page() {
@@ -84,6 +119,13 @@ export default {
     },
     board() {
       this.board_name = this.board;
+      for (let i = 0; i < this.menus.length; i++) {
+        if (this.menus[i].route === this.board_name) {
+          this.menuIcon = this.menus[i].icon;
+          this.menuText = this.menus[i].text;
+        }
+      }
+      this.page = 1;
     },
     board_name() {
       this.postUpdate();
@@ -92,6 +134,12 @@ export default {
   computed: {
     postList: function() {
       return this.post_list;
+    },
+    showBtn() {
+      if (this.board_name == "notice") {
+        return false;
+      }
+      return true;
     }
   },
   methods: {
@@ -123,5 +171,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

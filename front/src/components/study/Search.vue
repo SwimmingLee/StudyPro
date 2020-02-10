@@ -168,7 +168,7 @@
 
     <!-- 결과 테이블 -->
     <v-card class="col-10 offset-1">
-      <v-toolbar color="blue lighten-2" dark>
+      <v-toolbar color="customTheme" dark>
         <v-toolbar-title>Search Results</v-toolbar-title>
       </v-toolbar>
       <v-content v-if="noResult" class="text-center pt-10">
@@ -189,20 +189,26 @@
         >
           <template v-slot:activator>
             <v-list-item-content>
-              <v-layout row>
-                <v-flex column xs7 class="pl-3">
-                  <v-list-item-title v-text="item.name"></v-list-item-title>
-                </v-flex>
-                <v-flex column xs2>
+              <v-row>
+                <v-col cols="12" md="5" class="pl-3 text-center">
+                  <v-list-item-title 
+                    v-text="item.name"
+                    class="text-overflow">
+                  </v-list-item-title>
+                </v-col>
+                <v-col cols="6" sm="4" md="2" class="text-center">
                   <span>Mon, Fri</span>
-                </v-flex>
-                <v-flex column xs2>
+                </v-col>
+                <v-col cols="6" sm="4" md="2" class="text-center">
                   <span>{{ item.start_time+'/'+item.end_time | times}}</span>
-                </v-flex>
-                <v-flex column xs1 text-center>
-                  <v-icon class="mdi mdi-lock" v-if="!item.isopen"></v-icon>
-                </v-flex>
-              </v-layout>
+                </v-col>
+                <v-col cols="6" sm="2" md="2" class="text-center">
+                  <span>{{ 0 +'/'+ item.user_limit | limit}}</span>
+                </v-col>
+                <v-col cols="6" sm="2" md="1" class="text-center pr-3" v-if="item.isopen">
+                  <v-icon class="mdi mdi-lock"></v-icon>
+                </v-col>
+              </v-row>
             </v-list-item-content>
           </template>
           <!-- 펼쳤을 때 화면 -->
@@ -210,59 +216,61 @@
             <v-layout class="ma-2" row>
               <v-list-item :key="item.id">
                 <v-list-item-content class="pt-0 pb-1">
-                  <v-layout row class="px-3">
-                    <v-layout column xs2 align-center justify-center>
+                  <v-row class="px-2">
+                    <v-col cols="12" md="5" class="align-center justify-center">
                       <v-avatar color="white">
                         <v-icon size="62">mdi-account-circle</v-icon>
                       </v-avatar>
-                    </v-layout>
+                    </v-col>
 
                     <!-- 내용 -->
-                    <v-flex column xs10 class="pl-4">
+                    <v-col cols="12" md="7" class="pl-4">
                       <!-- 스터디 소개글 -->
-                      <v-layout row class="pb-2">
-                        <v-flex column xs2 class="text-end pr-3">
+                      <v-row class="pb-2">
+                        <v-col cols="4" md="5" class="text-end pr-3">
                           <v-content text class="pt-0 font-weight-bold"
                             >스터디 목표</v-content
                           >
-                        </v-flex>
-                        <v-flex column xs9 class="pl-2">{{
+                        </v-col>
+                        <v-col cols="8" md="7" class="pl-2">{{
                           item.goal
-                        }}</v-flex>
-                      </v-layout>
+                        }}</v-col>
+                      </v-row>
                       <!-- 시작시간 -->
-                      <v-layout row class="pb-2 pt-4">
-                        <v-flex column xs2 class="text-end pr-3">
+                      <v-row class="pb-2">
+                        <v-col cols="4" md="5" class="text-end pr-3">
                           <v-content text class="pt-0 font-weight-bold"
                             >시작날짜</v-content
                           >
-                        </v-flex>
-                        <v-flex column xs9 class="pl-2">{{
+                        </v-col>
+                        <v-col cols="8" md="7" class="pl-2">{{
                           item.start_date
-                        }}</v-flex>
-                      </v-layout>
+                        }}</v-col>
+                      </v-row>
                       <!-- 스터디기간 -->
-                      <v-layout row class="pt-4">
-                        <v-flex column xs2 class="text-end pr-3">
+                      <v-row>
+                        <v-col cols="4" md="5" class="text-end pr-3">
                           <v-content text class="pt-0 font-weight-bold"
                             >스터디기간</v-content
                           >
-                        </v-flex>
-                        <v-flex column xs9 class="pl-2">{{
+                        </v-col>
+                        <v-col cols="8" md="7" class="pl-2">{{
                           item.start_date + '/' + item.end_date | duration
-                        }}</v-flex>
-                      </v-layout>
-                    </v-flex>
-                  </v-layout>
-                  <v-layout column xs1 justify-center class="pt-4">
-                    <v-btn
-                      class="white lighten-3"
-                      elevation="1"
-                      @click="viewDetail(item.id)"
-                    >
-                      <span class="dark--text">view detail</span>
-                    </v-btn>
-                  </v-layout>
+                        }}</v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" class="justify-center pa-0">
+                      <v-btn
+                        class="white lighten-3"
+                        elevation="1"
+                        @click="viewDetail(item.id)"
+                      >
+                        <span class="dark--text">view detail</span>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
                 </v-list-item-content>
               </v-list-item>
               <group-modal
@@ -428,6 +436,13 @@ export default {
       let start = [Math.floor(arr[0]/100), arr[0]%100]
       let end = [Math.floor(arr[1]/100), arr[1]%100]
       return start[0]+':'+start[1]+' ~ '+end[0]+':'+end[1]
+    },
+    limit(value){
+      let arr = value.split('/')
+      if(arr[0] == arr[1]){
+        return '무제한'
+      }
+      return value
     }
   }
 };
@@ -436,5 +451,8 @@ export default {
 <style>
 .v-text-field__details {
   display: none;
+}
+.v-list-item__icon{
+  min-width: 24px !important;
 }
 </style>

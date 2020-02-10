@@ -28,7 +28,10 @@
 
 <script>
 export default {
-  name: "intro"
+  name: "intro",
+  mounted(){
+    this.$router.push({name:'home'})
+  }
 };
 </script>
 

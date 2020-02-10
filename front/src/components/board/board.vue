@@ -1,7 +1,7 @@
 <template>
   <v-content id="board">
     <v-row justify="center">
-      <v-col cols="10">
+      <v-col cols="12" sm="10">
         <v-card>
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
@@ -49,6 +49,7 @@ export default {
     return {
       defaultRoute: "/board/",
       board_list: "study",
+
       menus: [
         { icon: "menu_book", text: "스터디 게시판", route: "study" },
         { icon: "style", text: "자유 게시판", route: "free" },
