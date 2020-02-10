@@ -71,9 +71,26 @@
               <v-divider />
               <v-row>
                 <v-col class="text-end">
-                  <v-btn class="mx-1 error">
-                    <v-icon left dark>keyboard_backspace</v-icon>이전으로
-                  </v-btn>
+                  <v-dialog v-model="dialog" persistent max-width="290">
+                    <template v-slot:activator="{ on }">
+                      <v-btn class="mx-1 error" v-on="on">
+                        <v-icon left dark>keyboard_backspace</v-icon>이전으로
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title class="error white--text pa-2 pl-5">경고</v-card-title>
+                      <v-card-text class="pa-4 pb-2">
+                        작성 중이던 내용이 사라집니다.
+                        <br />이전 페이지로 이동하시겠습니까?
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green darken-1" text @click="dialog = false">계속 작업하기</v-btn>
+                        <v-btn color="green darken-1" text @click="clickBack">이전으로</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+
                   <v-btn class="mx-1 primary" @click="create">
                     <v-icon left dark>create</v-icon>글 작성
                   </v-btn>
@@ -134,9 +151,8 @@ export default {
   },
   data() {
     return {
-      items: ["study", "free", "notice"],
+      items: ["study", "free"],
       dialog: false,
-      loginDialog: false,
 
       postData: {
         type: "study",
@@ -181,23 +197,24 @@ export default {
   computed: {
     isAuth() {
       return this.$store.getters["auth/isAuth"];
-    }
+    },
   },
 
   methods: {
     create() {
-      this.postData.writer = this.user().uid;
+      this.postData.writer = this.getUser().uid;
       PostService.createPost(this.postData);
       this.$router.go(-1);
     },
     clickBack() {
       this.$router.go(-1);
     },
-    user() {
+    getUser() {
       return this.$store.getters["auth/getUser"];
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

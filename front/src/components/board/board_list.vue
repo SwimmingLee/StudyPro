@@ -35,7 +35,6 @@
           <v-divider class="ma-2" />
 
           <v-card flat v-for="(post, index) in post_list" :key="index" @click="routeTo(post.id)">
-            <!-- <v-card  v-for="(post, index) in postList" :key="index"> -->
             <v-row>
               <v-col align="center" cols="1" class="pa-2 px-3">
                 {{
