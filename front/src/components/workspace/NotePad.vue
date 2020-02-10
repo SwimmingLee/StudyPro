@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <div id="editor" />
-    <button id="download">저장하기</button>
+    <!-- <button id="download">저장하기</button> -->
   </v-card>
 </template>
 <script>
@@ -52,7 +52,7 @@ export default {
       el: document.querySelector("#editor"),
       initialEditType: "markdown",
       previewStyle: "vertical",
-      height: "500px"
+      height: "653px"
     });
 
     document.getElementById("editor").onload = () => {

@@ -72,6 +72,8 @@ export const connect = () => {
             })
 
             socket.on('leave', function (data) {
+                console.log("leave");
+                
                 // let study_id = 1;
                 let user_id = data.user_id;
                 let socket_id = socket.id;

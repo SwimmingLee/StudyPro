@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card outlined class="pt-3 px-3">
-      <v-card height="200" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus align="left">
+      <v-card height="256" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus align="left">
         <v-list ref="chat" outlined v-for="(data, index) in messages" :key="index">
           {{ data.user_nickname }}
           <v-card outlined class="ma-0 pa-1">{{ data.message }}</v-card>
