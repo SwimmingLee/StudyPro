@@ -1,9 +1,4 @@
 import app from "./app"
-import fs from "fs"
-const option = {
-    key: fs.readFileSync('../T02A106.pem'),
-    // cert: fs.readFileSync('../T02A106.pem')
-}
 export const server = require('http').createServer(option, app)
 const io = require('socket.io')(server)
 

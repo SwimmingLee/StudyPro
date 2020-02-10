@@ -37,7 +37,14 @@ export default {
       down.download = fileName;
       down.href = objURL;
       down.click();
-    }
+    },
+
+    isIE() {
+    return (navigator.appName === 'Netscape' && navigator.userAgent.search('Trident') !== -1) ||
+        navigator.userAgent.toLowerCase().indexOf("msie") !== -1;
+}
+
+
   },
   mounted() {
     let editor = new Editor({

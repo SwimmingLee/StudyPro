@@ -105,20 +105,20 @@ export default {
   created() {
     this.user_id = `${Math.ceil(Math.random() * 100000)}`
     this.study_id = window.location.href.split('workspace/')[1]
-    // this.socket = io.connect(`http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-    this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    this.socket = io.connect(`http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    // this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
     // this.socket = io.connect(`http://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
       // this.socket = io.connect("http://70.12.247.73:8210", {
       transports: ["websocket"],
       secure: true,
     });
-    this.socket.emit("join", { study_id: 1, user_id: `${this.user_id}` });
+    this.socket.emit("join", { study_id: this.study_id, user_id: `${this.user_id}` });
 
   
   },
   mounted() {
     window.onbeforeunload = () => {
-      this.socket.emit("leave", { study_id: 1, user_id: `${this.user_id}` });
+      this.socket.emit("leave", { study_id: this.study_id, user_id: `${this.user_id}` });
     };
 
     this.socket.on('alreadyexist', () => {
