@@ -1,4 +1,3 @@
-
 <template>
   <div id="groupmodal">
     <v-dialog v-model="open" max-width="40%">
@@ -60,7 +59,7 @@
       </v-card>
     </v-dialog>
 
-        <template>
+    <template>
       <check-modal
         :check-modal="checkModal"
         :to="user.id"
@@ -68,10 +67,8 @@
         :mainText="mainText"
         v-on:sendNo="sendNo"
         v-on:sendYes="sendYes"
-
       />
     </template>
-
   </div>
 </template>
 <script>
@@ -100,10 +97,10 @@ export default {
     }
   },
   methods: {
-    sendNo(){
+    sendNo() {
       this.checkModal = false;
     },
-    sendYes(){
+    sendYes() {
       this.mainText = "";
       this.titleText = "";
       // this.checkModal = false;

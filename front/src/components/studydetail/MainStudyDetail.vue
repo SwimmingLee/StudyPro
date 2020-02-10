@@ -2,27 +2,23 @@
   <v-content app id="search" class="fill-height">
     <v-card>
       <v-img src="@/assets/images/cherryblossom.jpg" aspect-ratio="7">
-        <v-card-title style="transform: translateY(150%)"
-          ><p id="studyname">
-            Team #6 SSAFY study
-          </p>
+        <v-card-title style="transform: translateY(150%)">
+          <p id="studyname">Team #6 SSAFY study</p>
         </v-card-title>
       </v-img>
 
       <!-- <router-link :to="`/workspace/${study_id}`" target="_blank"> -->
-        <v-btn
-          id="enterbtn"
-          class="mr-4"
-          height="60"
-          width="250"
-          color="#9EFFBE"
-          absolute
-          x-large
-          right
-          @click="child"
-        >
-          입장하기
-        </v-btn>
+      <v-btn
+        id="enterbtn"
+        class="mr-4"
+        height="60"
+        width="250"
+        color="#9EFFBE"
+        absolute
+        x-large
+        right
+        @click="child"
+      >입장하기</v-btn>
       <!-- </router-link> -->
     </v-card>
 
@@ -37,9 +33,7 @@
           일정 관리
         </v-tab>
 
-        <v-tab class="py-10">
-          게시판
-        </v-tab>
+        <v-tab class="py-10">게시판</v-tab>
 
         <v-tab class="py-10">
           <!-- <v-icon left>mdi-book-open-variant</v-icon> -->
@@ -64,12 +58,11 @@
           </v-card>
         </v-tab-item>
 
-         <v-tab-item>
+        <v-tab-item>
           <v-card flat>
             <study-member />
           </v-card>
         </v-tab-item>
-
       </v-tabs>
     </v-card>
   </v-content>
@@ -88,16 +81,24 @@ export default {
   },
   created() {
     window.closechild = () => {
-      this.workspace.close()
-    }
+      this.workspace.close();
+    };
 
-    this.study_id = window.location.href.split('studydetail/')[1]
+    this.study_id = window.location.href.split("studydetail/")[1];
   },
-  methods:{
+  methods: {
     child() {
-      this.workspace = window.open(`/workspace/${this.study_id}`)
+      this.workspace = window.open(
+        `/workspace/${this.study_id}`,'WORKSPACE','a')
+        // `/workspace/${this.study_id}`,'WORKSPACE'," left=0,top=0,width="+this.screen_width+",height="+this.screen_height);
     }
   },
+  mounted(){
+    
+    this.screen_width = screen.availWidth;
+    this.screen_height = screen.availHeight;
+    
+  }
 };
 </script>
 

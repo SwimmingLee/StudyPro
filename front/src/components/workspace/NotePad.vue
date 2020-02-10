@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <div id="editor" />
-    <button id="download">저장하기</button>
+    <!-- <button id="download">저장하기</button> -->
   </v-card>
 </template>
 <script>
@@ -37,7 +37,14 @@ export default {
       down.download = fileName;
       down.href = objURL;
       down.click();
-    }
+    },
+
+    isIE() {
+    return (navigator.appName === 'Netscape' && navigator.userAgent.search('Trident') !== -1) ||
+        navigator.userAgent.toLowerCase().indexOf("msie") !== -1;
+}
+
+
   },
   mounted() {
     let editor = new Editor({
@@ -45,7 +52,7 @@ export default {
       el: document.querySelector("#editor"),
       initialEditType: "markdown",
       previewStyle: "vertical",
-      height: "500px"
+      height: "653px"
     });
 
     document.getElementById("editor").onload = () => {
@@ -96,7 +103,7 @@ export default {
       editor.setHtml(data.pad_data);
       this.is_change = true;
     });
-
+  
     document.getElementById("download").onclick=()=>{
       this.saveToFile_Chrome("123123",editor.getMarkdown())
     }

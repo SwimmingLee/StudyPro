@@ -2,7 +2,6 @@ import app from "./app"
 export const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
-// console.log(option)
 let rooms = {};
 export const connect = () => {
     try {
@@ -73,6 +72,8 @@ export const connect = () => {
             })
 
             socket.on('leave', function (data) {
+                console.log("leave");
+                
                 // let study_id = 1;
                 let user_id = data.user_id;
                 let socket_id = socket.id;

@@ -4,11 +4,9 @@
       <v-row justify="center"
         ><v-col cols="12" sm="10">
           <v-card class="mx-auto" max-width="1500">
-            <v-toolbar flat color="black" dark>
-              <v-toolbar-title style="font-size:30px"
-                >마이페이지</v-toolbar-title
-              >
-            </v-toolbar>
+            <v-toolbar flat color="customTheme" dark>
+            <v-toolbar-title class="ml-5">마이페이지</v-toolbar-title>
+          </v-toolbar>
             <v-tabs vertical>
               <v-tab class="py-3">
                 <!-- <v-icon left>mdi-account</v-icon> -->
