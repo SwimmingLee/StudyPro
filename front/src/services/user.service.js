@@ -4,10 +4,9 @@ import AuthHeader from './auth.header'
 const URL = process.env.VUE_APP_API_URL + 'users/'
 
 class UserService {
-    getUserContent() {
-        let headers = AuthHeader.getToken()
-        if (!headers) return { status: {}, user: null }
-        return axios.post(URL + 'token', { headers: headers })
+    getUserContent(uid) {
+        AuthHeader.changeHeadersToken()
+        return axios.get(URL + uid)
             .then(res => {
                 return res.data
             })

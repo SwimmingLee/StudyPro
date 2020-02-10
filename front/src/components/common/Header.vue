@@ -1,126 +1,110 @@
 <template>
   <v-container>
-    <!-- Header Menu -->
-    <v-app-bar
-      app
-      fixed
-      shrink-on-scroll
-      prominent
-      src="@/assets/images/HeaderBackground.jpg"
-      fade-img-on-scroll
-      scroll-threshold="100"
-    >
-      <template v-slot:img="{ props }">
-        <v-img
-          v-bind="props"
-          gradient="to top, rgba(255,255,255,1), rgba(0,0,0,.5)"
-        >
-          <v-layout fill-height align-center aria-hidden>
-            <v-flex xs12 md7 offset-xs1>
-              <span class="display-3 headerText mb-4">
-                Header
-              </span>
-            </v-flex>
-          </v-layout>
-        </v-img>
-      </template>
-
-      <router-link to="/home" text-decoration="none">
-        <v-toolbar-title>
-          <v-icon large class="mr-2" color="black">fa-graduation-cap</v-icon>
-          <span class="black--text font-weight-light">Study</span>
-          <span class="black--text">PRO</span>
-        </v-toolbar-title>
-      </router-link>
-      <v-spacer></v-spacer>
-      <!-- <v-btn href="/workspace" target="_blank" class="mt-1" text color="gray">
-          <v-icon left>open_in_new</v-icon>
-          <span>WorkSpace</span>
-        </v-btn> -->
-
-      <v-btn
-        class="mt-1 d-none d-sm-flex"
-        @click="signinModal = true"
-        v-if="!isAuth"
-        text
+    <div>
+      <v-app-bar
+        app
+        fixed
+        prominent
+        max-height="56px"
       >
-        <span>로그인</span>
-      </v-btn>
-      <v-btn
-        class="mt-1 black--text d-none d-sm-flex transparent"
-        to="/user/signup"
-        elevation="0"
-        text
-        v-if="!isAuth"
-      >
-        <span>회원가입</span>
-      </v-btn>
+        <v-row>
+          <v-col cols="4" sm="3" md="2" class="py-0 pl-0">
+            <router-link to="/home" text-decoration="none">
+            <v-img src="@/assets/images/LogoText.png" max-height="45px"></v-img>
+            </router-link>
+          </v-col>
 
-      <!-- 유저 이미지 -->
-      <!-- <v-container class="align-right"> -->
-      <template v-else>
-        <a
-          @click="(usermenu = !usermenu)"
-          class="dropPanel d-none d-sm-block"
-        >
-          <v-avatar size="30" class="mr-2">
-            <v-img
-              :src="currentUser.profile_url"
-              v-if="currentUser && currentUser.profile_url"
+          <!-- Menu Tab -->
+          <v-col cols="1" sm="6" md="8" class="py-0">
+            <template>
+              <v-tabs
+                background-color="transparent"
+                class="d-none d-sm-flex justify-center"
+                center-active
+                show-arrows
+              >
+                <v-tab :to="menu.route" v-for="menu in menus" :key="menu.title">
+                  <v-icon left>{{ menu.icon }}</v-icon>
+                  <span class="d-none d-lg-flex">{{ menu.title }}</span>
+                </v-tab>
+              </v-tabs>
+            </template>
+          </v-col>
+
+          <v-col cols="7" sm="3" md="2" class="py-0 justify-end align-center">
+            <v-btn
+              class="d-none d-sm-inline-block"
+              @click="signinModal = true"
+              v-if="!isAuth"
+              text
             >
-            </v-img>
-            <v-icon v-else>mdi-account-circle</v-icon>
-          </v-avatar>
-          <span class="mr-2" style="color:rgba(70,80,255,.8);" v-if="currentUser">
-            {{ currentUser.nickname }}
-          </span>
-          <svg viewBox="0 0 451.847 451.847" width="12">
-            <path
-              d="M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751
+              <span>로그인</span>
+            </v-btn>
+            <v-btn
+              class="black--text d-none d-sm-inline-block pt-2"
+              to="/user/signup"
+              elevation="0"
+              text
+              v-if="!isAuth"
+            >
+              <span>회원가입</span>
+            </v-btn>
+
+            <!-- 유저 이미지 -->
+            <!-- <v-container class="align-right"> -->
+            <template v-if="isAuth">
+              <a
+                @click="usermenu = !usermenu"
+                class="dropPanel d-none d-sm-block"
+              >
+                <v-avatar size="30" class="mr-2">
+                  <v-img
+                    :src="currentUser.profile_url"
+                  >
+                  </v-img>
+                </v-avatar>
+                <span
+                  class="mr-2"
+                  style="color:rgba(70,80,255,.8);"
+                  v-if="currentUser"
+                >
+                  {{ currentUser.nickname }}
+                </span>
+                <svg viewBox="0 0 451.847 451.847" width="12">
+                  <path
+                    d="M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751
 		c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0
 		c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z"
-              fill="rgba(200,200,200,.7)"
-            />
-          </svg>
-          <div :class="{ menu:usermenu }" class="dropdown">
-            <ul class="pl-0">
-              <li v-for="item in usermenuitems" :key="item.title">
-                <v-btn
-                  text
-                  @click.prevent="clickUserMenu(item.name)"
-                  class="usermenubtn"
-                  :disabled="isLoading"
-                >
-                  <span class="usermenu">{{ item.title }}</span>
-                </v-btn>
-              </li>
-            </ul>
-          </div>
-        </a>
-      </template>
-      <!-- </v-container> -->
-      <!-- 유저 이미지 끝 -->
+                    fill="rgba(200,200,200,.7)"
+                  />
+                </svg>
+                <div :class="{ menu: usermenu }" class="dropdown">
+                  <ul class="pl-0">
+                    <li v-for="item in usermenuitems" :key="item.title">
+                      <v-btn
+                        text
+                        @click.prevent="clickUserMenu(item.name)"
+                        class="usermenubtn"
+                        :disabled="isLoading"
+                      >
+                        <span class="usermenu">{{ item.title }}</span>
+                      </v-btn>
+                    </li>
+                  </ul>
+                </div>
+              </a>
+            </template>
+          <!-- </v-container> -->
+          <!-- 유저 이미지 끝 -->
 
-      <v-app-bar-nav-icon
-        @click="drawer = true"
-        class="d-block d-sm-none"
-      ></v-app-bar-nav-icon>
-
-      <!-- Menu Tab -->
-      <template v-slot:extension>
-        <v-tabs background-color="transparent" class="d-none d-sm-block">
-          <v-tab
-            :to="menu.route"
-            class="mx-auto"
-            v-for="menu in menus"
-            :key="menu.title"
-          >
-            <v-icon left>{{ menu.icon }}</v-icon>
-            {{ menu.title }}
-          </v-tab>
-        </v-tabs>
-      </template>
-    </v-app-bar>
+          <v-app-bar-nav-icon
+            @click="drawer = true"
+            class="d-block d-sm-none"
+          ></v-app-bar-nav-icon>
+          </v-col>
+        </v-row>
+      </v-app-bar>
+    </div>
 
     <!-- Signin Modal Boxs -->
     <signin-modal :signinModal="signinModal" v-on:close="signinClose" />
@@ -225,7 +209,7 @@ export default {
       checkbox: false,
       usermenu: false,
       menus: [
-        { icon: "home", title: "스터디홈", route: "/home" },
+        { icon: "home", title: "홈", route: "/home" },
         { icon: "group", title: "스터디검색", route: "/study" },
         { icon: "alarm", title: "게시판", route: "/board/study" },
         { icon: "calendar_today", title: "일정관리", route: "/calendar/mycal" },
@@ -283,7 +267,7 @@ export default {
         this.signout();
         location.reload();
       }
-    },
+    }
   }
 };
 </script>

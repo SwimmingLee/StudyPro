@@ -52,6 +52,7 @@ class AuthService {
     register(formData) {
         return axios.post(URL + 'signup', formData).then(
             res => {
+                console.log(res.data)
                 if (res.data.state == 'success') {
                     return Promise.resolve(res.data)
                 } else {
