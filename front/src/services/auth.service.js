@@ -30,9 +30,9 @@ class AuthService {
             .then(this.handleResponse)
             .then(
                 response => {
-                    console.log(response)
                     if (response.data.state === 'success') {
                         this.setToken(response.data.user)
+                        console.log(response.data.user)
                         return response.data.user;
                     } else {
                         return response.data.user;
@@ -51,7 +51,6 @@ class AuthService {
     register(formData) {
         return axios.post(URL + 'signup', formData).then(
             res => {
-                console.log(res.data)
                 if (res.data.state == 'success') {
                     return Promise.resolve(res.data)
                 } else {

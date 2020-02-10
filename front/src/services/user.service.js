@@ -4,6 +4,7 @@ import AuthHeader from './auth.header'
 const URL = process.env.VUE_APP_API_URL + 'users/'
 
 class UserService {
+    // 회원정보 요청 - GET - 'users/:uid'
     getUserContent(uid) {
         AuthHeader.changeHeadersToken()
         return axios.get(URL + uid)
@@ -15,6 +16,16 @@ class UserService {
 
     getAllUser() {
         return axios.get(URL)
+    }
+
+    // 회원정보 수정 - PUT - 'users/:uid'
+    updateUser(payload) {
+        AuthHeader.changeHeadersToken()
+        return axios.put(URL, payload)
+            .then(res => {
+                console.log(res.data)
+                return res.data
+            })
     }
 }
 

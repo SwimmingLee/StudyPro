@@ -25,11 +25,18 @@ export default {
   components:{
     signinModal: () => import('@/components/user/SigninModal')
   },
+  watch:{
+    isAuth(){
+      this.$router.push({name:'home'})
+    }
+  },
+  computed:{
+    isAuth(){
+      return this.$store.getters['auth/isAuth']
+    }
+  },
   methods: {
     signinClose(){
-      if(this.$store.getters['auth/isAuth']){
-        this.$router.push({name:'home'})
-      }
       this.signinModal = false
     }
   },
