@@ -1,6 +1,13 @@
 <template>
-  <v-card oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+  <v-card
+    id="canvas_card"
+    height = 653
+    oncontextmenu='return false'
+    onselectstart='return false'
+    ondragstart='return false'
+  >
     <canvas
+      id="canvas"
       ref="canvas"
       @mousedown.left="mouse_down"
       @mouseup.left="mouse_up"
@@ -8,12 +15,13 @@
       @mouseout="mouse_out"
       @mousedown.right="eraiser_down"
       @mouseup.right="eraiser_up"
-      id="canvas"
-      width="640"
-      height="640"
+      height=653
+      width=1142
     ></canvas>
 
     <swatches
+      id="swatches"
+      class="btns"
       v-model="color"
       shapes="circles"
       colors="text-basic"
@@ -23,26 +31,27 @@
       exception-mode="hidden"
     />
 
-    <v-container class="pa-0">
-      <v-menu absolute :close-on-content-click="false" :nudge-width="200" offset-y>
-        <template v-slot:activator="{on}">
-          <v-btn fab dark small :color="color" v-on="on">
-            <v-icon dark>mdi-pencil</v-icon>
-          </v-btn>
-        </template>
+    <v-menu
+      :close-on-content-click="false"
+      :nudge-width="200"
+      offset-y
+    >
+      <template v-slot:activator="{on}">
+        <v-btn id = "pencil" class = "btns" fab dark small :color="color" v-on="on">
+          <v-icon dark>mdi-pencil</v-icon>
+        </v-btn>
+      </template>
 
-        <v-card>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-slider label="굵기" min="1" max="20" height="1" tick-size="3" v-model="width"></v-slider>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-      </v-menu>
-    </v-container>
-    <v-btn absolute class="mt-1" fab dark small color="primary" @click="clear">
+      <v-card>
+        <v-row>
+          <v-col cols="12">
+            <v-slider label="굵기" min="1" max="20" height="1" tick-size="3" v-model="width"></v-slider>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-menu>
+
+    <v-btn id="clear" absolute class="btns" fab dark small color="primary" @click="clear">
       <v-icon dark>mdi-delete</v-icon>
     </v-btn>
   </v-card>
@@ -57,7 +66,7 @@ export default {
     Swatches
   },
 
-  props: ["socket","study_id"],
+  props: ["socket", "study_id"],
 
   data() {
     return {
@@ -94,7 +103,8 @@ export default {
     mouse_up() {
       this.isDown = false;
     },
-    eraiser_down() {
+    eraiser_down(event) {
+      event.pr
       this.isClear = true;
       this.old_x = event.offsetX;
       this.old_y = event.offsetY;
@@ -143,15 +153,14 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.$refs.canvas);
-    // this.ctx = this.$refs.canvas.getContext('2d');
-
-      this.socket.emit("load_image", {
-        study_id : this.study_id
-      });
-
+    this.socket.emit("load_image", {
+      study_id: this.study_id
+    });
 
     this.canvas = document.getElementById("canvas");
+    // this.canvas.width = document.getElementById("canvas_card").offsetWidth;
+    // this.canvas.height = document.getElementById("canvas_card").offsetHeight;
+
     this.context = this.canvas.getContext("2d");
     this.socket.on("line", data => {
       this.context.lineWidth = data.width;
@@ -168,28 +177,58 @@ export default {
     });
 
     this.socket.on("load_image", data => {
-
       let image_data = this.canvas.toDataURL();
-      
+
       this.socket.emit("send_image", {
         socket_id: data,
         image_data: image_data
       });
     });
 
-    this.socket.on("send_image", (data) => {
-      
+    this.socket.on("send_image", data => {
       let image = new Image();
-      image.onload = ()=>{
-        this.context.drawImage(image,0,0);
-      }
+      image.onload = () => {
+        this.context.drawImage(image, 0, 0);
+      };
       image.src = data.image_data;
-      
     });
-
-    window.onsize = function() {
-      // console.log(document.getElementById("canvas"));
-    };
+    // window.onresize = () => {
+    //   console.log(document.getElementById("canvas_card").offsetHeight);
+    //   console.log(document.getElementById("canvas_card").offsetWidth);
+    // };
   }
 };
 </script>
+<style scoped>
+#canvas_card {
+  /* width: 1142px; */
+  /* height: 653px; */
+  z-index: 1;
+}
+#canvas {
+  position: absolute;
+  z-index: 2;
+}
+.btns{
+  position: absolute;
+  position: absolute;
+  position: absolute;
+  top:10px;
+  z-index: 3;
+
+}
+#swatches {
+  translate: transformY(-10%);
+  left:7px;
+}
+#pencil{
+  z-index: 3;
+  top:11px;
+  left:53px;
+}
+#clear{
+  z-index: 3;
+  top:11px;
+  left:99px;
+}
+</style>

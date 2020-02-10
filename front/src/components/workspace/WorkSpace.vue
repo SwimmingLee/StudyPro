@@ -1,9 +1,9 @@
 <template>
-  <!-- <v-container fluid class="pa-2"> -->
-    <v-card class="px-4 customTheme lighten-2">
-      <v-row>
-        <v-col :cols="talk ? 8 : 12" id="col" >
-          <v-tabs grow icons-and-text centered dark color="cyan">
+  <!-- <v-container fluid ma-0 pa-0 fill-height> -->
+    <v-card id="workspace_card"  class="ma-0 px-1 py-0 customTheme lighten-2">
+      <v-row class ="my-0 py-0">
+        <v-col :cols="talk ? 9 : 12" id="col" class="py-1 pr-1">
+          <v-tabs height="95" grow icons-and-text centered dark color="cyan"> 
             <v-tabs-slider color="red"></v-tabs-slider>
             <v-tab href="#Board">
               WhiteBoard
@@ -22,13 +22,14 @@
               <v-icon>help_outline</v-icon>
             </v-tab>
             <v-card>
-              <v-btn mx-2 @click="collapse">
+              <v-btn height=47 mx-2 @click="collapse">
                 <v-icon v-if="talk">arrow_forward</v-icon>
                 <v-icon v-else>arrow_back</v-icon>
-            </v-btn> <br>
-            <v-btn width="100%" @click="exit">
-              <v-icon>power_settings_new</v-icon>
-            </v-btn>
+              </v-btn>
+              <br />
+              <v-btn height=48 @click="exit">
+                <v-icon>power_settings_new</v-icon>
+              </v-btn>
             </v-card>
             <v-tab-item id="Board">
               <v-card outlined>
@@ -46,12 +47,11 @@
               </v-card>
             </v-tab-item>
             <v-tab-item id="Help">
-              <v-card outlined>
-              </v-card>
+              <v-card outlined></v-card>
             </v-tab-item>
           </v-tabs>
         </v-col>
-        <v-col align="center" justify="center" v-show="talk">
+        <v-col align="center" justify="center" v-show="talk" cols="3" class="py-1 pl-0 pr-9">
           <v-card outlined tile>
             <v-row no-gutters hidden class="pa-0">
               <FaceTalk :socket="socket" :user="user" :study_id="study_id" @connected="connected" :sharing_id="sharing_id" :debuging="debuging" />
@@ -87,7 +87,7 @@ export default {
       sharing_id: "no one",
       debuging: true,
 
-      talk: true,
+      talk: true
     };
   },
 
@@ -118,23 +118,32 @@ export default {
     // this.socket.emit("join", { study_id: this.study_id, user_id: this.user.user_id });
   },
   mounted() {
+    // let workspace_card = document.getElementById("workspace_card");
+    // console.log(workspace_card.offsetWidth);
+    // console.log(workspace_card.offsetHeight);
+    // workspace_card.abc = 300;
+    // // workspace_card.abc = 300;
+    window.moveTo(0, 0);
+    console.log(screen.availWidth + " " +screen.availHeight);
+    
+    window.resizeTo(screen.availWidth, screen.availHeight);
+
     window.onbeforeunload = () => {
       this.socket.emit("leave", { study_id: this.study_id, user_id: this.user.user_id, user_nickname: this.user.user_nickname });
     };
 
-    this.socket.on('alreadyexist', () => {
-      alert('못들어온단다 아가야')
-
-      window.opener.closechild()
-    })
+    this.socket.on("alreadyexist", () => {
+      alert("못들어온단다 아가야");
+      window.opener.closechild();
+    });
   },
   methods: {
     changeView(change_id) {
-      this.sharing_id = change_id
+      this.sharing_id = change_id;
     },
 
     async collapse() {
-      this.talk = !this.talk
+      this.talk = !this.talk;
     },
 
     exit() {
@@ -142,7 +151,7 @@ export default {
     },
 
     connected(connected_users) {
-      this.connected_users = connected_users.filter(user => user && user != -1)
+      this.connected_users = connected_users.filter(user => user && user != -1);
     }
   }
 };
@@ -154,4 +163,11 @@ export default {
   height: 100vh !important;
 }
 
+/* @media only screen and (min-width: 960px) */
+#workspace_card {
+
+  max-width: 1530px;
+  min-width: 1530px;
+
+}
 </style>

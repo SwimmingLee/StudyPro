@@ -2,12 +2,12 @@
   <v-card class="pa-0">
     <v-row no-gutters class="pa-0" border="0px">
       <v-col cols="12" md="6" class="d-none d-md-block" >
-        <v-card position="relative" outlined tile flex min-height="150" id="remote_block_0">
+        <v-card height=130  outlined tile flex id="remote_block_0">
           <video position="absolute" playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%" @contextmenu="showProfileMenu($event, 0)"></video>
         </v-card>
       </v-col>
       <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block" @contextmenu="showProfileMenu($event, i)">
-        <v-card class="ma-0 pa-0" outlined tile flex min-height="150" :id="`remote_block_${i}`">
+        <v-card height=130 class="ma-0 pa-0" outlined tile flex  :id="`remote_block_${i}`">
           <img
             src="../../assets/images/pengsoo.jpg"
             alt="펭수"

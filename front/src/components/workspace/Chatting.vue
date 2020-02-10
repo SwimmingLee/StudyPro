@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card outlined class="pt-3 px-3">
-      <v-card  height="200" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #9bbbd4">
+      <v-card  height="256" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #9bbbd4">
         <v-list class="ma-0 pa-0" ref="chat" outlined v-for="(data, index) in messages" :key="index" :align="'나' === data[0] ? `right` : data[0] ? `left` : 'center'" style="background-color: #9bbbd4">
           <font style="display : block" size="2">{{ data[0] === '나' ? '' : data[0] }}</font>
             <font size="2">
