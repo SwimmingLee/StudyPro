@@ -6,7 +6,6 @@
           <v-col style="max-width: 50px;">제목 :</v-col>
           <v-col>{{ this.post_contents.title }}</v-col>
         </v-row>
-
         <v-divider class="my-2" />
         <v-row no-gutters>
           <v-col style="max-width: 60px;">작성자 :</v-col>
@@ -14,33 +13,53 @@
           <v-col style="max-width: 45px;">조회 :</v-col>
           <v-col style="max-width: 40px;">{{ this.post_contents.view }}</v-col>
           <v-col style="max-width: 45px;">추천 :</v-col>
-          <v-col style="max-width: 30px;">0</v-col>
+          <v-col
+            style="max-width: 30px;"
+          >{{ this.post_contents.num_like + this.post_contents.like }}</v-col>
         </v-row>
       </v-card>
 
       <v-row no-gutters class="mb-3">
         <v-col cols="12">
-          <v-card outlined class="pa-3">
+          <v-card flat class="pa-3">
             <span v-html="this.post_contents.content"></span>
           </v-card>
         </v-col>
       </v-row>
-      <v-row no-gutters>
+      <v-row no-gutters class="mb-3">
         <v-col class="text-center ma-2">
-          <v-btn class="mx-1 mr-3 primary">
-            <v-icon left small dark>thumb_up</v-icon>추천
+          <v-btn class="mx-1 mr-3 primary" @click="toggleLike">
+            <v-icon left small dark :class="post_like ? 'red--text' : ''" icon>favorite</v-icon>추천
+            <span class="ma-1 ml-3">{{ this.post_contents.num_like + this.post_contents.like }}</span>
           </v-btn>
-          <v-btn class="mx-1 error">
+          <v-btn v-if="!isWriter" class="mx-1 error">
             <v-icon left small dark>report_problem</v-icon>신고하기
           </v-btn>
+          
+          <v-dialog v-if="isWriter" v-model="dialog" persistent max-width="290">
+            <template v-slot:activator="{ on }">
+              <v-btn  class="mx-1 error" v-on="on">
+                <v-icon left small dark>delete</v-icon>글 삭제
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title class="error white--text pa-2 pl-5">경고</v-card-title>
+              <v-card-text class="pa-4 pb-2">
+                삭제된 글은 복구할 수 없습니다.
+                <br />정말로 삭제하시겠습니까?
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialog = false">이전으로</v-btn>
+                <v-btn color="green darken-1" text @click="deletePost">삭제하기</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-col>
       </v-row>
-      <v-divider class="ma-2 mb-4" />
       <v-card outlined>
-        <v-card flat class="pa-5" align="center">
-          댓글을 입력하시려면 로그인이 필요합니다.
-        </v-card>
-        <v-card v-if="isAuth" flat class="ma-0 pa-0">
+        <v-card v-if="!isAuth" flat class="pa-5" align="center">댓글을 입력하시려면 로그인이 필요합니다.</v-card>
+        <v-card v-if="isAuth" flat class="ma-0 mt-1 pa-0">
           <v-row no-gutters>
             <v-col align-self="center" cols="2" align="center" class="mb-3">
               <v-avatar>
@@ -72,7 +91,7 @@
             </v-col>
           </v-row>
         </v-card>
-        <v-divider class="mx-3 mb-3" />
+        <v-divider v-if="this.post_comments.length" class="mx-3 mb-3" />
         <v-row no-gutters class="pa-0">
           <v-col cols="12">
             <v-card flat class="px-3" v-for="comment in post_comments" :key="comment.id">
@@ -91,7 +110,6 @@
                     </v-row>
                   </v-card>
                 </v-col>
-
                 <v-col align-self="center" cols="6">{{ comment.content }}</v-col>
                 <v-col align-self="center" cols="3">{{ comment.created_date }}</v-col>
               </v-row>
@@ -109,6 +127,8 @@ import PostService from "@/services/post.service";
 export default {
   data() {
     return {
+      dialog: false,
+
       defaultPost: "게시글을 선택하세요",
       post_id: "",
       new_comment: "",
@@ -137,6 +157,15 @@ export default {
     },
     isAuth() {
       return this.$store.getters["auth/isAuth"];
+    },
+    isWriter() {
+      return (
+        this.post_contents.writer ===
+        this.$store.getters["auth/getUser"].nickname
+      );
+    },
+    post_like() {
+      return this.post_contents.like;
     }
   },
 
@@ -147,6 +176,21 @@ export default {
         post_id: this.post_id
       });
       this.post_contents = tmp.data;
+      this.post_like = this.post_contents.like;
+      if (this.post_like) {
+        this.post_contents.num_like--;
+      }
+    },
+
+    async deletePost() {
+      console.log(this.post_id);
+      const tmp = await PostService.deletePost({
+        type: "study",
+        post_id: this.post_id
+      });
+      console.log(tmp);
+      this.$router.go(-1);
+      this.getPost();
     },
 
     async getComment() {
@@ -156,6 +200,14 @@ export default {
       });
       this.post_comments = tmp.data === "error" ? [] : tmp.data;
       this.calculate();
+    },
+
+    async toggleLike() {
+      const tmp = await PostService.toggleLike({
+        type: "study",
+        post_id: this.post_id
+      });
+      this.post_contents.like = tmp.data.like;
     },
 
     createComment(e) {

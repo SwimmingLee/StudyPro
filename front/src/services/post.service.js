@@ -17,6 +17,24 @@ class PostService {
         })
     }
 
+    deletePost(payload) {
+        console.log(payload);
+        return axios.delete(URL + "posts",
+            {
+                data: {
+                    type: payload.type,
+                    post_id: payload.post_id,
+                }
+            })
+    }
+
+    toggleLike(payload) {
+        return axios.post(URL + "posts/like", {
+            type: payload.type,
+            post_id: payload.post_id,
+        })
+    }
+
     // 스터디 검색에 들어가는 내용들이 있어야 한다.
     // getStudy(payload) {
     //     //const { minorclass, majorclass}  = payload
