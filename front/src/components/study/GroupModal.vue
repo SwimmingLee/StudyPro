@@ -3,14 +3,14 @@
     <v-dialog v-model="open" max-width="80%">
       <v-card id="lgiModal" class="px-0 pt-0">
         <v-card-title class="customTheme darken-2 white--text pb-3">
-          <span class="headline">{{item.name}}</span>
+          <span class="headline">{{studyInfo.name}}</span>
         </v-card-title>
         <v-card-text class="py-0 px-7">
           <v-container class="pb-0">
             <v-row class="justify-center">
               <v-avatar size="140" color="white">
                 <!-- <v-icon size="140">mdi-account-circle</v-icon> -->
-                  <v-img :src="item.imgsrc"></v-img>
+                  <v-img :src="studyInfo.captain.profile_url"></v-img>
               </v-avatar>
             </v-row>
             <v-row class="py-4">
@@ -18,7 +18,7 @@
                 <v-content text class="py-0 font-weight-bold">카테고리</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.topic}}</v-content>
+                <v-content text class="py-0">{{studyInfo.minor_class.name}}</v-content>
               </v-col>
             </v-row>
             <hr/>
@@ -27,7 +27,7 @@
                 <v-content text class="py-0 font-weight-bold">스터디명</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.name}}</v-content>
+                <v-content text class="py-0">{{studyInfo.name}}</v-content>
               </v-col>
             </v-row>
             <v-row class="py-1">
@@ -35,7 +35,7 @@
                 <v-content text class="py-0 font-weight-bold">스터디 소개</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.intro}}</v-content>
+                <v-content text class="py-0">{{studyInfo.description}}</v-content>
               </v-col>
             </v-row>
             <v-row class="py-1">
@@ -43,7 +43,7 @@
                 <v-content text class="py-0 font-weight-bold">스터디 목표</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.goal}}</v-content>
+                <v-content text class="py-0">{{studyInfo.goal}}</v-content>
               </v-col>
             </v-row>
             <v-row class="py-1">
@@ -51,7 +51,7 @@
                 <v-content text class="py-0 font-weight-bold">시작날짜</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.startdate}}</v-content>
+                <v-content text class="py-0">{{studyInfo.start_time}}</v-content>
               </v-col>
             </v-row>
             <v-row class="py-1">
@@ -59,7 +59,7 @@
                 <v-content text class="py-0 font-weight-bold">시간</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.starttime}} ~ {{item.endtime}}</v-content>
+                <v-content text class="py-0">{{studyInfo.start_time}} ~ {{studyInfo.end_time}}</v-content>
               </v-col>
             </v-row>
             <v-row class="py-1">
@@ -67,7 +67,7 @@
                 <v-content text class="py-0 font-weight-bold">요일</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.days}}</v-content>
+                <v-content text class="py-0">{{studyInfo.start_time}}</v-content>
               </v-col>
             </v-row>
             <v-row class="py-1">
@@ -75,7 +75,7 @@
                 <v-content text class="py-0 font-weight-bold">기간</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.duration}}</v-content>
+                <v-content text class="py-0">{{studyInfo.start_time}}</v-content>
               </v-col>
             </v-row>
             <hr/>
@@ -84,7 +84,7 @@
                 <v-content text class="py-0 font-weight-bold">그룹장</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.gmaster}}</v-content>
+                <v-content text class="py-0">{{studyInfo.captain.nickname}}</v-content>
               </v-col>
             </v-row>
 
@@ -93,7 +93,7 @@
                 <v-content text class="py-0 font-weight-bold">멤버 수</v-content>
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{item.member}} / 6</v-content>
+                <v-content text class="py-0">{{studyInfo.status}} / 6</v-content>
               </v-col>
             </v-row>
 
@@ -132,7 +132,7 @@ export default {
     open: false,
     regText: ''
   }),
-  props: ["groupModal", "gid", "item"],
+  props: ["groupModal", "gid", "studyInfo"],
   watch: {
     groupModal() {
       this.open = this.groupModal;
@@ -142,6 +142,9 @@ export default {
         this.$emit('close')
       }
     }
+  },
+  mounted(){
+    console.log('modal', this.studyInfo)
   },
   methods: {
     regGroup(){
