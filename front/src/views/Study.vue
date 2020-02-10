@@ -15,7 +15,7 @@
             </v-tab>
             <v-tab-item>
               <v-card flat>
-                <study-search />
+                <study-search/>
               </v-card>
             </v-tab-item>
             <v-tab-item>
