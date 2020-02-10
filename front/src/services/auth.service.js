@@ -30,7 +30,6 @@ class AuthService {
             .then(this.handleResponse)
             .then(
                 response => {
-                    console.log(response)
                     if (response.data.state === 'success') {
                         AuthHeader.changeHeadersToken()
                         this.setToken(response.data.user)
@@ -53,7 +52,6 @@ class AuthService {
     register(formData) {
         return axios.post(URL + 'signup', formData).then(
             res => {
-                console.log(res.data)
                 if (res.data.state == 'success') {
                     return Promise.resolve(res.data)
                 } else {

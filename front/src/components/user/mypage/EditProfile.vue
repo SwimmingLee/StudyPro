@@ -11,10 +11,8 @@
                     <v-col cols="12" sm="10">
                       <v-text-field
                         :disabled="true"
-                        v-model="input.email"
-                        :rules="idRules"
+                        v-model="email"
                         label="아이디"
-                        required
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -22,10 +20,9 @@
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
                       <v-text-field
-                        v-model="input.name"
-                        :rules="nameRules"
+                        v-model="name"
                         label="이름"
-                        required
+                        :rules="nameRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -33,10 +30,11 @@
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
                       <v-select
-                        v-model="input.gender"
+                        v-model="gender"
                         :items="genderItems"
                         label="성별"
                         dense
+                        disabled
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -44,11 +42,10 @@
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
                       <v-text-field
-                        v-model="input.nickname"
+                        v-model="nickname"
                         :counter="10"
-                        :rules="nicknameRules"
                         label="닉네임"
-                        required
+                        :rules="nicknameRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -56,10 +53,9 @@
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
                       <v-text-field
-                        v-model="input.phone"
-                        :rules="phoneRules"
+                        v-model="phone"
                         label="휴대전화 번호( - 제외하고 입력해 주세요.)"
-                        required
+                        :rules="phoneRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -67,49 +63,47 @@
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
                       <v-textarea
-                        v-model="input.introducing"
+                        v-model="about"
                         :counter="50"
-                        :rules="introducingRules"
                         label="자신을 멋지게 소개해 주세요!"
-                        required
                         outlined
                       ></v-textarea>
                     </v-col>
                   </v-row>
                   <v-row justify="center">
-                    <image-input v-model="input.profile_url" class="wrap-content">
+                    <image-input v-model="avatar" class="wrap-content">
                       <div slot="activator" class="wrap-content pointer">
-                        <v-avatar size="150px" v-ripple class="mb-3">
-                          <img :src="input.profile_url" alt="Error" />
+                        <v-avatar
+                          size="150px"
+                          v-ripple
+                          v-if="!avatar"
+                          class="grey lighten-3 mb-3"
+                        >
+                          <img :src="profile_url" />
+                        </v-avatar>
+                        <v-avatar size="150px" v-ripple v-else class="mb-3">
+                          <img :src="avatar.imageURL" alt="avatar" />
                         </v-avatar>
                       </div>
                     </image-input>
                   </v-row>
-                </v-card>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="12" sm="12">
-                <v-card
-                  class="mx-auto"
-                  max-width="1000"
-                  color="rgb(0, 0, 0, 0)"
-                  elevation="0"
-                >
-                  <v-layout row>
-                    <v-flex column>
-                      <v-layout justify-end>
-                        <v-btn
-                          class="mr-4"
-                          :disabled="!enablebtn || !valid"
-                          color="success"
-                          @click="validate"
-                          >수정하기</v-btn
-                        >
-                      </v-layout>
-                    </v-flex>
-                  </v-layout>
+                  <v-row justify="center">
+                    <v-btn text @click="avatar = null">
+                      이미지 초기화
+                    </v-btn>
+                  </v-row>
+                  <v-row justify="end">
+                    <v-col class="justify-end">
+                      <span class="error--text mr-5 title pt-1">{{ message }}</span>
+                      <v-btn
+                        class="mr-10 mb-2"
+                        :disabled="!enablebtn || !valid"
+                        color="success"
+                        @click="update"
+                        >수정하기</v-btn
+                      >
+                    </v-col>
+                  </v-row>
                 </v-card>
               </v-col>
             </v-row>
@@ -117,6 +111,18 @@
         </v-app>
       </div>
     </v-container>
+    <v-dialog v-model="modalOpen" max-width="300px" :scrollable="false">
+      <v-card>
+        <v-card-title>수정완료</v-card-title>
+        <v-card-text>
+          <v-row justify="end">
+        <v-btn text @click="modalOpen = false">
+          <span>확인</span>
+        </v-btn>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-form>
 </template>
 
@@ -126,26 +132,17 @@ export default {
     enablebtn: false,
     valid: true,
     user: null,
+    email: "",
+    name: "",
+    gender: "",
+    nickname: "",
+    phone: "",
+    about: "",
+    profile_url: "",
+    platform_type: "",
 
-    input: {
-      id: "",
-      email: "",
-      name: "",
-      gender: "",
-      nickname: "",
-      phone: "",
-      introducing: "",
-      profile_url: "",
-      platform_type: ""
-    },
+    avatar: null,
 
-    idRules: [
-      v => !!v || "아이디를 입력해 주세요.",
-      v =>
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-          v
-        ) || "ex) sample@example.com"
-    ],
     introducingRules: [
       v => !v || v.length <= 50 || "최대 50자까지 입력 가능합니다."
     ],
@@ -161,96 +158,129 @@ export default {
         "전화번호 형식이 올바르지 않습니다."
     ],
 
-    ai: false,
-    bc: false,
-    al: false,
-    ad: false,
-    os: false,
-    db: false,
-    cn: false,
-    cs: false
+    modalOpen: false,
+    message: ""
   }),
+  components: {
+    imageInput: () => import("@/components/base/ImageInput")
+  },
 
   computed: {
     passwordConfirmationRule() {
       return () =>
         this.password === this.confirmPassword ||
         "비밀번호가 서로 일치하지 않습니다.";
-    },
-    userNickname: function() {
-      return this.$store.getters.userNickname;
-    },
-    userEmail: function() {
-      return this.$store.getters.userEmail;
-    },
-    userName: function() {
-      return this.$store.getters.userName;
-    },
-    userPhone: function() {
-      return this.$store.getters.userPhone;
     }
   },
 
-  async mounted() {
-    var uid = this.$store.getters["auth/getUser"].uid;
-    var user = await this.$store.dispatch("getUserContent", uid);
-    console.log(user);
-    this.input = {
-      id: uid,
-      email: user.email,
-      name: user.name,
-      gender: user.gender,
-      nickname: user.nickname,
-      phone: user.phone,
-      introducing: "",
-      profile_url: user.profile_url,
-      platform_type: user.platform_type
-    };
-
-    this.user = user;
+  mounted() {
+    this.load();
   },
 
   methods: {
-    validate() {
-      if (
-        (!this.input.name || this.input.name == this.user.name) &&
-        (!this.input.nickname ||
-          (this.nickname == this.user.nickname &&
-            (!this.input.phone || this.phone == this.user.phone)))
-      ) {
-        this.enablebtn = false;
+    async load() {
+      var uid = this.$store.getters["auth/getUser"].uid;
+      var user = await this.$store.dispatch("getUserContent", uid);
+      this.email = user.email;
+      this.name = user.name;
+      this.gender = user.gender == "M" ? "남성" : "여성";
+      this.nickname = user.nickname;
+      this.phone = user.phone;
+      this.about = user.about;
+      this.profile_url = user.profile_url;
+      this.platform_type = user.platform_type;
+
+      this.user = user;
+      this.message = '';
+    },
+    async update() {
+      try {
+        var formDate = new FormData();
+        formDate.append("name", this.name);
+        formDate.append("nickname", this.nickname);
+        formDate.append("phone", this.phone);
+        formDate.append("about", this.about);
+        if (this.avatar == null) {
+          formDate.append("image_update", false);
+          formDate.append("img", null);
+        } else {
+          formDate.append("image_update", true);
+          formDate.append("img", this.avatar.imageFile);
+        }
+
+        var res = await this.$store.dispatch("updateUser", formDate);
+        if (res == 1) {
+          this.modalOpen = true;
+          await this.load()
+          this.validation()
+        } else {
+          this.message = "오류가 발생하여 수정되지 않았습니다";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    validation() {
+      this.enablebtn = false;
+      if (this.name != this.user.name) {
+        this.enablebtn = true;
+      }
+      if (this.nickname != this.user.nickname) {
+        this.enablebtn = true;
+      }
+      if (this.phone != this.user.phone) {
+        this.enablebtn = true;
+      }
+      if (this.about != this.user.about) {
+        this.enablebtn = true;
+      }
+      if (this.avatar != null) {
+        this.enablebtn = true;
       }
     }
   },
 
   watch: {
     name() {
-      if (this.input.name && this.input.name != this.user.name) {
+      if (this.name != this.user.name) {
         this.enablebtn = true;
       } else {
-        this.validate();
+        this.validation();
       }
     },
     nickname() {
-      if (this.input.nickname && this.input.nickname != this.user.nickname) {
+      if (this.nickname != this.user.nickname) {
         this.enablebtn = true;
       } else {
-        this.validate();
+        this.validation();
       }
     },
     phone() {
-      if (this.input.phone && this.input.phone != this.user.phone) {
+      if (this.phone != this.user.phone) {
         this.enablebtn = true;
       } else {
-        this.validate();
+        this.validation();
       }
     },
-    introducing() {
-      // if (this.introducing && this.introducing != "잘 부탁드려요!") {
-      //   this.enablebtn = true;
-      // } else {
-      //   this.validate();
-      // }
+    about() {
+      if (this.about != this.user.about) {
+        this.enablebtn = true;
+      } else {
+        this.validation();
+      }
+    },
+    avatar() {
+      if (this.avatar != null) {
+        this.enablebtn = true;
+      } else {
+        this.validation();
+      }
+    },
+    valid(){
+      console.log('valid', this.valid)
+    },
+    enablebtn(){
+      console.log('enable', this.enablebtn)
     }
   }
 };

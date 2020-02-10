@@ -102,18 +102,18 @@
                   <v-row justify="center" align="center">
                     <v-col cols="10">
                       <v-textarea
-                  label="소개"
-                  outlined
-                  height="150px"
-                  v-model="introducing"
-                  single-line
-                  :counter="50"
-                ></v-textarea>
+                        label="소개"
+                        outlined
+                        height="150px"
+                        v-model="about"
+                        single-line
+                        :counter="50"
+                      ></v-textarea>
                     </v-col>
                   </v-row>
 
                   <v-row justify="center">
-                    <image-input v-model="avatar" class="wrap-content">
+                    <image-input v-model="avatar" class="wrap-content" >
                       <div slot="activator" class="wrap-content pointer">
                         <v-avatar
                           size="150px"
@@ -128,6 +128,11 @@
                         </v-avatar>
                       </div>
                     </image-input>
+                  </v-row>
+                  <v-row justify="center">
+                    <v-btn text @click="imgInit">
+                      이미지 초기화
+                    </v-btn>
                   </v-row>
                 </v-card>
 
@@ -265,7 +270,7 @@ export default {
         /(?=.*\d)/.test(v) || "문자 / 숫자 혼용 8자리 이상으로 만들어 주세요."
     ],
     confirmPasswordRules: [v => !!v || "비밀번호를 한 번 더 입력해 주세요."],
-    introducing: "",
+    about: "",
 
     name: "",
     nameRules: [
@@ -306,9 +311,9 @@ export default {
     avatar: null,
     isLoading: false
   }),
-  watch:{
-    password(){
-      this.confirmPassword = ''
+  watch: {
+    password() {
+      this.confirmPassword = "";
     }
   },
   components: {
@@ -324,10 +329,11 @@ export default {
         formData.append("nickname", this.nickname);
         formData.append("gender", this.genderinput == "남성" ? "M" : "W");
         formData.append("phone", this.phone);
-        if(this.avatar){
+        formData.append("about", this.about);
+        if (this.avatar) {
           formData.append("img", this.avatar.imageFile);
-        }else{
-          formData.append("img", null)
+        } else {
+          formData.append("img", null);
         }
         await this.$store.dispatch("auth/register", formData).then(state => {
           if (state) {
@@ -340,6 +346,10 @@ export default {
       } catch (err) {
         console.error(err);
       }
+    },
+
+    imgInit(){
+      this.avatar = null
     }
   },
   computed: {
@@ -361,7 +371,7 @@ export default {
     this.nickname = "";
     this.phone = "";
     this.genderinput = "";
-    this.introducing = "";
+    this.about = "";
     this.avatar = null;
   }
 };
