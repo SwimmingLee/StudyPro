@@ -2,12 +2,12 @@
   <v-card class="pa-0">
     <v-row no-gutters class="pa-0" border="0px">
       <v-col cols="12" md="6" class="d-none d-md-block" >
-        <v-card position="relative" outlined tile flex min-height="150" id="remote_block_0">
+        <v-card height=130  outlined tile flex id="remote_block_0">
           <video position="absolute" playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%" @contextmenu="showProfileMenu($event, 0)"></video>
         </v-card>
       </v-col>
       <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block" @contextmenu="showProfileMenu($event, i)">
-        <v-card class="ma-0 pa-0" outlined tile flex min-height="150" :id="`remote_block_${i}`">
+        <v-card height=130 class="ma-0 pa-0" outlined tile flex  :id="`remote_block_${i}`">
           <img
             src="../../assets/images/pengsoo.jpg"
             alt="펭수"
@@ -18,7 +18,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <profile :profile="profile"></profile>
+    <profile :profile="profile" :show_profile_id="show_profile_id" :debuging="debuging"></profile>
   </v-card>
 </template>
 
@@ -34,7 +34,7 @@ const pcConfig = {
 };
 
 export default {
-  props: ["socket", "user_id", "study_id", "sharing_id"],
+  props: ["socket", "user", "study_id", "sharing_id", "debuging"],
   data() {
     return {
       // FaceTalk
@@ -42,11 +42,12 @@ export default {
       local_video: null,
       local_stream: null,
 
-      connected_users: [this.user_id, null, null, null, null, null],
+      connected_users: [this.user.user_id, null, null, null, null, null],
       peer_connections: {},
 
       remote_videos: [null],
       remote_streams: [null, null, null, null, null, null],
+      show_profile_id: this.user.user_id,
       profile : {
         fav: false,
         showProfile: false,
@@ -82,8 +83,10 @@ export default {
     },
 
     showProfileMenu(e,i) {
-      console.log(i)
       e.preventDefault();
+      if (!this.connected_users[i]) return
+
+      this.show_profile_id = i
       this.profile.showProfile = false;
       this.profile.x = e.clientX;
       this.profile.y = e.clientY;
@@ -121,7 +124,7 @@ export default {
               candidate: event.candidate.candidate
             },
             study_id: this.study_id,
-            from: this.user_id,
+            from: this.user.user_id,
             to: user_id
           });
         }
@@ -171,6 +174,7 @@ export default {
       eye.style.width = "50%"
       eye.style.position = "absolute"
       eye.style.zIndex = "3"
+      eye.style.opacity = "0.4"
 
 
       return eye
@@ -178,7 +182,7 @@ export default {
   },
 
   created() {
-    console.log("내아이디 : ", this.user_id);
+    console.log("내아이디 : ", this.user.user_id, '내 닉네임');
   },
   mounted() {
 
@@ -191,13 +195,13 @@ export default {
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
-        video: true
+        video: true,
       })
       .then(this.get_stream);
 
     this.socket.on("join", message => {
       const user_id = message.user_id;
-      if (user_id == this.user_id) return;
+      if (user_id == this.user.user_id) return;
       for (let idx in this.connected_users) {
         if (!this.connected_users[idx]) {
           this.connected_users[idx] = user_id;
@@ -213,7 +217,7 @@ export default {
             this.sendMessage({
               message: sdp,
               study_id: this.study_id,
-              from: this.user_id,
+              from: this.user.user_id,
               to: user_id
             })
           }, e => {console.log(e)})
@@ -223,6 +227,7 @@ export default {
     })
     this.socket.on('leave', message => {
       const video_num = this.connected_users.indexOf(message.user_id)
+      this.deleteBorder(video_num, this.sharing_id)
       this.connected_users[video_num] = null
       for (let i of this.remote_videos[video_num].childNodes) this.remote_videos[video_num].removeChild(i)
       const post_img = document.createElement('img')
@@ -253,7 +258,7 @@ export default {
             this.sendMessage({
               message: sdp,
               study_id: this.study_id,
-              from: this.user_id,
+              from: this.user.user_id,
               to: from
             });
           });

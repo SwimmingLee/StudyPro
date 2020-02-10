@@ -1,20 +1,26 @@
 import app from "./app"
-export const server = require('http').createServer(app)
+import fs from "fs"
+const option = {
+    // cert: fs.readFileSync('../T02A106.pem')
+}
+export const server = require('http').createServer(option, app)
+
+// export const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
-// console.log(option)
 let rooms = {};
 export const connect = () => {
     try {
         io.sockets.on('connection', function (socket) {
-            let study_id = socket.handshake.query.study_id;
-            let user_id = socket.handshake.query.user_id;
-            console.log("study id :", study_id, ', user id :', user_id, 'join');
+            const study_id = socket.handshake.query.study_id;
+            const user_id = socket.handshake.query.user_id;
+            const user_nickname = socket.handshake.query.user_nickname
+            console.log("study id :", study_id, ', user id :', user_id, user_nickname ,'join' );
             //방 찾기
             let room = rooms[study_id];
             let user_num;
             let user;
-            rooms[study_id]
+
             //join 
             if (room) {
                 //방이 존재 할때
@@ -52,6 +58,7 @@ export const connect = () => {
             io.sockets.to(study_id).emit('join', {
                 user: user,
                 user_id: user_id,
+                user_nickname: user_nickname,
                 user_num: user_num,
                 members: room.members,
                 member_cnt: room.member_cnt
@@ -63,16 +70,10 @@ export const connect = () => {
                 console.log(rooms, 'exit')
             });
 
-            socket.on('exitworkspace', data => {
-
-                const idx = rooms[study_id].members.indexOf('detail')
-
-                const t_socket = rooms[study_id].sockets[idx]
-                if (!t_socket) return
-                t_socket.emit('exitworkspace', data)
-            })
 
             socket.on('leave', function (data) {
+                console.log("leave");
+                
                 // let study_id = 1;
                 let user_id = data.user_id;
                 let socket_id = socket.id;
@@ -90,7 +91,8 @@ export const connect = () => {
 
                     io.sockets.to(study_id).emit('leave', {
                         user_id: user_id,
-                        user_num: user_num
+                        user_num: user_num,
+                        user_nickname: user_nickname
                     });
                 }
                 //이후 방과 아이디로 방을 찾아 관리
@@ -160,7 +162,6 @@ export const connect = () => {
 
             //화면공유
             socket.on('viewsharestart', data => {
-
                 io.sockets.to(study_id).emit('viewsharestart', data.user_id)
             })
             socket.on('viewsharejoin', data => {
