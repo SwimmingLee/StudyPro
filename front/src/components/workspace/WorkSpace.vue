@@ -43,13 +43,7 @@
             </v-tab-item>
             <v-tab-item id="ViewShare">
               <v-card outlined>
-                <ViewShare
-                  :socket="socket"
-                  :user_id="user_id"
-                  :study_id="study_id"
-                  :connected_users="connected_users"
-                  @changeView="changeView"
-                />
+                <ViewShare :socket="socket" :user="user" :study_id="study_id" :connected_users="connected_users" @changeView="changeView" />
               </v-card>
             </v-tab-item>
             <v-tab-item id="Help">
@@ -60,23 +54,12 @@
         <v-col align="center" justify="center" v-show="talk" cols="3" class="py-1 pl-0 pr-9">
           <v-card outlined tile>
             <v-row no-gutters hidden class="pa-0">
-              <FaceTalk
-                :socket="socket"
-                :user_id="user_id"
-                :study_id="study_id"
-                @connected="connected"
-                :sharing_id="sharing_id"
-              />
+              <FaceTalk :socket="socket" :user="user" :study_id="study_id" @connected="connected" :sharing_id="sharing_id" :debuging="debuging" />
             </v-row>
             <v-row no-gutters>
               <v-col cols="12">
                 <v-card outlined>
-                  <Chatting
-                    class="pa-0 ma-0"
-                    :socket="socket"
-                    :study_id="study_id"
-                    :user_id="user_id"
-                  />
+                  <Chatting class="pa-0 ma-0" :socket="socket" :study_id="study_id" :user="user" />
                 </v-card>
               </v-col>
             </v-row>
@@ -100,9 +83,9 @@ export default {
     return {
       tabs: null,
       socket: "",
-      user_id: null,
       connected_users: [],
       sharing_id: "no one",
+      debuging: true,
 
       talk: true
     };
@@ -116,22 +99,23 @@ export default {
     Chatting: Chatting
   },
   created() {
-    this.user_id = `${Math.ceil(Math.random() * 100000)}`;
-    this.study_id = window.location.href.split("workspace/")[1];
-    this.socket = io.connect(
-      `http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user_id}`,
-      {
-        // this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-        // this.socket = io.connect(`http://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-        // this.socket = io.connect("http://70.12.247.73:8210", {
-        transports: ["websocket"],
-        secure: true
+      this.user = this.debuging ? { 
+        user_id: `${Math.ceil(Math.random() * 100000)}`,
+        user_nickname: `${Math.ceil(Math.random() * 100000)}`
+      } : {
+        user_id: this.$store.getters['auth/getUser'].uid,
+        user_nickname: this.$store.getters['auth/getUser'].nickname
       }
-    );
-    this.socket.emit("join", {
-      study_id: this.study_id,
-      user_id: `${this.user_id}`
+    this.study_id = window.location.href.split('workspace/')[1]
+    // this.socket = io.connect(`http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
+    // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    // this.socket = io.connect(`https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    // this.socket = io.connect(`wss://us-central1-test-back-24347.cloudfunctions.net/server/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+      transports: ["websocket"],
+      secure: true,
     });
+    // this.socket.emit("join", { study_id: this.study_id, user_id: this.user.user_id });
   },
   mounted() {
     // let workspace_card = document.getElementById("workspace_card");
@@ -145,10 +129,7 @@ export default {
     window.resizeTo(screen.availWidth, screen.availHeight);
 
     window.onbeforeunload = () => {
-      this.socket.emit("leave", {
-        study_id: this.study_id,
-        user_id: `${this.user_id}`
-      });
+      this.socket.emit("leave", { study_id: this.study_id, user_id: this.user.user_id, user_nickname: this.user.user_nickname });
     };
 
     this.socket.on("alreadyexist", () => {
@@ -166,7 +147,7 @@ export default {
     },
 
     exit() {
-      window.opener.closechild();
+      window.opener ? window.opener.closechild() : window.close()
     },
 
     connected(connected_users) {

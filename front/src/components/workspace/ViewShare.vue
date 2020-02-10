@@ -1,14 +1,8 @@
 <template>
-  <v-container fluid class="pa-0">
-    <v-hover></v-hover>
+  <v-container fluid>
     <v-card id="share_block" height="653px" class="ma-0 pa-0">
-      
-      <v-img src="../../assets/images/noru.jpg" alt width="100%" id="noru" class="ma-0 pa-0">
-        <div class="ma-5 mt-5">
-          <v-btn v-show="sharing_user_id != user_id" @click="sharing_user_id = user_id">화면 공유</v-btn>
-          <v-btn v-show="sharing_user_id == user_id" @click="sharing_user_id = 'no one'">공유 중지</v-btn>
-        </div>
-      </v-img>
+    <v-btn v-show="sharing_user_id != user.user_id" @click="sharing_user_id = user.user_id">내 화면 보여주기</v-btn>
+    <v-btn v-show="sharing_user_id == user.user_id" @click="sharing_user_id = 'no one'">그만 보여주기</v-btn>
 
     </v-card>
   </v-container>
@@ -38,12 +32,9 @@ export default {
     };
   },
   created() {
-    this.socket.emit("viewsharejoin", {
-      user_id: this.user_id,
-      study_id: this.study_id
-    });
+    this.socket.emit('viewsharejoin', {user_id: this.user.user_id, study_id: this.study_id})
   },
-  props: ["socket", "user_id", "study_id", "connected_users"],
+  props: ["socket", "user", "study_id", "connected_users"],
   watch: {
     sharing_user_id: function(change) {
 
@@ -85,14 +76,14 @@ export default {
               candidate: event.candidate.candidate
             },
             study_id: this.study_id,
-            from: this.user_id,
+            from: this.user.user_id,
             to: user_id
           });
         }
       };
 
       t_pc.onaddstream = event => {
-        if (user_id != this.user_id) {
+        if (user_id != this.user.user_id) {
           this.share_block.childNodes[0].srcObject = event.stream;
           this.already_sharing = true;
         }
@@ -139,38 +130,35 @@ export default {
         this.share_block.appendChild(this.createImg(1));
         return;
       }
-      this.user_id == sharing_user_id
-        ? this.share_block.appendChild(this.createImg(0))
-        : this.share_block.appendChild(this.view_share_video);
-
-      if (sharing_user_id == this.user_id) {
+      this.user.user_id == sharing_user_id ? this.share_block.appendChild(this.createImg(0)) : this.share_block.appendChild(this.view_share_video)
+      
+      if (sharing_user_id == this.user.user_id) {
         navigator.mediaDevices
-          .getDisplayMedia({ video: true })
-          .then(this.get_stream)
-          .then(() => {
-            for (let peer_id of this.connected_users) {
-              if (peer_id == this.user_id) continue;
-              this.getPeerConnection(peer_id).then(t_pc => {
-                t_pc.createOffer(
-                  sdp => {
-                    t_pc.setLocalDescription(sdp);
-                    this.sendMessage({
-                      message: sdp,
-                      study_id: this.study_id,
-                      from: this.user_id,
-                      to: peer_id
-                    });
-                  },
-                  e => console.log(e)
-                );
-              });
-            }
-          });
+        .getDisplayMedia({ video: true })
+        .then(this.get_stream)
+        .then(() => {
+          for (let peer_id of this.connected_users) {
+            if (peer_id == this.user.user_id) continue
+            this.getPeerConnection(peer_id)
+            .then(t_pc => {
+              t_pc.createOffer(sdp => {
+                t_pc.setLocalDescription(sdp) 
+                this.sendMessage({
+                  message: sdp,
+                  study_id: this.study_id,
+                  from: this.user.user_id,
+                  to: peer_id
+                })
+              }, e => console.log(e))
+            })
+          }
+        });
       }
     });
 
     this.socket.on("viewsharejoin", user_id => {
-      if (this.user_id != this.now_sharing) return;
+
+      if (this.user.user_id != this.now_sharing) return
 
       setTimeout(() => {
         this.getPeerConnection(user_id).then(t_pc => {
@@ -180,7 +168,7 @@ export default {
               this.sendMessage({
                 message: sdp,
                 study_id: this.study_id,
-                from: this.user_id,
+                from: this.user.user_id,
                 to: user_id
               });
             },
@@ -217,7 +205,7 @@ export default {
             this.sendMessage({
               message: sdp,
               study_id: this.study_id,
-              from: this.user_id,
+              from: this.user.user_id,
               to: from
             });
           });
