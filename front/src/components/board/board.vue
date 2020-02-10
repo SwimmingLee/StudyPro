@@ -61,10 +61,6 @@ export default {
     if (this.$route.params.board) {
       this.board_list = this.$route.params.board;
     }
-
-    if (this.$route.params.post_id) {
-      this.post_id = this.$route.params.post_id
-    }
   },
 
   computed: {
