@@ -38,7 +38,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     created_date: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      defaultValue: DataTypes.NOW
     },
     view: {
       type: DataTypes.INTEGER,
@@ -72,7 +73,7 @@ module.exports = function(sequelize, DataTypes) {
   
   study_posts.read_study_post = async function(post_id){
     let result;
-    await this.count_view(post_id)
+    //await this.count_view(post_id)
     result = await this.findOne(
       {
         where:
@@ -161,7 +162,7 @@ module.exports = function(sequelize, DataTypes) {
     let result;
     
     result = await this.findAll(
-      { offset: offset,
+      { offset: Number(offset),
         limit: 10,
         where : {
           study_id : study_id,

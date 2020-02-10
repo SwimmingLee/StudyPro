@@ -4,7 +4,7 @@ import {users} from "./models"
 
 export const localsMiddelWare = async (req, res, next) => {
     try {
-        const accessToken = await req.get('accessToken');
+        const accessToken = await req.get('Authorization');
         if (typeof accessToken != 'undefined') {
             const decoded = await jwt.verify(accessToken, process.env.SECRET_KEY)
             if (decoded) {

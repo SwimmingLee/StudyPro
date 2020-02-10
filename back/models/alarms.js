@@ -46,17 +46,17 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'alarms'
   });
 
-  alarms.create_alarm = async function(from, to, data) {
-    data.from = from
-    data.to = to
 
-    if (!data.content || !data.title) {
+  alarms.create_alarm = async function(payload) {
+    const {title, content} = payload
+
+    if (!content || !title) {
         return {
         "state": "fail",
         "detail": "Wrong Input"
       }
     } else {
-      const created_alarm = await this.create(data)
+      const created_alarm = await this.create(payload)
       return {
         "state": "success",
         "detail": created_alarm
@@ -96,11 +96,14 @@ module.exports = function(sequelize, DataTypes) {
     }
   }
   
-  alarms.read_alarms_all = async function(user_id, target) {
-    let alarms = []
-    if (target === 'to') {alarms = await this.findAll({where:{to: user_id}})}
-    else if (target === 'from') {alarms = await this.findAll({where:{from: user_id}})}
+  alarms.read_alarms_all = function(payload) {
+    const {to, from} = payload
 
+    if (to) {
+      return this.findAll({where:{to}})
+    } else if (from) {
+      return this.findAll({where:{from}})
+    }
     return alarms
   }
 

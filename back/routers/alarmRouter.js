@@ -5,9 +5,9 @@ import {create_alarm, delete_alarm, read_alarm, read_alarms_all} from "../contro
 
 const alarmRouter = express.Router();
 
-alarmRouter.post(routes.alarm, create_alarm)
-alarmRouter.delete(routes.alarm_detail, delete_alarm)
-alarmRouter.get(routes.alarm_detail, read_alarm)
-alarmRouter.get(routes.alarms, read_alarms_all)
+alarmRouter.post(routes.home, create_alarm)
+alarmRouter.delete(routes.home, delete_alarm)
+alarmRouter.get(routes.home, read_alarms_all)
+//alarmRouter.get(routes.home, read_alarm)
 
 export default alarmRouter;

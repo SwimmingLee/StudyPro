@@ -1,6 +1,9 @@
 import app from "./app"
 import fs from "fs"
 const option = {
+    key: fs.readFileSync('./key/private.key'),
+    cert: fs.readFileSync('.key/certificate.crt'),
+    ca: fs.readFileSync('.key/ca_bundle.ca'),
     // cert: fs.readFileSync('../T02A106.pem')
 }
 export const server = require('http').createServer(option, app)
@@ -72,8 +75,6 @@ export const connect = () => {
 
 
             socket.on('leave', function (data) {
-                console.log("leave");
-                
                 // let study_id = 1;
                 let user_id = data.user_id;
                 let socket_id = socket.id;
@@ -162,6 +163,7 @@ export const connect = () => {
 
             //화면공유
             socket.on('viewsharestart', data => {
+
                 io.sockets.to(study_id).emit('viewsharestart', data.user_id)
             })
             socket.on('viewsharejoin', data => {

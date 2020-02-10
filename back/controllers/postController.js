@@ -68,9 +68,7 @@ export const read_like = async function(user_id, post_id,type) {
 
 export const read_post = async function(req, res) {
     try{
-        
-        const post_id = req.query.post_id;
-        const {type} = req.body;
+        const {post_id, type} = req.query;
         let result, user_id;
         let like = false;
         
@@ -79,6 +77,7 @@ export const read_post = async function(req, res) {
 
         }else if(type === "study"){
             result = await study_post_model.read_study_post(post_id)
+            res.send(result)
         }
         
         if (result) {
@@ -132,9 +131,9 @@ export const list_post = async function(req, res) {
         console.log(board, type, study_id, offset);
         let result;
         if(type === "common"){
-            result = await common_post_model.list_common_post(board, offset)
+            result = await common_post_model.list_common_post(board, offset || 0)
         }else if(type === "study"){
-            result = await study_post_model.list_study_post(study_id,board, offset)
+            result = await study_post_model.list_study_post(study_id,board, offset || 0)
         }
         res.send(result);
     }catch(error){
