@@ -29,7 +29,7 @@
             </v-col>
             <v-col>
               <v-card class="ma-2">
-                <boardList :board="boardList" :post_id="post_id" />
+                <boardList :board="boardList" />
               </v-card>
             </v-col>
           </v-row>
@@ -41,7 +41,6 @@
 
 <script>
 import boardList from "@/components/board/board_list";
-// import postContent from "@/components/board/post_content";
 
 export default {
   name: "board",
