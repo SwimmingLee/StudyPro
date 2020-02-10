@@ -41,7 +41,6 @@
 
 <script>
 import boardList from "@/components/board/board_list";
-// import postContent from "@/components/board/post_content";
 
 export default {
   name: "board",

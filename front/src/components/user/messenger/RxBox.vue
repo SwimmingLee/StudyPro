@@ -90,7 +90,9 @@ export default {
     }
   },
   async created() {
+    console.log('created')
     const rsvMsg = await AlarmService.getReceivedAlarm();
+    console.log(rsvMsg.data)
     this.rxBox = rsvMsg.data;
   },
   watch: {
