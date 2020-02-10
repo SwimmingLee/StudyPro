@@ -4,40 +4,38 @@ import multer from "multer"
 import jwt from "jsonwebtoken"
 
 export const signin = async function(req, res) {
-    const {email, password} = req.body;
-    const user = await users.findOne(  
-        {where: {
-                email,
-                platform_type:"local",
+    try{
+        const {email, password} = req.body;
+        const user = await users.findOne( {where: {email,platform_type:"local"}});
+        if (user) {
+            const pass = await user.verify(password);
+            if (pass) {
+                let accessToken = await user.getToken()
+                res.json({
+                    state: "success",
+                    user: {
+                        uid: user.dataValues.id,
+                        nickname: user.dataValues.nickname,
+                        profile_url: user.dataValues.profile_url,
+                        accessToken: accessToken
+                    }
+                })
             }
-        });
-    
-    if (user) {
-        const pass = await user.verify(password);
-        if (pass) {
-            let accessToken = await user.getToken()
-            res.json({
-                state: "success",
-                user: {
-                    uid: user.dataValues.id,
-                    nickname: user.dataValues.nickname,
-                    profile_url: user.dataValues.profile_url,
-                    accessToken: accessToken
-                }
-            })
+            else {   
+                res.json({state:"fail"}); 
+            }
+        } else {
+            res.json({state:"fail"});
         }
-        else {   
-            res.json({state:"fail"}); 
-        }
-    } else {
-        res.json({state:"fail"});
+    } catch(err) {
+        res.send(err)
     }
 };     
 
 
 export const social_signin = async function(req, res) {
-    const {email, nickname, gender, platform_type, profile_image} = req.body;
     try{
+        const {email, nickname, gender, platform_type, profile_image} = req.body;
         let user = await users.findOne({ where: { email, platform_type } });
         if (!user) {
             user = await users.save({
@@ -64,104 +62,147 @@ export const social_signin = async function(req, res) {
 
 // 세션 유지 확인을 위한 토큰 확인 + 확인 후 유저 정보 전송
 export const check_token = async function(req, res) {
-    const accessToken = req.header('Authorization')
+    try{
+        const accessToken = req.header('Authorization')
 
-    if (accessToken) {
-        const decoded = await jwt.verify(accessToken, process.env.SECRET_KEY)
-        if (decoded) {
-            const user = await users.findOne({ where: { id: decoded.user_id } });
-            const newAccessToken = await user.getToken()
-            res.json({
-                state: "success",
-                user: {
-                    uid: user.dataValues.id,
-                    nickname: user.dataValues.nickname,
-                    profile_url: user.dataValues.profile_url,
-                    accessToken: newAccessToken
-                }
-
-            })
+        if (accessToken) {
+            const decoded = await jwt.verify(accessToken, process.env.SECRET_KEY)
+            if (decoded) {
+                const user = await users.findOne({ where: { id: decoded.user_id } });
+                const newAccessToken = await user.getToken()
+                res.json({
+                    state: "success",
+                    user: {
+                        uid: user.dataValues.id,
+                        nickname: user.dataValues.nickname,
+                        profile_url: user.dataValues.profile_url,
+                        accessToken: newAccessToken }
+                })
+            } else {
+                res.json({state: "fail", detail: "unable token"})
+            }
         } else {
-            res.json({state: "fail", detail: "unable token"})
+            res.json({state: "fail", detail: "not token"})
         }
-    } else {
-        res.json({state: "fail", detail: "not token"})
+    } catch (err) {
+        res.send(err)
     }
-    
 }
 
 
 export const read_users = function(req, res) {
-    users.findAll({})
-        .map(user => {
+    try{
+        users.findAll({})
+            .map(user => {
                 delete user.dataValues.password
                 delete user.dataValues.auth
                 return user
-        })
-        .then(user => {
+        }).then(user => {
             res.send(user)
         });
+    } catch (err) {
+        res.send(err)
+    }
 }
 
 export const read_user = async (req, res) => {
-    const user = await users.findOne({where: {id:req.params.user_id}})
-    delete user.dataValues.password
-    delete user.dataValues.auth
-    res.send(user);
+    try{
+        const user = await users.findOne({where: {id:req.params.user_id}})
+        delete user.dataValues.password
+        delete user.dataValues.auth
+        res.send(user);
+    } catch (err) {
+        res.send(serr)
+    }
 }
 
-export const update_user = async (req, res) => { 
-    //const user_info = req.body;
-    //const user = await users.update_user(user_info, { where: { id: req.params.user_id } })
+export const update_user = async (req, res) => {
+    try{
+        const user = res.locals.user;
+        const {
+            body: {name, nickname, phone, image_update, about},
+        } = req;
+        const filename = (typeof req.file === 'undefined') ? "profile_default.png"  : req.file.filename
+    
+        console.log(user, name, nickname, image_update)
+        users.update({
+            name, nickname, phone, about,
+            profile_url: image_update ? process.env.IMAGE_URL + filename : user.profile_url,
+            },{where: {id:user.id}
+        }).then(user => {
+            res.send(user)
+        });
+    } catch (err) {
+        res.send(err)
+    }
+}
 
-    res.json({
-        state: "updating...",
-    });
-
+export const update_password = async (req, res) => {
+    try{
+        const user = res.locals.user;
+        const {new_password, password} = req.body;
+        
+        if(user) {
+            users.findOne({where:{id:user.id}})
+                .then(async (user) => {
+                    const pass = await user.verify(password)            
+                    if (pass) {
+                        const new_pass = await users.hash(new_password)
+                        const update_user = users.update({password:new_pass}, {where:{id:user.id}})
+                        if (update_user) {
+                            res.json({state: "success"})
+                        } else {
+                            res.json({state: "fail"})
+                        }
+                    }else {
+                        res.json({state: "fail", detail:"not pass"})
+                    }
+                })
+        } else {
+            res.json({state: "fail", detail:"not login"})
+        }
+    } catch (err) {
+        res.send(err)
+    }
 }
 export const delete_user = async (req, res) => {
-    const user = await users.destroy({where: {id:req.params.user_id}})
-    res.json({user});
+    try{
+        const user = await users.destroy({where: {id:req.params.user_id}})
+        res.json({user});
+    } catch (err) {
+        res.send(err)
+    }
 }
 
 
 export const signup = async function(req, res, next) {
-    const {
-        body:{email, password, name, nickname, gender, phone},
-        file:{filename}
-    } = req;
-    console.log("방디: ", req.body);
-    console.log("파일 ", req.file);
-    const user = await users.findOne(  
-        {where: {
-                email,
-                platform_type:"local",
-            }
-        });
-    
-    if(user) {
-        res.json({
-            state: "fail",
-            detail: "userEmail exist"
-        });
-        throw new Error("userEmail exist");
-    }
-    else {
-        const new_user = await users.save({
-            email, password, name, nickname, gender, phone, 
-            profile_url: filename,
-        }, "local");
+    try{
+        const {
+            body:{email, password, name, nickname, gender, phone, about},
+        } = req;
+        console.log(about)
+        const filename = (typeof req.file === 'undefined') ? "profile_default.png"  : req.file.filename
 
-        if (new_user) {
-            res.json({
-                state:"success"
-            });
-        } else {
-            res.json({
-                state:"fail",
-                detail: "not save"
-            });
+        const user = await users.findOne({where: {email, platform_type:"local"}})
+    
+        if(user) {
+            res.json( {state: "fail", detail: "userEmail exist"});
+            throw new Error("userEmail exist");
         }
+        else {
+            const new_user = await users.save({
+                email, password, name, nickname, gender, phone, about,
+                profile_url: process.env.IMAGE_URL + filename,
+            }, "local");
+
+            if (new_user) {
+                res.json( {state:"success"});
+            } else {
+                res.json( {state:"fail", detail: "not save"});
+            }
+        }
+    } catch (err) {
+        res.send(err)
     }          
 
 }

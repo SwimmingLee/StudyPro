@@ -1,5 +1,6 @@
 import {common_posts as common_post_model, common_post_likes as common_post_like_model} from "../models"
 import {study_posts as study_post_model, study_post_likes as study_post_like_model} from "../models"
+import {users} from "../models"
 
 export const number_post = async function(req, res) {
     try {
@@ -45,19 +46,23 @@ export const create_post = async function(req, res) {
     }
 }
 
-export const read_like = async function(user_id, post_id,type) {
+export const toggle_like = async function(req, res) {
     try{
+        const user = res.locals.user
+        const {post_id, type} = req.body;
         
-        let like;
+
         if(type === "common"){
-            like = await common_post_like_model.read_like(post_id,user_id);
-        }else if(type === "study"){
-            like = await study_post_like_model.read_like(post_id,user_id);
-        }
-        if(like){
-            return true;
-        }else{
-            return false;
+            const like = await common_post_like_model.findOne( {where: {common_post_id:post_id, user_id:user.id}});
+        }else if(type === "study" && user){
+            const like = await study_post_like_model.findOne( {where: {study_post_id:post_id, user_id:user.id}});
+            if (like) {
+                like.destroy();
+                res.send({like: false})
+            } else {
+                study_post_like_model.create({study_post_id:post_id, user_id:user.id});
+                res.send({like: true})
+            }
         }
     }catch(error){
         console.log(error);
@@ -69,15 +74,31 @@ export const read_like = async function(user_id, post_id,type) {
 export const read_post = async function(req, res) {
     try{
         const {post_id, type} = req.query;
-        let result, user_id;
+        const user = res.locals.user
+
+        let result;
         let like = false;
-        
         if(type === "common"){
             result = await common_post_model.read_common_post(post_id)
-
         }else if(type === "study"){
             result = await study_post_model.read_study_post(post_id)
-            res.send(result)
+            .then(async (post) => {
+                const writer = await users.findOne( {where: {id:post.writer}})
+                post.dataValues.writer = writer.dataValues.nickname
+                
+                if (user) {
+                    const post_like = await study_post_like_model.findOne( {where: {study_post_id:post_id, user_id:user.id}});
+                    post.dataValues.like = post_like ? true : false
+                }
+
+                const post_num_like = await study_post_like_model.count( {where: {study_post_id:post_id, user_id:user.id}});
+                post.dataValues.num_like = post_num_like
+
+                return post;
+            }).then(post => {
+                res.send(post)
+            })
+            
         }
         
         if (result) {
@@ -113,17 +134,23 @@ export const update_post = async function(req, res) {
 export const delete_post = async function(req, res) {
     try{
         const {post_id, type} = req.body;
-        let result;
+        console.log(req.body)
         if(type ==="common"){
-            result = await common_post_model.delete_common_post(post_id)
+            const post = await common_post_model.fineOne({where: {id:post_id}})
+            post.destroy();
         }else if( type === "study"){
-            result = await study_post_model.delete_study_post(post_id)
+            const post = await study_post_model.destroy({where: {id:post_id}})
+            if (post === '1') {
+                res.send({state: "success"});
+            } else {
+                res.send({state: "fail"})
+            }
         }
-        res.send("delete ok");
-    }catch(error){
+    } catch (error){
         res.send("error");
     }
 }
+
 
 export const list_post = async function(req, res) {
     try{
@@ -131,11 +158,44 @@ export const list_post = async function(req, res) {
         console.log(board, type, study_id, offset);
         let result;
         if(type === "common"){
-            result = await common_post_model.list_common_post(board, offset || 0)
+            common_post_model.findAll({ 
+                offset: Number(offset || 0),
+                limit: 10,
+                where : {
+                    study_id : study_id,
+                    board : board,
+                },
+                order:  [['id','DESC']]
+            }).map(async (post) => {
+                const writer_id = post.dataValues.writer
+                const writer = await users.findOne({where:{id:writer_id}})
+                post.dataValues.writer = writer.dataValues.nickname
+
+                const post_num_like = await study_post_like_model.count( {where: {study_post_id:post_id}});
+                post.dataValues.num_like = post_num_like
+
+                return post
+            }).then((posts)=>{
+                res.send(posts)
+            })
         }else if(type === "study"){
-            result = await study_post_model.list_study_post(study_id,board, offset || 0)
+            study_post_model.findAll({ 
+                offset: Number(offset || 0),
+                limit: 10,
+                where : {
+                    study_id : study_id,
+                    board : board,
+                },
+                order:  [['id','DESC']]
+            }).map(async (post) => {
+                const writer_id = post.dataValues.writer
+                const user = await users.findOne({where:{id:writer_id}})
+                post.dataValues.writer = user.dataValues.nickname
+                return post
+            }).then((posts)=>{
+                res.send(posts)
+            })
         }
-        res.send(result);
     }catch(error){
         console.log(error);
         

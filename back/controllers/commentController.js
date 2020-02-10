@@ -2,16 +2,17 @@ import {study_comments as study_comment_model} from "../models"
 import {study_comment_likes as study_comment_like_model} from "../models";
 import {common_comments as common_comment_model} from "../models"
 import {common_comment_likes as common_comment_like_model} from "../models";
-
+import {users} from "../models"
 
 export const create_comment = async function(req, res){
     try{
-       const {user_id, post_id, content, type} = req.body;
-       
+       const user_id = res.locals.user.id;
+       const {post_id, content, type} = req.body;
+
        let result;
        if(type ==="common"){
            result = await common_comment_model.create_comment(user_id, post_id, content);
-       }else{
+       } else if (type === "study") {
            result = await study_comment_model.create_comment(user_id, post_id , content);
        }
         res.send("create ok");
@@ -23,39 +24,51 @@ export const create_comment = async function(req, res){
 
 export const read_comments = async function(req, res){
     try{
-        const {post_id, type} = req.body;
-        const {user_id} = req.body;
         
+        const {post_id, type} = req.query;
         let results;
-        if(type === "common"){
-            results = await common_comment_model.read_comment(post_id);
-        }else{
-            results = await study_comment_model.read_comment(post_id);
+        
+        if(type === "common") {
+            common_comment_model.findAll({where:{post_id:post_id}})
+                .map(async (comment) => {
+                    const user = await users.findOne({where:{id:comment.dataValues.writer}})
+                    comment.dataValues.writer = user.dataValues;
+                    return comment
+                }).then(comments => {
+                    res.send(comments)
+                }) 
+        } else if (type === "study") {
+            study_comment_model.findAll({where:{post_id:post_id}})
+                .map(async (comment) => {
+                    const user = await users.findOne({where:{id:comment.dataValues.writer}})
+                    comment.dataValues.writer = user.dataValues;
+                    return comment
+                }).then(comments => {
+                    res.send(comments)
+                }) 
         }
-        if(user_id){
-            let comment_id;
-            for (const result of results) {
-                let like;
-                if(type === "common"){
-                    comment_id = result.common_comment_id;
-                    like = await study_comment_like_model.read_like(comment_id,user_id);
+    //     if(user_id){
+    //         let comment_id;
+    //         for (const result of results) {
+    //             let like;
+    //             if(type === "common"){
+    //                 comment_id = result.common_comment_id;
+    //                 like = await study_comment_like_model.read_like(comment_id,user_id);
                     
-                }else{
-                    comment_id = result.study_comment_id;
-                    like = await common_comment_like_model.read_like(comment_id,user_id);
-                }
+    //             }else{
+    //                 comment_id = result.study_comment_id;
+    //                 like = await common_comment_like_model.read_like(comment_id,user_id);
+    //             }
 
-                if(like){
-                    result.like = true;
-                }else{
-                    result.like = false;
-                }
-                console.log(result)
-            }
-        }
-
-
-        res.send(results);
+    //             if(like){
+    //                 result.like = true;
+    //             }else{
+    //                 result.like = false;
+    //             }
+    //             console.log(result)
+    //         }
+    //     }
+    //     res.send(results);
     
     }catch(error){
         console.log(error);

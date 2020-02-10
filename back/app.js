@@ -30,6 +30,7 @@ app.use(morgan("dev"));
 
 app.use(localsMiddelWare)
 app.use(routes.images, express.static(path.join(__dirname, 'uploads')));
+app.use(routes.sshauth, express.static(path.join(__dirname, 'auth')));
 app.use(routes.users, userRouter);
 app.use(routes.studies, studyRouter);
 app.use(routes.comments, commentRouter);

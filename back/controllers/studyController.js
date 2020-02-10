@@ -85,8 +85,25 @@ export const update_study = async function(req, res) {
 }
 
 export const read_studies = async function(req, res) {
-    const result = await studies.findAll();
-    res.send(result);
+    try{
+        studies.findAll()
+            .map(async study => {
+                const minor =  await minor_classes.findOne({where:{id:study.dataValues.minor_class_id}});
+                study.dataValues.minor_class = minor
+                delete study.dataValues.minor_class_id
+
+                const captain = await users.findOne({where:{id:study.dataValues.captain}})
+                delete captain.dataValues.password
+                delete captain.dataValues.auth
+                study.dataValues.captain = captain.dataValues
+
+                return study
+            }).then(studies => {
+                res.send(studies)
+            })
+    } catch(err) {
+
+    }
 }
 
 export const read_study = async function(req, res) {

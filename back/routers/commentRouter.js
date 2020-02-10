@@ -9,8 +9,8 @@ const commentRouter = express.Router();
 
 
 
-commentRouter.get(routes.comment, onlyPrivate, read_comments);
-commentRouter.post(routes.comment, create_comment);
+commentRouter.get(routes.home, read_comments);
+commentRouter.post(routes.home, create_comment);
 commentRouter.put(routes.comment, update_comment);
 commentRouter.delete(routes.comment, delete_comment);
 

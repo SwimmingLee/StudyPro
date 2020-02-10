@@ -18,8 +18,13 @@
     "database": "samoim",  
     "host": "15.164.245.201",
     "dialect": "mysql",
-    "operatorsAliases": false,
     "timezone": "+09:00",
+    "operatorsAliases": false,
+    "dialectOptions": {
+      "useUTC": false, 
+      "dateStrings": true, 
+      "typeCast": true 
+    },
     "define": {
       "timestamps": false,
       "underscored" : true

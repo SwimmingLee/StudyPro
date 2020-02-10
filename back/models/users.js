@@ -46,6 +46,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: true,
     },
+    about: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
   }, {
     tableName: 'users'
   });
@@ -80,7 +84,7 @@ module.exports = function (sequelize, DataTypes) {
   users.save = async function (user, platform_type, auth) {
     try {
       const {
-        email, phone, password, name, nickname, gender, profile_url
+        email, phone, password, name, nickname, gender, profile_url, about
        } = user;
 
     
@@ -96,6 +100,7 @@ module.exports = function (sequelize, DataTypes) {
           gender,
           auth: auth || 0,
           profile_url,
+          about
         })
         return new_user;
       } else {
@@ -109,6 +114,7 @@ module.exports = function (sequelize, DataTypes) {
           gender,
           auth: auth || 0,
           profile_url,
+          about
         })
         return new_user;
       }

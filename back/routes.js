@@ -9,7 +9,7 @@ const SIGNUP = "/signup";
 const SIGNIN = "/signin";
 const SOCIAL_SIGNIN = "/social/signin";
 const CHECK_TOKEN = "/token";
-
+const UPDATE_PASSWORD = "/pass"
 
 // Images
 const IMAGES = "/images"
@@ -28,6 +28,7 @@ const POST_LIST = "/list";
 const POST_DETAIL = "/detail";
 const POST_SEARCH = "/search";
 const POST_NUMBER = "/number"
+const POST_LIKE = "/like";
 
 // Comments
 const COMMENTS = "/comments";
@@ -59,6 +60,7 @@ const routes = {
     signin : SIGNIN,
     social_signin : SOCIAL_SIGNIN,
     check_token: CHECK_TOKEN,
+    update_password: UPDATE_PASSWORD,
 
     images : IMAGES,
     
@@ -73,6 +75,7 @@ const routes = {
     post_list : POST_LIST,
     post_detail : POST_DETAIL,
     post_search : POST_SEARCH,
+    post_like: POST_LIKE,
 
     comments : COMMENTS,
     comment : COMMENT,

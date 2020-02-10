@@ -9,12 +9,20 @@ export const create_alarm = async function(req, res) {
     if (!to_user) {
         res.send({
         "state": "fail",
-        "detail": "wrong id"
+        "detail": "wrong user id"
         })
     } else {
         const result = await alarms.create_alarm({from, to, title, content})
         res.send(result)
     }
+}
+
+export const check_alarm = async function(req, res) {
+    const {alarm_id} = req.body
+    alarms.update({check:1}, {where:{id: alarm_id}})
+    res.send({
+        state:"success"
+    })
 }
 
 export const delete_alarm = async function(req, res) {
@@ -37,11 +45,12 @@ export const read_alarms_all = async function(req, res) {
     let from, to;
     const {direction} = req.query
 
-    console.log(direction, "¾ÆÇÏ")
     if (direction === "fromUser") {
         from = res.locals.user.id
-        alarms.findAll({where:{from}})
+        alarms.findAll({where:{from}, order:  [['created_date','DESC']]})
             .map(async (alarm) => {
+                console.log(alarm.dataValues.created_date)
+
                 to = alarm.dataValues.to
                 const user = await users.findOne({where:{id:to}})
                 delete user.dataValues.password
@@ -53,7 +62,7 @@ export const read_alarms_all = async function(req, res) {
             })
     } else if (direction === "toUser") {
         to = res.locals.user.id
-        alarms.findAll({where:{to}})
+        alarms.findAll({where:{to}, order:  [['created_date','DESC']]})
             .map(async (alarm) => {
                 from = alarm.dataValues.from
                 const user = await users.findOne({where:{id:from}})
