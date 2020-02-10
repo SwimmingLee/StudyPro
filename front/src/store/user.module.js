@@ -14,6 +14,11 @@ export const user = {
         async updateUser({ dummy }, payload) {
             console.log('updateUser in user.module.js', dummy)
             return await UserService.updateUser(payload)
+        },
+
+        async chagnePass({ dummy }, payload) {
+            console.log('changePass in user.module.js', dummy)
+            return await UserService.chagnePass(payload)
         }
     }
 }
