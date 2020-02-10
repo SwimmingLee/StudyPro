@@ -103,7 +103,7 @@ export default {
       editor.setHtml(data.pad_data);
       this.is_change = true;
     });
-
+  
     document.getElementById("download").onclick=()=>{
       this.saveToFile_Chrome("123123",editor.getMarkdown())
     }

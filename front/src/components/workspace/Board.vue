@@ -1,5 +1,10 @@
 <template>
-  <v-card oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+  <v-card
+    id="canvas_card"
+    oncontextmenu="return false"
+    ondragstart="return false"
+    onselectstart="return false"
+  >
     <canvas
       ref="canvas"
       @mousedown.left="mouse_down"
@@ -9,8 +14,6 @@
       @mousedown.right="eraiser_down"
       @mouseup.right="eraiser_up"
       id="canvas"
-      width="640"
-      height="640"
     ></canvas>
 
     <swatches
@@ -57,7 +60,7 @@ export default {
     Swatches
   },
 
-  props: ["socket","study_id"],
+  props: ["socket", "study_id"],
 
   data() {
     return {
@@ -143,15 +146,15 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.$refs.canvas);
-    // this.ctx = this.$refs.canvas.getContext('2d');
+    this.socket.emit("load_image", {
+      study_id: this.study_id
+    });
 
-      this.socket.emit("load_image", {
-        study_id : this.study_id
-      });
-
-
+    
     this.canvas = document.getElementById("canvas");
+    this.canvas.width = document.getElementById("canvas_card").offsetWidth;
+    this.canvas.height = document.getElementById("canvas_card").offsetHeight;
+
     this.context = this.canvas.getContext("2d");
     this.socket.on("line", data => {
       this.context.lineWidth = data.width;
@@ -168,28 +171,26 @@ export default {
     });
 
     this.socket.on("load_image", data => {
-
       let image_data = this.canvas.toDataURL();
-      
+
       this.socket.emit("send_image", {
         socket_id: data,
         image_data: image_data
       });
     });
 
-    this.socket.on("send_image", (data) => {
-      
+    this.socket.on("send_image", data => {
       let image = new Image();
-      image.onload = ()=>{
-        this.context.drawImage(image,0,0);
-      }
+      image.onload = () => {
+        this.context.drawImage(image, 0, 0);
+      };
       image.src = data.image_data;
-      
     });
 
-    window.onsize = function() {
-      // console.log(document.getElementById("canvas"));
-    };
+    // window.onresize = () => {
+    //   console.log(document.getElementById("canvas_card").offsetHeight);
+    //   console.log(document.getElementById("canvas_card").offsetWidth);
+    // };
   }
 };
 </script>

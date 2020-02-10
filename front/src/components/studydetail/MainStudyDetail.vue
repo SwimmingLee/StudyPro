@@ -95,7 +95,11 @@ export default {
   },
   methods:{
     child() {
-      this.workspace = window.open(`/workspace/${this.study_id}`)
+      
+      this.workspace = window.open(`/workspace/${this.study_id}`,"WORKSPACE",
+      "location = no, toolbar=no, menubar=no,resizable=no"
+      )
+    
     }
   },
 };

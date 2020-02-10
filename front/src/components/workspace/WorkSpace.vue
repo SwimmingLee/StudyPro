@@ -1,6 +1,6 @@
 <template>
-  <!-- <v-container fluid class="pa-2"> -->
-    <v-card class="px-4 customTheme lighten-2">
+  <v-container fluid class="pa-2">
+    <v-card id = "workspace_card" class="px-4 customTheme lighten-2" >
       <v-row>
         <v-col :cols="talk ? 8 : 12" id="col" >
           <v-tabs grow icons-and-text centered dark color="cyan">
@@ -67,7 +67,7 @@
         </v-col>
       </v-row>
     </v-card>
-  <!-- </v-container> -->
+  </v-container>
 </template>
 
 <script>
@@ -117,6 +117,13 @@ export default {
   
   },
   mounted() {
+
+    let workspace_card = document.getElementById("workspace_card");
+    console.log(workspace_card.offsetWidth);
+    console.log(workspace_card.offsetHeight);
+    workspace_card.abc = 300;
+    workspace_card.abc = 300;
+
     window.onbeforeunload = () => {
       this.socket.emit("leave", { study_id: this.study_id, user_id: `${this.user_id}` });
     };

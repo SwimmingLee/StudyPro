@@ -1,8 +1,7 @@
 import app from "./app"
-export const server = require('http').createServer(option, app)
+export const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
-// console.log(option)
 let rooms = {};
 export const connect = () => {
     try {
