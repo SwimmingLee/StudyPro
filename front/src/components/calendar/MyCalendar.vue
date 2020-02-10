@@ -1,6 +1,6 @@
 <template>
   <div id="mycal">
-    <div v-if="!isAuth">
+    <div v-if="isAuth">
       <v-row class="fill-height" justify="center">
         <v-col cols="11" class="mx-2">
           <v-card>

@@ -10,15 +10,11 @@
             <v-tabs vertical>
               <v-tab class="py-3">
                 <!-- <v-icon left>mdi-account</v-icon> -->
-                회원정보수정
+                정보수정
               </v-tab>
               <v-tab class="py-3">
                 <!-- <v-icon left>mdi-lock</v-icon> -->
                 비밀번호변경
-              </v-tab>
-              <v-tab class="py-3">
-                <!-- <v-icon left>mdi-access-point</v-icon> -->
-                회원탈퇴
               </v-tab>
 
               <v-tab-item>
@@ -29,9 +25,6 @@
                 <manage-study />
               </v-tab-item>
 
-              <v-tab-item>
-                <withdrawal />
-              </v-tab-item>
             </v-tabs>
           </v-card>
         </v-col>
@@ -48,9 +41,8 @@
 <script>
 export default {
   components: {
-    EditProfile: () => import("@/components/mypage/EditProfile"),
-    ManageStudy: () => import("@/components/mypage/ChangePassword"),
-    Withdrawal: () => import("@/components/mypage/Withdrawal"),
+    EditProfile: () => import("@/components/user/mypage/EditProfile"),
+    ManageStudy: () => import("@/components/user/mypage/ChangePassword"),
     requestSignin: () => import("@/components/base/RequestSignin")
   },
   computed: {

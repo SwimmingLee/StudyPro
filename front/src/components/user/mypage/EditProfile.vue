@@ -11,7 +11,7 @@
                     <v-col cols="12" sm="10">
                       <v-text-field
                         :disabled="true"
-                        v-model="id"
+                        v-model="input.email"
                         :rules="idRules"
                         label="아이디"
                         required
@@ -21,20 +21,30 @@
 
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
-                      <v-text-field v-model="name" :rules="nameRules" label="이름" required></v-text-field>
+                      <v-text-field
+                        v-model="input.name"
+                        :rules="nameRules"
+                        label="이름"
+                        required
+                      ></v-text-field>
                     </v-col>
                   </v-row>
 
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
-                      <v-select :items="gender" label="성별" dense></v-select>
+                      <v-select
+                        v-model="input.gender"
+                        :items="genderItems"
+                        label="성별"
+                        dense
+                      ></v-select>
                     </v-col>
                   </v-row>
 
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
                       <v-text-field
-                        v-model="nickname"
+                        v-model="input.nickname"
                         :counter="10"
                         :rules="nicknameRules"
                         label="닉네임"
@@ -46,7 +56,7 @@
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
                       <v-text-field
-                        v-model="phone"
+                        v-model="input.phone"
                         :rules="phoneRules"
                         label="휴대전화 번호( - 제외하고 입력해 주세요.)"
                         required
@@ -56,14 +66,24 @@
 
                   <v-row justify="center" align="center">
                     <v-col cols="12" sm="10">
-                      <v-text-field
-                        v-model="introducing"
+                      <v-textarea
+                        v-model="input.introducing"
                         :counter="50"
                         :rules="introducingRules"
                         label="자신을 멋지게 소개해 주세요!"
                         required
-                      ></v-text-field>
+                        outlined
+                      ></v-textarea>
                     </v-col>
+                  </v-row>
+                  <v-row justify="center">
+                    <image-input v-model="input.profile_url" class="wrap-content">
+                      <div slot="activator" class="wrap-content pointer">
+                        <v-avatar size="150px" v-ripple class="mb-3">
+                          <img :src="input.profile_url" alt="Error" />
+                        </v-avatar>
+                      </div>
+                    </image-input>
                   </v-row>
                 </v-card>
               </v-col>
@@ -71,49 +91,12 @@
 
             <v-row>
               <v-col cols="12" sm="12">
-                <v-card class="px-5 mx-auto" max-width="1000">
-                  <v-card-text class="pt-0" style="font-size:18px">
-                    <p>
-                      <br />
-                    </p>관심있는 분야를 선택해 주세요.
-                  </v-card-text>
-
-                  <v-row justify="center" align="center">
-                    <v-col cols="12" sm="3">
-                      <v-checkbox v-model="db" class="mx-2" label="데이터베이스"></v-checkbox>
-                    </v-col>
-                    <v-col cols="12" sm="3">
-                      <v-checkbox v-model="bc" class="mx-2" label="블록체인"></v-checkbox>
-                    </v-col>
-                    <v-col cols="12" sm="3">
-                      <v-checkbox v-model="al" class="mx-2" label="알고리즘"></v-checkbox>
-                    </v-col>
-                    <v-col cols="12" sm="3">
-                      <v-checkbox v-model="os" class="mx-2" label="운영체제"></v-checkbox>
-                    </v-col>
-                  </v-row>
-
-                  <v-row justify="center" align="center">
-                    <v-col cols="12" sm="3">
-                      <v-checkbox v-model="ai" class="mx-2" label="인공지능"></v-checkbox>
-                    </v-col>
-                    <v-col cols="12" sm="3">
-                      <v-checkbox v-model="ad" class="mx-2" label="자율주행"></v-checkbox>
-                    </v-col>
-                    <v-col cols="12" sm="3">
-                      <v-checkbox v-model="cs" class="mx-2" label="컴퓨터보안"></v-checkbox>
-                    </v-col>
-                    <v-col cols="12" sm="3">
-                      <v-checkbox v-model="cn" class="mx-2" label="컴퓨터통신"></v-checkbox>
-                    </v-col>
-                  </v-row>
-                </v-card>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="12" sm="12">
-                <v-card class="mx-auto" max-width="1000" color="rgb(0, 0, 0, 0)" elevation="0">
+                <v-card
+                  class="mx-auto"
+                  max-width="1000"
+                  color="rgb(0, 0, 0, 0)"
+                  elevation="0"
+                >
                   <v-layout row>
                     <v-flex column>
                       <v-layout justify-end>
@@ -122,7 +105,8 @@
                           :disabled="!enablebtn || !valid"
                           color="success"
                           @click="validate"
-                        >수정하기</v-btn>
+                          >수정하기</v-btn
+                        >
                       </v-layout>
                     </v-flex>
                   </v-layout>
@@ -141,8 +125,20 @@ export default {
   data: () => ({
     enablebtn: false,
     valid: true,
+    user: null,
 
-    id: "",
+    input: {
+      id: "",
+      email: "",
+      name: "",
+      gender: "",
+      nickname: "",
+      phone: "",
+      introducing: "",
+      profile_url: "",
+      platform_type: ""
+    },
+
     idRules: [
       v => !!v || "아이디를 입력해 주세요.",
       v =>
@@ -150,18 +146,12 @@ export default {
           v
         ) || "ex) sample@example.com"
     ],
-    introducing: "잘 부탁드려요!",
-    introducingRules: [v => v.length <= 50 || "최대 50자까지 입력 가능합니다."],
-
-    name: "",
-    nameRules: [v => v.length <= 50 || "이름이 너무 깁니다."],
-
-    gender: ["남성", "여성"],
-
-    nickname: "",
-    nicknameRules: [v => v.length <= 10 || "닉네임은 최대 10자입니다."],
-
-    phone: "",
+    introducingRules: [
+      v => !v || v.length <= 50 || "최대 50자까지 입력 가능합니다."
+    ],
+    nameRules: [v => !v || v.length <= 50 || "이름이 너무 깁니다."],
+    genderItems: ["남성", "여성"],
+    nicknameRules: [v => !v || v.length <= 10 || "닉네임은 최대 10자입니다."],
     phoneRules: [
       v =>
         (v && v.length >= 10 && v.length <= 11) ||
@@ -198,23 +188,35 @@ export default {
     },
     userPhone: function() {
       return this.$store.getters.userPhone;
-    },
+    }
   },
 
-  mounted() {
-    this.id = this.userEmail;
-    this.nickname = this.userNickname;
-    this.name = this.userName;
-    this.phone = this.userPhone;
+  async mounted() {
+    var uid = this.$store.getters["auth/getUser"].uid;
+    var user = await this.$store.dispatch("getUserContent", uid);
+    console.log(user);
+    this.input = {
+      id: uid,
+      email: user.email,
+      name: user.name,
+      gender: user.gender,
+      nickname: user.nickname,
+      phone: user.phone,
+      introducing: "",
+      profile_url: user.profile_url,
+      platform_type: user.platform_type
+    };
+
+    this.user = user;
   },
 
   methods: {
     validate() {
       if (
-        (!this.name || this.name == "윤찬희") &&
-        (!this.nickname || this.nickname == "cyun") &&
-        (!this.phone || this.phone == "01012345678") &&
-        (!this.introducing || this.introducing == "잘 부탁드려요!")
+        (!this.input.name || this.input.name == this.user.name) &&
+        (!this.input.nickname ||
+          (this.nickname == this.user.nickname &&
+            (!this.input.phone || this.phone == this.user.phone)))
       ) {
         this.enablebtn = false;
       }
@@ -223,32 +225,32 @@ export default {
 
   watch: {
     name() {
-      if (this.name && this.name != "윤찬희") {
+      if (this.input.name && this.input.name != this.user.name) {
         this.enablebtn = true;
       } else {
         this.validate();
       }
     },
     nickname() {
-      if (this.nickname && this.nickname != "cyun") {
+      if (this.input.nickname && this.input.nickname != this.user.nickname) {
         this.enablebtn = true;
       } else {
         this.validate();
       }
     },
     phone() {
-      if (this.phone && this.phone != "01012345678") {
+      if (this.input.phone && this.input.phone != this.user.phone) {
         this.enablebtn = true;
       } else {
         this.validate();
       }
     },
     introducing() {
-      if (this.introducing && this.introducing != "잘 부탁드려요!") {
-        this.enablebtn = true;
-      } else {
-        this.validate();
-      }
+      // if (this.introducing && this.introducing != "잘 부탁드려요!") {
+      //   this.enablebtn = true;
+      // } else {
+      //   this.validate();
+      // }
     }
   }
 };

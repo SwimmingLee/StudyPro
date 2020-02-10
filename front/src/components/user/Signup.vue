@@ -107,7 +107,6 @@
                   height="150px"
                   v-model="introducing"
                   single-line
-                  :rules="introducingRules"
                   :counter="50"
                 ></v-textarea>
                     </v-col>
@@ -132,7 +131,7 @@
                   </v-row>
                 </v-card>
 
-                <v-row>
+                <!-- <v-row>
                   <v-col cols="12" sm="12">
                     <v-card class="px-5 mx-auto" max-width="1000">
                       <v-card-text class="pt-0" style="font-size:18px">
@@ -205,7 +204,7 @@
                       </v-row>
                     </v-card>
                   </v-col>
-                </v-row>
+                </v-row> -->
 
                 <v-card
                   class="mx-auto"
@@ -215,12 +214,12 @@
                 >
                   <v-layout row right justify-end>
                     <span
-                      class="red--text lighten-1 mr-10 pt-2"
+                      class="red--text lighten-1 mr-10 pt-2 mt-2"
                       v-show="notcreated"
                       >아이디가 이미 존재합니다.</span
                     >
                     <v-btn
-                      class="mr-4"
+                      class="mr-4 mt-2"
                       :disabled="!valid || isLoading"
                       color="green lighten-4"
                       @click="onSignup()"
@@ -267,10 +266,6 @@ export default {
     ],
     confirmPasswordRules: [v => !!v || "비밀번호를 한 번 더 입력해 주세요."],
     introducing: "",
-    introducingRules: [
-      v => !!v || "하고싶은 말을 자유롭게 작성해 보세요!",
-      v => (v && v.length <= 50) || "최대 50자까지 입력 가능합니다."
-    ],
 
     name: "",
     nameRules: [
@@ -311,6 +306,11 @@ export default {
     avatar: null,
     isLoading: false
   }),
+  watch:{
+    password(){
+      this.confirmPassword = ''
+    }
+  },
   components: {
     ImageInput: () => import("@/components/base/ImageInput")
   },

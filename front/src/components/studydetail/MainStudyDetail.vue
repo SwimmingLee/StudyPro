@@ -1,5 +1,5 @@
 <template>
-  <v-content app id="search" class="fill-height">
+  <v-content app id="search" class="fill-height pt-8">
     <v-card>
       <v-img src="@/assets/images/cherryblossom.jpg" aspect-ratio="7">
         <v-card-title style="transform: translateY(150%)"
