@@ -74,8 +74,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
 export default {
   data: () => ({
     pwd: "qwerqwer1",
@@ -84,24 +82,20 @@ export default {
     curpassword: "",
     password: "",
     confirmPassword: "",
-
+    curpasswordRules:[],  
+    passwordRules: [],
     confirmPasswordRules: [v => !!v || "비밀번호를 한 번 더 입력해 주세요."]
   }),
 
   methods: {
-    ...mapActions(["signup"]),
-    async onSignup() {
+    async changePass() {
       try {
-        let signupResult = await this.signup({
-          name: this.name,
-          nickname: this.nickname,
-          email: this.email,
-          password: this.password,
-          gender: "M",
-          phone: this.phone
-        });
-        this.created = signupResult;
-        console.log(signupResult);
+        var formData = new FormData()
+        formData.append('password', this.curpassword)
+        formData.append('new_password', this.password)
+
+        var res = await this.$store.dispatch('changePass', formData)
+        console.log(res)
       } catch (err) {
         console.error(err);
       }
@@ -134,10 +128,6 @@ export default {
     ];
     this.curpasswordRules = [
       v => !!v || "현재 비밀번호를 입력해 주세요.",
-      v => (v && v.length >= 8) || "비밀번호 형식이 올바르지 않습니다.",
-      v => /(?=.*[a-zA-Z])/.test(v) || "비밀번호 형식이 올바르지 않습니다.",
-      v => /(?=.*\d)/.test(v) || "비밀번호 형식이 올바르지 않습니다.",
-      v => (v && v == this.pwd) || "비밀번호가 일치하지 않습니다."
     ];
   }
 };

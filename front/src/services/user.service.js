@@ -23,6 +23,15 @@ class UserService {
         AuthHeader.changeHeadersToken()
         return axios.put(URL, payload)
             .then(res => {
+                return res.data
+            })
+    }
+
+    // 비밀번호 변경
+    changePass(payload) {
+        AuthHeader.changeHeadersToken()
+        return axios.put(URL + 'pass', payload)
+            .then(res => {
                 console.log(res.data)
                 return res.data
             })
