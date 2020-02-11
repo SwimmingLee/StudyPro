@@ -7,7 +7,7 @@ const USER_DETAIL = "/:user_id";
 const CHANGE_PASSWARD = "/change-password";
 const SIGNUP = "/signup";
 const SIGNIN = "/signin";
-const SOCIAL_SIGNIN = "/social/signin";
+const SOCIAL_SIGNIN = "/social-signin";
 const CHECK_TOKEN = "/token";
 const UPDATE_PASSWORD = "/pass"
 

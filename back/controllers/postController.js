@@ -75,7 +75,7 @@ export const toggle_like = async function(req, res) {
                 like.destroy();
                 res.send({like: false})
             } else {
-                study_post_like_model.create({study_post_id:post_id, user_id:user.id});
+                common_post_like_model.create({common_post_id:post_id, user_id:user.id});
                 res.send({like: true})
             }
         }else if(type === "study" && user){
@@ -106,19 +106,21 @@ export const read_post = async function(req, res) {
                 .then(async (post) => {
                     const writer = await users.findOne( {where: {id:post.writer}})
                     post.dataValues.writer = writer.dataValues.nickname
-                
+                    
                     if (user) {
-                        const post_like = await study_post_like_model.findOne( {where: {study_post_id:post_id, user_id:user.id}});
+                        const post_like = await common_post_like_model.findOne( {where: {common_post_id:post_id, user_id:user.id}});
                         post.dataValues.like = post_like ? true : false
 
                     } else {
                         post.dataValues.like = false
                     }
-                    const post_num_like = await study_post_like_model.count( {where: {study_post_id:post_id}});
+                    const post_num_like = await common_post_like_model.count( {where: {common_post_id:post_id}});
                     post.dataValues.num_like = post_num_like;
 
-                    res.send(post)
-                })  
+                    const view = post.dataValues.view
+                    common_post_model.update({view:view+1}, {where:{id:post.dataValues.id}})
+                    res.send(post)      
+                })          
         }else if(type === "study"){
             study_post_model.findOne({where:{id:post_id}})
                 .then(async (post) => {
@@ -135,6 +137,8 @@ export const read_post = async function(req, res) {
                     const post_num_like = await study_post_like_model.count( {where: {study_post_id:post_id}});
                     post.dataValues.num_like = post_num_like;
 
+                    const view = post.dataValues.view
+                    study_post_like_model.update({view:view+1}, {where:{id:post.dataValues.id}})
                     res.send(post)
                 })          
         }
@@ -186,7 +190,7 @@ export const list_post = async function(req, res) {
                 
                 return post
 
-            }).then((posts)=>{
+            }).then((posts)=>{   
                 
                 res.send(posts)
             })

@@ -36,23 +36,27 @@ export const signin = async function(req, res) {
 export const social_signin = async function(req, res) {
     try{
         const {email, nickname, gender, platform_type, profile_image} = req.body;
+        console.log(req.body)
         let user = await users.findOne({ where: { email, platform_type } });
         if (!user) {
             user = await users.save({
                 email,
                 nickname,
                 gender,
-                platform_type,
                 profile_url: profile_image
             },
             platform_type
             );
         }
-        let token = await user.getToken()
+        let accessToken = await user.getToken()
             res.json({
                 state: "success",
-                token: token,
-                user: user.dataValues
+                user: {
+                    uid: user.dataValues.id,
+                    nickname: user.dataValues.nickname,
+                    profile_url: user.dataValues.profile_url,
+                    accessToken: accessToken
+                }
             })
     } catch (err) {
         console.log(err);

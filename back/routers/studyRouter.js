@@ -8,7 +8,7 @@ const studyRouter = express.Router();
 
 
 studyRouter.get(routes.home, read_studies);
-studyRouter.post(routes.study, study_image_upload.single('img'), create_study)
+studyRouter.post(routes.home, study_image_upload.single('img'), create_study)
 studyRouter.delete(routes.study_detail, delete_study)
 studyRouter.put(routes.study_detail, update_study)
 studyRouter.get(routes.study_search, search_studies)

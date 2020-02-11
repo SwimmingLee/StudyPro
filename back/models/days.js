@@ -26,7 +26,10 @@ module.exports = function(sequelize, DataTypes) {
 
   
   days.create_days = async function(study_id, days) {
-
+    if (typeof days === 'undefined') {
+      console.log("gkgkgk")
+      return;
+    }
     for (const day of days) {
       this.create({study_id, day})
     }

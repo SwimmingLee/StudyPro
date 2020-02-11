@@ -1,6 +1,6 @@
 import {users, studies, users_and_studies, applies, days, tags, studies_and_tags, marked_studies, minor_classes} from "../models"
 import multer from "multer"
-// 
+import path from "path"
 
 const study_image_default = function () {
     return ("study_default"  + (Math.round(Math.random() * 2) + 1) + ".png")
@@ -10,33 +10,43 @@ export const create_study = async function(req, res) {
     const captain = res.locals.user;
     const {
         name, goal, description, minor_class_id, user_limit,
-        start_day, end_day, start_time, end_time, isOpen, status, progress_days
+        start_day, end_day, start_time, end_time, isOpen, status, progress_days, input_tags
     } = req.body;
-    const filename = (typeof req.file === 'undefined') ? study_image_default() : req.file.filename
-    
-    studies.create({
-        name, goal, description, minor_class_id, user_limit, captain:captain.id,
-        start_day, end_day, start_time, end_time, isOpen, status, 
-        image_url: process.env.IMAGE_URL + filename,
-    }).then(study => {
-        const study_id = study.dataValues.id
-        users_and_studies.create({user_id:captain.id, study_id})
-        days.create_days(study_id, progress_days)
 
-        return study_id
-    }).then(async (study_id)=> {
-        for (const tag of input_tags) {
-            const temp_tag = await tags.findOne({where :{name:tag}})
-            if (temp_tag) {
-                studies_and_tags.create_study_tag(study_id, temp_tag.id)
-            }
-            else {
-                const created_tag = await tags.create_tag(tag)
-                studies_and_tags.create_study_tag(study_id, created_tag.id)
-            }
-        }
-    })
+    const study = await studies.findOne({where:{name}})
+    if (study) {
+        res.send({state:"fail", detail:"study name exist"})
+    } else {
+        const filename = (typeof req.file === 'undefined') ? study_image_default() : req.file.filename
+        // console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", req.body)
+        const new_study = await studies.create({
+            name, goal, description, minor_class_id, user_limit, captain:captain.id,
+            start_date:start_day, end_date:end_day, start_time, end_time, isopen:(isOpen === 'true' ? 1: 0), status, 
+            image_url: process.env.IMAGE_URL + filename,
+        }).then(study => {
+            const study_id = study.dataValues.id
+            users_and_studies.create({user_id:captain.id, study_id})
+            days.create_days(study_id, progress_days)
     
+            return study
+        }).then(async (study)=> {
+            if (typeof input_tags === 'undefined') {
+                res.send({state:"success", gid:study.dataValues.id})
+            } else {
+                for (const tag of input_tags) {
+                    const temp_tag = await tags.findOne({where :{name:tag}})
+                    if (temp_tag) {
+                        studies_and_tags.create_study_tag(study_id, temp_tag.id)
+                    }
+                    else {
+                        const created_tag = await tags.create_tag(tag)
+                        studies_and_tags.create_study_tag(study_id, created_tag.id)
+                    }
+                }
+                res.send({state:"success", gid:study.dataValues.id})
+            }
+        })
+    }
 }
 
 export const apply_study = async function(req, res) {

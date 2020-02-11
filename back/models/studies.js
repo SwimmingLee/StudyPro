@@ -70,7 +70,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: DataTypes.NOW,
-    }
+    },
+    image_url: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
   }, {
     tableName: 'studies'
   });
