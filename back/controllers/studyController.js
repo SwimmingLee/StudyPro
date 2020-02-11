@@ -1,70 +1,86 @@
 import {users, studies, users_and_studies, applies, days, tags, studies_and_tags, marked_studies, minor_classes} from "../models"
-
+import multer from "multer"
 // 
+
+const study_image_default = function () {
+    return ("study_default"  + (Math.round(Math.random() * 2) + 1) + ".png")
+}
+
 export const create_study = async function(req, res) {
-    const data = req.body;
-    const user_id = res.locals.user.id;
-
-    const wrong_id = user_id;
-    const minor_class = await minor_classes.findOne({where:{name: data.minor_class}})
+    const captain = res.locals.user;
+    const {
+        name, goal, description, minor_class_id, user_limit,
+        start_day, end_day, start_time, end_time, isOpen, status, progress_days
+    } = req.body;
+    const filename = (typeof req.file === 'undefined') ? study_image_default() : req.file.filename
     
-    let result
-    if (!minor_class) {
-        result = {
-            state: "fail",
-            detail: "소주제가 잘못되었습니다"
-        }
-    } else {
-        delete data.minor_class
-        data.minor_class_id = minor_class.id
-        data.captain = user_id
-        result = await studies.create_study(wrong_id, data)
-    }
+    studies.create({
+        name, goal, description, minor_class_id, user_limit, captain:captain.id,
+        start_day, end_day, start_time, end_time, isOpen, status, 
+        image_url: process.env.IMAGE_URL + filename,
+    }).then(study => {
+        const study_id = study.dataValues.id
+        users_and_studies.create({user_id:captain.id, study_id})
+        days.create_days(study_id, progress_days)
 
-    if (result.state === "fail") {res.send(result)}
-    else {
-        const created_study_id = result.detail.id
-        users_and_studies.join_to_study(data.captain, created_study_id, false, false)
-        res.send(result)
-        if (data.days) {
-            // day모델에 추가하는 과정
-            //const input_days = data.days.replace('[', '').replace(']', '').replace(/ /g,'').split(',')
-            const input_days = data.days;
-            days.create_days(created_study_id, input_days)
-        }
-        if (data.tags) {
-            // tag모델에 추가하는 과정
-            //const input_tags = data.tags.replace('[', '').replace(']', '').replace(/#/g, '').replace(/ /g,'').split(',')
-            const input_tags = data.tags
-            for (const tag of input_tags) {
-                const temp_tag = await tags.findOne({where :{name:tag}})
-                if (temp_tag) {
-                    studies_and_tags.create_study_tag(created_study_id, temp_tag.id)
-                }
-                else {
-                    const created_tag = await tags.create_tag(tag)
-                    studies_and_tags.create_study_tag(created_study_id, created_tag.id)
-                }
+        return study_id
+    }).then(async (study_id)=> {
+        for (const tag of input_tags) {
+            const temp_tag = await tags.findOne({where :{name:tag}})
+            if (temp_tag) {
+                studies_and_tags.create_study_tag(study_id, temp_tag.id)
+            }
+            else {
+                const created_tag = await tags.create_tag(tag)
+                studies_and_tags.create_study_tag(study_id, created_tag.id)
             }
         }
-    }
+    })
+    
+}
 
+export const apply_study = async function(req, res) {
+    try{
+        const user = res.locals.user;
+        const {study_id, comment} = req.body
+
+        const study = await studies.findOne({where:{id:study_id}})
+        if (study && user) {
+            const apply = await applies.create({study_id, user_id:user.id, comment:comment})
+            if (apply) {
+                res.send({state:"success"})
+            } else {
+                res.send({state:"fail"})
+            }
+        } else {
+            res.send({state:"fail"})
+        }
+    } catch(err) {
+        res.send(err)
+    }
 }
 
 export const join_study = async function(req, res) {
-    
-    const user_id = res.locals.user.id;
-    const study_id = req.query.study_id
+    const {apply_id, accept} = req.body
 
-    const study = await studies.findOne({where:{id:study_id}})
-    const wrong_id = !study
-
-    const already_join = await users_and_studies.findOne({
-        where: {user_id, study_id}
-    })
-
-    const result = await users_and_studies.join_to_study(user_id, study_id, wrong_id, already_join)
-    res.send(result)
+    const apply = await applies.findOne({where:{id:apply_id}})
+    if (apply) {
+        const user_id = apply.dataValues.user_id;
+        const study_id = apply.dataValues.study_id;
+        if (apply.dataValues.accept) {
+            const join = await users_and_studies.findOrCreate({user_id, study_id})
+            if (join) {
+                res.send({state:"success"})
+            } else {
+                res.send({state:"fail"})
+            }
+        } else { 
+            res.send({state:"success"})
+        }
+        apply.destroy();
+    } else {
+        res.send({state:"fail"})
+    }
 }
 
 export const delete_study = async function(req, res) {
@@ -202,3 +218,14 @@ export const read_marked_studies = async function(req, res) {
 
     res.send(result)
 }
+
+export const study_image_upload = multer({
+    storage: multer.diskStorage({
+        destination: function(req, file, cb) {
+            cb(null, process.env.IMAGE_PATH);
+        }, 
+        filename: function(req, file, cb) {
+            cb(null , new Date().valueOf() + path.extname(file.originalname));
+        }
+    })
+});

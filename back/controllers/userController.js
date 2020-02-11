@@ -60,7 +60,7 @@ export const social_signin = async function(req, res) {
 
 }
 
-// ¼¼¼Ç À¯Áö È®ÀÎÀ» À§ÇÑ ÅäÅ« È®ÀÎ + È®ÀÎ ÈÄ À¯Àú Á¤º¸ Àü¼Û
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å« È®ï¿½ï¿½ + È®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 export const check_token = async function(req, res) {
     try{
         const accessToken = req.header('Authorization')
@@ -123,11 +123,10 @@ export const update_user = async (req, res) => {
             body: {name, nickname, phone, image_update, about},
         } = req;
         const filename = (typeof req.file === 'undefined') ? "profile_default.png"  : req.file.filename
-    
-        console.log(user, name, nickname, image_update)
+        
         users.update({
             name, nickname, phone, about,
-            profile_url: image_update ? process.env.IMAGE_URL + filename : user.profile_url,
+            profile_url: (image_update === 'true' ? process.env.IMAGE_URL + filename : user.profile_url),
             },{where: {id:user.id}
         }).then(user => {
             res.send(user)
@@ -210,7 +209,7 @@ export const signup = async function(req, res, next) {
 export const profile_upload = multer({
     storage: multer.diskStorage({
         destination: function(req, file, cb) {
-            cb(null, 'uploads/');
+            cb(null, process.env.IMAGE_PATH);
         }, 
         filename: function(req, file, cb) {
             cb(null , new Date().valueOf() + path.extname(file.originalname));

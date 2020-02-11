@@ -29,7 +29,7 @@ app.use(helmet()); // 보안을 위한 것
 app.use(morgan("dev"));
 
 app.use(localsMiddelWare)
-app.use(routes.images, express.static(path.join(__dirname, 'uploads')));
+app.use(routes.images, express.static(process.env.IMAGE_PATH));
 app.use(routes.users, userRouter);
 app.use(routes.studies, studyRouter);
 app.use(routes.comments, commentRouter);
