@@ -23,7 +23,11 @@ module.exports = function(sequelize, DataTypes) {
         model: 'studies',
         key: 'id'
       }
-    }
+    },
+    level: {
+      type: DataTypes.STRING(45),
+      allowNull: true,
+    },
   }, {
     tableName: 'users_and_studies'
   });

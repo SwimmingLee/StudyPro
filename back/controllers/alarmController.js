@@ -1,5 +1,20 @@
 import {alarms, users} from "../models"
 
+export const number_alarm = async function(req, res) {
+    try {
+        const user = res.locals.user;
+        if (user) {
+            const num_alarm = await alarms.count({where:{to: user.id, check:0}})
+            res.send({num_alarm})
+        } else {
+            res.send({detail:"not avaible token"})
+        }
+    } catch (err) {
+        res.send('err')
+    }
+}
+
+
 export const create_alarm = async function(req, res) {
     const from = res.locals.user.id;
     const {title, content, to} = req.body;

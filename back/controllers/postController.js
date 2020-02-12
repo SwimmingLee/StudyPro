@@ -6,8 +6,6 @@ export const number_post = async function(req, res) {
     try {
         const {board, type, study_id} = req.query;
         let nPost;
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        console.log(req.query)
         if(type === "common"){
             nPost = await common_post_model.count({where:{board}})
         } else if (type === "study") {

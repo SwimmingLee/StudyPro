@@ -1,4 +1,5 @@
 import {users, studies, users_and_studies, applies, days, tags, studies_and_tags, marked_studies, minor_classes} from "../models"
+import {study_posts as study_post_model, study_post_likes as study_post_like_model, study_comments as study_comment_model} from "../models"
 import multer from "multer"
 import path from "path"
 
@@ -18,14 +19,14 @@ export const create_study = async function(req, res) {
         res.send({state:"fail", detail:"study name exist"})
     } else {
         const filename = (typeof req.file === 'undefined') ? study_image_default() : req.file.filename
-        // console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", req.body)
+        //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", req.body)
         const new_study = await studies.create({
             name, goal, description, minor_class_id, user_limit, captain:captain.id,
             start_date:start_day, end_date:end_day, start_time, end_time, isopen:(isOpen === 'true' ? 1: 0), status, 
             image_url: process.env.IMAGE_URL + filename,
         }).then(study => {
             const study_id = study.dataValues.id
-            users_and_studies.create({user_id:captain.id, study_id})
+            users_and_studies.create({user_id:captain.id, study_id, level:"captain"})
             days.create_days(study_id, progress_days)
     
             return study
@@ -70,6 +71,29 @@ export const apply_study = async function(req, res) {
     }
 }
 
+export const read_apply_study = async function(req, res) {
+    try  {
+        const {study_id} = req.query;
+
+        applies.findAll({where:{study_id}})
+            .map(async (read_apply)=>{
+                const user = await users.findOne({where:{id:read_apply.dataValues.user_id}})
+                delete user.dataValues.password
+                delete user.dataValues.auth
+                read_apply.dataValues.user = user.dataValues
+                return read_apply
+            })
+            .then(read_applies => {
+                res.send(read_applies)
+            })
+        
+
+    } catch (err) {
+        res.send(err)
+    }
+}
+
+
 export const join_study = async function(req, res) {
     const {apply_id, accept} = req.body
 
@@ -78,7 +102,7 @@ export const join_study = async function(req, res) {
         const user_id = apply.dataValues.user_id;
         const study_id = apply.dataValues.study_id;
         if (apply.dataValues.accept) {
-            const join = await users_and_studies.findOrCreate({user_id, study_id})
+            const join = await users_and_studies.findOrCreate({user_id, study_id, level:"silver"})
             if (join) {
                 res.send({state:"success"})
             } else {
@@ -93,12 +117,42 @@ export const join_study = async function(req, res) {
     }
 }
 
-export const delete_study = async function(req, res) {
-    const study_id =  req.query.study_id
-    const user_id = res.locals.user.id;
+export const destory_study = async function(req, res) {
+    const captain = res.locals.user;
+    const {study_id} =  req.body;
 
-    const result = await studies.delete_study(study_id, user_id)
-    res.send(result)
+    // 댓글, 게시판, 유저와 스터디, 스터디, 스터디승인, 데이즈, 스터디 할일
+    if (captain) {
+        studies.findOne({where:{id:study_id}})
+            .then(async (study) => {
+                if (study.dataValues.captain != captain.id) {
+                    res.send({detail:"당신은 캡틴이 아닙니다."})
+                    throw new Error("당신은 캡틴이 아닙니다.")
+                }
+            })
+            .then(async ()=>{
+                await days.destroy({where:{study_id}})
+                await applies.destroy({where:{study_id}})
+                const posts = await study_post_model.findAll({where:{study_id}})
+                return posts;
+            })
+            .map(async (post)=>{
+                const post_id = post.dataValues.id
+                await study_comment_model.destroy({where:{post_id}})
+                await study_post_likes.destroy({where:{post_id}})
+                return post;
+            })
+            .then(async ()=>{
+                await users_and_studies.destroy({where:{study_id}})
+                await studies.destroy({where:{id:study_id}})
+                res.send({state:"success"})
+            })
+            .catch(function(err){
+                res.send(err)
+            })
+    } else {
+        res.send(result)
+    }
 
 }
 
@@ -112,8 +166,10 @@ export const update_study = async function(req, res) {
 
 export const read_studies = async function(req, res) {
     try{
-        studies.findAll()
-            .map(async study => {
+        studies.findAll({
+            limit: 10,
+            order:  [['created_date','DESC']]
+            }).map(async study => {
                 const minor =  await minor_classes.findOne({where:{id:study.dataValues.minor_class_id}});
                 study.dataValues.minor_class = minor
                 delete study.dataValues.minor_class_id
@@ -122,6 +178,9 @@ export const read_studies = async function(req, res) {
                 delete captain.dataValues.password
                 delete captain.dataValues.auth
                 study.dataValues.captain = captain.dataValues
+
+                const num_joined_student  = await users_and_studies.count({where:{study_id:study.dataValues.id}})
+                study.dataValues.num_joined_student = num_joined_student
 
                 return study
             }).then(studies => {
@@ -166,7 +225,6 @@ export const search_studies = async function(req, res) {
     const searching_major_class = req.body.major_class ? await major_classes.findOne({where:{name: req.body.major_class}}) : undefined
     const searching_tag = req.body.tag ? await tags.findOne({where:{name: req.body.tag}}) : undefined
     const input_days = req.body.days ? req.body.days.replace('[', '').replace(']', '').replace(/ /g,'').split(',') : []
-
 
     const searching_captain_id = searching_captain ? searching_captain.id : -1
     const searching_minor_class_id = searching_minor_class ? searching_minor_class.id : -1

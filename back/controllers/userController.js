@@ -1,4 +1,4 @@
-import {users} from "../models"
+import {users, users_and_studies, studies, minor_classes, days} from "../models"
 import path from "path"
 import multer from "multer"
 import jwt from "jsonwebtoken"
@@ -116,7 +116,7 @@ export const read_user = async (req, res) => {
         delete user.dataValues.auth
         res.send(user);
     } catch (err) {
-        res.send(serr)
+        res.send(err)
     }
 }
 
@@ -220,3 +220,57 @@ export const profile_upload = multer({
         }
     })
 });
+
+
+export const get_joined_study = function(req, res) {
+    try{
+        const user = res.locals.user;
+        if (user){
+            users_and_studies.findAll({where:{user_id:user.id}})
+                .map(async (joined) => {
+                    const joined_study = await studies.findOne({where:{id:joined.dataValues.study_id}})
+                    joined_study.dataValues.membership_level = joined.dataValues.level
+
+                    const minor =  await minor_classes.findOne({where:{id:joined_study.dataValues.minor_class_id}});
+                    delete minor.dataValues.id
+                    joined_study.dataValues.minor_class = minor
+                    delete joined_study.dataValues.minor_class_id
+                    
+                    const process_days = await days.read_days(joined.dataValues.study_id)
+                    joined_study.dataValues.process_days = process_days
+
+                    const num_joined_student  = await users_and_studies.count({where:{study_id:joined.dataValues.study_id}})
+                    joined_study.dataValues.num_joined_student = num_joined_student
+
+                    return joined_study;
+                }).then(joined_studies => {
+                    res.send(joined_studies)
+                })
+        } else {
+            res.send({detail:"not available token"})
+        }
+
+    } catch(err) {
+        res.send(err)
+    }
+}
+
+export const leave_study = function(req, res) {
+    try{
+        const user = res.locals.user;
+        const {study_id} = req.body;
+        
+        if (user && study_id) {
+            const des_res = users_and_studies.destroy({where:{user_id:user.id, study_id}})
+            if (des_res) {
+                res.send({state:"success"})
+            } else {
+                res.send({detail:"not available token"})
+            }
+        } else {
+            res.send({detail:"not available token"})
+        }
+    } catch (err) {
+        res.send(err)
+    }
+};

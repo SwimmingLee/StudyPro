@@ -10,6 +10,8 @@ const SIGNIN = "/signin";
 const SOCIAL_SIGNIN = "/social-signin";
 const CHECK_TOKEN = "/token";
 const UPDATE_PASSWORD = "/pass"
+const JOINED_STUDY = "/joined-study";
+const LEAVE_STUDY = "/leave-study"
 
 // Images
 const IMAGES = "/images"
@@ -20,7 +22,7 @@ const STUDY = "/create";
 const STUDY_SEARCH = "/search";
 const STUDY_MARK = "/mark";
 const STUDY_DETAIL = "/detail";
-
+const STUDY_APPLY = "/apply"
 
 //Post
 const POSTS = "/posts"
@@ -49,6 +51,7 @@ const APPLY_DETAIL = "/detail";
 const ALARMS = "/alarms";
 const ALARM = "/create";
 const ALARM_DETAIL = "/detail";
+const ALARM_NUMBER = "/number"
 
 const routes = {
     home : HOME,
@@ -61,6 +64,8 @@ const routes = {
     social_signin : SOCIAL_SIGNIN,
     check_token: CHECK_TOKEN,
     update_password: UPDATE_PASSWORD,
+    joined_study : JOINED_STUDY,
+    leave_study : LEAVE_STUDY,
 
     images : IMAGES,
     
@@ -69,6 +74,7 @@ const routes = {
     study_detail : STUDY_DETAIL,
     study_search : STUDY_SEARCH,
     study_mark : STUDY_MARK,
+    study_apply: STUDY_APPLY,
 
     posts : POSTS,
     post_number: POST_NUMBER,
@@ -92,5 +98,6 @@ const routes = {
     alarms : ALARMS,
     alarm : ALARM,
     alarm_detail : ALARM_DETAIL,
+    alarm_number : ALARM_NUMBER
 }
 export default routes;
