@@ -10,6 +10,7 @@ export const create_work = async function(req, res) {
     console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     console.log({name, content, start_date, end_date, status, type, study_id})
     console.log(req.body)
+
     const work = await works.create({writer:writer.id, study_id, name, content, start_date, end_date, status})
     res.send(work)
 }
@@ -36,30 +37,11 @@ export const update_work = async function(req, res) {
 }
 
 export const read_work = async function(req, res) {
+    const writer = res.locals.user;
+    const {type, study_id} = req.query;
+    const works = (type === 'study') ? study_works : personal_works
 
-    const works = req.body.study === '1' ? study_works : personal_works
-
-    const work_id = req.query.work_id
-
-    const result = await works.read_work(work_id)
-
-    if (!result) {
-        res.send({
-            "state": "fail",
-            "detail": "Wrong id"
-        })
-    }
-    else {
-        const study = await studies.findOne({where:{id:result.study_id}})
-        const user = await users.findOne({where:{id:result.writer}})
-        delete result.dataValues.writer
-
-        delete user.dataValues.password
-        delete user.dataValues.auth
-
-        result.dataValues.study = study
-        result.dataValues.writer = user
-
-        res.send(result)
-    }
+    const work = await works.findAll({where:{writer:writer.id}})
+    res.send(work)
+        
 }

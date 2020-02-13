@@ -134,9 +134,11 @@ export const read_post = async function(req, res) {
                     }
                     const post_num_like = await study_post_like_model.count( {where: {study_post_id:post_id}});
                     post.dataValues.num_like = post_num_like;
+                    
 
                     const view = post.dataValues.view
-                    study_post_like_model.update({view:view+1}, {where:{id:post.dataValues.id}})
+                    study_post_model.update({view:view+1}, {where:{id:post.dataValues.id}})
+                    
                     res.send(post)
                 })          
         }

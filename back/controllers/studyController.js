@@ -54,14 +54,28 @@ export const apply_study = async function(req, res) {
     try{
         const user = res.locals.user;
         const {study_id, comment} = req.body
-
+        
         const study = await studies.findOne({where:{id:study_id}})
+        
         if (study && user) {
-            const apply = await applies.create({study_id, user_id:user.id, comment:comment})
+            //console.log("여기는 와야지 ")
+            const existing_user = await users_and_studies.findOne({where:{user_id:user.id, study_id}})
+            //console.log("이게 맞는데 ")
+            if (existing_user) {
+                //console.log("AAA이미 가입된 사용자")
+                res.send({state:"fail", detial:"이미 가입된 사업자입니다."})
+                return;
+            }
+            const apply = await applies.findOne({where:{study_id, user_id:user.id}})
             if (apply) {
-                res.send({state:"success"})
+                //console.log("가입 대기 중입니다.")
+                res.send({state:"fail", detail:"가입 대기 중입니다."})
+                return;
             } else {
-                res.send({state:"fail"})
+                //console.log("A오잉?")
+                ress = await applies.create({study_id, user_id:user.id, comment:comment}) 
+                //console.log(ress)
+                res.send({state:"success"})
             }
         } else {
             res.send({state:"fail"})
@@ -101,12 +115,15 @@ export const join_study = async function(req, res) {
     if (apply) {
         const user_id = apply.dataValues.user_id;
         const study_id = apply.dataValues.study_id;
-        if (apply.dataValues.accept) {
-            const join = await users_and_studies.findOrCreate({user_id, study_id, level:"silver"})
+        console.log(accept)
+        if (accept) {
+            const join = await users_and_studies.findOrCreate({
+                where: {user_id, study_id},
+                defaults:{level:"silver"}})
             if (join) {
                 res.send({state:"success"})
             } else {
-                res.send({state:"fail"})
+                res.send({state:"fail", detail:"이미 가입된 사람입니다."})
             }
         } else { 
             res.send({state:"success"})
@@ -117,6 +134,18 @@ export const join_study = async function(req, res) {
     }
 }
 
+export const get_joined_user = async function(req, res) {
+    const {study_id} = req.query
+    //console.log(req)
+    users_and_studies.findAll({where:{study_id}})
+        .map(async (res)=>{
+            const user = await users.findOne({where:{id:res.dataValues.user_id}})
+            return user;})
+        .then((users) =>{
+            res.send(users)
+        })
+}
+
 export const destory_study = async function(req, res) {
     const captain = res.locals.user;
     const {study_id} =  req.body;
@@ -125,10 +154,10 @@ export const destory_study = async function(req, res) {
     if (captain) {
         studies.findOne({where:{id:study_id}})
             .then(async (study) => {
-                // if (study.dataValues.captain != captain.id) {
-                //     res.send({detail:"당신은 캡틴이 아닙니다."})
-                //     throw new Error("당신은 캡틴이 아닙니다.")
-                // }
+                if (study.dataValues.captain != captain.id) {
+                    res.send({detail:"당신은 캡틴이 아닙니다."})
+                    throw new Error("당신은 캡틴이 아닙니다.")
+                }
             })
             .then(async ()=>{
                 await days.destroy({where:{study_id}})

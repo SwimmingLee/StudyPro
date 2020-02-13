@@ -23,6 +23,7 @@ const STUDY_SEARCH = "/search";
 const STUDY_MARK = "/mark";
 const STUDY_DETAIL = "/detail";
 const STUDY_APPLY = "/apply"
+const STUDY_JOIN = "/join"
 
 // Post
 const POSTS = "/posts"
@@ -73,6 +74,7 @@ const routes = {
     study_search : STUDY_SEARCH,
     study_mark : STUDY_MARK,
     study_apply: STUDY_APPLY,
+    study_join : STUDY_JOIN,
 
     posts : POSTS,
     post_number: POST_NUMBER,
