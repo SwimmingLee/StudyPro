@@ -1,8 +1,8 @@
+// Home
 const HOME  = "/";
 
 // User
 const USERS  = "/users";
-
 const USER_DETAIL = "/:user_id";
 const CHANGE_PASSWARD = "/change-password";
 const SIGNUP = "/signup";
@@ -24,7 +24,7 @@ const STUDY_MARK = "/mark";
 const STUDY_DETAIL = "/detail";
 const STUDY_APPLY = "/apply"
 
-//Post
+// Post
 const POSTS = "/posts"
 const POST_LIST = "/list";
 const POST_DETAIL = "/detail";
@@ -39,8 +39,6 @@ const COMMENT_like = "/comment_like";
 
 // Works
 const WORKS = "/works";
-const WORK = "/create";
-const WORK_DETAIL = "/detail";
 
 // Applies
 const APPLIES = "/applies";
@@ -88,8 +86,6 @@ const routes = {
     comment_like: COMMENT_like,
 
     works : WORKS,
-    work : WORK,
-    work_detail : WORK_DETAIL,
     
     applies : APPLIES,
     apply : APPLY,

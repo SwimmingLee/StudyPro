@@ -3,24 +3,15 @@ import {study_works, personal_works, users, studies} from "../models"
 //req.body.study가 1이면 스터디 일정, 0이면 개인 일정
 
 export const create_work = async function(req, res) {
+    const writer = res.locals.user;
+    const {name, content, start_date, end_date, status, type, study_id} = req.body;
+    const works = (type === 'study') ? study_works : personal_works
     
-    const works = req.body.study == '1' ? study_works : personal_works
-    
-    const user_id = res.locals.user.id;
-    const study_id = req.query.study_id || -1;
-    
-    const data = req.body;
-    data.writer = user_id
-    data.study_id = study_id
-    
-    const study = await studies.findOne({where:{id:study_id}});
-    const wrong_id = (!study && req.body.study == '1');
-
-    const same_content_at_date = await works.findOne({where:{start_date:data.start_date, content:data.content}});
-    const same_work = !same_content_at_date;
-    
-    const result = await works.create_work(data, wrong_id, !same_work);
-    res.send(result)
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    console.log({name, content, start_date, end_date, status, type, study_id})
+    console.log(req.body)
+    const work = await works.create({writer:writer.id, study_id, name, content, start_date, end_date, status})
+    res.send(work)
 }
 
 export const delete_work = async function(req, res) {

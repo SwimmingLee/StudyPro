@@ -74,7 +74,7 @@ export const apply_study = async function(req, res) {
 export const read_apply_study = async function(req, res) {
     try  {
         const {study_id} = req.query;
-
+        
         applies.findAll({where:{study_id}})
             .map(async (read_apply)=>{
                 const user = await users.findOne({where:{id:read_apply.dataValues.user_id}})
@@ -125,10 +125,10 @@ export const destory_study = async function(req, res) {
     if (captain) {
         studies.findOne({where:{id:study_id}})
             .then(async (study) => {
-                if (study.dataValues.captain != captain.id) {
-                    res.send({detail:"당신은 캡틴이 아닙니다."})
-                    throw new Error("당신은 캡틴이 아닙니다.")
-                }
+                // if (study.dataValues.captain != captain.id) {
+                //     res.send({detail:"당신은 캡틴이 아닙니다."})
+                //     throw new Error("당신은 캡틴이 아닙니다.")
+                // }
             })
             .then(async ()=>{
                 await days.destroy({where:{study_id}})
@@ -181,6 +181,9 @@ export const read_studies = async function(req, res) {
 
                 const num_joined_student  = await users_and_studies.count({where:{study_id:study.dataValues.id}})
                 study.dataValues.num_joined_student = num_joined_student
+
+                const process_days = await days.read_days(study.dataValues.id)
+                study.dataValues.process_days = process_days
 
                 return study
             }).then(studies => {
