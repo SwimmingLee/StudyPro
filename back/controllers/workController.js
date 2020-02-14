@@ -3,45 +3,62 @@ import {study_works, personal_works, users, studies} from "../models"
 //req.body.study가 1이면 스터디 일정, 0이면 개인 일정
 
 export const create_work = async function(req, res) {
-    const writer = res.locals.user;
-    const {name, content, start_date, end_date, status, type, study_id} = req.body;
-    const works = (type === 'study') ? study_works : personal_works
-    
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    console.log({name, content, start_date, end_date, status, type, study_id})
-    console.log(req.body)
+    try{
+        const writer = res.locals.user;
+        const {name, content, start_date, end_date, group, type, study_id, color} = req.body;
+        const works = (type === 'study') ? study_works : personal_works
 
-    const work = await works.create({writer:writer.id, study_id, name, content, start_date, end_date, status})
-    res.send(work)
-}
-
-export const delete_work = async function(req, res) {
-    const works = req.body.study === '1' ? study_works : personal_works;
-    const user_id =  res.locals.user.id;
-
-    const work_id = req.query.work_id;
-    const result = await works.delete_work(work_id, user_id);
-
-    res.send(result);
-}
-
-export const update_work = async function(req, res) {
-    const works = req.body.study === '1' ? study_works : personal_works;
-    const user_id = res.locals.user.id;
-
-    const work_id = req.query.work_id;
-    const data = req.body;
-
-    const result = await works.update_work(work_id, data, user_id);
-    res.send(result);
+        console.log(req.body)
+        const work = await works.create({writer:writer.id, study_id, name, content, start_date, end_date, status:group, color})
+        res.send(work)
+    } catch (err) {
+        res.send(err)
+    }
 }
 
 export const read_work = async function(req, res) {
-    const writer = res.locals.user;
-    const {type, study_id} = req.query;
-    const works = (type === 'study') ? study_works : personal_works
+    try{
+        const writer = res.locals.user;
+        const {type, study_id} = req.query;
+        const works = (type === 'study') ? study_works : personal_works
 
-    const work = await works.findAll({where:{writer:writer.id}})
-    res.send(work)
+        if (type === "personal") {
+            const work = await works.findAll({where:{writer:writer.id}})
+            res.send(work)
+        } else {
+            const work = await works.findAll({where:{study_id}})
+            res.send(work)
+        }
+    } catch(err) {
+        res.send(err)
+    }
+}
         
+
+export const delete_work = async function(req, res) {
+    try{
+        const writer = res.locals.user;
+        const {type, work_id} = req.body;
+        const works = (type === 'study') ? study_works : personal_works
+        
+        const result = await works.destroy({where:{id:work_id}});
+        res.send(result);
+    } catch (err) {
+        res.send(err)
+    }
+}
+
+export const update_work = async function(req, res) {
+    try{
+        const writer = res.locals.user;
+        const {type, work_id, name, content, start_date, end_date, group, color} = req.body;
+        const works = (type === 'study') ? study_works : personal_works
+
+        console.log("AAAAAAAAAAAAA")
+        console.log(req.body)
+        const result = await works.update({name, content, start_date, end_date, status:group, color}, {where:{id:work_id}});
+        res.send(result);
+    } catch(err) {
+
+    }
 }

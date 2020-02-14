@@ -102,7 +102,7 @@ export const read_post = async function(req, res) {
         if(type === "common"){
             common_post_model.findOne({where:{id:post_id}})
                 .then(async (post) => {
-                    const writer = await users.findOne( {where: {id:post.writer}})
+                    const writer = await users.findOne( {where: {id:post.dataValues.writer}})
                     post.dataValues.writer = writer.dataValues.nickname
                     
                     if (user) {

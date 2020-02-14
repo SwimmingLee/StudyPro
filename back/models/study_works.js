@@ -25,11 +25,11 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     start_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false
     },
     end_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false
     },
     content: {
@@ -42,6 +42,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     name: {
       type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    color: {
+      type: DataTypes.STRING(45),
       allowNull: false
     }
   }, {

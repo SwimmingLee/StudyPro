@@ -63,7 +63,7 @@ export const apply_study = async function(req, res) {
             //console.log("이게 맞는데 ")
             if (existing_user) {
                 //console.log("AAA이미 가입된 사용자")
-                res.send({state:"fail", detial:"이미 가입된 사업자입니다."})
+                res.send({state:"fail", detail:"이미 가입된 사용자입니다."})
                 return;
             }
             const apply = await applies.findOne({where:{study_id, user_id:user.id}})
@@ -73,9 +73,9 @@ export const apply_study = async function(req, res) {
                 return;
             } else {
                 //console.log("A오잉?")
-                ress = await applies.create({study_id, user_id:user.id, comment:comment}) 
+                const new_apply = await applies.create({study_id, user_id:user.id, comment:comment}) 
                 //console.log(ress)
-                res.send({state:"success"})
+                res.send({state:"success", new_apply})
             }
         } else {
             res.send({state:"fail"})
@@ -136,51 +136,67 @@ export const join_study = async function(req, res) {
 
 export const get_joined_user = async function(req, res) {
     const {study_id} = req.query
-    //console.log(req)
+    //console.log(req) 
     users_and_studies.findAll({where:{study_id}})
         .map(async (res)=>{
             const user = await users.findOne({where:{id:res.dataValues.user_id}})
+            const level = await users_and_studies.findOne({where:{user_id:res.dataValues.user_id, study_id}})
+            user.dataValues.level = level.dataValues.level
             return user;})
         .then((users) =>{
             res.send(users)
         })
 }
+export const delete_study_user = async function (req, res) {
+    try{
+        const {study_id, user_id} = req.body;
+        users_and_studies.destroy({where:{study_id, user_id}})
+
+    } catch(err) {
+        res.send(err)
+    }
+}
+
 
 export const destory_study = async function(req, res) {
-    const captain = res.locals.user;
-    const {study_id} =  req.body;
+    try{
+        const captain = res.locals.user;
+        const {study_id} =  req.body;
 
-    // 댓글, 게시판, 유저와 스터디, 스터디, 스터디승인, 데이즈, 스터디 할일
-    if (captain) {
-        studies.findOne({where:{id:study_id}})
-            .then(async (study) => {
-                if (study.dataValues.captain != captain.id) {
-                    res.send({detail:"당신은 캡틴이 아닙니다."})
-                    throw new Error("당신은 캡틴이 아닙니다.")
-                }
-            })
-            .then(async ()=>{
-                await days.destroy({where:{study_id}})
-                await applies.destroy({where:{study_id}})
-                const posts = await study_post_model.findAll({where:{study_id}})
-                return posts;
-            })
-            .map(async (post)=>{
-                const post_id = post.dataValues.id
-                await study_comment_model.destroy({where:{post_id}})
-                await study_post_likes.destroy({where:{post_id}})
-                return post;
-            })
-            .then(async ()=>{
-                await users_and_studies.destroy({where:{study_id}})
-                await studies.destroy({where:{id:study_id}})
-                res.send({state:"success"})
-            })
-            .catch(function(err){
-                res.send(err)
-            })
-    } else {
-        res.send(result)
+        // 댓글, 게시판, 유저와 스터디, 스터디, 스터디승인, 데이즈, 스터디 할일
+        if (captain) {
+            studies.findOne({where:{id:study_id}})
+                .then(async (study) => {
+                    if (study.dataValues.captain != captain.id) {
+                        res.send({detail:"당신은 캡틴이 아닙니다."})
+                        throw new Error("당신은 캡틴이 아닙니다.")
+                    }
+                })
+                .then(async ()=>{
+                    await days.destroy({where:{study_id}})
+                    await applies.destroy({where:{study_id}})
+                    const posts = await study_post_model.findAll({where:{study_id}})
+                    return posts;
+                })
+                .map(async (post)=>{
+                    const post_id = post.dataValues.id
+                    await study_comment_model.destroy({where:{post_id}})
+                    await study_post_likes.destroy({where:{post_id}})
+                    return post;
+                })
+                .then(async ()=>{
+                    await users_and_studies.destroy({where:{study_id}})
+                    await studies.destroy({where:{id:study_id}})
+                    res.send({state:"success"})
+                })
+                .catch(function(err){
+                    res.send(err)
+                })
+        } else {
+            res.send(result)
+        }
+    } catch(err) {
+        console.log(err)
     }
 
 }
@@ -224,31 +240,25 @@ export const read_studies = async function(req, res) {
 }
 
 export const read_study = async function(req, res) {
-    
-    const study_id =  req.query.study_id
-    const user_id = res.locals.user.id;
-    const result = await studies.read_study(study_id)
-    const study_applies = await applies.findAll({where:{study_id}})
-    const study_users_links = await users_and_studies.findAll({where:{study_id}})
-
-    const is_liked = await marked_studies.findOne({where:{user_id, study_id}})
-    const like = is_liked ? true : false
-
-    let study_users = [], link, temp_user, is_joined = false  
-    for (link of study_users_links) {
-        temp_user = await users.findOne({where:{id: link.user_id}})
-        delete temp_user.dataValues.password
-        delete temp_user.dataValues.auth
-        study_users.push(temp_user)
-
-        if (link.user_id == user_id) is_joined = true;
+    try{
+        const {study_id} = req.query
+        const user = res.locals.user;
+        
+        const study = await studies.findOne({where:{id:study_id}})
+        if (study){
+            if (user){
+                const level = await users_and_studies.findOne({where:{study_id, user_id:user.id}})
+                if (level){
+                    study.dataValues.level = level.dataValues.level
+                }
+            }
+            res.send(study)
+        } else {
+            res.send({state:"fail", detail:"존재하지 않는 스터디입니다."})
+        }
+    } catch(err) {
+        res.send(err)
     }
-    result.dataValues.applies = study_applies
-    result.dataValues.users = study_users
-    result.dataValues.like = like
-    result.dataValues.is_joined = is_joined
-
-    res.send(result)
 }
 
 export const search_studies = async function(req, res) {
