@@ -24,7 +24,8 @@ const signin = function () {
             },
             fail: (err) => {
                 reject(err);
-            }
+            },
+            scope: "profile,account_email,gender"
         })
     })
 }
@@ -40,6 +41,7 @@ const WbKakao = {
     },
 
     signout: () => {
+        Kakao.Auth.cleanup();
         return Kakao.Auth.logout();
     }
 

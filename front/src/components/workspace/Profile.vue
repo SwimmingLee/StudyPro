@@ -42,23 +42,25 @@ export default {
       }
     },
     props: ["profile", "show_profile_id", "debuging"],
-    mounted() {
-      this.debuging ? 
-      this.getDummyData():
-      UserService.getUserById(this.show_profile_id)
-      .then(data => {
-        this.user.nickname= data.data.nickname
-        this.user.profile_url = data.data.profile_url
-        this.user.about = data.data.about
-      })
-    },
-    methods: {
-      getDummyData() {
-        this.user.nickname = 'Pengsoo'
-        this.user.profile_url = require("@/assets/images/pengsoo.jpg")
-        this.user.about = '친추 하지 마세요 진짜 ㅋㅋㅋ'
+    watch: {
+
+      show_profile_id: function() {
+        this.getUser()
       }
     },
+    mounted() {
+      this.getUser()
+    },
+    methods: {
+      getUser() {
+        UserService.getUserById(this.show_profile_id)
+        .then(data => {
+          this.user.nickname= data.data.nickname
+          this.user.profile_url = data.data.profile_url
+          this.user.about = data.data.about
+        })
+      },
+    }
 }
 </script>
 

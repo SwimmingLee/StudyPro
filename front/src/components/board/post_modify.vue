@@ -145,16 +145,24 @@ Vue.use(TiptapVuetifyPlugin, {
 });
 
 export default {
-  props: ["board", "post_id"],
   components: {
     TiptapVuetify,
     requestSignin: () => import("@/components/base/RequestSignin")
   },
   data() {
     return {
-      items: ["study", "free"],
+      items: ["share", "free"],
       dialog: false,
+      post_id: "",
 
+      modified: {
+        type: "",
+        post_id: "",
+        title: "",
+        content: "",
+        board: ""
+      },
+      postData: [],
       files: [],
       rules: [
         value => value.size < 5000000 || "File size should be less than 5 MB"
@@ -187,20 +195,52 @@ export default {
     };
   },
 
+  created() {
+    this.post_id = this.$route.params.post_id;
+    this.getPost();
+  },
+
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/getUser"];
+    },
+    isAuth() {
+      return this.$store.getters["auth/isAuth"];
+    },
+    isWriter() {
+      return (
+        this.post_contents.writer ===
+        this.$store.getters["auth/getUser"].nickname
+      );
+    },
+    post_like() {
+      return this.post_contents.like;
+    }
+  },
+
   methods: {
-    modify() {
-      PostService.createPost(this.postData);
+    async modify() {
+      this.modified.type = "common";
+      this.modified.post_id = this.post_id;
+      this.modified.title = this.postData.title;
+      this.modified.content = this.postData.content;
+      this.modified.board = this.postData.board;
+      await PostService.modifyPost(this.modified);
+      // const path = this.$route.path.split('/')
+      // this.$router.push({path:"/"+path[1]+"/"+path[2]})
       this.$router.go(-1);
     },
     clickBack() {
       this.$router.go(-1);
+      // const path = this.$route.path.split('/')
+      // this.$router.push({path:"/"+path[1]+"/"+path[2]})
     },
     async getPost() {
       const tmp = await PostService.getPostContents({
-        type: this.board,
+        type: "common",
         post_id: this.post_id
       });
-      this.post_contents = tmp.data;
+      this.postData = tmp.data;
     }
   }
 };

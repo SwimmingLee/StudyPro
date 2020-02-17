@@ -17,6 +17,14 @@
             style="max-width: 30px;"
           >{{ this.post_contents.num_like + this.post_contents.like }}</v-col>
         </v-row>
+        <v-row no-gutters>
+          <div v-for="file in post_contents.files" :key="file.id">
+            <v-btn @click="fileDownload(file)" elevation="0" color="white">
+              <v-icon style="color:black">attachment</v-icon>
+              <span :class="ml-3">{{file.file_name}}</span>
+            </v-btn>
+          </div>
+        </v-row>
       </v-card>
 
       <v-row no-gutters class="mb-3">
@@ -35,10 +43,10 @@
           <v-btn v-if="!isWriter" class="mx-1 error">
             <v-icon left small dark>report_problem</v-icon>신고하기
           </v-btn>
-          
+
           <v-dialog v-if="isWriter" v-model="dialog" persistent max-width="290">
             <template v-slot:activator="{ on }">
-              <v-btn  class="mx-1 error" v-on="on">
+              <v-btn class="mx-1 mr-3 error" v-on="on">
                 <v-icon left small dark>delete</v-icon>글 삭제
               </v-btn>
             </template>
@@ -55,20 +63,24 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          <v-btn v-if="isWriter" class="mx-1 mr-3 yellow" @click="modify">
+            <v-icon left small dark>cached</v-icon>
+            <b>글 수정</b>
+          </v-btn>
         </v-col>
       </v-row>
       <v-card outlined>
         <v-card v-if="!isAuth" flat class="pa-5" align="center">댓글을 입력하시려면 로그인이 필요합니다.</v-card>
         <v-card v-if="isAuth" flat class="ma-0 mt-1 pa-0">
-          <v-row no-gutters>
-            <v-col align-self="center" cols="2" align="center" class="mb-3">
+          <v-row no-gutters class="pa-1">
+            <v-col align-self="center" cols="2" align="center" class="pb-3">
               <v-avatar>
                 <img :src="currentUser.profile_url" />
               </v-avatar>
               <p style="font-size:14px" class="ma-0 pt-2">{{ currentUser.nickname }}</p>
             </v-col>
-            <v-divider />
-            <v-col cols="7" class="ma-3">
+            <v-divider vertical class="my-1 mr-3" />
+            <v-col cols="7" class="ma-3 mb-0">
               <v-textarea
                 @keydown.enter="createComment"
                 clearable
@@ -84,9 +96,9 @@
                 v-model="new_comment"
               ></v-textarea>
             </v-col>
-            <v-col align-self="center" cols="2" class="mb-7 ml-2">
-              <v-btn dark class="green my-3">
-                <v-icon left dark @click="createComment">create</v-icon>댓글 달기
+            <v-col align-self="center" cols="2" class="mb-5 ml-2">
+              <v-btn dark class="green my-3" @click="createComment">
+                <v-icon left dark>create</v-icon>댓글 달기
               </v-btn>
             </v-col>
           </v-row>
@@ -123,14 +135,15 @@
 
 <script>
 import PostService from "@/services/post.service";
+import FileService from "@/services/file.service";
 
 export default {
+  props: ["post_id"],
   data() {
     return {
       dialog: false,
 
       defaultPost: "게시글을 선택하세요",
-      post_id: "",
       new_comment: "",
       post_contents: [],
       post_comments: []
@@ -138,14 +151,12 @@ export default {
   },
 
   created() {
-    this.post_id = this.$route.params.post_id;
     this.getPost();
     this.getComment();
   },
 
   watch: {
     $route() {
-      this.post_id = this.$route.params.post_id;
       this.getPost();
       this.getComment();
     }
@@ -159,10 +170,14 @@ export default {
       return this.$store.getters["auth/isAuth"];
     },
     isWriter() {
-      return (
-        this.post_contents.writer ===
-        this.$store.getters["auth/getUser"].nickname
-      );
+      if (this.$store.getters["auth/getUser"]) {
+        return (
+          this.post_contents.writer ===
+          this.$store.getters["auth/getUser"].nickname
+        );
+      } else {
+        return false;
+      }
     },
     post_like() {
       return this.post_contents.like;
@@ -170,32 +185,40 @@ export default {
   },
 
   methods: {
+    fileDownload(file) {
+      FileService.downloadFile(file.file_url).then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", file.file_name);
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
     async getPost() {
-      const tmp = await PostService.getPostContents({
-        type: "study",
+      const post = await PostService.getPostContents({
+        type: "common",
         post_id: this.post_id
       });
-      this.post_contents = tmp.data;
-      this.post_like = this.post_contents.like;
-      if (this.post_like) {
+      this.post_contents = post.data;
+      if (this.post_contents.like) {
         this.post_contents.num_like--;
       }
     },
 
     async deletePost() {
-      console.log(this.post_id);
-      const tmp = await PostService.deletePost({
-        type: "study",
+      await PostService.deletePost({
+        type: "common",
         post_id: this.post_id
       });
-      console.log(tmp);
-      this.$router.go(-1);
-      this.getPost();
+      var path = this.$route.path.split("/");
+
+      this.$router.push({ path: "/" + path[1] + "/" + path[2] });
     },
 
     async getComment() {
       const tmp = await PostService.getPostComments({
-        type: "study",
+        type: "common",
         post_id: this.post_id
       });
       this.post_comments = tmp.data === "error" ? [] : tmp.data;
@@ -204,23 +227,30 @@ export default {
 
     async toggleLike() {
       const tmp = await PostService.toggleLike({
-        type: "study",
+        type: "common",
         post_id: this.post_id
       });
       this.post_contents.like = tmp.data.like;
     },
 
-    createComment(e) {
+    async createComment(e) {
       e.preventDefault();
       if (this.new_comment !== "") {
-        PostService.createComment({
-          type: "study",
+        await PostService.createComment({
+          type: "common",
           post_id: this.post_id,
           content: this.new_comment
         });
         this.new_comment = "";
         this.getComment();
       }
+    },
+
+    modify() {
+      this.$router.push({
+        name: "post_modify",
+        params: { post_id: this.post_id }
+      });
     },
 
     calculate() {
@@ -272,7 +302,7 @@ export default {
             ")";
         } else {
           this.post_comments[i].created_date +=
-            ", (" + created.getMonth() + 1 + "/" + created.getDate() + ")";
+            ", (" + (created.getMonth() + 1) + "/" + created.getDate() + ")";
         }
       }
     }

@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <v-card outlined class="pt-3 px-3">
-      <v-card  height="256" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #9bbbd4">
-        <v-list class="ma-0 pa-0" ref="chat" outlined v-for="(data, index) in messages" :key="index" :align="'나' === data[0] ? `right` : data[0] ? `left` : 'center'" style="background-color: #9bbbd4">
+    <v-card outlined class="pt-1 px-0">
+      <v-card  height="286" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #c0c0c0">
+        <v-list class="ma-0 pa-0" ref="chat" outlined v-for="(data, index) in messages" :key="index" :align="'나' === data[0] ? `right` : data[0] ? `left` : 'center'" style="background-color: #c0c0c0">
           <font style="display : block" size="2">{{ data[0] === '나' ? '' : data[0] }}</font>
-            <font size="2">
+            <font>
               <div v-for="(message,in_index) in data[1]" :key="`${index}-${in_index}`">
-              <span class="px-2 my-1 py-1" :style="data[0] === '나' ? 'background-color: #fef01b' : data[0] ? 'background-color: #ffffff' : 'background-color: #9bbbd4'"  size="2">
+              <span class="chat" :style="data[0] === '나' ? 'background-color: #fef01b' : data[0] ? 'background-color: #ffffff' : 'background-color: #c0c0c0'"  size="2">
               {{message}}
               </span>
               </div>
@@ -14,14 +14,14 @@
         </v-list>
       </v-card>
       <v-text-field
-        class="mt-5"
+        class="mt-3 mb-2 ml-1"
         outlined
         dense
         v-model="message"
         append-outer-icon="mdi-send"
-        :prepend-icon="icon"
         clear-icon="mdi-close-circle"
         clearable
+        hide-details
         label="전송할 메세지를 입력하세요."
         type="text"
         @click:append-outer="sendMessage"
@@ -45,23 +45,6 @@ export default {
       message: "",
       messages: [],
       length: 0,
-      iconIndex: 0,
-      icons: [
-        "mdi-emoticon",
-        "mdi-emoticon-cool",
-        "mdi-emoticon-dead",
-        "mdi-emoticon-devil",
-        "mdi-emoticon-excited",
-        "mdi-emoticon-happy",
-        "mdi-emoticon-neutral",
-        "mdi-emoticon-poop",
-        "mdi-emoticon-sad",
-        "mdi-emoticon-tongue",
-        "mdi-heart",
-        "mdi-star",
-        "mdi-cached",
-        "mdi-thumb-up"
-      ]
     };
   },
   methods: {
@@ -109,12 +92,12 @@ export default {
     });
     this.socket.on("join", data => {
       this.prvUsr = '공지'
-      const message = data.user_id === this.user.user_id ? '채팅방에 입장하였습니다' : `${data.user_nickname}님이 입장하였습니다`
+      const message = data.user_id === this.user.user_id ? '스터디룸에 입장하였습니다' : `${data.user_nickname} 님이 입장하였습니다`
       this.messages.push(['', [message]])
     })
     this.socket.on("leave", data => {
       this.prvUsr = '공지'
-      const message = data.user_id === this.user.user_id ? '채팅방에 입장하였습니다' : `${data.user_nickname}님이 퇴장하였습니다`
+      const message = data.user_id === this.user.user_id ? '스터디룸을 나갔습니다' : `${data.user_nickname} 님이 퇴장하였습니다`
       this.messages.push(['', [message]])
     })
   }
@@ -125,5 +108,12 @@ export default {
   span {
     display: inline-block;
     border-radius: 5px;
+    font-family: '중고딕';
+    font-weight: bolder;
+    font-size: 12px;
+  }
+  .chat {
+    margin-top: 5px;
+    padding: 4px 6px 4px 6px;
   }
 </style>

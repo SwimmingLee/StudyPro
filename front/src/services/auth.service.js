@@ -31,7 +31,6 @@ class AuthService {
             .then(
                 response => {
                     if (response.data.state === 'success') {
-                        AuthHeader.changeHeadersToken()
                         this.setToken(response.data.user)
                         AuthHeader.changeHeadersToken()
                         return response.data.user;
@@ -41,6 +40,27 @@ class AuthService {
                 })
     }
 
+    socialLogin(user) {
+        return axios
+            .post(URL + 'social-signin', {
+                email: user.email,
+                nickname: user.nickname,
+                gender: user.gender,
+                profile_image: user.profile_image,
+                platform_type: user.platform
+            })
+            .then(this.handleResponse)
+            .then(
+                response => {
+                    if (response.data.state === 'success') {
+                        this.setToken(response.data.user)
+                        AuthHeader.changeHeadersToken()
+                        return response.data.user;
+                    } else {
+                        return response.data.user;
+                    }
+                })
+    }
 
 
     // 로그아웃

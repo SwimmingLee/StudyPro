@@ -151,16 +151,15 @@ export default {
   },
   data() {
     return {
-      items: ["study", "free"],
+      items: ["share", "free"],
       dialog: false,
 
       postData: {
-        type: "study",
-        study_id: "8",
+        type: "common",
         writer: "",
         title: "",
         content: "",
-        board: "study"
+        board: "share"
       },
 
       files: [],
@@ -202,8 +201,19 @@ export default {
 
   methods: {
     create() {
+      let formData = new FormData();
       this.postData.writer = this.getUser().uid;
-      PostService.createPost(this.postData);
+      for (var i = 0; i < this.files.length; i++) {
+        let file = this.files[i];
+        formData.append("post_file", file);
+      }
+      console.log("hello")
+      formData.append("type", this.postData.type);
+      formData.append("title", this.postData.title);
+      formData.append("content", this.postData.content);
+      formData.append("board", this.postData.board);
+      PostService.createPost(formData);
+
       this.$router.go(-1);
     },
     clickBack() {

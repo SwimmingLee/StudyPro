@@ -1,4 +1,5 @@
 import AuthService from '@/services/auth.service'
+import WbKakao from "@/social-signin/kakao/kakao";
 
 const local = JSON.parse(localStorage.getItem('user'))
 const session = JSON.parse(sessionStorage.getItem('user'))
@@ -48,9 +49,34 @@ export const auth = {
             }
         },
 
+        // 소셜 로그인
+        async socialLogin({ commit }, user) {
+            let complete = await AuthService.socialLogin(user).then(
+                res => {
+                    if (res) {
+                        return res
+                    } else {
+                        return res
+                    }
+                },
+                () => { // error
+                    return false
+                }
+            )
+
+            if (complete) {
+                commit('loginSuccess', complete)
+                return true
+            } else {
+                commit('loginFailure')
+                return false
+            }
+        },
+
         // 로그아웃
         async logout({ commit }) {
             await AuthService.logout()
+            WbKakao.signout();
             commit('logout')
         },
 

@@ -9,6 +9,16 @@ class PostService {
         )
     }
 
+    modifyPost(payload) {
+        return axios.put(URL + "posts/detail", {
+            type: payload.type,
+            post_id: payload.post_id,
+            title: payload.post_title,
+            content: payload.content,
+            board: payload.board,
+        })
+    }
+
     createComment(payload) {
         return axios.post(URL + "comments", {
             type: payload.type,
@@ -18,7 +28,6 @@ class PostService {
     }
 
     deletePost(payload) {
-        console.log(payload);
         return axios.delete(URL + "posts",
             {
                 data: {

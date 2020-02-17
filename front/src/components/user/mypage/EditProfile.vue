@@ -6,9 +6,9 @@
           <v-form ref="form" v-model="valid">
             <v-row>
               <v-col cols="12" sm="12">
-                <v-card class="mx-auto" max-width="1000">
+                <v-card class="mx-auto" elevation="0">
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-text-field
                         :disabled="true"
                         v-model="email"
@@ -18,7 +18,7 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-text-field
                         v-model="name"
                         label="이름"
@@ -28,7 +28,7 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-select
                         v-model="gender"
                         :items="genderItems"
@@ -40,7 +40,7 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-text-field
                         v-model="nickname"
                         :counter="10"
@@ -51,7 +51,7 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-text-field
                         v-model="phone"
                         label="휴대전화 번호( - 제외하고 입력해 주세요.)"
@@ -61,7 +61,7 @@
                   </v-row>
 
                   <v-row justify="center" align="center">
-                    <v-col cols="12" sm="10">
+                    <v-col cols="10">
                       <v-textarea
                         v-model="about"
                         :counter="50"
@@ -71,8 +71,8 @@
                     </v-col>
                   </v-row>
                   <v-row justify="center">
-                    <image-input v-model="avatar" class="wrap-content">
-                      <div slot="activator" class="wrap-content pointer">
+                    <image-input v-model="avatar" class="wrap-content" v-on:clear="imgClear">
+                      <div slot="activator" class="wrap-content">
                         <v-avatar
                           size="150px"
                           v-ripple
@@ -87,16 +87,10 @@
                       </div>
                     </image-input>
                   </v-row>
-                  <v-row justify="center">
-                    <v-btn text @click="avatar = null">
-                      이미지 초기화
-                    </v-btn>
-                  </v-row>
                   <v-row justify="end">
                     <v-col class="justify-end">
-                      <span class="error--text mr-5 title pt-1">{{ message }}</span>
+                      <span class="error--text mr-5 subtitle-1 pt-1">{{ message }}</span>
                       <v-btn
-                        class="mr-10 mb-2"
                         :disabled="!enablebtn || !valid"
                         color="success"
                         @click="update"
@@ -213,6 +207,7 @@ export default {
           this.modalOpen = true;
           await this.load()
           this.validation()
+          this.$store.dispatch('auth/checkUserDefault')
         } else {
           this.message = "오류가 발생하여 수정되지 않았습니다";
         }
@@ -237,6 +232,9 @@ export default {
       if (this.avatar != null) {
         this.enablebtn = true;
       }
+    },
+    imgClear(){
+      this.avatar = null
     }
   },
 
@@ -275,12 +273,6 @@ export default {
       } else {
         this.validation();
       }
-    },
-    valid(){
-      console.log('valid', this.valid)
-    },
-    enablebtn(){
-      console.log('enable', this.enablebtn)
     }
   }
 };

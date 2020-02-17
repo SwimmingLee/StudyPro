@@ -84,6 +84,7 @@ export default {
     }
   },
   async created() {
+    console.log('Txbox created')
     const sendMsg = await AlarmService.getSendAlarm();
     this.txBox = sendMsg.data;
   },

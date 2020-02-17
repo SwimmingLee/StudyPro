@@ -13,7 +13,7 @@
         </v-col>
       </v-row>
     </v-list-item>
-    <v-list-item v-for="msg in rsvMsg" :key="msg.title">
+    <v-list-item v-for="msg in rsvMsg" :key="msg.id">
       <v-card elevation="0" width="1500" @click="viewDetail(msg)">
         <v-row style="border-bottom: 1px solid #E5C1D4;">
           <v-col cols="2" align="center">
@@ -90,9 +90,8 @@ export default {
     }
   },
   async created() {
-    console.log('created')
+    console.log('Rxbox created')
     const rsvMsg = await AlarmService.getReceivedAlarm();
-    console.log(rsvMsg.data)
     this.rxBox = rsvMsg.data;
   },
   watch: {

@@ -42,12 +42,11 @@
             <v-col class="pa-0 pl-4">
               <a id="kakao-login-btn"></a>
               <button
-                class="social-btn mr-4"
+                class="social-btn mr-4 mt-1"
                 @click="AuthKakaoSignin('kakao')"
-                style="width:50px"
               >
                 <v-img
-                  src="@/assets/images/social-btn/kakaolink_btn_medium.png"
+                  src="https://developers.kakao.com/assets/img/about/logos/kakaologin/kr/kakao_account_login_btn_medium_narrow.png"
                 ></v-img>
               </button>
             </v-col>
@@ -150,30 +149,26 @@ export default {
     },
     async AuthKakaoSignin() {
       const user_info = await WbKakao.signinForm();
+      console.log(user_info)
       let {
         properties: { nickname, profile_image },
         kakao_account: { email, gender }
       } = user_info;
 
       try {
-        gender = gender === "mail" ? "M" : "F";
-        const loginResult = await this.socialLogin({
+        gender = (gender === "male" ? "M" : "F");
+        await this.$store.dispatch("auth/socialLogin",{
           email,
           nickname,
           gender,
           profile_image,
           platform: "kakao"
         });
-        console.log(loginResult);
+        this.isLoading = false;
       } catch (err) {
         console.log(err);
       }
     },
-    AuthLogout() {
-      this.logout();
-      // 카카오 로그인 버튼을 생성합니다.
-    },
-
     clickEnter(){
       this.signin()
     }

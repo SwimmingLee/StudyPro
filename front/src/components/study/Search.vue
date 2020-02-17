@@ -1,9 +1,10 @@
 <template>
   <v-content id="contents" class="py-5">
     <v-row class="justify-center">
-      <v-col class="pa-2 col-10 col-md-9">
+      <v-col cols="10">
         <!-- 검색 창 -->
         <v-autocomplete
+          outlined
           :items="recommendItems"
           :loading="isLoading"
           :search-input.sync="searchInput"
@@ -44,16 +45,42 @@
 
     <!-- 상세 검색 -->
     <v-row class="justify-center">
-      <v-col class="col-11 col-md-9 pt-0 mx-auto">
+      <v-col cols="10" class="px-3 pt-0">
         <v-expansion-panels>
           <v-expansion-panel hover>
             <v-expansion-panel-header>상세검색</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-row>
-                <v-col sm="3" class="pl-6 pb-0">
+                <v-col cols="3">
+                  <span>카테고리</span>
+                </v-col>
+                <v-col cols="9" md="4" class="pa-0">
+                  <span class="mr-3">대분류</span>
+                  <v-overflow-btn
+                    :items="majorItems"
+                    v-model="major"
+                    segmented
+                    dense
+                    style="width: 150px; display:inline-block"
+                  ></v-overflow-btn>
+                </v-col>
+                <v-col cols="3" class="d-md-none" />
+                <v-col cols="9" md="4" class="pa-0">
+                  <span class="mr-3">소분류</span>
+                  <v-overflow-btn
+                    :items="minorItems"
+                    v-model="minor"
+                    segmented
+                    dense
+                    style="width: 150px; display:inline-block"
+                  ></v-overflow-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="3" class="pt-2">
                   <span>시작날짜</span>
                 </v-col>
-                <v-col sm="4" md="3" class="pb-0 pt-0">
+                <v-col cols="9" class="py-0">
                   <v-menu
                     ref="calendar"
                     v-model="calendar"
@@ -65,101 +92,142 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="searchForm.startdate"
-                        label="start date"
                         prepend-icon="event"
                         readonly
                         v-on="on"
                         class="pt-0"
+                        hide-details
+                        style="max-width:150px"
                       ></v-text-field>
                     </template>
                     <v-date-picker
                       v-model="searchForm.startdate"
                       no-title
                       scrollable
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="calendar = false"
-                        >Cancel</v-btn
-                      >
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.calendar.save(searchForm.startdate)"
-                        >OK</v-btn
-                      >
-                    </v-date-picker>
+                      @click:date="$refs.calendar.save(searchForm.startdate)"
+                    ></v-date-picker>
                   </v-menu>
                 </v-col>
               </v-row>
-              <hr />
-              <v-row class="pb-4">
-                <v-col sm="3" class="pl-6 pb-0">
-                  <span>시간</span>
+              <v-row class="pb-2">
+                <v-col cols="3">
+                  <span>시작/종료시간</span>
                 </v-col>
-                <v-col cols="4" sm="3" class="pb-0 pr-0">
-                  <timeselector
-                    v-model="searchForm.starttime"
-                    class="grey lighten-4"
-                  />
+                <v-col cols="7" sm="5" md="3" class="py-0 pr-0">
+                  <v-menu
+                    ref="startTime"
+                    v-model="active.startTime"
+                    :close-on-content-click="false"
+                    :nudge-right="30"
+                    :return-value.sync="searchForm.starttime"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="searchForm.starttime"
+                        label="시작시간"
+                        prepend-icon="access_time"
+                        readonly
+                        hide-details
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-model="searchForm.starttime"
+                      full-width
+                      header-color="customTheme"
+                      ampm-in-title
+                      @click:minute="$refs.startTime.save(searchForm.starttime)"
+                    ></v-time-picker>
+                  </v-menu>
                 </v-col>
-                <v-col cols="1" class="pb-0 px-0 text-center">
+                <v-col cols="2" md="1" class="text-center">
                   <span>~</span>
                 </v-col>
-                <v-col cols="4" sm="3" class="pb-0 pl-0">
-                  <timeselector
-                    v-model="searchForm.endtime"
-                    class="grey lighten-4"
-                  />
+                <v-col cols="3" class="d-md-none"></v-col>
+                <v-col cols="7" sm="5" md="3" class="py-0 pl-0 text-end">
+                  <v-menu
+                    ref="endTime"
+                    v-model="active.endTime"
+                    :close-on-content-click="false"
+                    :nudge-right="30"
+                    :return-value.sync="searchForm.endtime"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="searchForm.endtime"
+                        label="시작시간"
+                        prepend-icon="access_time"
+                        readonly
+                        hide-details
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-model="searchForm.endtime"
+                      full-width
+                      header-color="customTheme"
+                      ampm-in-title
+                      @click:minute="$refs.endTime.save(searchForm.endtime)"
+                    ></v-time-picker>
+                  </v-menu>
                 </v-col>
                 <v-spacer />
               </v-row>
-              <hr />
+
               <v-row>
-                <v-col sm="3" class="pl-6 pb-0 pt-4">
+                <v-col cols="3">
                   <span>요일</span>
                 </v-col>
-                <v-col sm="9" class="pb-0 pt-1 pl-0">
+                <v-col cols="9" class="pa-0">
                   <v-btn-toggle
                     v-model="searchForm.dayofweek"
                     multiple
                     dense
                     group
                   >
-                    <v-btn>Mon</v-btn>
-                    <v-btn>Tue</v-btn>
-                    <v-btn>Wed</v-btn>
-                    <v-btn>Thu</v-btn>
-                    <v-btn>Fri</v-btn>
-                    <v-btn>Sat</v-btn>
-                    <v-btn>Sun</v-btn>
+                    <v-row>
+                      <v-btn class="multiplebtn" elevation="0" value="Mon"
+                        >Mon</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Tue"
+                        >Tue</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Wed"
+                        >Wed</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Thu"
+                        >Thu</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Fri"
+                        >Fri</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Sat"
+                        >Sat</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Sun"
+                        >Sun</v-btn
+                      >
+                    </v-row>
                   </v-btn-toggle>
                 </v-col>
               </v-row>
-              <hr />
-              <v-row class="pt-4">
-                <v-col sm="3" class="pl-6 pb-0 pt-4">
-                  <span>기간</span>
-                </v-col>
-                <v-col sm="2" class="pb-0 pt-2">
-                  <v-text-field
-                    class="pt-0 pb-3 inputDuration"
-                    hide-details
-                    v-model="searchForm.duration"
-                    type="number"
-                  ></v-text-field>
-                </v-col>
-                <v-col sm="3" class="pb-0 pt-0">
-                  <v-overflow-btn
-                    class="my-2 pb-0"
-                    v-model="durationOp"
-                    :items="itemsDuration"
-                    label="select"
-                    target="#"
-                    dense
-                  ></v-overflow-btn>
-                </v-col>
+              <!-- 카테고리 -->
+              <v-row justify="end">
+                <v-btn class="mr-2" style="width:80px" @click="detailInit"
+                  >초기화</v-btn
+                >
+                <v-btn class="mr-2" style="width:80px" @click="detailSearch"
+                  >검색</v-btn
+                >
               </v-row>
-              <hr />
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -176,36 +244,47 @@
       </v-content>
       <v-list
         v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="busy"
+        :infinite-scroll-disabled="busy"
         infinite-scroll-distance="10"
       >
         <v-list-group
-          v-for="item in display"
+          v-for="item in displayItems"
           :key="item.id"
           v-model="item.active"
           :prepend-icon="item.action"
-          :disabled="disLoading"
+          :disabled="isLoading"
           no-action
         >
           <template v-slot:activator>
             <v-list-item-content>
               <v-row>
                 <v-col cols="12" md="5" class="pl-3 text-center">
-                  <v-list-item-title 
-                    v-text="item.name"
-                    class="text-overflow">
+                  <v-list-item-title v-text="item.name" class="text-overflow">
                   </v-list-item-title>
                 </v-col>
                 <v-col cols="6" sm="4" md="2" class="text-center">
-                  <span>Mon, Fri</span>
+                  <span>{{ item.process_days | filterDays }}</span>
                 </v-col>
                 <v-col cols="6" sm="4" md="2" class="text-center">
-                  <span>{{ item.start_time+'/'+item.end_time | times}}</span>
+                  <span
+                    >{{ item.start_time | times }} ~
+                    {{ item.end_time | times }}</span
+                  >
                 </v-col>
                 <v-col cols="6" sm="2" md="2" class="text-center">
-                  <span>{{ 0 +'/'+ item.user_limit | limit}}</span>
+                  <span
+                    >{{ item.num_joined_student }}/{{
+                      item.user_limit | limit
+                    }}</span
+                  >
                 </v-col>
-                <v-col cols="6" sm="2" md="1" class="text-center pr-3" v-if="item.isopen">
+                <v-col
+                  cols="6"
+                  sm="2"
+                  md="1"
+                  class="text-center pr-3"
+                  v-if="item.isopen"
+                >
                   <v-icon class="mdi mdi-lock"></v-icon>
                 </v-col>
               </v-row>
@@ -215,59 +294,60 @@
           <template>
             <v-layout class="ma-2" row>
               <v-list-item :key="item.id">
-                <v-list-item-content class="pt-0 pb-1">
+                <v-list-item-content class="pt-0 pb-1 d-block">
                   <v-row class="px-2">
-                    <v-col cols="12" md="5" class="align-center justify-center">
-                      <v-avatar color="white">
-                        <v-icon size="62">mdi-account-circle</v-icon>
-                      </v-avatar>
-                    </v-col>
-
                     <!-- 내용 -->
-                    <v-col cols="12" md="7" class="pl-4">
-                      <!-- 스터디 소개글 -->
-                      <v-row class="pb-2">
-                        <v-col cols="4" md="5" class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold"
-                            >스터디 목표</v-content
-                          >
+                    <v-col cols="12" md="9">
+                      <!-- 카테고리 -->
+                      <v-row>
+                        <v-col cols="4">
+                          <span class="font-weight-bold">카테고리</span>
                         </v-col>
-                        <v-col cols="8" md="7" class="pl-2">{{
-                          item.goal
-                        }}</v-col>
+                        <v-col cols="8">{{ item.minor_class.name }}</v-col>
+                      </v-row>
+                      <!-- 현재상태 -->
+                      <v-row>
+                        <v-col cols="4">
+                          <span class="font-weight-bold">상태</span>
+                        </v-col>
+                        <v-col cols="8">{{ item.status }}</v-col>
+                      </v-row>
+                      <!-- 스터디 소개글 -->
+                      <v-row>
+                        <v-col cols="4">
+                          <span class="font-weight-bold">스터디 목표</span>
+                        </v-col>
+                        <v-col cols="8">{{ item.goal }}</v-col>
                       </v-row>
                       <!-- 시작시간 -->
-                      <v-row class="pb-2">
-                        <v-col cols="4" md="5" class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold"
-                            >시작날짜</v-content
-                          >
-                        </v-col>
-                        <v-col cols="8" md="7" class="pl-2">{{
-                          item.start_date
-                        }}</v-col>
-                      </v-row>
-                      <!-- 스터디기간 -->
                       <v-row>
-                        <v-col cols="4" md="5" class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold"
-                            >스터디기간</v-content
-                          >
+                        <v-col cols="4">
+                          <span class="pt-0 font-weight-bold">시작날짜</span>
                         </v-col>
-                        <v-col cols="8" md="7" class="pl-2">{{
-                          item.start_date + '/' + item.end_date | duration
-                        }}</v-col>
+                        <v-col cols="8">{{ item.start_date }}</v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="4">
+                          <span class="pt-0 font-weight-bold">종료날짜</span>
+                        </v-col>
+                        <v-col cols="8">{{ item.end_date }}</v-col>
                       </v-row>
                     </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" class="justify-center pa-0">
+                    <v-col
+                      cols="12"
+                      md="3"
+                      class="justify-center align-center pa-0"
+                    >
                       <v-btn
                         class="white lighten-3"
-                        elevation="1"
-                        @click="viewDetail(item.id)"
+                        elevation="0"
+                        @click="(groupModal = true), (modalItem = item)"
                       >
-                        <span class="dark--text">view detail</span>
+                        <span
+                          class="dark--text"
+                          style="text-decoration:underline;"
+                          >view detail</span
+                        >
                       </v-btn>
                     </v-col>
                   </v-row>
@@ -275,8 +355,7 @@
               </v-list-item>
               <group-modal
                 :group-modal="groupModal"
-                :id="id"
-                :item="item"
+                :study-info="modalItem"
                 v-on:close="modalClose"
               />
             </v-layout>
@@ -288,9 +367,6 @@
 </template>
 
 <script>
-import Timeselector from "vue-timeselector";
-//import api from "@/services";
-
 export default {
   data: () => ({
     isLoading: false,
@@ -301,17 +377,11 @@ export default {
     calendar: false,
     durationOp: "",
     itemsDuration: ["Day", "Week", "Month", "Year"],
-    id: 0,
     searchForm: {
-      name: "",
       startdate: "",
       starttime: "",
       endtime: "",
-      dayofweek: [],
-      duration: "",
-      tags: "",
-      minorClass: "",
-      goal: ""
+      dayofweek: []
     },
     items: [],
     copyItems: [],
@@ -320,28 +390,25 @@ export default {
     searchedItems: [],
     disLoading: false,
     noResult: false,
+    major: -1,
+    minor: -1,
+    majorItems: [],
+    minorItems: [],
+    active: {
+      startTime: false,
+      endTime: false
+    },
+    modalItem: null
   }),
+  props: ["id"],
   components: {
-    GroupModal: () => import("@/components/study/GroupModal"),
-    Timeselector
-  },
-  computed: {
-    display() {
-      if(this.items.length == 0){
-        this.loadDeaultList()
-      }
-      return this.displayItems;
-    },
-
-    autocomplete() {
-      return 1;
-    },
+    GroupModal: () => import("@/components/study/GroupModal")
   },
   watch: {
     searchInput() {
       this.recommendItems = [];
 
-      if (this.searchInput == "") {
+      if (!this.searchInput) {
         return;
       } else {
         for (var item of this.items) {
@@ -349,6 +416,21 @@ export default {
             this.recommendItems.push(item);
           }
         }
+      }
+    },
+    async major() {
+      this.minorItems = [];
+
+      const minor_classes = await this.$store.dispatch(
+        "study/getMinorClass",
+        this.major
+      );
+      for (let i = 0; i < minor_classes.length; i++) {
+        this.minorItems.push({
+          value: minor_classes[i].id,
+          text: minor_classes[i].name,
+          callback: () => {}
+        });
       }
     }
   },
@@ -367,19 +449,20 @@ export default {
     loadMore() {
       this.busy = true;
       setTimeout(() => {
-        let len = 10;
-        if (this.recommendItems.length < 10) len = this.recommendItems.length;
+        let len = 20;
+        if (this.copyItems.length < 10) len = this.copyItems.length;
         for (var i = 0; i < len; i++) {
-          this.displayItems.push(this.recommendItems.shift());
+          this.displayItems.push(this.copyItems.shift());
         }
       }, 1000);
       this.busy = false;
     },
 
     async searchEnter() {
-      this.busy = true
-      this.displayItems = []
-      this.noResult = false
+      this.busy = true;
+      this.displayItems = [];
+      this.noResult = false;
+      this.copyItems = [];
       if (!this.searchInput) {
         await this.loadDeaultList();
         this.busy = false;
@@ -387,18 +470,17 @@ export default {
       } else {
         for (var item of this.items) {
           if (item.name.includes(this.searchInput)) {
-            this.searchedItems.push(item);
+            this.copyItems.push(item);
           }
         }
-        let len = this.searchedItems.length < 20 ? this.searchedItems.length : 20;
+        let len = this.copyItems.length < 20 ? this.copyItems.length : 20;
         for (var i = 0; i < len; i++) {
-          this.displayItems.push(this.searchedItems.shift());
+          this.displayItems.push(this.copyItems.shift());
         }
       }
-      console.log(this.displayItems)
-      this.searchInput = ''
+      this.searchInput = "";
       if (this.displayItems.length == 0) {
-        this.noResult = true
+        this.noResult = true;
       }
       this.busy = false;
     },
@@ -407,43 +489,192 @@ export default {
       this.searchInput = name;
     },
 
-    viewDetail(id) {
-      this.id = id;
-      this.groupModal = true;
-    },
     modalClose() {
       this.groupModal = false;
+    },
+
+    detailSearch() {
+      this.busy = true;
+      this.displayItems = [];
+      this.copyItems = [];
+      this.noResult = false;
+      for (var item of this.items) {
+        if (this.checkItems(item, this.searchForm)) {
+          this.copyItems.push(item);
+        }
+      }
+      let len = this.copyItems.length < 20 ? this.copyItems.length : 20;
+      for (var i = 0; i < len; i++) {
+        this.displayItems.push(this.copyItems.shift());
+      }
+    },
+
+    checkItems(item, input) {
+      // 이름 검사
+      if (this.searchInput && item.name.includes(this.searchInput)) {
+        return false;
+      }
+      // 대분류 검사
+      if (this.major != -1 && item.minor_class.major_class_id != this.major) {
+        return false;
+      }
+      // 소분류 검사
+      if (this.minor != -1 && item.minor_class.id == this.minor) {
+        return false;
+      }
+      // 시작날짜 검사
+      if (
+        input.startdate != "" &&
+        this.isLaterLeftDate([
+          { date: input.startdate },
+          { date: item.start_date }
+        ])
+      ) {
+        return false;
+      }
+      // 시작시간 검사
+      if (
+        input.starttime != "" &&
+        this.isLaterLeftTime([
+          { time: input.starttime },
+          { time: item.start_time }
+        ])
+      ) {
+        return false;
+      }
+      //종료시간 검사
+      if (
+        input.endtime != "" &&
+        this.isLaterLeftTime([{ time: item.end_time }, { time: input.endtime }])
+      ) {
+        return false;
+      }
+      // 요일 검사
+      if (this.compareDays(item.process_days, input.dayofweek)) {
+        return false;
+      }
+      return true;
+    },
+
+    isLaterLeftDate(days) {
+      for (var d of days) {
+        var arr = d.date.split("-");
+        d.year = arr[0];
+        d.month = arr[1];
+        d.day = arr[2];
+      }
+      if (days[0].year > days[1].year) {
+        return true;
+      }
+
+      if (days[0].year == days[1].year && days[0].month > days[1].month) {
+        return true;
+      }
+      if (days[0].month == days[1].month && days[0].day > days[1].day) {
+        return true;
+      }
+      return false;
+    },
+
+    isLaterLeftTime(times) {
+      for (var t of times) {
+        if (typeof t.time == "number") {
+          t.hour = Math.floor(t.time / 100);
+          t.minute = t.time % 100;
+        } else {
+          t.hour = t.time.split(":")[0];
+          t.minute = t.time.split(":")[1];
+        }
+      }
+
+      if (times[0].hour > times[1].hour) {
+        return true;
+      }
+
+      if (times[0].hour == times[1].hour && times[0].minute > times[1].minute) {
+        return true;
+      }
+
+      return false;
+    },
+
+    compareDays(item, input) {
+      for (var input_day of input) {
+        var notMatching = true;
+        for (var item_day of item) {
+          if (input_day == item_day.day) {
+            notMatching = false;
+            break;
+          }
+        }
+
+        if (notMatching) {
+          return true;
+        }
+      }
+    },
+
+    detailInit() {
+      this.searchForm = {
+        name: "",
+        startdate: "",
+        starttime: "",
+        endtime: "",
+        dayofweek: []
+      };
+      this.major = -1;
+      this.minor = -1;
+      this.searchInput = "";
     }
   },
   filters: {
-    duration(value){
-      let arr = value.split('/')
-      let start = arr[0].trim().split('-')
-      let end = arr[1].trim().split('-')
-      let year = end[0] - start[0]
-      let month = end[1] - start[1]
-      let day = end[2] - start[2]
-      let result = ''
-      if(year != 0)  result += year+'년 '
-      if(month != 0)  result += month+'월 '
-      if(day != 0)  result += day+'일'
-      
-      if(result == '')  return '기간미지정'
-      else  return result
+    times(value) {
+      let hour = Math.floor(value / 100);
+      let minute = value % 100;
+      if (hour < 10) hour = "0" + hour;
+      if (minute < 10) minute = "0" + minute;
+      return hour + ":" + minute;
     },
-    times(value){
-      let arr = value.split('/')
-      let start = [Math.floor(arr[0]/100), arr[0]%100]
-      let end = [Math.floor(arr[1]/100), arr[1]%100]
-      return start[0]+':'+start[1]+' ~ '+end[0]+':'+end[1]
-    },
-    limit(value){
-      let arr = value.split('/')
-      if(arr[0] == arr[1]){
-        return '무제한'
+    limit(value) {
+      if (value == 0) {
+        return "-";
       }
-      return value
+      return value;
+    },
+
+    filterDays(value) {
+      if (value.length == 1 && value[0].day == "") {
+        return "-";
+      }
+      var days = "";
+      var weekofdays = {
+        Mon: "월",
+        Tue: "화",
+        Wed: "수",
+        Thu: "목",
+        Fri: "금",
+        Sat: "토",
+        Sun: "일"
+      };
+      for (var i = 0; i < value.length; i++) {
+        days += weekofdays[value[i].day] + " ";
+      }
+
+      return days;
     }
+  },
+  async mounted() {
+    this.majorItems = [];
+    const getMajorRes = await this.$store.dispatch("study/getMajorClass"); //await api.getMajorClasses();
+    for (let i = 0; i < getMajorRes.length; i++) {
+      this.majorItems.push({
+        value: getMajorRes[i].id,
+        text: getMajorRes[i].name,
+        callback: () => {}
+      });
+    }
+
+    await this.loadDeaultList();
   }
 };
 </script>
@@ -452,7 +683,11 @@ export default {
 .v-text-field__details {
   display: none;
 }
-.v-list-item__icon{
+.v-list-item__icon {
   min-width: 24px !important;
+}
+
+.multiplebtn {
+  background-color: rgba(0, 0, 0, 0) !important;
 }
 </style>

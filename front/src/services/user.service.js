@@ -13,7 +13,6 @@ class UserService {
             })
     }
 
-
     getAllUser() {
         return axios.get(URL)
     }
@@ -32,8 +31,24 @@ class UserService {
         AuthHeader.changeHeadersToken()
         return axios.put(URL + 'pass', payload)
             .then(res => {
-                console.log(res.data)
                 return res.data
+            })
+    }
+
+    // 가입 그룹 목록 요청
+    getMyGroups() {
+        AuthHeader.changeHeadersToken()
+        return axios.get(URL + 'joined-study')
+            .then(res => {
+                return res.data
+            })
+    }
+
+    // 유저 정보 요청
+    getUserById(uid) {
+        return axios.get(URL + uid)
+            .then(res => {
+                return res
             })
     }
 }

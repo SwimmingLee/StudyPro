@@ -1,6 +1,6 @@
 <template>
   <v-list>
-    <v-list-item v-for="user in userList" :key="user.title">
+    <v-list-item v-for="user in userList" :key="user.id">
       <v-card elevation="0" width="1500">
         <v-row style="border-bottom: 1px solid #E5C1D4;">
           <v-col cols="2" align="center">
@@ -59,6 +59,7 @@ export default {
     }
   },
   async created() {
+    console.log('FriendList created')
     const userInfo = await UserService.getAllUser();
     this.userItems = userInfo.data;
   },

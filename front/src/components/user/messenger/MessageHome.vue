@@ -30,11 +30,6 @@ export default {
       tab: null
     };
   },
-  computed: {
-    isAuth: function() {
-      return this.$store.getters.isAuth;
-    }
-  },
   components: {
     RxBox: () => import("@/components/user/messenger/RxBox"),
     TxBox: () => import("@/components/user/messenger/TxBox"),

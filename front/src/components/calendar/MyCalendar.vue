@@ -2,7 +2,7 @@
   <div id="mycal">
     <div v-if="isAuth">
       <v-row class="fill-height" justify="center">
-        <v-col cols="11" class="mx-2">
+        <v-col cols="12" md="11" class="mx-2">
           <v-card>
             <v-toolbar flat color="customTheme" dark>
               <v-toolbar-title class="ml-5">내 일정관리</v-toolbar-title>
@@ -197,6 +197,7 @@
 
 <script>
 import { format } from "date-fns";
+import WorkService from "@/services/work.service"
 
 export default {
   name: "mycal",
@@ -289,20 +290,18 @@ export default {
     }
   },
   mounted() {
-    //   임시 더미 입력
-    this.events.push({
-      name: "테스트",
-      content: "테스트내용",
-      start: "2020-02-09 10:00",
-      end: "2020-02-13 18:00",
-      group: "테스트그룹",
-      color: "pink",
-      event_id: 0
-    });
-
+    WorkService.getWorks({type:"personal"})
+      .then(works =>{
+        works.data.map(work=>{
+          work.name = "[" + work.status + "]" + work.name
+          work.color = work.color ? work.color : "primary"/* 빨리 여기를 수정해야 한다. */ 
+          work.start = work.start_date
+          work.end = work.end_date
+        })
+        
+        this.events = works.data;
+      })
     // 마운트시 내 일정 엑시오스 요청
-
-    this.$refs.calendar.checkChange();
   },
   methods: {
     viewDay({ date }) {
@@ -385,25 +384,36 @@ export default {
       }
     },
 
-    reload(event) {
+    reload(/*event*/) {
       // 추가할 데이터 // 테스트용
-      var newEvent = {
-        name:
-          event.group == "empty"
-            ? event.name
-            : "[" + event.group + "]" + event.name,
-        content: event.content,
-        start: event.start,
-        end: event.end,
-        group: event.group,
-        color: event.color,
-        event_id: 0
-      };
-      //테스트라인
-      this.events.push(newEvent);
-
+      // var newEvent = {
+      //   name:
+      //     event.group == "empty"
+      //       ? event.name
+      //       : "[" + event.group + "]" + event.name,
+      //   content: event.content,
+      //   start: event.start,
+      //   end: event.end,
+      //   group: event.group,
+      //   color: event.color,
+      //   event_id: 0
+      // };
+      // //테스트라인
+      // this.events.push(newEvent);
+      WorkService.getWorks({type:"personal"})
+      .then(works =>{
+        works.data.map(work=>{
+          work.name = "[" + work.status + "]" + work.name
+          work.color = work.color ? work.color : "primary"/* 빨리 여기를 수정해야 한다. */ 
+          work.start = work.start_date
+          work.end = work.end_date
+        })
+        
+        this.events = works.data;
+        this.$refs.calendar.checkChange();
+      })
       // 일정목록 리로드
-      this.$refs.calendar.checkChange();
+      
     },
 
     clickDetailMenu(value, event) {
@@ -422,11 +432,13 @@ export default {
     },
 
     eventDelete(event) {
-      console.log("eventDelete in MyCalendar.vue", event);
-
+      WorkService.deleteWork({type:"personal", work_id:event.id});
+      //console.log("eventDelete in MyCalendar.vue", event);
+      const eventsIdx = this.events.indexOf(event)
       //삭제 엑시오스 요청
-
+      this.events.splice(eventsIdx, 1)
       this.delOpen = false;
+      this.selectedOpen = false;
       this.$refs.calendar.checkChange();
     }
   }

@@ -3,12 +3,16 @@
 // }
 $black: #212529;
 $white: #ffffff;
+.theme--light.v-application {
+    background-color: #fff;
+}
+
 .dropPanel {
     display: block;
     text-decoration: none;
     transition: all 200ms ease;
     &.active {
-        background-color: rgba(0, 0, 0, .45);
+        background-color: rgba(0, 0, 0, 0.45);
     }
     ul {
         li {
@@ -61,12 +65,12 @@ ul {
     list-style-type: none;
 }
 
-input[type='number'] {
+input[type="number"] {
     -moz-appearance: textfield;
 }
 
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
 
@@ -104,4 +108,33 @@ input[type=number]::-webkit-inner-spin-button {
 .justify-end {
     display: flex;
     justify-content: flex-end;
+}
+
+a {
+    text-decoration: none;
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    overflow: hidden;
+}
+
+.ellipsis-multi {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* 라인수 */
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    line-height: 1.2em;
+    height: 3.6em;
+    /* line-height 가 1.2em 이고 3라인을 자르기 때문에 height는 1.2em * 3 = 3.6em */
+}
+
+.card-text {
+    font-family: "TDTDTadakTadak", "RIDIbatang", "Times New Roman", Times, Arial, Helvetica, sans-serif;
+    font-size: 16px;
 }

@@ -32,6 +32,10 @@ class AlarmService {
             alarm_id: payload.alarm_id
         })
     }
+
+    getAlarmNumber() {
+        return axios.get(URL + "number")
+    }
 }
 
 export default new AlarmService()

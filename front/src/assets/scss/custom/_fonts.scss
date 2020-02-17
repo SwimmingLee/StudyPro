@@ -5,10 +5,56 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: "MapoFlowerIsland";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "CookieRun-Regular";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "TDTDTadakTadak";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/TDTDTadakTadak.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Binggrae-Bold";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Binggrae-Bold.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
 .v-application {
     font-family: "RIDIbatang", "Times New Roman", Times, Arial, Helvetica, sans-serif;
 }
 
 body {
     font-family: "RIDIbatang", "Times New Roman", Times, Arial, Helvetica, sans-serif;
+}
+
+#header {
+    font-family: "Binggrae-Bold", "RIDIbatang", "Times New Roman", Times, Arial, Helvetica, sans-serif;
+}
+
+.main-title {
+    font-family: "MapoFlowerIsland", "RIDIbatang", "Times New Roman", Times, Arial, Helvetica, sans-serif;
+    font-size: 30px;
+}
+
+.card-title {
+    font-family: "CookieRun-Regular", "RIDIbatang", "Times New Roman", Times, Arial, Helvetica, sans-serif;
+}
+
+.card-text {
+    font-family: "TDTDTadakTadak", "RIDIbatang", "Times New Roman", Times, Arial, Helvetica, sans-serif;
+    font-size: 19px;
 }

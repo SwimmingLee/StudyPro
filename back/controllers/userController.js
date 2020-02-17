@@ -64,7 +64,7 @@ export const social_signin = async function(req, res) {
 
 }
 
-// ���� ���� Ȯ���� ���� ��ū Ȯ�� + Ȯ�� �� ���� ���� ����
+// 세션 유지 확인을 위한 토큰 확인 + 확인 후 유저 정보 전송
 export const check_token = async function(req, res) {
     try{
         const accessToken = req.header('Authorization')
