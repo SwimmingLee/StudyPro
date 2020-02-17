@@ -52,7 +52,13 @@ const APPLY_DETAIL = "/detail";
 const ALARMS = "/alarms";
 const ALARM = "/create";
 const ALARM_DETAIL = "/detail";
-const ALARM_NUMBER = "/number"
+const ALARM_NUMBER = "/number";
+
+//email
+const EMAIL = "/email"
+const AUTH = "/auth"
+const NOTICE_APPLY = "/notice_apply"
+const RESULT_APPLY = "/result_apply"
 
 const routes = {
     home : HOME,
@@ -100,6 +106,11 @@ const routes = {
     alarms : ALARMS,
     alarm : ALARM,
     alarm_detail : ALARM_DETAIL,
-    alarm_number : ALARM_NUMBER
+    alarm_number : ALARM_NUMBER,
+
+    email:EMAIL,
+    auth:AUTH,
+    notice_apply : NOTICE_APPLY,
+    result_apply : RESULT_APPLY,
 }
 export default routes;

@@ -14,6 +14,7 @@ import postRouter from "./routers/postRouter"
 import applyRouter from "./routers/applyRouter"
 import alarmRouter from "./routers/alarmRouter"
 import classRouter from "./routers/classRouter"
+//import emailRouter from "/routers/emailRouter"
 import routes from "./routes"
 import path from "path"
 
@@ -39,6 +40,7 @@ app.use(routes.works, workRouter);
 app.use(routes.applies, applyRouter);
 app.use(routes.alarms, alarmRouter);
 app.use('/class', classRouter);
+//app.use(routes.email, emailRouter);
 
 export default app;
 
