@@ -110,8 +110,10 @@ export const read_apply_study = async function(req, res) {
 
 export const join_study = async function(req, res) {
     const {apply_id, accept} = req.body
-
+    console.log("AAAAAAAAAAAAAAAAAAAAAA")
+    console.log(req.body)
     const apply = await applies.findOne({where:{id:apply_id}})
+    console.log(apply)
     if (apply) {
         const user_id = apply.dataValues.user_id;
         const study_id = apply.dataValues.study_id;
@@ -135,22 +137,53 @@ export const join_study = async function(req, res) {
 }
 
 export const get_joined_user = async function(req, res) {
-    const {study_id} = req.query
-    //console.log(req) 
-    users_and_studies.findAll({where:{study_id}})
-        .map(async (res)=>{
-            const user = await users.findOne({where:{id:res.dataValues.user_id}})
-            const level = await users_and_studies.findOne({where:{user_id:res.dataValues.user_id, study_id}})
-            user.dataValues.level = level.dataValues.level
-            return user;})
-        .then((users) =>{
-            res.send(users)
-        })
+    try{
+       const {study_id} = req.query
+     //console.log(req) 
+        users_and_studies.findAll({where:{study_id}})
+            .map(async (res)=>{
+                const user = await users.findOne({where:{id:res.dataValues.user_id}})
+                const level = await users_and_studies.findOne({where:{user_id:res.dataValues.user_id, study_id}})
+                user.dataValues.level = level.dataValues.level
+                return user;})
+            .then((users) =>{
+                res.send(users)
+            })
+    } catch(err) {
+        res.send(err);
+    }
 }
+
+export const update_study_user_level = async function(req, res) {
+    try{
+        const captain = res.locals.user;
+        const {user_id, study_id, level} = req.body;
+
+        const study_captain = await users_and_studies.findOne({where:{user_id:captain.id, study_id}})
+        if (!study_captain) {
+            res.send({state:"당신은 캡틴이 아닙니다."})
+            return;
+        }
+        const joined_user = await users_and_studies.update({level}, {where:{user_id, study_id}})
+        if (joined_user) {
+            res.send({state:"success"})
+        } else {
+            res.send({state:"fail"})
+        }
+    } catch(err) {
+        res.send(err)
+    }
+}
+
 export const delete_study_user = async function (req, res) {
     try{
         const {study_id, user_id} = req.body;
-        users_and_studies.destroy({where:{study_id, user_id}})
+        const result = await users_and_studies.destroy({where:{study_id, user_id}})
+        if (result) {
+            res.send({state:"success"})
+        } else {
+            res.send({state:"fail"})
+        }
 
     } catch(err) {
         res.send(err)

@@ -13,8 +13,9 @@ const UPDATE_PASSWORD = "/pass"
 const JOINED_STUDY = "/joined-study";
 const LEAVE_STUDY = "/leave-study"
 
-// Images
+// Images & Files
 const IMAGES = "/images"
+const FILES = "/files"
 
 // Study
 const STUDIES = "/studies";
@@ -24,6 +25,7 @@ const STUDY_MARK = "/mark";
 const STUDY_DETAIL = "/detail";
 const STUDY_APPLY = "/apply"
 const STUDY_JOIN = "/join"
+const CHANGE_LEVEL = "/change-level"
 
 // Post
 const POSTS = "/posts"
@@ -67,6 +69,7 @@ const routes = {
     leave_study : LEAVE_STUDY,
 
     images : IMAGES,
+    files : FILES,
     
     studies : STUDIES,
     study : STUDY,
@@ -75,6 +78,7 @@ const routes = {
     study_mark : STUDY_MARK,
     study_apply: STUDY_APPLY,
     study_join : STUDY_JOIN,
+    change_level : CHANGE_LEVEL,
 
     posts : POSTS,
     post_number: POST_NUMBER,

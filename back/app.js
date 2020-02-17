@@ -30,6 +30,7 @@ app.use(morgan("dev"));
 
 app.use(localsMiddelWare)
 app.use(routes.images, express.static(process.env.IMAGE_PATH));
+app.use(routes.files, express.static(process.env.FILE_PATH));
 app.use(routes.users, userRouter);
 app.use(routes.studies, studyRouter);
 app.use(routes.comments, commentRouter);

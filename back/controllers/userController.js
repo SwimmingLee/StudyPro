@@ -228,8 +228,12 @@ export const get_joined_study = function(req, res) {
         if (user){
             users_and_studies.findAll({where:{user_id:user.id}})
                 .map(async (joined) => {
+                    
                     const joined_study = await studies.findOne({where:{id:joined.dataValues.study_id}})
                     joined_study.dataValues.membership_level = joined.dataValues.level
+                    
+                    const captain = await users.findOne({where:{id:joined_study.dataValues.captain}})
+                    joined_study.dataValues.captain_name = captain.dataValues.nickname
 
                     const minor =  await minor_classes.findOne({where:{id:joined_study.dataValues.minor_class_id}});
                     delete minor.dataValues.id
