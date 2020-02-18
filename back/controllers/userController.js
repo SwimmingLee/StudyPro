@@ -233,7 +233,9 @@ export const get_joined_study = function(req, res) {
                     joined_study.dataValues.membership_level = joined.dataValues.level
                     
                     const captain = await users.findOne({where:{id:joined_study.dataValues.captain}})
-                    joined_study.dataValues.captain_name = captain.dataValues.nickname
+                    delete captain.dataValues.password
+                    delete captain.dataValues.auth
+                    joined_study.dataValues.captain = captain.dataValues
 
                     const minor =  await minor_classes.findOne({where:{id:joined_study.dataValues.minor_class_id}});
                     delete minor.dataValues.id

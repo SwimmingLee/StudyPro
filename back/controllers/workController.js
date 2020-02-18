@@ -9,7 +9,7 @@ export const create_work = async function(req, res) {
         const works = (type === 'study') ? study_works : personal_works
 
         console.log(req.body)
-        const work = await works.create({writer:writer.id, study_id, name, content, start_date, end_date, status:group, color})
+        const work = await works.create({writer:writer.id, study_id, name, content, start_date, end_date, group, color})
         res.send(work)
     } catch (err) {
         res.send(err)
