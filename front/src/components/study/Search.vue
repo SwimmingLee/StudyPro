@@ -1,10 +1,9 @@
 <template>
-  <v-content id="contents" class="py-5">
+  <div id="contents">
     <v-row class="justify-center">
-      <v-col cols="10">
+      <v-col cols="12" sm="10">
         <!-- 검색 창 -->
         <v-autocomplete
-          outlined
           :items="recommendItems"
           :loading="isLoading"
           :search-input.sync="searchInput"
@@ -15,6 +14,7 @@
           label="이름으로 검색"
           solo
           @keyup.enter="searchEnter()"
+          id="study-search"
         >
           <template v-slot:no-data>
             <v-list-item>
@@ -29,8 +29,7 @@
             <v-list-item-avatar
               color="indigo"
               class="headline font-weight-light white--text"
-              >{{ item.name.charAt(0) }}</v-list-item-avatar
-            >
+            >{{ item.name.charAt(0) }}</v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title v-text="item.name"></v-list-item-title>
             </v-list-item-content>
@@ -45,10 +44,10 @@
 
     <!-- 상세 검색 -->
     <v-row class="justify-center">
-      <v-col cols="10" class="px-3 pt-0">
-        <v-expansion-panels>
-          <v-expansion-panel hover>
-            <v-expansion-panel-header>상세검색</v-expansion-panel-header>
+      <v-col cols="12" sm="10" class="px-3 pt-0">
+        <v-expansion-panels hover>
+          <v-expansion-panel>
+            <v-expansion-panel-header class="pl-3">상세검색</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-row>
                 <v-col cols="3">
@@ -187,46 +186,23 @@
                   <span>요일</span>
                 </v-col>
                 <v-col cols="9" class="pa-0">
-                  <v-btn-toggle
-                    v-model="searchForm.dayofweek"
-                    multiple
-                    dense
-                    group
-                  >
+                  <v-btn-toggle v-model="searchForm.dayofweek" multiple dense group>
                     <v-row>
-                      <v-btn class="multiplebtn" elevation="0" value="Mon"
-                        >Mon</v-btn
-                      >
-                      <v-btn class="multiplebtn" elevation="0" value="Tue"
-                        >Tue</v-btn
-                      >
-                      <v-btn class="multiplebtn" elevation="0" value="Wed"
-                        >Wed</v-btn
-                      >
-                      <v-btn class="multiplebtn" elevation="0" value="Thu"
-                        >Thu</v-btn
-                      >
-                      <v-btn class="multiplebtn" elevation="0" value="Fri"
-                        >Fri</v-btn
-                      >
-                      <v-btn class="multiplebtn" elevation="0" value="Sat"
-                        >Sat</v-btn
-                      >
-                      <v-btn class="multiplebtn" elevation="0" value="Sun"
-                        >Sun</v-btn
-                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Mon">Mon</v-btn>
+                      <v-btn class="multiplebtn" elevation="0" value="Tue">Tue</v-btn>
+                      <v-btn class="multiplebtn" elevation="0" value="Wed">Wed</v-btn>
+                      <v-btn class="multiplebtn" elevation="0" value="Thu">Thu</v-btn>
+                      <v-btn class="multiplebtn" elevation="0" value="Fri">Fri</v-btn>
+                      <v-btn class="multiplebtn" elevation="0" value="Sat">Sat</v-btn>
+                      <v-btn class="multiplebtn" elevation="0" value="Sun">Sun</v-btn>
                     </v-row>
                   </v-btn-toggle>
                 </v-col>
               </v-row>
               <!-- 카테고리 -->
               <v-row justify="end">
-                <v-btn class="mr-2" style="width:80px" @click="detailInit"
-                  >초기화</v-btn
-                >
-                <v-btn class="mr-2" style="width:80px" @click="detailSearch"
-                  >검색</v-btn
-                >
+                <v-btn class="mr-2" style="width:80px" @click="detailInit">초기화</v-btn>
+                <v-btn class="mr-2" style="width:80px" @click="detailSearch">검색</v-btn>
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -235,10 +211,12 @@
     </v-row>
 
     <!-- 결과 테이블 -->
-    <v-card class="col-10 offset-1">
-      <v-toolbar color="customTheme" dark>
-        <v-toolbar-title>Search Results</v-toolbar-title>
-      </v-toolbar>
+    <v-card class="col-12 col-sm-10 offset-sm-1">
+      <v-card flat class="mt-2 ml-2">
+        <v-icon large class="mr-2" color="black">search</v-icon>
+        <span style="font-size: 25px">검색 결과</span>
+      </v-card>
+      <v-divider v-if="!noResult" class="mt-3 mx-2" />
       <v-content v-if="noResult" class="text-center pt-10">
         <span>검색 대상을 찾지 못했습니다.</span>
       </v-content>
@@ -247,123 +225,119 @@
         :infinite-scroll-disabled="busy"
         infinite-scroll-distance="10"
       >
-        <v-list-group
-          v-for="item in displayItems"
-          :key="item.id"
-          v-model="item.active"
-          :prepend-icon="item.action"
-          :disabled="isLoading"
-          no-action
-        >
-          <template v-slot:activator>
-            <v-list-item-content>
-              <v-row>
-                <v-col cols="12" md="5" class="pl-3 text-center">
-                  <v-list-item-title v-text="item.name" class="text-overflow">
-                  </v-list-item-title>
-                </v-col>
-                <v-col cols="6" sm="4" md="2" class="text-center">
-                  <span>{{ item.process_days | filterDays }}</span>
-                </v-col>
-                <v-col cols="6" sm="4" md="2" class="text-center">
-                  <span
-                    >{{ item.start_time | times }} ~
-                    {{ item.end_time | times }}</span
-                  >
-                </v-col>
-                <v-col cols="6" sm="2" md="2" class="text-center">
-                  <span
-                    >{{ item.num_joined_student }}/{{
+        <v-card outlined>
+          <v-list-group
+            v-for="item in displayItems"
+            :key="item.id"
+            v-model="item.active"
+            :prepend-icon="item.action"
+            :disabled="isLoading"
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-row>
+                  <v-col cols="12" md="5" class="pl-3 text-center">
+                    <v-list-item-title v-text="item.name" class="text-overflow"></v-list-item-title>
+                  </v-col>
+                  <v-col cols="6" sm="4" md="2" class="text-center">
+                    <span>{{ item.process_days | filterDays }}</span>
+                  </v-col>
+                  <v-col cols="6" sm="4" md="2" class="text-center">
+                    <span>
+                      {{ item.start_time | times }} ~
+                      {{ item.end_time | times }}
+                    </span>
+                  </v-col>
+                  <v-col cols="6" sm="2" md="2" class="text-center">
+                    <span>
+                      {{ item.num_joined_student }}/{{
                       item.user_limit | limit
-                    }}</span
-                  >
-                </v-col>
-                <v-col
-                  cols="6"
-                  sm="2"
-                  md="1"
-                  class="text-center pr-3"
-                  v-if="item.isopen"
-                >
-                  <v-icon class="mdi mdi-lock"></v-icon>
-                </v-col>
-              </v-row>
-            </v-list-item-content>
-          </template>
-          <!-- 펼쳤을 때 화면 -->
-          <template>
-            <v-layout class="ma-2" row>
-              <v-list-item :key="item.id">
-                <v-list-item-content class="pt-0 pb-1 d-block">
-                  <v-row class="px-2">
-                    <!-- 내용 -->
-                    <v-col cols="12" md="9">
-                      <!-- 카테고리 -->
-                      <v-row>
-                        <v-col cols="4">
-                          <span class="font-weight-bold">카테고리</span>
-                        </v-col>
-                        <v-col cols="8">{{ item.minor_class.name }}</v-col>
-                      </v-row>
-                      <!-- 현재상태 -->
-                      <v-row>
-                        <v-col cols="4">
-                          <span class="font-weight-bold">상태</span>
-                        </v-col>
-                        <v-col cols="8">{{ item.status }}</v-col>
-                      </v-row>
-                      <!-- 스터디 소개글 -->
-                      <v-row>
-                        <v-col cols="4">
-                          <span class="font-weight-bold">스터디 목표</span>
-                        </v-col>
-                        <v-col cols="8">{{ item.goal }}</v-col>
-                      </v-row>
-                      <!-- 시작시간 -->
-                      <v-row>
-                        <v-col cols="4">
-                          <span class="pt-0 font-weight-bold">시작날짜</span>
-                        </v-col>
-                        <v-col cols="8">{{ item.start_date }}</v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="4">
-                          <span class="pt-0 font-weight-bold">종료날짜</span>
-                        </v-col>
-                        <v-col cols="8">{{ item.end_date }}</v-col>
-                      </v-row>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      md="3"
-                      class="justify-center align-center pa-0"
-                    >
-                      <v-btn
-                        class="white lighten-3"
-                        elevation="0"
-                        @click="(groupModal = true), (modalItem = item)"
-                      >
-                        <span
-                          class="dark--text"
-                          style="text-decoration:underline;"
-                          >view detail</span
+                      }}
+                    </span>
+                  </v-col>
+                  <v-col cols="6" sm="2" md="1" class="text-center pr-3" v-if="item.isopen">
+                    <v-icon class="mdi mdi-lock"></v-icon>
+                  </v-col>
+                </v-row>
+              </v-list-item-content>
+            </template>
+            <v-divider />
+            <v-divider />
+            <!-- 펼쳤을 때 화면 -->
+            <template>
+              <v-layout class="ma-2" row>
+                <v-list-item :key="item.id">
+                  <v-list-item-content class="pt-0 pb-1 d-block">
+                    <v-row class="px-2">
+                      <!-- 내용 -->
+                      <v-col cols="12" md="9">
+                        <!-- 카테고리 -->
+                        <v-row>
+                          <v-col cols="4">
+                            <span class="font-weight-bold">카테고리</span>
+                          </v-col>
+                          <v-divider vertical class="mr-2"/>
+                          <v-col cols="7">{{ item.minor_class.name }}</v-col>
+                        </v-row>
+                        <!-- 현재상태 -->
+                        <v-row>
+                          <v-col cols="4">
+                            <span class="font-weight-bold">상태</span>
+                          </v-col>
+                          <v-divider vertical class="mr-2"/>
+                          <v-col cols="7">{{ item.status }}</v-col>
+                        </v-row>
+                        <!-- 스터디 소개글 -->
+                        <v-row>
+                          <v-col cols="4">
+                            <span class="font-weight-bold">스터디 목표</span>
+                          </v-col>
+                          <v-divider vertical class="mr-2"/>
+                          <v-col cols="7">{{ item.goal }}</v-col>
+                        </v-row>
+                        <!-- 시작시간 -->
+                        <v-row>
+                          <v-col cols="4">
+                            <span class="pt-0 font-weight-bold">시작날짜</span>
+                          </v-col>
+                          <v-divider vertical class="mr-2"/>
+                          <v-col cols="7">{{ item.start_date }}</v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="4">
+                            <span class="pt-0 font-weight-bold">종료날짜</span>
+                          </v-col>
+                          <v-divider vertical class="mr-2"/>
+                          <v-col cols="7">{{ item.end_date }}</v-col>
+                        </v-row>
+                      </v-col>
+                      <v-col cols="12" md="3" class="justify-center align-center pa-0">
+                        <v-btn
+                          class="white lighten-3"
+                          elevation="0"
+                          @click="(groupModal = true), (modalItem = item)"
                         >
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-list-item-content>
-              </v-list-item>
-              <group-modal
-                :group-modal="groupModal"
-                :study-info="modalItem"
-                v-on:close="modalClose"
-              />
-            </v-layout>
-          </template>
-        </v-list-group>
+                          <span class="dark--text" style="text-decoration:underline;">view detail</span>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-list-item-content>
+                </v-list-item>
+                <group-modal
+                  :group-modal="groupModal"
+                  :study-info="modalItem"
+                  v-on:close="modalClose"
+                />
+              </v-layout>
+              <v-divider />
+              <v-divider />
+            </template>
+          </v-list-group>
+        </v-card>
       </v-list>
     </v-card>
-  </v-content>
+  </div>
 </template>
 
 <script>

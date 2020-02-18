@@ -1,7 +1,6 @@
 <template>
   <v-card
     id="canvas_card"
-    height="653"
     oncontextmenu="return false"
     onselectstart="return false"
     ondragstart="return false"
@@ -185,7 +184,6 @@ export default {
       };
       image.src = data.image_data;
     });
-    console.log(document.getElementById("slider"));
 
     // window.onresize = () => {
     //   console.log(document.getElementById("canvas_card").offsetHeight);
@@ -194,40 +192,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-#canvas_card {
-  /* width: 1142px; */
-  /* height: 653px; */
-  z-index: 1;
-}
-#canvas {
-  position: absolute;
-  left:11px;
-  z-index: 2;
-}
-.btns {
-  position: absolute;
-  position: absolute;
-  position: absolute;
-  top: 10px;
-  z-index: 3;
-}
-#swatches {
-  translate: transformY(-10%);
-  left: 20px;
-}
-#pencil {
-  z-index: 3;
-  top: 11px;
-  left: 70px;
-}
-#clear {
-  z-index: 3;
-  top: 11px;
-  left: 120px;
-}
-
-.v-messages.theme--light {
-  display: none;
-}
-</style>

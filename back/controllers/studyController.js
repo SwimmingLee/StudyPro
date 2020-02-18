@@ -1,4 +1,4 @@
-import {users, studies, users_and_studies, applies, days, tags, studies_and_tags, marked_studies, minor_classes} from "../models"
+import {users, studies, users_and_studies, applies, days, tags, studies_and_tags, marked_studies, minor_classes, attendences } from "../models"
 import {study_posts as study_post_model, study_post_likes as study_post_like_model, study_comments as study_comment_model} from "../models"
 import multer from "multer"
 import path from "path"
@@ -361,3 +361,44 @@ export const study_image_upload = multer({
         }
     })
 });
+
+
+export const read_today_attendence = async function (req, res) {
+    
+    
+    try {
+        const user = res.locals.user;
+        
+        const {study_id,user_id,date} = req.body;
+        
+        let today_attendence = await attendences.read_today_attendence(study_id, user_id,date)
+        
+        
+        if (today_attendence) {
+            res.send({ state: "true" })
+        } else {
+            res.send({ state: "false" })
+        }
+    } catch (err) {
+        console.log(err);
+        
+        res.send(err)
+    }
+};
+
+export const attendence = function (req, res) {
+    
+    try {
+        const user = res.locals.user;
+        const {study_id,user_id} = req.body;
+
+        let today_attendence = attendences.create_attendence(study_id, user_id)
+        if (today_attendence) {
+            res.send({ state: "success" })
+        } else {
+            res.send({ state: "fail" })
+        }
+    } catch (err) {
+        res.send(err)
+    }
+};

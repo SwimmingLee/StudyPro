@@ -1,8 +1,10 @@
 <template>
   <div id="createGroup" class="mx-10">
-    <v-content>
-      <p class="ml-5 cus-title">그룹 생성</p>
-      <v-row class="ml-1 mb-2">
+    <v-card flat>
+      <v-card-title>
+        그룹 생성
+      </v-card-title>
+      <v-row class="ml-1 mb-2 mt-10">
         <span class="red--text">*</span>는 필수항목입니다.
       </v-row>
       <hr />
@@ -261,7 +263,7 @@
           >
         </v-col>
       </v-row>
-    </v-content>
+    </v-card>
   </div>
 </template>
 
@@ -353,8 +355,8 @@ export default {
       this.validation();
     },
     starttime() {
-      console.log(this.starttime)
-      console.log(this.starttime.split(':')[0] + this.starttime.split(':')[1])
+      console.log(this.starttime);
+      console.log(this.starttime.split(":")[0] + this.starttime.split(":")[1]);
       this.validation();
     },
     endtime() {
@@ -418,10 +420,10 @@ export default {
       }
 
       //시간체크
-      var start_hour = this.starttime.split(':')[0];
-      var start_minute = this.starttime.split(':')[1];
-      var end_hour = this.endtime.split(':')[0];
-      var end_minute = this.endtime.split(':')[1];
+      var start_hour = this.starttime.split(":")[0];
+      var start_minute = this.starttime.split(":")[1];
+      var end_hour = this.endtime.split(":")[0];
+      var end_minute = this.endtime.split(":")[1];
       if (
         start_hour > end_hour ||
         (start_hour == end_hour && start_minute > end_minute)
@@ -444,13 +446,13 @@ export default {
       formData.append(
         "start_time",
         this.starttime
-          ? this.starttime.split(':')[0] + this.starttime.split(':')[1]
+          ? this.starttime.split(":")[0] + this.starttime.split(":")[1]
           : "0000"
       );
       formData.append(
         "end_time",
         this.endtime
-          ? this.endtime.split(':')[0] + this.endtime.split(':')[1]
+          ? this.endtime.split(":")[0] + this.endtime.split(":")[1]
           : "0000"
       );
       formData.append("status", this.status);
@@ -505,10 +507,6 @@ export default {
 </script>
 
 <style>
-.cus-title {
-  font-size: 30px;
-}
-
 .v-text-field__details {
   display: inline-block !important;
 }

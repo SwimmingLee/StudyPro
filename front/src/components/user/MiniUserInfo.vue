@@ -2,15 +2,6 @@
   <div>
     <v-row class="mx-1">
       <v-col>
-        <v-btn to="/msgbox" elevation="0" color="white">
-          
-            <v-badge :content="numAlarm" :value="numAlarm" color="red" overlap>
-            <v-icon style="color:black">mdi-email</v-icon>
-            </v-badge>
-            <span :class="numAlarm ? 'ml-5': 'ml-2'">쪽지함</span>       
-        </v-btn>
-      </v-col>
-      <v-col>
         <v-btn @click="logout()" class="transparent" elevation="0" style="float:right;">
           <span class="italic">로그아웃</span>
         </v-btn>

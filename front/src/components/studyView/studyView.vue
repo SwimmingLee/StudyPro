@@ -2,7 +2,7 @@
   <v-content id="study" class="pa-0">
     <v-navigation-drawer absolute permanent expand-on-hover v-if="isAuth">
       <v-list>
-        <v-list-item class>
+        <v-list-item class="mt-2">
           <v-list-item-avatar>
             <v-img :src="currentUser.profile_url"></v-img>
           </v-list-item-avatar>
@@ -23,11 +23,11 @@
           <v-list-item-icon>
             <v-icon medium>developer_board</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>WorkSpace</v-list-item-title>
+          <v-list-item-title>스터디 룸</v-list-item-title>
         </v-list-item>
       </v-list>
       <v-divider class="mx-3" />
-      <v-list>
+      <!-- <v-list>
         <v-list-item @click="routeTo()">
           <v-list-item-icon>
             <v-icon medium>check</v-icon>
@@ -40,14 +40,21 @@
           </v-list-item-icon>
           <v-list-item-title>관리자 메뉴</v-list-item-title>
         </v-list-item>
-      </v-list>
+      </v-list> -->
     </v-navigation-drawer>
 
     <v-card flat>
-      <v-img src="@/assets/images/cherryblossom.jpg" aspect-ratio="7"></v-img>
+      <div id="group-img-container">
+        <v-img src="@/assets/images/banner/group_default.png" />
+        <v-row justify="end">
+          <v-btn text id="group-img-btn">
+            <v-icon color="white">settings</v-icon>
+          </v-btn>
+        </v-row>
+      </div>
       <v-row no-gutters justify="center">
         <v-col offset="1" cols="11" class="mr-7 mt-5">
-          <router-view></router-view>
+          <router-view @closeChild="closeChild" @toWorkspace="toWorkspace"></router-view>
         </v-col>
       </v-row>
     </v-card>
@@ -55,6 +62,10 @@
 </template>
 
 <script>
+import StudyService from "@/services/study.service";
+import AuthService from "@/services/auth.service";
+let open_workspace = null;
+
 export default {
   props: ["study_id"],
   data() {
@@ -94,16 +105,21 @@ export default {
     };
   },
 
-  created() {
-    window.closechild = () => {
-      this.workspace.close();
-    };
-  },
+  created() {},
 
-  mounted() {
+  async mounted() {
     if (!this.isAuth) {
       this.$router.push({ name: "home" });
     }
+    await this.loadStudyInfo();
+    if (this.studyInfo.level) {
+      this.isJoined = true;
+    } else {
+      this.isJoined = false;
+    }
+    window.closechild = () => {
+      open_workspace.close();
+    };
   },
 
   computed: {
@@ -116,15 +132,29 @@ export default {
   },
 
   methods: {
+    async loadStudyInfo() {
+      await AuthService.checkUserDefault();
+      this.studyInfo = await StudyService.getStudyInfo({
+        study_id: this.study_id
+      }).then(res => {
+        console.log("data", res);
+        return res.data;
+      });
+    },
+
     routeTo(route) {
       this.$router.push({ name: route.routes, params: route.params });
     },
     toWorkspace() {
+      if (!this.isJoined) {
+        window.alert("스터디에 가입해주세요");
+        return;
+      }
       let workspace = this.$router.resolve({
         name: "workspace",
         params: { study_id: this.study_id }
       });
-      this.workspace = window.open(workspace.href, "WORKSPACE", "a");
+      open_workspace = window.open(workspace.href, "WORKSPACE", "a");
     }
   }
 };

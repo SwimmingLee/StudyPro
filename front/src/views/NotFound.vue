@@ -10,7 +10,7 @@
             <v-col cols="7">
               <v-card flat align="center" style="width: 100%; height: 100%">
                     <p>page not found</p>
-                <p>¿äÃ»ÇÏ½Å ÆäÀÌÁö¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù...</p>
+                <p>ìš”ì²­í•˜ì‹  íŽ˜ì´ì§€ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤...</p>
               </v-card>
             </v-col>
           </v-row>

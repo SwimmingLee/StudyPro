@@ -13,7 +13,7 @@
       </v-btn>
     </v-flex>
     <v-divider class="mx-3 mt-5" />
-    <v-row>
+    <v-row no-gutters>
       <v-col>
         <router-view class="pa-0" />
       </v-col>

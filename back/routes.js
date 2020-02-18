@@ -25,6 +25,8 @@ const STUDY_MARK = "/mark";
 const STUDY_DETAIL = "/detail";
 const STUDY_APPLY = "/apply"
 const STUDY_JOIN = "/join"
+const CHECK_ATTNEDENCE = "/check_attendence"
+const ATTNEDENCE = "/attendence"
 const CHANGE_LEVEL = "/change-level"
 
 // Post
@@ -58,6 +60,7 @@ const ALARM_NUMBER = "/number";
 const EMAIL = "/email"
 const AUTH = "/auth"
 const NOTICE_APPLY = "/notice_apply"
+const NOTICE_DROP = "/notice_drop"
 const RESULT_APPLY = "/result_apply"
 
 const routes = {
@@ -84,8 +87,10 @@ const routes = {
     study_mark : STUDY_MARK,
     study_apply: STUDY_APPLY,
     study_join : STUDY_JOIN,
+    check_attendence : CHECK_ATTNEDENCE,
+    attendence : ATTNEDENCE,
     change_level : CHANGE_LEVEL,
-
+        
     posts : POSTS,
     post_number: POST_NUMBER,
     post_list : POST_LIST,
@@ -111,6 +116,7 @@ const routes = {
     email:EMAIL,
     auth:AUTH,
     notice_apply : NOTICE_APPLY,
+    notice_drop : NOTICE_DROP,
     result_apply : RESULT_APPLY,
 }
 export default routes;

@@ -21,7 +21,14 @@
         </v-card>
       </v-col>
     </v-row>
-    <profile :profile="profile" :show_profile_id="show_profile_id" :debuging="debuging"></profile>
+    <profile :user="user" :profile="profile" :show_profile_id="show_profile_id" @msgModal="msgModal"></profile>    
+    <template>
+      <group-modal
+        :group-modal="groupModal"
+        :user="msg_user"
+        v-on:close="modalClose"
+      />
+    </template>
   </v-card>
 </template>
 
@@ -40,6 +47,9 @@ export default {
   props: ["socket", "user", "study_id", "sharing_id", "debuging"],
   data() {
     return {
+      groupModal: false,
+      msg_user: {},
+
       // FaceTalk
       post_img: null,
       local_video: null,
@@ -57,7 +67,6 @@ export default {
       remote_streams: [null, null, null, null, null, null],
       show_profile_id: this.user.user_id,
       profile : {
-        fav: false,
         showProfile: false,
         x: 0,
         y: 0,
@@ -75,9 +84,18 @@ export default {
     }
   },
   components: {
-    profile: profile
+    profile: profile,
+    
+    GroupModal: () => import("@/components/user/messenger/MsgSendModal")
   },
   methods: {
+    modalClose() {
+      this.groupModal = false;
+    },
+    msgModal(data) {
+      this.groupModal = data.groupModal
+      this.msg_user = data.msg_user
+    },
     redrawing(e) {
 
       let temp_btn = e.target
@@ -94,7 +112,10 @@ export default {
         const add_stream = this.video_streamings[i] ? this.local_dummy_stream : this.local_stream
         this.video_streamings[i] = !this.video_streamings[i]
         temp_btn.src = this.video_streamings[i] ? this.camera_on_img : this.camera_off_img
-        
+        console.log('addstream', add_stream)
+        console.log('delete', delete_stream)
+        console.log('localstream', this.local_stream)
+        console.log('---------------------------')
         for (let i in this.peer_connections) {
           let pc = this.peer_connections[i]
           pc.removeStream(delete_stream)
@@ -203,8 +224,8 @@ export default {
         mute_button.style.zIndex = "5";
         mute_button.style.width = "20px";
         mute_button.style.height = "20px";
-        mute_button.style.right = '5px'
-        mute_button.style.bottom = '5px'
+        mute_button.style.right = '5px';
+        mute_button.style.bottom = '5px';
 
         const camera_button = document.createElement('img')
         camera_button.src = this.camera_on_img
@@ -213,8 +234,8 @@ export default {
         camera_button.style.zIndex = "5";
         camera_button.style.width = "20px";
         camera_button.style.height = "20px";
-        camera_button.style.right = '30px'
-        camera_button.style.bottom = '5px'
+        camera_button.style.right = '30px';
+        camera_button.style.bottom = '5px';
 
 
         const remote_block = this.remote_videos[video_num]
@@ -226,7 +247,7 @@ export default {
         mute_button.onclick = this.mute
       }
 
-      t_pc.addStream(this.local_stream);
+      t_pc.addStream(this.local_stream)
 
       return t_pc;
     },
@@ -238,8 +259,6 @@ export default {
       this.remote_videos[video_num].appendChild(this.createEye())
       this.remote_videos[video_num].lastChild.style.left = "25%"
       this.remote_videos[video_num].lastChild.style.top = "25%"
-
-
     },
 
     deleteBorder(video_num, before_id) {
@@ -261,7 +280,6 @@ export default {
   },
 
   created() {
-    console.log("내아이디 : ", this.user.user_id, '내 닉네임 : ', this.user.user_nickname);
     this.mute_img = require("../../assets/images/mute.png")
     this.volume_img = require("../../assets/images/volume.png")
     this.camera_off_img = require("../../assets/images/camera_off.png")
@@ -291,7 +309,6 @@ export default {
       })
       .then(this.get_stream) :
       this.get_stream(this.canvas.captureStream(25))
-      
 
     this.socket.on("join", message => {
       const user_id = message.user_id;
@@ -313,7 +330,8 @@ export default {
               study_id: this.study_id,
               from: this.user.user_id,
               from_profile: this.user.user_profile_url || this.no_signal_img,
-              to: user_id
+              to: user_id,
+              isStreaming: this.video_streamings[0],
             })
           }, e => {console.log(e)})
         })      
@@ -325,6 +343,7 @@ export default {
       this.deleteBorder(video_num, this.sharing_id)
       this.connected_users[video_num] = null
       this.user_profiles[video_num] = null
+      this.video_streamings[video_num] = true
       let temp_video =  this.remote_videos[video_num]
 
       while (temp_video.firstChild) temp_video.removeChild(temp_video.lastChild)
@@ -349,6 +368,7 @@ export default {
           if (!this.connected_users[idx]) {
             this.connected_users[idx] = from;
             this.user_profiles[idx] = data.from_profile
+            this.video_streamings[idx] = data.isStreaming
             break;
           }
         }

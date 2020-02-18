@@ -4,7 +4,7 @@ import AuthHeader from './auth.header'
 const URL = process.env.VUE_APP_API_URL + 'users/'
 
 class UserService {
-    // 회원정보 요청 - GET - 'users/:uid'
+    // 회원정보 요청요청 - GET - 'users/:uid'
     getUserContent(uid) {
         AuthHeader.changeHeadersToken()
         return axios.get(URL + uid)

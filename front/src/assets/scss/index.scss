@@ -1,5 +1,12 @@
-// Core
-// Custom
-@import './custom/custom.scss';
+@import './custom/common.scss';
 @import './custom/fonts.scss';
-@import './custom/animation.scss' // Vendor
+@import './custom/animation.scss';
+@import './custom/app.scss';
+@import './custom/header.scss';
+@import './custom/homeTop.scss';
+@import './custom/study.scss';
+@import './custom/board.scss';
+@import './custom/mypage.scss';
+@import './custom/calendar.scss';
+@import './custom/studydetail.scss';
+@import './custom/workspace.scss';

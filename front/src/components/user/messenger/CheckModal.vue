@@ -6,18 +6,6 @@
           메시지를 전송하시겠습니까?
         </v-card-text>
 
-        <!-- <v-card-text class="pa-5">
-          {{titleText}}
-        </v-card-text>
-
-        <v-card-text class="pa-5">
-          {{item.sender}}
-        </v-card-text>
-
-        <v-card-text class="pa-5">
-          {{mainText}}
-        </v-card-text> -->
-
         <v-card-actions class="pt-0 pr-5">
           <v-spacer></v-spacer>
           <v-btn

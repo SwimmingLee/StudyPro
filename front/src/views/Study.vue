@@ -1,7 +1,7 @@
 <template>
-  <v-content app id="study" class="pa-0">
+  <div id="study">
     <router-view/>
-  </v-content>
+  </div>
 </template>
 
 <script>

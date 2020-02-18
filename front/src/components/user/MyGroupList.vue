@@ -16,7 +16,6 @@
       :headers="headers"
       :items="items"
       :search="search"
-      show-select
       @click:row="clicked($event)"
     >
       <v-alert

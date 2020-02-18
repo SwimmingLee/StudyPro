@@ -1,5 +1,5 @@
 <template>
-  <v-content app class="pa-0">
+  <div id="footer">
     <v-btn
       v-scroll="onScroll"
       v-show="toTopBtn"
@@ -7,13 +7,13 @@
       fixed
       bottom
       right
-      class="red pa-0"
+      class="red"
       @click="toTop"
     >
       <v-icon class="white--text">fa-arrow-up</v-icon>
     </v-btn>
-    <v-footer class="customTheme" padless style="opacity:.7;">
-      <v-row justify="center" no-gutters>
+    <v-footer class="customTheme" padless>
+      <v-row justify="center">
         <!-- <v-btn
           v-for="link in links"
           :key="link"
@@ -21,10 +21,11 @@
           text
           rounded
           class="my-2"
+          @click="effect(link)"
           >{{ link }}</v-btn
         > -->
         <v-col
-          class="customTheme lighten-1 py-3 text-center white--text"
+          class="customTheme lighten-1 text-center white--text"
           cols="12"
         >
           <span class="font-weight-light">StudyPRO</span>
@@ -33,7 +34,7 @@
         </v-col>
       </v-row>
     </v-footer>
-  </v-content>
+  </div>
 </template>
 
 <script>
@@ -41,10 +42,26 @@ export default {
   data() {
     return {
       toTopBtn: false,
-      links: ["Home", "About Us", "Services", "Blog", "Contact Us"]
+      links: ["Home", "About Us", "Services", "Blog", "Contact Us"],
+      effects: {
+        aboutUs: false
+      }
     };
   },
   methods: {
+    effect(link) {
+      switch (link) {
+        case "About Us":
+          this.effects.aboutUs = !this.effects.aboutUs
+          setTimeout(() => {
+              window.scrollTo(0, document.body.scrollHeight)
+            }, 0.01);
+          break;
+      
+        default:
+          break;
+      }
+    },
     onScroll(scr) {
       if (typeof window === "undefined") return;
       const top = window.pageYOffset || scr.target.scrollTop || 0;

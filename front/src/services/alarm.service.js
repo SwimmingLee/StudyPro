@@ -1,4 +1,5 @@
 import axios from 'axios'
+import AuthHeader from './auth.header'
 
 const URL = process.env.VUE_APP_API_URL + "alarms/";
 
@@ -20,11 +21,13 @@ class AlarmService {
     }
 
     sendAlarm(payload) {
-        const { to , title, content} = payload
+        const { to, title, content } = payload
         return axios.post(URL, {
-            to, title, content
+            to,
+            title,
+            content
         })
-        
+
     }
 
     checkAlarm(payload) {
@@ -34,6 +37,7 @@ class AlarmService {
     }
 
     getAlarmNumber() {
+        AuthHeader.changeHeadersToken();
         return axios.get(URL + "number")
     }
 }

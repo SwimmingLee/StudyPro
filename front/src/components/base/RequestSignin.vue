@@ -3,8 +3,7 @@
     <v-row align="center" style="height:400px;">
       <v-col cols="12" class="text-center">
         <div>
-          <span class="display-2 font-weight-thin">Study</span>
-          <span class="display-2">PRO</span>
+          <v-img src="@/assets/images/LogoText7.png" contain style="max-height:80px;"></v-img>
         </div>
         <div class="mt-4">
           <slot name="text"></slot>

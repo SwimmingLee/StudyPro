@@ -60,7 +60,7 @@ export const notice_apply = (req,res) => {
     let title = '스터디 가입신청 알림'
     let content = '<h1>'+study_name+' 에 가입신청이 왔습니다.</h1>'
     content += '<span>가입 목록 보러가기 : </span><br>'
-    content += 'http://localhost:8000/home'
+    content += 'https://i02a106.p.ssafy.io/study/'+study_id +'/member'
     
     //전송
     send_mail(user_email, title, content);
@@ -73,18 +73,34 @@ export const result_apply = (req,res) => {
     const {user_email, study_name, study_id, result}  = req.body;
     let title, content;
     if(result){
-        let title = study_name + '에 가입 신청이 승인되었습니다.'
-        let content = '<h1>'+study_name+'그룹에 가입신청이 왔습니다.</h1>'
-        content += '<span>내 가입 목록 이동 : </span><br>'
-        content += 'http://localhost:8000/home'
+        title = study_name + '에 가입 신청이 승인되었습니다.'
+        content = '<h1>'+study_name+'그룹에 가입신청이 승인되었습니다.</h1>'
+        content += '<span>가입 스터디로 이동 : </span><br>'
+        content += 'https://i02a106.p.ssafy.io/study/'+study_id
     }else{
         title = study_name + '에 가입 신청이 거절되었습니다.'
-        content = '<h1>'+study_name+'그룹에 가입신청이 왔습니다.</h1>'
-        content += '<span>내 가입 목록 이동 : </span><br>'
-        content += 'http://localhost:8000/home'
+        content = '<h1>'+study_name+'그룹에 가입신청이 거절되었습니다.</h1>'
+        content += '<span>스터디로 이동 : </span><br>'
+        content += 'https://i02a106.p.ssafy.io/study/'+study_id
     }
     //전송
     send_mail(user_email, title, content);
     res.send("메일 발송 완료")
 }
+
+export const notice_drop = (req,res) => {
+    connect_smtp();
+    const {user_email, study_name, study_id}  = req.body;
+
+    let title = '스터디 탈퇴 안내'
+    let content = '<h1>'+study_name+' 에서 탈퇴 당하셨습니다..</h1>'
+    content += '<span>스터디로 이동 : </span><br>'
+    content += 'https://i02a106.p.ssafy.io/study/'+study_id
+
+    //전송
+    send_mail(user_email, title, content);
+    res.send("메일 발송 완료")
+}
+
+
 

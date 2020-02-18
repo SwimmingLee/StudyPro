@@ -10,51 +10,99 @@
         </v-row>
       </v-card-title>
 
-      <v-list two-line>
-        <v-list-item-group v-model="selected" multiple active-class="pink--text">
-          <template v-for="(item, index) in items">
-            <v-list-item :key="item.title">
-              <template v-slot:default="{ active }">
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.title"></v-list-item-title>
-                </v-list-item-content>
-
-                <v-list-item-action>
-                  <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
-                  <v-icon v-if="!active" color="grey lighten-1">star_border</v-icon>
-
-                  <v-icon v-else color="yellow">star</v-icon>
-                </v-list-item-action>
-              </template>
-            </v-list-item>
-
-            <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
-          </template>
-        </v-list-item-group>
+      <v-card flat v-show="items.length === 0">
+        <v-row no-gutters style="height:100%" align="center" justify="center">
+          <v-col cols="12">
+            <v-card flat align="center" style="width: 100%; height: 100%" class="mb-7">
+              <span class="calAlarm">오늘의 일정이 없습니다.</span>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-card>
+      <v-list two-line v-show="!(items.length === 0)">
+        <v-row no-gutters>
+          <v-col cols="6">
+            <v-card outlined min-height="300" class="mx-2">
+              <v-card-title>오늘의 할 일</v-card-title>
+              <v-divider class="mx-2" />
+              <v-list-item-group v-model="selected" multiple active-class="pink--text">
+                <template v-for="(item, index) in items">
+                  <v-list-item v-show="!isSelected(index)" :key="item.title">
+                    <template>
+                      <v-list-item-content>
+                        <v-list-item-title v-text="item.content"></v-list-item-title>
+                      </v-list-item-content>
+                      <v-list-item-action>
+                        <v-list-item-action-text v-text="item.start_date"></v-list-item-action-text>
+                        <v-icon color="grey lighten-1">favorite_border</v-icon>
+                      </v-list-item-action>
+                    </template>
+                  </v-list-item>
+                  <v-divider class="mx-2" v-if="index + 1 < items.length" :key="index"></v-divider>
+                </template>
+              </v-list-item-group>
+            </v-card>
+          </v-col>
+          <v-col cols="6">
+            <v-card outlined min-height="300" class="mx-2">
+              <v-card-title>완료한 일</v-card-title>
+              <v-divider class="mx-2" />
+              <v-list-item-group v-model="selected" multiple active-class="pink--text">
+                <template v-for="(item, index) in items">
+                  <v-list-item v-show="isSelected(index)" :key="item.title">
+                    <template>
+                      <v-list-item-content>
+                        <v-list-item-title v-text="item.content"></v-list-item-title>
+                      </v-list-item-content>
+                      <v-list-item-action>
+                        <v-list-item-action-text v-text="item.start_date"></v-list-item-action-text>
+                        <v-icon color="yellow">favorite</v-icon>
+                      </v-list-item-action>
+                    </template>
+                  </v-list-item>
+                  <v-divider class="mx-2" v-if="index + 1 < items.length" :key="index"></v-divider>
+                </template>
+              </v-list-item-group>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-list>
     </v-card>
   </v-content>
 </template>
 
 <script>
+import WorkService from "@/services/work.service";
+
 export default {
+  props: ["study_id"],
   data: () => ({
-    selected: [2],
-    items: [
-      {
-        action: "15 min",
-        title: "영어 단어 외우기"
-      },
-      {
-        action: "2 hr",
-        title: "자기소개서 쓰기"
-      },
-      {
-        action: "6 hr",
-        title: "집에 가기"
+    selected: [],
+    items: []
+  }),
+
+  created() {
+    this.getTodo();
+  },
+
+  methods: {
+    isSelected(index) {
+      for (let i = 0; i < this.selected.length; i++) {
+        if (this.selected[i] === index) return true;
       }
-    ]
-  })
+      return false;
+    },
+    async getTodo() {
+      const date = new Date();
+      const tmp = await WorkService.getWorks({
+        type: "study",
+        study_id: this.study_id,
+        today: date
+      });
+      this.items = tmp.data;
+      console.log(this.items);
+    }
+  }
 };
 </script>
 
@@ -62,5 +110,9 @@ export default {
 .Hline {
   font-size: 25px !important;
   font-weight: bold !important;
+}
+.calAlarm {
+  font-size: 18px !important;
+  color: #808080 !important;
 }
 </style>

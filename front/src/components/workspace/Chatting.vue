@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-card outlined class="pt-1 px-0">
-      <v-card  height="286" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #c0c0c0">
-        <v-list class="ma-0 pa-0" ref="chat" outlined v-for="(data, index) in messages" :key="index" :align="'나' === data[0] ? `right` : data[0] ? `left` : 'center'" style="background-color: #c0c0c0">
+      <v-card  height="286" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #e9e9e9">
+        <v-list class="ma-0 pa-0" ref="chat" outlined v-for="(data, index) in messages" :key="index" :align="'나' === data[0] ? `right` : data[0] ? `left` : 'center'" style="background-color: #e9e9e9">
           <font style="display : block" size="2">{{ data[0] === '나' ? '' : data[0] }}</font>
             <font>
               <div v-for="(message,in_index) in data[1]" :key="`${index}-${in_index}`">
-              <span class="chat" :style="data[0] === '나' ? 'background-color: #fef01b' : data[0] ? 'background-color: #ffffff' : 'background-color: #c0c0c0'"  size="2">
+              <span class="chat" :style="data[0] === '나' ? 'background-color: #fef01b' : data[0] ? 'background-color: #ffffff' : 'background-color: #e9e9e9'"  size="2">
               {{message}}
               </span>
               </div>
@@ -92,12 +92,12 @@ export default {
     });
     this.socket.on("join", data => {
       this.prvUsr = '공지'
-      const message = data.user_id === this.user.user_id ? '스터디룸에 입장하였습니다' : `${data.user_nickname} 님이 입장하였습니다`
+      const message = data.user_id == this.user.user_id ? '스터디룸에 입장하였습니다' : `${data.user_nickname} 님이 입장하였습니다`
       this.messages.push(['', [message]])
     })
     this.socket.on("leave", data => {
       this.prvUsr = '공지'
-      const message = data.user_id === this.user.user_id ? '스터디룸을 나갔습니다' : `${data.user_nickname} 님이 퇴장하였습니다`
+      const message = data.user_id == this.user.user_id ? '스터디룸을 나갔습니다' : `${data.user_nickname} 님이 퇴장하였습니다`
       this.messages.push(['', [message]])
     })
   }

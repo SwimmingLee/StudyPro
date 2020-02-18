@@ -10,7 +10,8 @@ class workService {
         return axios.get(URL, {
             params:{
                 type:payload.type,
-                study_id:payload.study_id
+                study_id:payload.study_id,
+                today:payload.today,
             }
         })
     }

@@ -101,6 +101,7 @@ export default {
       t_video.style.zIndex = 1;
       t_video.autoplay = true;
       t_video.playsinline = true;
+      t_video.controls = true;
 
       return t_video;
     },
@@ -144,7 +145,11 @@ export default {
       
       if (sharing_user_id == this.user.user_id) {
         navigator.mediaDevices
-        .getDisplayMedia({ video: true })
+        .getDisplayMedia({ video: true, audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100
+          } })
         .then(this.get_stream)
         .then(() => {
           for (let peer_id of this.connected_users) {
@@ -245,7 +250,6 @@ export default {
     width: 100%;
     z-index : 1;
     position: absolute;
-
   }
   .btns {
     position: absolute;

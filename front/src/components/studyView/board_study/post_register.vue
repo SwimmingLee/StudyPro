@@ -8,10 +8,7 @@
           </v-flex>
           <v-card class="pa-3 px-5" outlined>
             <div v-if="isAuth">
-              <v-row justify="center">
-                <v-col cols="12" class="py-0">
-                  <v-subheader>제목 :</v-subheader>
-                </v-col>
+              <v-row justify="center" class="mt-3">
                 <v-col cols="12" md="3" sm="4" class="py-0">
                   <v-select
                     v-model="postData.board"
@@ -26,20 +23,13 @@
                   <v-text-field v-model="postData.title" clearable label="제목을 입력하세요" outlined dense></v-text-field>
                 </v-col>
               </v-row>
-              <v-divider />
-              <v-row>
-                <v-col cols="12" class="py-0">
-                  <v-subheader>내용 :</v-subheader>
-                </v-col>
-              </v-row>
+              <v-divider class="mb-5 mt-0"/>
               <v-row style="min-height: 500px">
                 <v-col class="py-0">
-                  <tiptap-vuetify
-                    placeholder="내용을 입력하세요..."
-                    v-model="postData.content"
-                    :extensions="extensions"
-                    :toolbar-attributes="{ color: 'customTheme', dark: true }"
-                  />
+                  <Editor v-model="postData.content"
+                  mode="wysiwyg"
+                  previewStyle="vertical"
+                  height="500px"/>
                 </v-col>
               </v-row>
               <v-divider class="mt-5 mb-3" />
@@ -112,42 +102,16 @@
 <script>
 import PostService from "@/services/post.service";
 
-import Vue from "vue";
-import Vuetify from "vuetify";
+import "tui-editor/dist/tui-editor.css";
+import "tui-editor/dist/tui-editor-contents.css";
+import "codemirror/lib/codemirror.css";
 
-import {
-  TiptapVuetifyPlugin,
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Strike,
-  Underline,
-  Paragraph,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Link,
-  Code,
-  Blockquote,
-  HardBreak,
-  HorizontalRule,
-  History
-} from "tiptap-vuetify";
-import "tiptap-vuetify/dist/main.css";
-import "vuetify/dist/vuetify.min.css";
-
-const vuetify = new Vuetify();
-Vue.use(Vuetify);
-Vue.use(TiptapVuetifyPlugin, {
-  vuetify,
-  iconGroup: "md"
-});
+import { Editor } from "@toast-ui/vue-editor";
 
 export default {
   props: ["study_id"],
   components: {
-    TiptapVuetify,
+    Editor: Editor,
     requestSignin: () => import("@/components/base/RequestSignin")
   },
   data() {
@@ -168,31 +132,6 @@ export default {
       rules: [
         value => value.size < 5000000 || "File size should be less than 5 MB"
       ],
-
-      extensions: [
-        History,
-        Blockquote,
-        Bold,
-        Underline,
-        Strike,
-        Italic,
-        ListItem,
-        BulletList,
-        OrderedList,
-        [
-          Heading,
-          {
-            options: {
-              levels: [1, 2, 3]
-            }
-          }
-        ],
-        Link,
-        Code,
-        HorizontalRule,
-        Paragraph,
-        HardBreak
-      ]
     };
   },
 
@@ -211,14 +150,12 @@ export default {
       this.postData = post.data;
     },
     create() {
-      console.log("AAAAAAAAAAAAAAAA")
       let formData = new FormData();
       this.postData.writer = this.getUser().uid;
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i];
         formData.append("post_file", file);
       }
-      console.log("A", this.files)
       formData.append("type", this.postData.type);
       formData.append("study_id", this.study_id);
       formData.append("title", this.postData.title);

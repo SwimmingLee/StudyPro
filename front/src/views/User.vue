@@ -1,6 +1,6 @@
 <template>
   <div id="user">
-    <!-- <v-img src="@/assets/images/HeaderBackground.jpg" aspect-ratio="9"/> -->
+    <v-img src="@/assets/images/banner/mypage.png" />
     <router-view/>
   </div>
 </template>

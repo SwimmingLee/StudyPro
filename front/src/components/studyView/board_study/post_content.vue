@@ -30,7 +30,7 @@
       <v-row no-gutters class="mb-3">
         <v-col cols="12">
           <v-card flat class="pa-3">
-            <span v-html="this.post_contents.content"></span>
+            <Viewer :value="this.post_contents.content" />
           </v-card>
         </v-col>
       </v-row>
@@ -40,16 +40,48 @@
             <v-icon left small dark :class="post_like ? 'red--text' : ''" icon>favorite</v-icon>추천
             <span class="ma-1 ml-3">{{ this.post_contents.num_like + this.post_contents.like }}</span>
           </v-btn>
-          <v-btn v-if="!isWriter" class="mx-1 error">
+
+          <v-btn v-if="!isWriter" class="mx-1 error" @click.stop="report = true">
             <v-icon left small dark>report_problem</v-icon>신고하기
           </v-btn>
 
-          <v-dialog v-if="isWriter" v-model="dialog" persistent max-width="290">
-            <template v-slot:activator="{ on }">
-              <v-btn class="mx-1 mr-3 error" v-on="on">
-                <v-icon left small dark>delete</v-icon>글 삭제
-              </v-btn>
-            </template>
+          <v-dialog v-model="report" persistent max-width="450">
+            <v-card>
+              <v-card-title class="error white--text pa-3 pl-5">신고하기</v-card-title>
+              <v-card-text class="pb-0 mb-0">
+                <v-card-text class="pl-2 pb-0">▷ 신고 사유를 선택하세요.</v-card-text>
+                <v-container fluid>
+                  <v-checkbox class="pa-0 ma-0" v-model="selected" label="부적절한 홍보 게시글" value="0"></v-checkbox>
+                  <v-checkbox class="pa-0 ma-0" v-model="selected" label="청소년에게 부적합한 게시글" value="1"></v-checkbox>
+                  <v-checkbox class="pa-0 ma-0" v-model="selected" label="음란 게시글" value="2"></v-checkbox>
+                  <v-checkbox class="pa-0 ma-0" v-model="selected" label="악성코드 신고" value="3"></v-checkbox>
+                  <v-checkbox class="pa-0 ma-0" v-model="selected" label="욕설 신고" value="4"></v-checkbox>
+                </v-container>
+                <v-card-text class="pl-2">▷ 위 선택 사유에 대해 보다 자세히 입력해주세요.</v-card-text>
+                <v-textarea outlined class="mx-3" label="신고 사유를 자세히 입력해주세요."></v-textarea>
+              </v-card-text>
+              <v-card-actions class="pt-0">
+                <v-spacer></v-spacer>
+                <v-btn color="primary darken-1" text @click="report = false">이전으로</v-btn>
+                <v-btn color="error darken-1" text @click="reportSuccess = true">신고하기</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="reportSuccess" persistent max-width="290">
+            <v-card>
+              <v-card-title class="error white--text pa-2 pl-5">신고하기</v-card-title>
+              <v-card-text class="pa-4 pb-2">신고가 정상적으로 완료되었습니다.</v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary darken-1" text @click="reportSuccess = report = false">확인</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+          <v-btn v-if="isWriter" class="mx-1 mr-3 error" @click.stop="dialog = true">
+            <v-icon left small dark>delete</v-icon>글 삭제
+          </v-btn>
+          <v-dialog v-model="dialog" persistent max-width="290">
             <v-card>
               <v-card-title class="error white--text pa-2 pl-5">경고</v-card-title>
               <v-card-text class="pa-4 pb-2">
@@ -79,7 +111,7 @@
               </v-avatar>
               <p style="font-size:14px" class="ma-0 pt-2">{{ currentUser.nickname }}</p>
             </v-col>
-            <v-divider vertical class="my-1 mr-3"/>
+            <v-divider vertical class="my-1 mr-3" />
             <v-col cols="7" class="ma-3 mb-0">
               <v-textarea
                 @keydown.enter="createComment"
@@ -135,13 +167,25 @@
 
 <script>
 import PostService from "@/services/post.service";
-import FileService from "@/services/file.service"
+import FileService from "@/services/file.service";
+
+import "tui-editor/dist/tui-editor.css";
+import "tui-editor/dist/tui-editor-contents.css";
+import "codemirror/lib/codemirror.css";
+
+import { Viewer } from "@toast-ui/vue-editor";
 
 export default {
-  props: [ "post_id", "board_name" ],
+  props: ["post_id", "board_name"],
+  components: {
+    Viewer: Viewer,
+  },
   data() {
     return {
       dialog: false,
+      report: false,
+      reportSuccess: false,
+      selected: [],
 
       defaultPost: "게시글을 선택하세요",
       new_comment: "",
@@ -171,14 +215,13 @@ export default {
     },
     isWriter() {
       if (this.$store.getters["auth/getUser"]) {
-    return (
-        this.post_contents.writer ===
-        this.$store.getters["auth/getUser"].nickname
-      );
+        return (
+          this.post_contents.writer ===
+          this.$store.getters["auth/getUser"].nickname
+        );
       } else {
-        return false
+        return false;
       }
-      
     },
     post_like() {
       return this.post_contents.like;
@@ -212,8 +255,7 @@ export default {
         type: "study",
         post_id: this.post_id
       });
-      
-      //await this.getPost();
+
       this.$router.go(-1);
     },
 

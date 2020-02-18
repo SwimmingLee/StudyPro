@@ -55,6 +55,8 @@
 </template>
 <script>
 import AlarmService from "@/services/alarm.service";
+import {EventBus} from "@/plugins/event-bus"
+
 export default {
   data: () => ({
     groupModal: false,
@@ -80,6 +82,7 @@ export default {
       this.msg = msg;
     },
     async modalClose() {
+      EventBus.$emit("mailChk");
       const rsvMsg = await AlarmService.getReceivedAlarm();
       this.rxBox = rsvMsg.data;
       this.groupModal = false;

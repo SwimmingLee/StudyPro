@@ -8,10 +8,7 @@
           </v-flex>
           <v-card class="pa-3 px-5" outlined>
             <div v-if="isAuth">
-              <v-row justify="center">
-                <v-col cols="12" class="py-0">
-                  <v-subheader>제목 :</v-subheader>
-                </v-col>
+              <v-row justify="center" class="mt-3">
                 <v-col cols="12" md="3" sm="4" class="py-0">
                   <v-select
                     v-model="postData.board"
@@ -26,49 +23,16 @@
                   <v-text-field v-model="postData.title" clearable label="제목을 입력하세요" outlined dense></v-text-field>
                 </v-col>
               </v-row>
-              <v-divider />
-              <v-row>
-                <v-col cols="12" class="py-0">
-                  <v-subheader>내용 :</v-subheader>
-                </v-col>
-              </v-row>
+              <v-divider class="mb-5 mt-0"/>
               <v-row style="min-height: 500px">
                 <v-col class="py-0">
-                  <tiptap-vuetify
-                    placeholder="내용을 입력하세요..."
-                    v-model="postData.content"
-                    :extensions="extensions"
-                    :toolbar-attributes="{ color: 'customTheme', dark: true }"
-                  />
+                  <Editor v-model="postData.content"
+                  mode="wysiwyg"
+                  previewStyle="vertical"
+                  height="500px"/>
                 </v-col>
               </v-row>
               <v-divider class="mt-5 mb-3" />
-              <v-row>
-                <v-col>
-                  <v-file-input
-                    :rules="rules"
-                    accept="image/png, image/jpeg, image/bmp"
-                    outlined
-                    v-model="files"
-                    color="deep-purple accent-4"
-                    label="Attach File"
-                    counter
-                    multiple
-                    placeholder="Select Files"
-                    prepend-icon="mdi-paperclip"
-                    :show-size="1000"
-                  >
-                    <template v-slot:selection="{ index, text }">
-                      <v-chip v-if="index < 5" color="deep-purple accent-4" dark label>{{ text }}</v-chip>
-                      <span
-                        v-else-if="index === 5"
-                        class="overline grey--text text--darken-3 mx-2"
-                      >+{{ files.length - 5 }} File(s)</span>
-                    </template>
-                  </v-file-input>
-                </v-col>
-              </v-row>
-              <v-divider />
               <v-row>
                 <v-col class="text-end">
                   <v-dialog v-model="dialog" persistent max-width="290">
@@ -112,41 +76,15 @@
 <script>
 import PostService from "@/services/post.service";
 
-import Vue from "vue";
-import Vuetify from "vuetify";
+import "tui-editor/dist/tui-editor.css";
+import "tui-editor/dist/tui-editor-contents.css";
+import "codemirror/lib/codemirror.css";
 
-import {
-  TiptapVuetifyPlugin,
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Strike,
-  Underline,
-  Paragraph,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Link,
-  Code,
-  Blockquote,
-  HardBreak,
-  HorizontalRule,
-  History
-} from "tiptap-vuetify";
-import "tiptap-vuetify/dist/main.css";
-import "vuetify/dist/vuetify.min.css";
-
-const vuetify = new Vuetify();
-Vue.use(Vuetify);
-Vue.use(TiptapVuetifyPlugin, {
-  vuetify,
-  iconGroup: "md"
-});
+import { Editor } from "@toast-ui/vue-editor";
 
 export default {
   components: {
-    TiptapVuetify,
+    Editor: Editor,
     requestSignin: () => import("@/components/base/RequestSignin")
   },
   data() {
@@ -167,31 +105,6 @@ export default {
       rules: [
         value => value.size < 5000000 || "File size should be less than 5 MB"
       ],
-
-      extensions: [
-        History,
-        Blockquote,
-        Bold,
-        Underline,
-        Strike,
-        Italic,
-        ListItem,
-        BulletList,
-        OrderedList,
-        [
-          Heading,
-          {
-            options: {
-              levels: [1, 2, 3]
-            }
-          }
-        ],
-        Link,
-        Code,
-        HorizontalRule,
-        Paragraph,
-        HardBreak
-      ]
     };
   },
 
@@ -220,7 +133,6 @@ export default {
 
   methods: {
     async modify() {
-      console.log("modify")
       this.modified.type = "study";
       this.modified.post_id = this.post_id;
       this.modified.title = this.postData.title;

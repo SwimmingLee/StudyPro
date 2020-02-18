@@ -97,9 +97,32 @@ class StudyService {
         })
     }
 
+    changeUserLevel(payload) {
+        return axios.post(URL + "change-level", {
+            study_id: payload.study_id,
+            user_id: payload.user_id,
+            level: payload.level,
+        })
+    }
+    
+    checkAttendence(payload) {
+        return axios.post(URL + "check_attendence", {
+            study_id: payload.study_id,
+            user_id: payload.user_id,
+            date: payload.date,
+        })
+    }
 
-
-
+    attendence(payload) {
+        console.log(URL + "attendence");
+        
+        return axios.post(URL + "attendence", {
+            study_id: payload.study_id,
+            user_id: payload.user_id,
+        })
+    }
+    
+    
 
 }
 

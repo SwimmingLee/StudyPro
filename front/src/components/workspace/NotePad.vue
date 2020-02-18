@@ -1,7 +1,6 @@
 <template>
   <v-card>
     <div id="editor" />
-    <div class="container pa-0 text-end">
     <v-tooltip bottom>
       <template v-slot:activator="{on}">
         <v-btn class="btns"  id="download" v-on="on" @click="click_down" icon>
@@ -19,7 +18,6 @@
       </template>
       <span>Load</span>
     </v-tooltip>
-    </div>
 
     <input id="file_load" type="file" accept=".txt, .md" @change="load_file" hidden />
   </v-card>
@@ -109,8 +107,6 @@ export default {
 
     this.editor.on("change", () => {
       if (this.is_change) {
-        console.log("왜 안바뀌냐");
-
         this.socket.emit("typing", {
           study_id: this.study_id,
           text: this.editor.getValue()
@@ -149,11 +145,17 @@ export default {
   z-index: 1;
 }
 
-.container {
+.btns {
   top: -2px;
   position: absolute;
   z-index: 2;
   font-family: fantasy;
   font-weight: bold;
+}
+#upload {
+  left: 1070px;
+}
+#download {
+  left: 1105px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-content class="pa-0">
     <v-card flat>
-      <v-card-title class="pb-0">
+      <v-card-title class="pt-0 pb-0">
         <v-row no-gutters>
           <v-col cols="8">
             <v-icon class="black--text pl-1" x-large>notifications_none</v-icon>
@@ -25,7 +25,17 @@
               </v-row>
               <v-divider class="ma-2" />
 
+              <v-card flat v-show="notice_list.length === 0" class="mt-5">
+                <v-row no-gutters style="height:100%" align="center" justify="center">
+                  <v-col cols="12">
+                    <v-card flat align="center" style="width: 100%; height: 100%">
+                      <p class="board_content">등록된 공지사항이 없습니다.</p>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-card>
               <v-card
+                v-show="!(notice_list.length === 0)"
                 flat
                 v-for="(post, index) in notice_list"
                 :key="index"
@@ -89,7 +99,17 @@
               </v-row>
               <v-divider class="ma-2" />
 
+              <v-card flat v-show="post_list.length === 0" class="mt-5">
+                <v-row no-gutters style="height:100%" align="center" justify="center">
+                  <v-col cols="12">
+                    <v-card flat align="center" style="width: 100%; height: 100%">
+                      <p class="board_content">등록된 게시글이 없습니다.</p>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-card>
               <v-card
+                v-show="!(post_list.length === 0)"
                 flat
                 v-for="(post, index) in post_list"
                 :key="index"
@@ -178,6 +198,7 @@ export default {
         offset: 0
       });
       this.post_list = post_list.data;
+      console.log(this.post_list);
     },
     routeTo(post_id) {
       this.$router.push({
@@ -193,5 +214,10 @@ export default {
 .Hline {
   font-size: 25px !important;
   font-weight: bold !important;
+}
+
+.board_content {
+  font-size: 18px !important;
+  color: #808080 !important;
 }
 </style>

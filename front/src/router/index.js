@@ -10,7 +10,7 @@ import intro from '@/views/Intro'
 import home from '@/views/Home'
 
 // 게시판
-import board from '@/components/board/board'
+import board from '@/components/board/board_main'
 import postContent from '@/components/board/post_content'
 import postRegister from '@/components/board/post_register'
 import postModify from '@/components/board/post_modify'
@@ -22,10 +22,11 @@ import signupSuccess from '@/components/user/SignupSuccess'
 import mypage from '@/components/user/Mypage'
 
 // 스터디페이지
-import studySearch from '@/views/Study'
+import study from '@/views/Study'
 import search from '@/components/study/StudyMain'
 // import studydetail from '@/components/studydetail/MainStudyDetail'
 import workspace from '@/components/workspace/WorkSpace'
+import MyGroupList from '@/components/user/MyGroupList'
 
 //쪽지함 접근(임시)
 import msgbox from '@/components/user/messenger/MessageHome'
@@ -49,8 +50,7 @@ import NotFound from '@/views/NotFound'
 
 Vue.use(VueRouter)
 
-const routes = [
-    {
+const routes = [{
         path: '/',
         name: 'intro',
         components: {
@@ -73,63 +73,69 @@ const routes = [
         name: 'study',
         components: {
             header: appHeader,
-            default: studySearch,
+            default: study,
             footer: appFooter
         },
         children: [{
-            path: 'search',
-            name: 'search',
-            component: search,
-        },
-        {
-            path: ':study_id',
-            name: 'study_main',
-            component: studyView,
-            props: true,
-            children: [{
-                path: 'home',
-                name: 'study_home',
-                component: studyHome,
-                props: true,
+                path: 'search',
+                name: 'search',
+                component: search,
             },
             {
-                path: 'schedule',
-                name: 'study_schedule',
-                component: studySchedule,
-                props: true,
+                path: 'mygroups',
+                name: 'mygroups',
+                component: MyGroupList,
             },
             {
-                path: 'member',
-                name: 'study_member',
-                component: studyMember,
-                props: true,
-            },
-            {
-                path: 'board/register',
-                name: 'study_register',
-                component: studyRegister,
-                props: true,
-            },
-            {
-                path: 'board/modify',
-                name: 'study_modify',
-                component: studyModify,
-                props: true,
-            },
-            {
-                path: 'board/:board_name',
-                name: 'study_board',
-                component: studyBoard,
+                path: ':study_id',
+                name: 'study_main',
+                component: studyView,
                 props: true,
                 children: [{
-                    path: '?post_id=:post_id',
-                    name: 'board_contents',
-                    component: boardContents,
-                    props: true,
-                }]
-            }]
+                        path: 'home',
+                        name: 'study_home',
+                        component: studyHome,
+                        props: true,
+                    },
+                    {
+                        path: 'schedule',
+                        name: 'study_schedule',
+                        component: studySchedule,
+                        props: true,
+                    },
+                    {
+                        path: 'member',
+                        name: 'study_member',
+                        component: studyMember,
+                        props: true,
+                    },
+                    {
+                        path: 'board/register',
+                        name: 'study_register',
+                        component: studyRegister,
+                        props: true,
+                    },
+                    {
+                        path: 'board/modify',
+                        name: 'study_modify',
+                        component: studyModify,
+                        props: true,
+                    },
+                    {
+                        path: 'board/:board_name',
+                        name: 'study_board',
+                        component: studyBoard,
+                        props: true,
+                        children: [{
+                            path: '?post_id=:post_id',
+                            name: 'board_contents',
+                            component: boardContents,
+                            props: true,
+                        }]
+                    }
+                ]
 
-        },
+            },
         ]
     },
     {
@@ -137,7 +143,7 @@ const routes = [
         name: 'workspace',
         components: {
             header: null,
-            default: workspace,
+            submain: workspace,
             footer: null
         },
     },
@@ -185,18 +191,18 @@ const routes = [
             footer: appFooter
         },
         children: [{
-            path: 'mypage',
-            component: mypage
-        },
-        {
-            path: 'signup',
-            name: 'signup',
-            component: signup
-        },
-        {
-            path: 'signup/success',
-            component: signupSuccess
-        },
+                path: 'mypage',
+                component: mypage
+            },
+            {
+                path: 'signup',
+                name: 'signup',
+                component: signup
+            },
+            {
+                path: 'signup/success',
+                component: signupSuccess
+            },
         ]
     },
     {

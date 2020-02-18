@@ -1,22 +1,26 @@
 <template>
   <div id="mycal">
-    <div v-if="isAuth">
-      <v-row class="fill-height" justify="center">
-        <v-col cols="12" md="11" class="mx-2">
-          <v-card>
-            <v-toolbar flat color="customTheme" dark>
-              <v-toolbar-title class="ml-5">내 일정관리</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn
-                class="primary mr-2 pa-0 d-flex d-sm-none"
-                elevation="0"
-                @click="loadAddModal()"
-              >
-                <span class="white--text px-2">+</span>
-                <span class="pr-2">일정추가</span>
-              </v-btn>
-            </v-toolbar>
-
+    <v-img src="@/assets/images/banner/calendar.png" />
+    <div id="cal-content" v-if="isAuth">
+      <p class="main-title">최신 그룹일정</p>
+      <v-data-table
+        v-model="selected"
+        :headers="tableHeaders"
+        :items="items"
+        :search="search"
+        show-select
+        @click:row="clicked($event)"
+      >
+        <v-alert slot="no-results" icon="warning" class="ma-0"
+          >Your search for "{{ search }}" found no results.</v-alert
+        >
+      </v-data-table>
+      <v-expansion-panels>
+        <v-expansion-panel>
+          <v-expansion-panel-header>
+            <span class="ex-title">Calendar</span>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
             <!-- 달력 -->
             <v-row class="fill-height">
               <v-col>
@@ -39,12 +43,14 @@
                     <v-toolbar-title>{{ title }}</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-btn
-                      class="primary mr-2 pa-0 d-none d-sm-flex"
+                      class="customTheme mr-2 pa-0"
                       elevation="0"
                       @click="loadAddModal()"
                     >
                       <span class="white--text px-2">+</span>
-                      <span class="pr-2">일정추가</span>
+                      <span class="pr-2 white--text d-none d-sm-flex"
+                        >일정추가</span
+                      >
                     </v-btn>
                     <v-menu bottom right>
                       <template v-slot:activator="{ on }">
@@ -180,9 +186,9 @@
                 </v-sheet>
               </v-col>
             </v-row>
-          </v-card>
-        </v-col>
-      </v-row>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
       <add-modal
         :add-modal="addModal"
         :is-update="isUpdate"
@@ -191,13 +197,17 @@
         v-on:reload="reload"
       />
     </div>
-    <request-signin v-else />
+    <request-signin v-else>
+      <template v-slot:text>
+          <p>로그인이 필요합니다</p>
+        </template>
+    </request-signin>
   </div>
 </template>
 
 <script>
 import { format } from "date-fns";
-import WorkService from "@/services/work.service"
+import WorkService from "@/services/work.service";
 
 export default {
   name: "mycal",
@@ -217,25 +227,6 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    colors: [
-      "blue",
-      "indigo",
-      "deep-purple",
-      "cyan",
-      "green",
-      "orange",
-      "grey darken-1"
-    ],
-    names: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party"
-    ],
     propEvent: {},
     isUpdate: false,
     addModal: false,
@@ -244,7 +235,16 @@ export default {
       { title: "일정수정", value: "update" },
       { title: "삭제", value: "delete" }
     ],
-    delOpen: false
+    delOpen: false,
+    tableHeaders: {
+      id: -1,
+      name: '',
+      content: '',
+      start_date: '',
+      end_date: '',
+      start_time: '',
+      end_time: '',
+    }
   }),
   components: {
     AddModal: () => import("./AddModal"),
@@ -290,17 +290,18 @@ export default {
     }
   },
   mounted() {
-    WorkService.getWorks({type:"personal"})
-      .then(works =>{
-        works.data.map(work=>{
-          work.name = "[" + work.status + "]" + work.name
-          work.color = work.color ? work.color : "primary"/* 빨리 여기를 수정해야 한다. */ 
-          work.start = work.start_date
-          work.end = work.end_date
-        })
-        
-        this.events = works.data;
-      })
+    WorkService.getWorks({ type: "personal" }).then(works => {
+      works.data.map(work => {
+        work.name = "[" + work.status + "]" + work.name;
+        work.color = work.color
+          ? work.color
+          : "primary"; /* 빨리 여기를 수정해야 한다. */
+        work.start = work.start_date;
+        work.end = work.end_date;
+      });
+
+      this.events = works.data;
+    });
     // 마운트시 내 일정 엑시오스 요청
   },
   methods: {
@@ -400,20 +401,20 @@ export default {
       // };
       // //테스트라인
       // this.events.push(newEvent);
-      WorkService.getWorks({type:"personal"})
-      .then(works =>{
-        works.data.map(work=>{
-          work.name = "[" + work.status + "]" + work.name
-          work.color = work.color ? work.color : "primary"/* 빨리 여기를 수정해야 한다. */ 
-          work.start = work.start_date
-          work.end = work.end_date
-        })
-        
+      WorkService.getWorks({ type: "personal" }).then(works => {
+        works.data.map(work => {
+          work.name = "[" + work.status + "]" + work.name;
+          work.color = work.color
+            ? work.color
+            : "primary"; /* 빨리 여기를 수정해야 한다. */
+          work.start = work.start_date;
+          work.end = work.end_date;
+        });
+
         this.events = works.data;
         this.$refs.calendar.checkChange();
-      })
+      });
       // 일정목록 리로드
-      
     },
 
     clickDetailMenu(value, event) {
@@ -432,11 +433,11 @@ export default {
     },
 
     eventDelete(event) {
-      WorkService.deleteWork({type:"personal", work_id:event.id});
+      WorkService.deleteWork({ type: "personal", work_id: event.id });
       //console.log("eventDelete in MyCalendar.vue", event);
-      const eventsIdx = this.events.indexOf(event)
+      const eventsIdx = this.events.indexOf(event);
       //삭제 엑시오스 요청
-      this.events.splice(eventsIdx, 1)
+      this.events.splice(eventsIdx, 1);
       this.delOpen = false;
       this.selectedOpen = false;
       this.$refs.calendar.checkChange();

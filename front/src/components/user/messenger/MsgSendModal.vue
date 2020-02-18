@@ -94,6 +94,9 @@ export default {
         this.showResponse = false;
         this.$emit("close");
       }
+    },
+    user() {
+      console.log(this.user)
     }
   },
   methods: {

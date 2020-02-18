@@ -70,6 +70,7 @@
                   v-model="input.startTime"
                   full-width
                   header-color="customTheme"
+                  ampm-in-title
                   @click:minute="$refs.startTime.save(input.startTime)"
                 ></v-time-picker>
               </v-menu>
@@ -131,7 +132,6 @@
                     v-model="input.endTime"
                     label="종료시간"
                     prepend-icon="access_time"
-                    readonly
                     hide-details
                     v-on="on"
                   ></v-text-field>
@@ -140,6 +140,7 @@
                   v-model="input.endTime"
                   full-width
                   header-color="customTheme"
+                  ampm-in-title
                   @click:minute="$refs.endTime.save(input.endTime)"
                 ></v-time-picker>
               </v-menu>
@@ -193,7 +194,7 @@
                 v-model="input.color"
                 :items="colorOptions"
                 label="색상"
-                hide-details
+                :color="input.color"
                 outlined
                 dense
               ></v-select>

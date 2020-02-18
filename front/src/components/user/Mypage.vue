@@ -1,41 +1,33 @@
 <template>
-  <v-content class="pa-0" >
-    <v-form v-if="isAuth" >
-      <v-row justify="center"
-        ><v-col cols="12" md="11" lg="10">
-          <v-card class="mx-1">
-            <v-toolbar flat color="customTheme" dark>
-            <v-toolbar-title class="ml-5">마이페이지</v-toolbar-title>
-          </v-toolbar>
-            <v-tabs vertical >
-              <v-tab class="py-3">
-                <!-- <v-icon left>mdi-account</v-icon> -->
-                정보수정
-              </v-tab>
-              <v-tab class="py-3">
-                <!-- <v-icon left>mdi-lock</v-icon> -->
-                비밀번호변경
-              </v-tab>
+  <div id="mypage">
+    <v-form v-if="isAuth">
+      <v-card flat class="mt-1">
+        <v-tabs vertical>
+          <v-tab class="justify-start py-3">
+            <v-icon>mdi-account</v-icon>
+            <span class="d-none d-sm-flex ml-5">정보 수정</span>
+          </v-tab>
+          <v-tab class="py-3">
+            <v-icon>mdi-lock</v-icon>
+            <span class="d-none d-sm-flex ml-5">비밀번호 변경</span>
+          </v-tab>
 
-              <v-tab-item >
-                <edit-profile />
-              </v-tab-item>
+          <v-tab-item>
+            <edit-profile />
+          </v-tab-item>
 
-              <v-tab-item>
-                <manage-study />
-              </v-tab-item>
-
-            </v-tabs>
-          </v-card>
-        </v-col>
-      </v-row>
+          <v-tab-item>
+            <manage-study />
+          </v-tab-item>
+        </v-tabs>
+      </v-card>
     </v-form>
     <request-signin v-else>
       <template v-slot:text>
         <p>로그인이 필요합니다</p>
       </template>
     </request-signin>
-  </v-content>
+  </div>
 </template>
 
 <script>
