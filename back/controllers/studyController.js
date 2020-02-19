@@ -402,3 +402,15 @@ export const attendence = function (req, res) {
         res.send(err)
     }
 };
+
+
+export const image_url_update = function(req, res) {
+    studies.findAll()
+        .map(study => {
+            const image_url = study.dataValues.image_url;
+            console.log(image_url)
+            const new_image_url = image_url.replace(process.env.OLD_IMAGE_URL, process.env.IMAGE_URL)
+            console.log(image_url, new_image_url)
+            studies.update({image_url: new_image_url}, {where:{id:study.dataValues.id}})
+        })
+}

@@ -280,3 +280,13 @@ export const leave_study = function(req, res) {
         res.send(err)
     }
 };
+
+export const image_url_update = function(req, res) {
+    users.findAll()
+        .map(user => {
+            const profile_url = user.dataValues.profile_url;
+            const new_profile_url = profile_url.replace(process.env.OLD_IMAGE_URL, process.env.IMAGE_URL)
+            console.log(profile_url, new_profile_url)
+            users.update({profile_url: new_profile_url}, {where:{id:user.dataValues.id}})
+        })
+}

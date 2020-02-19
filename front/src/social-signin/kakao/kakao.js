@@ -19,10 +19,13 @@ const signin = function () {
     return new Promise((resolve, reject) => {
         Kakao.Auth.loginForm({
             success: async (/*authObj*/) => {
+                console.log("이게뭐야 소셜")
                 const user_info = await signin_callback();
                 resolve(user_info);
             },
             fail: (err) => {
+                console.log("무엇이 에러인가")
+                console.log(err)
                 reject(err);
             },
             scope: "profile,account_email,gender"

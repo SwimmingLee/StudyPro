@@ -5,7 +5,7 @@ const option = {
     cert: fs.readFileSync('./keys/certificate.crt'),
     ca: fs.readFileSync('./keys/ca_bundle.crt'),
 }
-export const server = require('http').createServer(option, app)
+export const server = require('https').createServer(option, app)
 
 const io = require('socket.io')(server)
 

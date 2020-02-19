@@ -148,22 +148,29 @@ export default {
       this.isLoading = false;
     },
     async AuthKakaoSignin() {
+      try {
+        
+      this.isLoading = true;
       const user_info = await WbKakao.signinForm();
-      console.log(user_info)
       let {
         properties: { nickname, profile_image },
         kakao_account: { email, gender }
       } = user_info;
 
-      try {
         gender = (gender === "male" ? "M" : "F");
-        await this.$store.dispatch("auth/socialLogin",{
+        this.$store.dispatch("auth/socialLogin",{
           email,
           nickname,
           gender,
           profile_image,
           platform: "kakao"
+        }).then(res=>{
+          console.log(res)
+          if (res) {
+            this.close();
+          }
         });
+        //this.close();
         this.isLoading = false;
       } catch (err) {
         console.log(err);
