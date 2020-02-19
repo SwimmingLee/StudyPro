@@ -133,7 +133,7 @@ export default {
 
 
       } else {
-        this.reg_message = res.detail;
+        this.reg_message = res.data.detail;
       }
     },
 

@@ -187,10 +187,8 @@ export default {
           user_profile_url: this.$store.getters["auth/getUser"].profile_url
         };
     this.study_id = window.location.href.split("workspace/")[1];
-    console.log(process.env.VUE_APP_SOCKET_URL);
-    
     this.socket = io.connect(
-        process.env.VUE_APP_SOCKET_URL + `${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
+      process.env.VUE_APP_SOCKET_URL+`${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
       {
         transports: ["websocket"],
         secure: true
@@ -201,6 +199,7 @@ export default {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
     this.loadStudyInfo();
+    
 
     if (!window.opener) return;
     window.onkeyup = event => {

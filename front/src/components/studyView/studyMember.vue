@@ -87,11 +87,7 @@
 
           <v-col align-self="center" align="center" cols="1">
             <a>
-              <v-icon
-                v-if="member.id !== currentUser.uid"
-                class="black--text ma-0"
-                @click="viewDetail(member)"
-              >mdi-email</v-icon>
+              <v-icon v-if="member.id !== currentUser.uid" class="black--text ma-0" @click="viewDetail(member)">mdi-email</v-icon>
             </a>
           </v-col>
 
@@ -224,7 +220,8 @@
     <v-row align="center" style="height:400px;">
       <v-col cols="12" class="text-center">
         <div>
-          <v-img src="@/assets/images/LogoText7.png" contain style="max-height:80px;"></v-img>
+          <span class="display-2 font-weight-thin">Study</span>
+          <span class="display-2">PRO</span>
         </div>
 
         <div class="mt-4">
@@ -254,7 +251,6 @@
       </template>
     </modal>
   </v-container>
-  
 </template>
 
 <script>
@@ -269,7 +265,7 @@ export default {
     comment: "",
     reg_message: "",
     groupModal: false,
-    user: "",
+    user:"",
     modal: false,
     modalType: "",
     member: {},
@@ -336,7 +332,6 @@ export default {
   },
   methods: {
     modalClose() {
-      this.modal = false;
       this.groupModal = false;
     },
 
@@ -396,7 +391,7 @@ export default {
         //이메일 보내기
 
         let user_email = this.selectedUser.user.email;
-
+        
         let study_name = this.studyInfo.name;
         EmailService.resultApply(user_email, study_name, this.study_id, true);
       } else {
@@ -423,6 +418,7 @@ export default {
       } else {
         this.modalType = "error";
       }
+
     },
     async deleteMember() {
       var res = await StudyService.deleteUser({
@@ -440,6 +436,7 @@ export default {
 
         let study_name = this.studyInfo.name;
         EmailService.noticeDrop(user_email, study_name, this.study_id);
+
       } else {
         this.modalType = "error";
       }
@@ -466,18 +463,16 @@ export default {
 
       if (res.state == "success") {
         //이메일 보내기
-        let captain_info = await UserService.getUserContent(
-          this.studyInfo.captain
-        );
+        let captain_info = await UserService.getUserContent(this.studyInfo.captain);
         let captain_email = captain_info.email;
         let study_name = this.studyInfo.name;
         EmailService.noticeApply(captain_email, study_name, this.study_id);
 
         this.reg_message = "가입신청을 완료했습니다";
       } else {
-        this.reg_message = res.detail;
+        this.reg_message = res.data.detail;
       }
-    },
+    }
   }
 };
 </script>

@@ -41,7 +41,10 @@
             </v-col>
             <v-col class="pa-0 pl-4">
               <a id="kakao-login-btn"></a>
-              <button class="social-btn mr-4 mt-1" @click="AuthKakaoSignin('kakao')">
+              <button
+                class="social-btn mr-4 mt-1"
+                @click="AuthKakaoSignin('kakao')"
+              >
                 <v-img
                   src="https://developers.kakao.com/assets/img/about/logos/kakaologin/kr/kakao_account_login_btn_medium_narrow.png"
                 ></v-img>
@@ -64,8 +67,18 @@
       </div>
       <v-card-actions class="pt-0 pr-5">
         <v-spacer></v-spacer>
-        <v-btn color="error--text lighten-1 transparent" @click="close" elevation="0">닫기</v-btn>
-        <v-btn color="transparent" @click.prevent="signin" elevation="0" :disabled="isLoading">
+        <v-btn
+          color="error--text lighten-1 transparent"
+          @click="close"
+          elevation="0"
+          >닫기</v-btn
+        >
+        <v-btn
+          color="transparent"
+          @click.prevent="signin"
+          elevation="0"
+          :disabled="isLoading"
+        >
           <span class="spinner-border spinner-border-sm"></span>
           <span>로그인</span>
         </v-btn>
@@ -107,7 +120,7 @@ export default {
         email: "",
         password: "",
         loginRemain: false
-      };
+      }
       this.$emit("close");
     },
 
@@ -126,25 +139,25 @@ export default {
             this.message = error.message;
           }
         );
-      } else if (!this.user.email) {
-        this.message = "아이디를 입력해주세요";
-      } else {
-        this.message = "비밀번호를 입력해주세요";
+      }else if(!this.user.email){
+        this.message="아이디를 입력해주세요"
+      }else{
+        this.message="비밀번호를 입력해주세요"
       }
 
       this.isLoading = false;
     },
     async AuthKakaoSignin() {
-      try {
-        this.isLoading = true;
-        const user_info = await WbKakao.signinForm();
-        let {
-          properties: { nickname, profile_image },
-          kakao_account: { email, gender }
-        } = user_info;
+      const user_info = await WbKakao.signinForm();
+      console.log(user_info)
+      let {
+        properties: { nickname, profile_image },
+        kakao_account: { email, gender }
+      } = user_info;
 
-        gender = gender === "male" ? "M" : "F";
-        await this.$store.dispatch("auth/socialLogin", {
+      try {
+        gender = (gender === "male" ? "M" : "F");
+        await this.$store.dispatch("auth/socialLogin",{
           email,
           nickname,
           gender,
@@ -152,18 +165,17 @@ export default {
           platform: "kakao"
         });
         this.isLoading = false;
-        this.close();
       } catch (err) {
         console.log(err);
       }
     },
-    clickEnter() {
-      this.signin();
+    clickEnter(){
+      this.signin()
     }
   },
   mounted() {
     if (this.$store.getters["auth/isAuth"]) {
-      this.$emit("close");
+      this.$emit('close')
     }
   }
 };

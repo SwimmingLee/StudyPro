@@ -1,10 +1,20 @@
 <template>
   <v-card>
-    <div id="editor" />
+    <!-- <div id="editor" /> -->
+    <editor
+      id="editor"
+      height="653px"
+      v-model="editorText"
+      previewStyle="vertical"
+      :options="defaultOptions"
+      mode="markdown"
+      @load="load_editor"
+      @change="change_editor"
+    />
     <v-tooltip bottom>
       <template v-slot:activator="{on}">
-        <v-btn class="btns"  id="download" v-on="on" @click="click_down" icon>
-            <v-icon color="black">save</v-icon>
+        <v-btn class="btns" id="download" v-on="on" @click="click_down" icon>
+          <v-icon color="black">save</v-icon>
         </v-btn>
       </template>
       <span>Save</span>
@@ -12,8 +22,8 @@
 
     <v-tooltip bottom>
       <template v-slot:activator="{on}">
-        <v-btn class="btns"  id="upload" @click="click_upload" v-on="on" icon>
-        <v-icon color="black">folder_open</v-icon>
+        <v-btn class="btns" id="upload" @click="click_upload" v-on="on" icon>
+          <v-icon color="black">folder_open</v-icon>
         </v-btn>
       </template>
       <span>Load</span>
@@ -26,16 +36,47 @@
 import "tui-editor/dist/tui-editor.css";
 import "tui-editor/dist/tui-editor-contents.css";
 import "codemirror/lib/codemirror.css";
-import "highlight.js/styles/github.css";
-import Editor from "tui-editor";
+import { Editor } from "@toast-ui/vue-editor";
 
 export default {
   props: ["socket", "study_id"],
+  components: {
+    editor: Editor
+  },
 
   data() {
     return {
       editor: "",
       editorText: "",
+      defaultOptions: {
+        language: "en_US",
+        useCommandShortcut: true,
+        useDefaultHTMLSanitizer: true,
+        usageStatistics: true,
+        hideModeSwitch: true,
+        toolbarItems: [
+          "heading",
+          "bold",
+          "italic",
+          "strike",
+          "divider",
+          "hr",
+          "quote",
+          "divider",
+          "ul",
+          "ol",
+          "task",
+          "indent",
+          "outdent",
+          "divider",
+          "table",
+          "image",
+          "link",
+          "divider",
+          "code",
+          "codeblock"
+        ]
+      },
       is_change: false
     };
   },
@@ -74,58 +115,57 @@ export default {
       if (day.length == 1) {
         day = "0" + day;
       }
-
       let title = year + month + day;
-      this.saveToFile_Chrome(title, this.editor.getMarkdown());
+      this.saveToFile_Chrome(title, this.editorText);
     },
 
     async load_file(event) {
-      this.editor.setValue("");
       let value = await event.target.files[0].text();
-      this.editor.setValue(value);
+      this.editorText = value;
       this.socket.emit("typing", {
         study_id: this.study_id,
-        text: this.editor.getValue()
+        text: this.editorText
       });
     },
     click_upload() {
       document.getElementById("file_load").click();
-    }
-  },
-  mounted() {
-    this.editor = new Editor({
-      // 에디터 인스턴스 생성
-      el: document.querySelector("#editor"),
-      initialEditType: "wysiwyg",
-      previewStyle: "vertical",
-      height: "653px"
-    });
-
-    document.getElementById("editor").onload = () => {
+    },
+    load_editor() {
       this.is_change = true;
-    };
-
-    this.editor.on("change", () => {
+    },
+    change_editor() {
       if (this.is_change) {
         this.socket.emit("typing", {
           study_id: this.study_id,
-          text: this.editor.getValue()
+          text: this.editorText
         });
       }
-    });
-
-    this.socket.on("typing", data => {
-      this.is_change = false;
-      this.editor.setValue(data.text);
-      this.is_change = true;
-    });
-
+    }
+  },
+  mounted() {
     this.socket.emit("load_pad", {
       study_id: this.study_id
     });
 
+    window.onload = () => {
+      this.is_change = true;
+    };
+    document.getElementById("editor").onload = () => {
+      this.is_change = true;
+    };
+
+    this.socket.on("typing", data => {
+      console.log("받아오나?");
+
+      this.is_change = false;
+      this.editorText = data.text;
+      console.log(data.text);
+
+      this.is_change = true;
+    });
+
     this.socket.on("load_pad", data => {
-      let pad_data = this.editor.getValue();
+      let pad_data = this.editorText;
       this.socket.emit("send_pad", {
         socket_id: data,
         pad_data: pad_data
@@ -134,7 +174,7 @@ export default {
 
     this.socket.on("send_pad", data => {
       this.is_change = false;
-      this.editor.setValue(data.pad_data);
+      this.editorText = data.pad_data;
       this.is_change = true;
     });
   }
