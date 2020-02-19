@@ -188,7 +188,7 @@ export default {
         };
     this.study_id = window.location.href.split("workspace/")[1];
     this.socket = io.connect(
-      `https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
+      `http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
       // this.socket = io.connect(
       //   `http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
       {

@@ -262,7 +262,7 @@ export default {
     name: "",
     nameRules: [
       v => !!v || "이름을 입력해 주세요.",
-      v => (v && v.length <= 50) || "이름이 너무 깁니다."
+      v => (v && v.length <= 45) || "이름이 너무 깁니다."
     ],
 
     gender: ["남성", "여성"],

@@ -109,7 +109,7 @@ import "codemirror/lib/codemirror.css";
 import { Editor } from "@toast-ui/vue-editor";
 
 export default {
-  props: ["study_id"],
+  props: ["study_id", "board_name"],
   components: {
     Editor: Editor,
     requestSignin: () => import("@/components/base/RequestSignin")
@@ -133,6 +133,10 @@ export default {
         value => value.size < 5000000 || "File size should be less than 5 MB"
       ],
     };
+  },
+
+  created() {
+    this.postData.board = this.board_name;
   },
 
   computed: {

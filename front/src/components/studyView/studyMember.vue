@@ -463,7 +463,6 @@ export default {
       var res = await StudyService.applyStudy(payload).then(res => {
         return res.data;
       });
-      console.log(res);
 
       if (res.state == "success") {
         //이메일 보내기

@@ -6,7 +6,7 @@
           <font style="display : block" size="2">{{ data[0] === '나' ? '' : data[0] }}</font>
             <font>
               <div v-for="(message,in_index) in data[1]" :key="`${index}-${in_index}`">
-              <span class="chat" :style="data[0] === '나' ? 'background-color: #fef01b' : data[0] ? 'background-color: #ffffff' : 'background-color: #e9e9e9'"  size="2">
+              <span display="inline-block" class="chat" :style="data[0] === '나' ? 'background-color: #fef01b' : data[0] ? 'background-color: #ffffff' : 'background-color: #e9e9e9'"  size="2">
               {{message}}
               </span>
               </div>

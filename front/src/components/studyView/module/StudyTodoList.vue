@@ -100,7 +100,6 @@ export default {
         today: date
       });
       this.items = tmp.data;
-      console.log(this.items);
     }
   }
 };

@@ -61,7 +61,10 @@ export default {
   computed: {
     boardList: function() {
       return this.board_list;
-    }
+    },
+    currentUser() {
+      return this.$store.getters["auth/getUser"];
+    },
   },
 
   watch: {

@@ -64,7 +64,7 @@
                     <v-col cols="10">
                       <v-textarea
                         v-model="about"
-                        :counter="50"
+                        :counter="150"
                         label="자신을 멋지게 소개해 주세요!"
                         outlined
                       ></v-textarea>

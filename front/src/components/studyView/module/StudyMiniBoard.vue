@@ -198,7 +198,6 @@ export default {
         offset: 0
       });
       this.post_list = post_list.data;
-      console.log(this.post_list);
     },
     routeTo(post_id) {
       this.$router.push({

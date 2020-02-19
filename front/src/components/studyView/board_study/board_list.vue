@@ -133,7 +133,7 @@ export default {
       return this.post_list;
     },
     showBtn() {
-      if (this.board_name == "notice") {
+      if (this.board_name === "notice") {
         return false;
       }
       return true;
@@ -167,7 +167,7 @@ export default {
     register() {
       this.$router.push({
         name: "study_register",
-        params: { study_id: this.study_id },
+        params: { study_id: this.study_id, board_name: this.board_name },
       })
     }
   }

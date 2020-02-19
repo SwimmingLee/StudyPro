@@ -409,7 +409,6 @@ export default {
         color: this.input.color,
         study_id: this.study_id
       };
-      console.log("추가 엑시오스", newEvent)
       //데이터추가 엑시오스
       WorkService.createWork(newEvent);
       //테스트 변수 제거해야함

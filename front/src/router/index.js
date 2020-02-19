@@ -155,6 +155,7 @@ const routes = [{
             default: postRegister,
             footer: appFooter
         },
+        props: true,
     },
     {
         path: '/board/modify',

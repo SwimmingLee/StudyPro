@@ -2,12 +2,24 @@
   <div id="mycal">
     <v-img src="@/assets/images/banner/calendar.png" />
     <div id="cal-content" v-if="isAuth">
-      <p class="main-title">최신 그룹일정</p>
+      <v-card-title>
+        최신 그룹일정
+        <v-spacer></v-spacer>
+        <v-text-field
+          append-icon="search"
+          label="검색"
+          single-line
+          hide-details
+          v-model="search"
+        ></v-text-field>
+      </v-card-title>
       <v-data-table
-        v-model="selected"
+        class="cal-table"
+        v-model="tableSelected"
         :headers="tableHeaders"
         :items="items"
         :search="search"
+        :items-per-page="5"
         show-select
         @click:row="clicked($event)"
       >
@@ -197,11 +209,7 @@
         v-on:reload="reload"
       />
     </div>
-    <request-signin v-else>
-      <template v-slot:text>
-          <p>로그인이 필요합니다</p>
-        </template>
-    </request-signin>
+    <request-signin v-else />
   </div>
 </template>
 
@@ -236,15 +244,13 @@ export default {
       { title: "삭제", value: "delete" }
     ],
     delOpen: false,
-    tableHeaders: {
-      id: -1,
-      name: '',
-      content: '',
-      start_date: '',
-      end_date: '',
-      start_time: '',
-      end_time: '',
-    }
+    tableHeaders: [
+      { text: '그룹명', align: 'center', value: 'group'},
+      { text: "일정명", align: "center", value: "name" },
+      { text: "내용", align: "start", sortable: false, value: "content" },
+      { text: "날짜", align: "start", value: 'date'},
+      { text: '시간', align: 'start', value: 'time'}
+    ]
   }),
   components: {
     AddModal: () => import("./AddModal"),

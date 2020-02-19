@@ -130,6 +130,7 @@ import "codemirror/lib/codemirror.css";
 import { Editor } from "@toast-ui/vue-editor";
 
 export default {
+  props: [ "board_name" ],
   components: {
     Editor: Editor,
     requestSignin: () => import("@/components/base/RequestSignin"),
@@ -155,6 +156,11 @@ export default {
       ]
     };
   },
+
+  created() {
+    this.postData.board = this.$route.params.board_name;
+  },
+
   computed: {
     isAuth() {
       return this.$store.getters["auth/isAuth"];
