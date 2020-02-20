@@ -40,10 +40,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    color: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
     start_time: {
       type: DataTypes.STRING(45),
       allowNull: false
@@ -58,6 +54,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     study_name:{
       type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    members:{
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {

@@ -20,7 +20,7 @@
     "dialect": "mysql",
     "timezone": "+09:00",
     "operatorsAliases": false,
-    "logging": false,
+    "logging": true,
     "dialectOptions": {
       "dateStrings": true, 
       "typeCast": true 
