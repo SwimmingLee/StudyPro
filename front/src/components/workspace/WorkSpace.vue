@@ -188,7 +188,8 @@ export default {
         };
     this.study_id = window.location.href.split("workspace/")[1];
     this.socket = io.connect(
-      process.env.VUE_APP_SOCKET_URL+`${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
+      process.env.VUE_APP_SOCKET_URL +
+        `${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
       {
         transports: ["websocket"],
         secure: true
@@ -199,14 +200,6 @@ export default {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
     this.loadStudyInfo();
-    
-
-    if (!window.opener) return;
-    window.onkeyup = event => {
-      if (event.keyCode == 27) {
-        this.overlay = false;
-      }
-    };
 
     window.onbeforeunload = () => {
       this.socket.emit("leave", {
@@ -214,6 +207,14 @@ export default {
         user_id: this.user.user_id,
         user_nickname: this.user.user_nickname
       });
+    };
+
+    if (!window.opener) return;
+
+    window.onkeyup = event => {
+      if (event.keyCode == 27) {
+        this.overlay = false;
+      }
     };
 
     this.socket.on("alreadyexist", () => {
@@ -267,7 +268,9 @@ export default {
     },
 
     exit() {
-      window.opener.closechild ? window.opener.closechild() : window.alert("오류가 있습니다 페이지를 직접 종료해주세요")
+      window.opener.closechild
+        ? window.opener.closechild()
+        : window.alert("오류가 있습니다 페이지를 직접 종료해주세요");
     },
 
     connected(connected_users) {
