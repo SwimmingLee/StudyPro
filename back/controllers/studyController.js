@@ -267,6 +267,7 @@ export const read_study = async function(req, res) {
         const user = res.locals.user;
         
         const study = await studies.findOne({where:{id:study_id}})
+        const num_joined_student  = await users_and_studies.count({where:{study_id:study_id}})
         if (study){
             if (user){
                 const level = await users_and_studies.findOne({where:{study_id, user_id:user.id}})
@@ -274,6 +275,7 @@ export const read_study = async function(req, res) {
                     study.dataValues.level = level.dataValues.level
                 }  
             }
+            study.dataValues.num_joined_student = num_joined_student;
             res.send(study)
         } else {
             res.send({state:"fail", detail:"존재하지 않는 스터디입니다."})

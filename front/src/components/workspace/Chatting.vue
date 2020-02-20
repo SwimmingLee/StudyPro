@@ -96,6 +96,8 @@ export default {
       this.messages.push(['', [message]])
     })
     this.socket.on("leave", data => {
+      console.log("누가 떠났어~~~~~~~~~~~");
+      
       this.prvUsr = '공지'
       const message = data.user_id == this.user.user_id ? '스터디룸을 나갔습니다' : `${data.user_nickname} 님이 퇴장하였습니다`
       this.messages.push(['', [message]])

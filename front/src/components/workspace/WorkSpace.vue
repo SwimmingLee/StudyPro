@@ -197,7 +197,7 @@ export default {
   },
   mounted() {
     window.moveTo(0, 0);
-    window.resizeTo(screen.availWidth, screen.availHeight + 100);
+    window.resizeTo(screen.availWidth, screen.availHeight);
     this.loadStudyInfo();
     
 

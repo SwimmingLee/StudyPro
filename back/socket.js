@@ -71,7 +71,7 @@ export const connect = () => {
             });
 
             socket.on('leave', function (data) {
-                console.log("떠난다");
+                console.log("Aaaaaaaaaaa",study_id);
                 
                 // let study_id = 1;
                 let user_id = data.user_id;

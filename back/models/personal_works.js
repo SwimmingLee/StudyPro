@@ -16,14 +16,6 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    study_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'studies',
-        key: 'id'
-      }
-    },
     dates: {
       type: DataTypes.STRING(100),
       allowNull: false
@@ -40,10 +32,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    color: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
     start_time: {
       type: DataTypes.STRING(45),
       allowNull: false
@@ -56,8 +44,8 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: false
     },
-    study_name:{
-      type: DataTypes.STRING(45),
+    members:{
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {
