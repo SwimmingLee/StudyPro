@@ -12,7 +12,7 @@ studyRouter.get("/update", image_url_update)
 studyRouter.get(routes.home, read_studies);
 studyRouter.post(routes.home, study_image_upload.single('img'), create_study)
 studyRouter.post(routes.change_level, update_study_user_level)
-studyRouter.delete(routes.home, destory_study)
+studyRouter.delete(routes.home, delete_study)
 studyRouter.get(routes.study_apply, read_apply_study)
 studyRouter.put(routes.study_detail, update_study)
 studyRouter.get(routes.study_search, search_studies)
@@ -25,6 +25,7 @@ studyRouter.post(routes.study_apply , apply_study)
 studyRouter.get(routes.study_join, get_joined_user)
 studyRouter.post(routes.attendence,attendence)
 studyRouter.post(routes.check_attendence,read_today_attendence);
+
 
 
 export default studyRouter;

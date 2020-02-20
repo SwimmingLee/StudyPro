@@ -234,7 +234,6 @@ export const update_study = async function(req, res) {
 export const read_studies = async function(req, res) {
     try{
         studies.findAll({
-            limit: 10,
             order:  [['created_date','DESC']]
             }).map(async study => {
                 const minor =  await minor_classes.findOne({where:{id:study.dataValues.minor_class_id}});
@@ -415,4 +414,21 @@ export const image_url_update = function(req, res) {
             console.log(image_url, new_image_url)
             studies.update({image_url: new_image_url}, {where:{id:study.dataValues.id}})
         })
+};
+
+export const delete_study = (req,res) => {
+    try {
+        console.log(req.body);
+        const {study_id, user_id} = req.body;
+        
+        let result = studies.delete_study(study_id, user_id);
+        res.send({state:'success'})
+    } catch (error) {
+        res.send({state: 'fail'})    
+        console.log(error);
+        
+    }
+
+
+
 }
