@@ -41,9 +41,7 @@
 
           <v-col align="center" cols="1">
             <v-icon
-              @click="
-                (modalType = 'accept'), (selectedUser = newbie), (modal = true)
-              "
+              @click="limit_check(newbie)"
               color="green"
             >check</v-icon>
           </v-col>
@@ -87,14 +85,15 @@
 
           <v-col align-self="center" align="center" cols="1">
             <a>
-              <v-icon v-if="member.id !== currentUser.uid" class="black--text ma-0" @click="viewDetail(member)">mdi-email</v-icon>
+              <v-icon
+                v-if="member.id !== currentUser.uid"
+                class="black--text ma-0"
+                @click="viewDetail(member)"
+              >mdi-email</v-icon>
             </a>
           </v-col>
 
           <v-col align="center" cols="3">
-            <!-- <v-icon @click="viewGreeting(member)" color="black"
-              >more_horiz</v-icon
-            >-->
             <v-row>
               <v-col cols="6">
                 <v-img
@@ -226,7 +225,10 @@
 
         <div class="mt-4">
           <p>"{{ this.studyInfo.name }}" 스터디에 지금 가입하세요!</p>
-          <v-btn text color="green lighten-2" @click="modalOpen">가입하기</v-btn>
+
+          <v-btn v-if="!isApplying" text color="green lighten-2" @click="modalOpen">가입하기</v-btn>
+          <span id="applying_span" v-else text color="blue lighten-2">가입 심사 중</span>
+
           <!-- <v-btn text color="error" @click="goBack">이전으로</v-btn> -->
         </div>
       </v-col>
@@ -265,7 +267,7 @@ export default {
     comment: "",
     reg_message: "",
     groupModal: false,
-    user:"",
+    user: "",
     modal: false,
     modalType: "",
     member: {},
@@ -274,6 +276,7 @@ export default {
     studyInfo: {},
     isCaptain: false,
     isJoined: false,
+    isApplying: false,
 
     selectedUser: {
       user: {
@@ -289,7 +292,17 @@ export default {
       error: "오류가 발생했습니다"
     }
   }),
+  async mounted(){
 
+    let apply_list = await StudyService.getApplyList({study_id :this.study_id});
+    apply_list.data.forEach(element => {
+      if(element.user_id === this.currentUser.uid){
+        this.isApplying = true;
+        return;
+      }
+    });
+
+  },
   async created() {
     await this.loadStudyInfo();
 
@@ -331,6 +344,7 @@ export default {
     GroupModal: () => import("@/components/user/messenger/MsgSendModal")
   },
   methods: {
+
     modalClose() {
       this.groupModal = false;
     },
@@ -387,11 +401,9 @@ export default {
         this.getApplyList();
         this.getjoinedUser();
         this.modal = false;
-
         //이메일 보내기
-
         let user_email = this.selectedUser.user.email;
-        
+
         let study_name = this.studyInfo.name;
         EmailService.resultApply(user_email, study_name, this.study_id, true);
       } else {
@@ -418,7 +430,6 @@ export default {
       } else {
         this.modalType = "error";
       }
-
     },
     async deleteMember() {
       var res = await StudyService.deleteUser({
@@ -436,7 +447,6 @@ export default {
 
         let study_name = this.studyInfo.name;
         EmailService.noticeDrop(user_email, study_name, this.study_id);
-
       } else {
         this.modalType = "error";
       }
@@ -463,7 +473,9 @@ export default {
 
       if (res.state == "success") {
         //이메일 보내기
-        let captain_info = await UserService.getUserContent(this.studyInfo.captain);
+        let captain_info = await UserService.getUserContent(
+          this.studyInfo.captain
+        );
         let captain_email = captain_info.email;
         let study_name = this.studyInfo.name;
         EmailService.noticeApply(captain_email, study_name, this.study_id);
@@ -472,7 +484,32 @@ export default {
       } else {
         this.reg_message = res.data.detail;
       }
+    },
+    async limit_check(newbie) {
+      let study_info = await StudyService.getStudyInfo({
+        study_id: this.study_id
+      });
+
+      let study_limit = study_info.data.user_limit;
+      let num_joined_student = study_info.data.num_joined_student;
+      console.log(study_info);
+
+
+      if (num_joined_student >= study_limit) {
+        alert("스터디 참여 인원이 초과하였습니다.");
+        return;
+      }else{
+        this.modalType = 'accept';
+        this.selectedUser = newbie;
+        this.modal = true;
+      }
     }
   }
 };
 </script>
+
+<style  scoped>
+  #applying_span{
+    color : #2196F3
+  }
+</style>

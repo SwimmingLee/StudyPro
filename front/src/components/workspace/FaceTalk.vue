@@ -339,7 +339,7 @@ export default {
     })
 
     this.socket.on('leave', message => {
-      const video_num = this.connected_users.indexOf(message.user_id)
+      const video_num = this.connected_users.indexOf(message.user_id) === -1 ? this.connected_users.indexOf(`${message.user_id}`) : this.connected_users.indexOf(message.user_id)
       this.deleteBorder(video_num, this.sharing_id)
       this.connected_users[video_num] = null
       this.user_profiles[video_num] = null

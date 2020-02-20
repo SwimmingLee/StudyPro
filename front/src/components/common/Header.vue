@@ -308,7 +308,6 @@ export default {
     getAlarmNumber() {
       AlarmService.getAlarmNumber().then(numAlarm => {
         this.numAlarm = numAlarm.data.num_alarm || 0;
-        console.log("aaaa", this.numAlarm);
       });
     }
   },

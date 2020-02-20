@@ -149,7 +149,6 @@ export default {
     },
     async AuthKakaoSignin() {
       const user_info = await WbKakao.signinForm();
-      console.log(user_info)
       let {
         properties: { nickname, profile_image },
         kakao_account: { email, gender }

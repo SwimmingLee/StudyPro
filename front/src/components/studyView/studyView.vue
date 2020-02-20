@@ -117,9 +117,6 @@ export default {
 
 
   async mounted() {
-    if (!this.isAuth) {
-      this.$router.push({ name: "home" });
-    }
     await this.loadStudyInfo();
     if (this.studyInfo.level) {
       this.isJoined = true;

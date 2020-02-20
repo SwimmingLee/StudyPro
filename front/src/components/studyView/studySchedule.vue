@@ -1,8 +1,8 @@
 <template>
   <div id="mycal">
     <div v-if="isAuth">
-      <v-row class="fill-height ml-2" align="center" justify="center">
-        <v-col cols="12">
+      <v-row class="ml-4" align="center" justify="center">
+        <v-col cols="11" sm="12" offset="1" offset-sm="0">
           <v-expansion-panels style="z-Index:0;">
             <v-expansion-panel>
               <v-expansion-panel-header>
@@ -77,7 +77,6 @@
                           :event-color="getEventColor"
                           :now="today"
                           :type="type"
-                          @click:event="showEvent"
                           @click:more="viewDay"
                           @click:date="viewDay"
                           @change="updateRange"
@@ -132,46 +131,6 @@
                                   </ul>
                                 </div>
                               </div>
-                              <v-dialog
-                                v-model="delOpen"
-                                max-width="400px"
-                                style="overflow:hidden"
-                              >
-                                <v-card class="py-2 px-3">
-                                  <p>정말 삭제하시겠습니까?</p>
-                                  <v-row justify="end">
-                                    <v-btn
-                                      text
-                                      color="dark lighten-2"
-                                      @click="delOpen = false"
-                                      >Cancel</v-btn
-                                    >
-                                    <v-btn
-                                      text
-                                      color="error"
-                                      @click="eventDelete(selectedEvent)"
-                                      >Ok</v-btn
-                                    >
-                                  </v-row>
-                                </v-card>
-                              </v-dialog>
-                              <v-dialog
-                                v-model="userOpen"
-                                max-width="400px"
-                                style="overflow:hidden"
-                              >
-                                <v-card class="py-2 px-3">
-                                  <p>내 일정에 추가했습니다.</p>
-                                  <v-row justify="end">
-                                    <v-btn
-                                      text
-                                      color="dark lighten-2"
-                                      @click="putUserSchedule()"
-                                      >확인</v-btn
-                                    >
-                                  </v-row>
-                                </v-card>
-                              </v-dialog>
                             </v-toolbar>
                             <v-card-text>
                               <p
@@ -203,69 +162,155 @@
             </v-expansion-panel>
           </v-expansion-panels>
 
-          <!-- 이슈 등록 -->
+          <!-- 이슈 -->
           <v-row class="mt-8">
-            <!-- 할일 -->
-            <v-col cols="4" v-for="issue in issues" :key="issue.title">
+            <v-col cols="4" v-for="(issue, index) in issues" :key="index">
               <p class="issue-container-title text-center">
                 {{ issue.title }}
               </p>
-              <div class="issue-container py-2">
-                <draggable
-                  class="list-group"
-                  :list="issue.items"
-                  group="issue"
-                  v-bind="dragOptions"
-                  @start="drag = true"
-                  @end="drag = false"
-                >
-                  <transition-group
-                    type="transition"
-                    :name="!drag ? 'flip-list' : null"
+              <!-- 이슈 박스 -->
+              <div class="issue-container py-2 px-2">
+                <!-- 할일 기능 -->
+                <div v-if="issue.title == '준비'">
+                  <!-- 등록 버튼 -->
+                  <v-btn
+                    class="issue-reg-btn primary white--text mb-4"
+                    width="100%"
+                    @click="(modal = true), (isUpdate = false)"
+                    >일정 등록</v-btn
                   >
-                    <div v-for="item in issue.items" :key="item.order">
-                      <v-card class="issue-card list-group-item">
-                        <i
-                          :class="
-                            item.fixed
-                              ? 'fa fa-anchor'
-                              : 'glyphicon glyphicon-pushpin'
+                  <!-- 등록버튼 끝 -->
+                  <!-- 기본 카드 -->
+                  <draggable
+                    class="list-default-group"
+                    :list="default_items"
+                    :group="{ name: 'issue', pull: 'clone', put: false }"
+                    v-bind="dragOptions"
+                  >
+                    <transition-group
+                      type="transition"
+                      :name="!drag ? 'flip-list' : null"
+                    >
+                      <div
+                        class="list-group-item"
+                        v-for="(item, index) in default_items"
+                        :key="index"
+                      >
+                        <v-card
+                          class="issue-card default-card"
+                          color="redC"
+                          @click="
+                            (isUpdate = true),
+                              (propEvent = item),
+                              (modal = true)
                           "
-                          @click="item.fixed = !item.fixed"
-                          aria-hidden="true"
-                        ></i>
-                        <v-container>
-                          <p class="issue-card-text" aria-disabled>
-                            {{ item.captaion }}
-                          </p>
-                          <p class="issue-card-title" aria-disabled>
-                            {{ item.name }}
-                          </p>
-                          <p class="issue-card-text" aria-disabled>
-                            {{ item.start_date }} ~ {{ item.end_date }}
-                          </p>
-                          <p class="issue-card-text" aria-disabled>
-                            {{ item.start_time }} ~ {{ item.end_time }}
-                          </p>
-                        </v-container>
-                      </v-card>
-                    </div>
-                  </transition-group>
-                </draggable>
+                        >
+                          <v-container>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.user_nickname }}
+                            </p>
+                            <p class="issue-card-title" aria-disabled>
+                              {{ item.name }}
+                            </p>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.dates | filterDate }}
+                            </p>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.start_time }} ~ {{ item.end_time }}
+                            </p>
+                          </v-container>
+                        </v-card>
+                      </div>
+                    </transition-group>
+                  </draggable>
+                  <!-- 기본 카드 끝 -->
+                </div>
+                <!-- 할일 기능 끝 -->
+                <!-- 등록된 카드 -->
+                <div class="issue-list-container">
+                  <draggable
+                    class="list-group"
+                    :list="issue.items"
+                    v-bind="dragOptions"
+                    @start="drag = true"
+                    @end="drag = false"
+                    @change="log($event, issue.title)"
+                  >
+                    <transition-group
+                      type="transition"
+                      :name="!drag ? 'flip-list' : null"
+                    >
+                      <div v-for="(item, index) in issue.items" :key="index">
+                        <v-card
+                          class="issue-card list-group-item"
+                          :color="getColor(issue.title)"
+                          @click="
+                            (isUpdate = true),
+                              (propEvent = item),
+                              (modal = true)
+                          "
+                        >
+                          <v-container>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.user_nickname }}
+                            </p>
+                            <p class="issue-card-title" aria-disabled>
+                              {{ item.name }}
+                            </p>
+                            <v-row>
+                              <v-col class="pb-0">
+                                <v-btn
+                                  v-if="issue.title == '활성'"
+                                  class="primary issue-enter-btn"
+                                  @click.prevent="enterIssue($event, item)"
+                                  ><span>참여</span></v-btn
+                                >
+                              </v-col>
+                              <v-col class="pb-0">
+                                <v-row justify="end">
+                                  <p class="issue-card-text mr-4" aria-disabled>
+                                    {{ item.dates | filterDate }}
+                                  </p>
+                                </v-row>
+                                <v-row justify="end">
+                                  <p class="issue-card-text mr-4" aria-disabled>
+                                    {{ item.start_time }} ~ {{ item.end_time }}
+                                  </p>
+                                </v-row>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card>
+                      </div>
+                    </transition-group>
+                  </draggable>
+                </div>
+                <!-- 등록된 카드 끝 -->
               </div>
+              <!-- 이슈 박스 끝 -->
             </v-col>
-            <!-- 할일 끝 -->
+            <!-- 이슈 끝 -->
           </v-row>
         </v-col>
       </v-row>
       <study-cal-modal
-        :add-modal="addModal"
+        :add-modal="modal"
         :is-update="isUpdate"
         :prop-event="propEvent"
         :study_id="study_id"
-        v-on:close="addModal = false"
+        v-on:close="(modal = false), (isUpdate = false)"
         v-on:reload="reload"
       />
+      <modal :open-modal="errorModal" v-on:close="errorModal = false">
+        <template v-slot:text>
+          <span v-show="errorType == 'noDays'"
+            >날짜를 입력하지 않으면 달력에 표시되지 않습니다</span
+          >
+          <span v-show="errorType == 'timeDup'"
+            >해당시간에 나의 일정이 있습니다</span
+          >
+        </template>
+      </modal>
     </div>
     <request-signin v-else />
   </div>
@@ -295,28 +340,11 @@ export default {
     userOpen: false,
     selectedOpen: false,
     events: [],
-    colors: [
-      "blue",
-      "indigo",
-      "deep-purple",
-      "cyan",
-      "green",
-      "orange",
-      "grey darken-1"
-    ],
-    names: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party"
-    ],
     propEvent: {},
     isUpdate: false,
-    addModal: false,
+    modal: false,
+    errorModal: false,
+    errorType: "noDays",
     detail: false,
     detailMenus: [
       { title: "내 일정에 추가", value: "movemycal" },
@@ -325,114 +353,34 @@ export default {
     ],
     delOpen: false,
     picked: false,
+    default_items: [],
     issues: [
       {
-        title: "할 일",
-        items: [
-          {
-            name: "헬로우1",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 1
-          },
-          {
-            name: "헬로우2",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 2
-          },
-          {
-            name: "헬로우3",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 3
-          }
-        ]
+        title: "준비",
+        items: []
       },
       {
-        title: "진행 중",
-        items: [
-          {
-            name: "헬로우1",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 4
-          },
-          {
-            name: "헬로우2",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 5
-          },
-          {
-            name: "헬로우3",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 6
-          }
-        ]
+        title: "활성",
+        items: []
       },
       {
         title: "완료",
-        items: [
-          {
-            name: "헬로우1",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 7
-          },
-          {
-            name: "헬로우2",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 8
-          },
-          {
-            name: "헬로우3",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 9
-          }
-        ]
+        items: []
       }
     ],
-    drag: false
+    drag: false,
+    removed: "",
+    added: ""
   }),
   components: {
     studyCalModal: () => import("@/components/studyView/studyCalModal"),
     requestSignin: () => import("@/components/base/RequestSignin"),
-    draggable: () => import("vuedraggable")
+    draggable: () => import("vuedraggable"),
+    modal: () => import("@/components/base/Modal")
   },
   watch: {
-    dragArray() {
-      console.log(this.dragArray);
+    issues() {
+      console.log(this.issues);
     }
   },
   computed: {
@@ -483,31 +431,19 @@ export default {
     dragOptions() {
       return {
         animation: 200,
-        group: "description",
+        group: "issue",
         disabled: false,
         ghostClass: "ghost"
       };
+    },
+
+    currentUser() {
+      return this.$store.getters["auth/getUser"];
     }
   },
   mounted() {
-    //console.log("studySChedule.vue", this.study_id)
-    //   임시 더미 입력
     // 마운트시 내 일정 엑시오스 요청
-    WorkService.getWorks({ type: "study", study_id: this.study_id }).then(
-      works => {
-        works.data.map(work => {
-          work.name = "[" + work.status + "]" + work.name;
-          work.color = work.color
-            ? work.color
-            : "primary"; /* 빨리 여기를 수정해야 한다. */
-          work.start = work.start_date;
-          work.end = work.end_date;
-        });
-
-        this.events = works.data;
-      }
-    );
-    this.$refs.calendar.checkChange();
+    this.reload();
   },
   methods: {
     viewDay({ date }) {
@@ -532,41 +468,17 @@ export default {
     next() {
       this.$refs.calendar.next();
     },
-    showEvent({ nativeEvent, event }) {
-      const open = () => {
-        this.selectedEvent = event;
-        this.selectedElement = nativeEvent.target;
-        setTimeout(
-          () => ((this.selectedOpen = true), (this.detail = false)),
-          10
-        );
-      };
-
-      if (this.selectedOpen) {
-        this.selectedOpen = false;
-        setTimeout(open, 10);
-      } else {
-        open();
-      }
-
-      nativeEvent.stopPropagation();
-    },
     updateRange({ start, end }) {
-      //   const events = [];
+      // const events = [];
+      // console.log(this.issues[1].items)
+      // let my_events = this.issues[1].items;
 
-      //   const my_events = []; // 내일정 엑시오스 요청
-
-      //   for (var i = 0; i < my_events.length; i++) {
+      // for (let i = 0; i < my_events.length; i++) {
+      //   for (let j = 0; j < my_events.dates.length; j++) {
       //     events.push({
-      //       name:
-      //         my_events.group == "empty"
-      //           ? my_events.name
-      //           : "[" + my_events.group + "]" + my_events.name,
+      //       name: my_events.name,
       //       content: my_events.content,
-      //       start:
-      //         event.startTime != ""
-      //           ? event.startDay + " " + event.startTime
-      //           : event.startDay,
+      //       start: my_events.dates,
       //       end:
       //         event.endTime != ""
       //           ? event.endDay + " " + event.endTime
@@ -576,6 +488,7 @@ export default {
       //       event_id: event.event_id
       //     });
       //   }
+      // }
 
       this.start = start;
       this.end = end;
@@ -585,98 +498,200 @@ export default {
       //   this.events = events;
     },
 
-    loadAddModal(event) {
-      if (!event) {
-        this.isUpdate = false;
-        this.addModal = true;
-      } else {
-        this.isUpdate = true;
-        this.propEvent = event;
-        this.addModal = true;
-      }
-    },
-
-    reload(/*event*/) {
-      // 추가할 데이터 // 테스트용
-      // var newEvent = {
-      //   name:
-      //     event.group == "empty"
-      //       ? event.name
-      //       : "[" + event.group + "]" + event.name,
-      //   content: event.content,
-      //   start: event.start,
-      //   end: event.end,
-      //   group: event.group,
-      //   color: event.color,
-      //   event_id: 0,
-      //   group_id: 0
-      // };
-      // //테스트라인
-      // this.events.push(newEvent);
-
-      // // 일정목록 리로드
-      // this.$refs.calendar.checkChange();
-      WorkService.getWorks({ type: "study", study_id: this.study_id }).then(
-        async works => {
-          await works.data.map(work => {
-            work.name = "[" + work.status + "]" + work.name;
-            work.color = work.color
-              ? work.color
-              : "primary"; /* 빨리 여기를 수정해야 한다. */
-            work.start = work.start_date;
-            work.end = work.end_date;
-          });
-
-          this.events = works.data;
-          this.$refs.calendar.checkChange();
+    async reload() {
+      let payload = {
+        type: "study",
+        study_id: this.study_id
+      };
+      let res = await WorkService.getWorks(payload);
+      this.default_items = [];
+      this.issues[0].items = [];
+      this.issues[1].items = [];
+      this.issues[2].items = [];
+      for (let item of res) {
+        item.dates = this.datesToList(item.dates);
+        switch (item.status) {
+          case "기본":
+            this.default_items.push(item);
+            break;
+          case "준비":
+            this.issues[0].items.push(item);
+            break;
+          case "활성":
+            this.issues[1].items.push(item);
+            break;
+          case "완료":
+            this.issues[2].items.push(item);
+            break;
+          default:
+            console.log(
+              "reload method in studyScehdule.vue error",
+              item.status
+            );
         }
-      );
+      }
+
+      this.updateEvent();
     },
 
-    clickDetailMenu(value, event) {
-      switch (value) {
-        case "movemycal":
-          this.moveMyCal(event);
-          break;
-        case "update":
-          this.loadAddModal(event);
-          break;
-        case "delete":
-          this.delOpen = true;
-          break;
-        default:
+    getColor(title) {
+      let colors = {
+        준비: "greenC",
+        활성: "blueC",
+        완료: "greyC"
+      };
+
+      return colors[title];
+    },
+    datesToList(dates) {
+      if (dates == "") return [];
+      let result = [];
+      let arr = dates.split("/");
+      if (arr.length == 1) return [dates];
+
+      for (let date of arr) {
+        result.push(date);
+      }
+      return result;
+    },
+    async create(newEvent) {
+      //데이터추가 엑시오스
+      let res = await WorkService.createWork(newEvent);
+      if (res.type == "study") {
+        this.reload();
       }
     },
 
-    eventDelete(event) {
-      WorkService.deleteWork({ type: "study", work_id: event.id });
-      const eventsIdx = this.events.indexOf(event);
-      this.events.splice(eventsIdx, 1);
+    async update(event) {
+      let updateEvent = JSON.parse(JSON.stringify(event));
+      updateEvent.work_id = updateEvent.id;
+      //수정 엑시오스 요청
+      await WorkService.updateWork(updateEvent);
 
-      this.delOpen = false;
-      this.selectedOpen = false;
-      this.$refs.calendar.checkChange();
+      if (
+        event.type == "study" &&
+        updateEvent.status == "활성" &&
+        updateEvent.dates.length != 0
+      ) {
+        this.updateEvent();
+      }
+
+      this.reload();
+    },
+    async log(evt, title) {
+      console.log(evt, title)
+      if (evt.added) {
+        this.added = title;
+        if (this.removed != "") {
+          evt.added.element.status = title;
+          await this.update(evt.added.element);
+          this.removed = "";
+        }
+        if (evt.added.element.status == "기본") {
+          let newEvent = JSON.parse(JSON.stringify(evt.added.element));
+          newEvent.status = title;
+          await this.create(newEvent);
+        }
+        if (title == "활성" && evt.added.element.dates == "") {
+          this.errorType = "noDays";
+          this.errorModal = true;
+        }
+      }
+      if (evt.removed) {
+        this.removed = title;
+        if (this.added != "") {
+          evt.removed.element.status = this.added;
+          await this.update(evt.removed.element);
+          this.added = "";
+        }
+      }
+    },
+    updateEvent() {
+      this.events = [];
+      for (let item of this.issues[1].items) {
+        if (item.dates.length == 0) continue;
+
+        for (let date of item.dates) {
+          let copy = JSON.parse(JSON.stringify(item));
+          copy.start = date + " " + copy.start_time;
+          copy.end = date + " " + copy.end_time;
+          this.events.push(copy);
+        }
+      }
+    },
+    async enterIssue(event, item) {
+      event.stopPropagation();
+
+      let payload = {
+        type: "personal"
+      };
+      let myIssues = await WorkService.getWorks(payload);
+
+      // 시간겹치는지 체크
+      for (let issue of myIssues) {
+        if (issue.dates.length == 0) continue;
+
+        issue.dates = this.datesToList(issue.dates);
+        for (let date1 of issue.dates) {
+          for (let date2 of item.dates) {
+            if (date1 == date2) {
+              if (
+                (this.isLaterLeftTime(item.start_time, issue.start_time) &&
+                  this.isLaterLeftTime(issue.end_time, item.start_time)) ||
+                (this.isLaterLeftTime(item.end_time, issue.start_time) &&
+                  this.isLaterLeftTime(issue.end_time, item.end_time))
+              ) {
+                this.errorType = "timeDup";
+                this.errorModal = true;
+                return;
+              }
+            }
+          }
+        }
+      }
+
+      // 안겹치면 등록
+      // 스터디일정 정보 업데이트
+      item.members += ", " + this.currentUser.nickname;
+      this.update(item);
+
+      // 내일정으로 생성
+      let copy = JSON.parse(JSON.stringify(item));
+      copy.type = "personal";
+      this.create(copy);
     },
 
-    moveMyCal(event) {
-      const name_arr = event.name.split("]");
-      const name = name_arr.length == 2 ? name_arr[1] : name_arr[0];
+    isLaterLeftTime(time1, time2) {
+      let arr1 = time1.split(":");
+      let arr2 = time2.split(":");
+      let left = {
+        hour: arr1[0],
+        minute: arr1[1]
+      };
+      let right = {
+        hour: arr2[0],
+        minute: arr2[1]
+      };
 
-      WorkService.createWork({
-        type: "personal",
-        study_id: event.study_id,
-        group: "study " + event.status,
-        name: name,
-        content: event.content,
-        start: event.start_date,
-        end: event.end_date,
-        color: event.color
-      });
-      this.userOpen = true;
-    },
-    putUserSchedule() {
-      this.selectedOpen = false;
-      this.userOpen = false;
+      if (left.hour > right.hour) {
+        return true;
+      } else if (left.hour == right.hour && left.minute >= right.minute) {
+        return true;
+      }
+
+      return false;
+    }
+  },
+  filters: {
+    filterDate(values) {
+      if (values.length == 0) return;
+      let result = "";
+      for (let value of values) {
+        let arr = value.split("-");
+        result += " " + arr[1] + "/" + arr[2];
+      }
+
+      return result;
     }
   }
 };

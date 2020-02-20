@@ -25,7 +25,7 @@
       </v-card-subtitle>
       <v-divider class="mx-2" />
       <v-card-actions class="mb-2">
-        <v-row justify="center mx-0">
+        <v-row class="mx-0">
           <template v-if="isJoined">
             <v-btn
               v-if="!attendenced"
@@ -37,7 +37,15 @@
             <v-btn v-else class="btns_join mt-1" disabled large block>출석 완료</v-btn>
           </template>
           <template v-else>
-            <v-btn class="btns_join green mt-1" large dark @click="modalOpen" v-if="!isJoined" block>가입하기</v-btn>
+            <v-btn
+              v-if="!isApplying"
+              class="btns_join green mt-1"
+              large
+              dark
+              @click="modalOpen"
+              block
+            >가입하기</v-btn>
+            <v-btn v-else class="btns_join mt-1" disabled large block>가입 심사 중</v-btn>
           </template>
         </v-row>
       </v-card-actions>
@@ -78,7 +86,8 @@ export default {
       comment: "",
       reg_message: "",
       isJoined: false,
-      attendenced: false
+      attendenced: false,
+      isApplying: ""
     };
   },
 
@@ -194,7 +203,7 @@ export default {
       this.$emit('toWorkspace')
     }
   },
-  mounted() {
+  async mounted() {
     this.check_attendence().then(res => {
       if (res.data.state === "true") {
         this.attendenced = true;
@@ -202,7 +211,21 @@ export default {
         this.attendenced = false;
       }
     });
+
+    let apply_list = await StudyService.getApplyList({study_id :this.study_id});
+    let user_id = this.$store.getters["auth/getUser"].uid;
+    apply_list.data.forEach(element => {
+      if(element.user_id === user_id){
+        this.isApplying = true;
+        return;
+      }
+    });
+
+
+
   }
+
+  
 };
 </script>
 

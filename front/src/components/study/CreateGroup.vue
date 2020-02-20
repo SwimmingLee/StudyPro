@@ -268,6 +268,7 @@
 </template>
 
 <script>
+// import WorkService from "@/services/work.service";
 import VDaterange from "@/components/base/VDaterange";
 import { format } from "date-fns";
 
@@ -355,8 +356,6 @@ export default {
       this.validation();
     },
     starttime() {
-      console.log(this.starttime);
-      console.log(this.starttime.split(":")[0] + this.starttime.split(":")[1]);
       this.validation();
     },
     endtime() {
@@ -473,6 +472,7 @@ export default {
       const res = await this.$store.dispatch("study/createStudy", formData);
       if (res.state == "success") {
         this.$emit("success", res.gid);
+        this.makeCard();
         this.message = "";
       } else {
         this.message = "이미 존재하는 모임명입니다";
@@ -502,6 +502,30 @@ export default {
         callback: () => {}
       });
     }
+  },
+
+  async makdCard() {
+    // // 추가할 데이터
+    // var newEvent = {
+    //   study_id: this.study_id,
+    //   type: "study",
+    //   name: this.input.name,
+    //   content: this.input.content,
+    //   dates: this.input.dates,
+    //   start_time: this.input.startTime,
+    //   end_time: this.input.endTime,
+    //   status: this.input.isDefault ? "기본" : "할 일",
+    //   color: ""
+    // };
+    // //데이터추가 엑시오스
+    // let res = await WorkService.createWork(newEvent);
+    // if (res.id) {
+    //   this.$emit("reload");
+    //   this.close();
+    // } else {
+    //   this.message = "생성하지 못했습니다.";
+    // }
+    // this.isLoading = false;
   }
 };
 </script>

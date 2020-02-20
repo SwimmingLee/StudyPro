@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <v-row justify="center" v-cloak>
+    <v-row justify="center">
       <v-col class="py-0" cols="12" lg="9" md="12" sm="12">
         <router-view name="header" />
         <router-view class="main-view" />
@@ -22,3 +22,4 @@ export default {
   }
 };
 </script>
+

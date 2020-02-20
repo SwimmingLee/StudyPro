@@ -65,7 +65,6 @@ class StudyService {
     }
 
     joinStudy(payload) {
-        //accept ==> true/false
         return axios.post(URL + "join", {
             apply_id: payload.apply_id,
             accept: payload.accept
@@ -114,8 +113,6 @@ class StudyService {
     }
 
     attendence(payload) {
-        console.log(URL + "attendence");
-        
         return axios.post(URL + "attendence", {
             study_id: payload.study_id,
             user_id: payload.user_id,

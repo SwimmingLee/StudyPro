@@ -2,210 +2,139 @@
   <div id="mycal">
     <v-img src="@/assets/images/banner/calendar.png" />
     <div id="cal-content" v-if="isAuth">
-      <v-card-title>
-        최신 그룹일정
-        <v-spacer></v-spacer>
-        <v-text-field
-          append-icon="search"
-          label="검색"
-          single-line
-          hide-details
-          v-model="search"
-        ></v-text-field>
-      </v-card-title>
-      <v-data-table
-        class="cal-table"
-        v-model="tableSelected"
-        :headers="tableHeaders"
-        :items="items"
-        :search="search"
-        :items-per-page="5"
-        show-select
-        @click:row="clicked($event)"
-      >
-        <v-alert slot="no-results" icon="warning" class="ma-0"
-          >Your search for "{{ search }}" found no results.</v-alert
-        >
-      </v-data-table>
-      <v-expansion-panels>
-        <v-expansion-panel>
-          <v-expansion-panel-header>
-            <span class="ex-title">Calendar</span>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <!-- 달력 -->
-            <v-row class="fill-height">
-              <v-col>
-                <v-sheet height="64">
-                  <v-toolbar flat color="white">
-                    <v-btn
-                      outlined
-                      class="mr-4"
-                      color="grey darken-2"
-                      @click="setToday"
-                    >
-                      오늘날짜로
-                    </v-btn>
-                    <v-btn fab text small color="grey darken-2" @click="prev">
-                      <v-icon small>mdi-chevron-left</v-icon>
-                    </v-btn>
-                    <v-btn fab text small color="grey darken-2" @click="next">
-                      <v-icon small>mdi-chevron-right</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>{{ title }}</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      class="customTheme mr-2 pa-0"
-                      elevation="0"
-                      @click="loadAddModal()"
-                    >
-                      <span class="white--text px-2">+</span>
-                      <span class="pr-2 white--text d-none d-sm-flex"
-                        >일정추가</span
-                      >
-                    </v-btn>
-                    <v-menu bottom right>
-                      <template v-slot:activator="{ on }">
-                        <v-btn outlined color="grey darken-2" v-on="on">
-                          <span>{{ typeToLabel[type] }}</span>
-                          <v-icon right>mdi-menu-down</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item @click="type = 'day'">
-                          <v-list-item-title>일</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="type = 'week'">
-                          <v-list-item-title>주</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="type = 'month'">
-                          <v-list-item-title>월</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="type = '4day'">
-                          <v-list-item-title>4일</v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-toolbar>
-                </v-sheet>
+      <!-- 달력 -->
+      <v-row class="fill-height">
+        <v-col>
+          <v-sheet height="64">
+            <v-toolbar flat color="white">
+              <v-btn
+                outlined
+                class="mr-4"
+                color="grey darken-2"
+                @click="setToday"
+              >
+                오늘날짜로
+              </v-btn>
+              <v-btn fab text small color="grey darken-2" @click="prev">
+                <v-icon small>mdi-chevron-left</v-icon>
+              </v-btn>
+              <v-btn fab text small color="grey darken-2" @click="next">
+                <v-icon small>mdi-chevron-right</v-icon>
+              </v-btn>
+              <v-toolbar-title>{{ title }}</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn
+                class="customTheme mr-2 pa-0"
+                elevation="0"
+                @click="loadAddModal()"
+              >
+                <span class="white--text px-2">+</span>
+                <span class="pr-2 white--text d-none d-sm-flex">일정추가</span>
+              </v-btn>
+              <v-btn >월단위로</v-btn>
+            </v-toolbar>
+          </v-sheet>
 
-                <!-- 달력 메인 -->
-                <v-sheet height="600">
-                  <v-calendar
-                    ref="calendar"
-                    v-model="focus"
-                    color="primary"
-                    :events="events"
-                    :event-color="getEventColor"
-                    :now="today"
-                    :type="type"
-                    @click:event="showEvent"
-                    @click:more="viewDay"
-                    @click:date="viewDay"
-                    @change="updateRange"
-                  ></v-calendar>
-                  <v-menu
-                    v-model="selectedOpen"
-                    :close-on-content-click="false"
-                    :activator="selectedElement"
-                    offset-y
-                    :nudge-right="30"
-                    max-width="500px"
-                    min-width="350px"
-                  >
-                    <v-card color="grey lighten-4" flat>
-                      <v-toolbar :color="selectedEvent.color" dark>
-                        <v-toolbar-title
-                          v-html="selectedEvent.name"
-                        ></v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <div>
+          <!-- 달력 메인 -->
+          <v-sheet height="600">
+            <v-calendar
+              ref="calendar"
+              v-model="focus"
+              color="primary"
+              :events="events"
+              :event-color="getEventColor"
+              :now="today"
+              :type="type"
+              @click:event="showEvent"
+              @click:more="viewDay"
+              @click:date="viewDay"
+              @change="updateRange"
+            ></v-calendar>
+            <v-menu
+              v-model="selectedOpen"
+              :close-on-content-click="false"
+              :activator="selectedElement"
+              offset-y
+              :nudge-right="30"
+              max-width="500px"
+              min-width="350px"
+            >
+              <v-card color="grey lighten-4" flat>
+                <v-toolbar :color="selectedEvent.color" dark>
+                  <v-toolbar-title
+                    v-html="selectedEvent.name"
+                  ></v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <div>
+                    <v-btn icon class="dropPanel" @click="detail = !detail">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                    <div
+                      :class="{ menu: detail }"
+                      class="detaildrop"
+                      style="position:absolute"
+                    >
+                      <ul class="pl-0">
+                        <li v-for="item in detailMenus" :key="item.title">
                           <v-btn
-                            icon
-                            class="dropPanel"
-                            @click="detail = !detail"
+                            text
+                            @click="clickDetailMenu(item.value, selectedEvent)"
                           >
-                            <v-icon>mdi-dots-vertical</v-icon>
+                            <span style="color:black">{{ item.title }}</span>
                           </v-btn>
-                          <div
-                            :class="{ menu: detail }"
-                            class="detaildrop"
-                            style="position:absolute"
-                          >
-                            <ul class="pl-0">
-                              <li v-for="item in detailMenus" :key="item.title">
-                                <v-btn
-                                  text
-                                  @click="
-                                    clickDetailMenu(item.value, selectedEvent)
-                                  "
-                                >
-                                  <span style="color:black">{{
-                                    item.title
-                                  }}</span>
-                                </v-btn>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <v-dialog
-                          v-model="delOpen"
-                          max-width="400px"
-                          style="overflow:hidden"
-                        >
-                          <v-card class="py-2 px-3">
-                            <p>정말 삭제하시겠습니까?</p>
-                            <v-row justify="end">
-                              <v-btn
-                                text
-                                color="dark lighten-2"
-                                @click="delOpen = false"
-                              >
-                                Cancel
-                              </v-btn>
-                              <v-btn
-                                text
-                                color="error"
-                                @click="eventDelete(selectedEvent)"
-                              >
-                                Ok
-                              </v-btn>
-                            </v-row>
-                          </v-card>
-                        </v-dialog>
-                      </v-toolbar>
-                      <v-card-text>
-                        <p
-                          v-text="
-                            selectedEvent.start + ' ~ ' + selectedEvent.end
-                          "
-                          class="text-center"
-                        ></p>
-                        <span v-html="selectedEvent.content"></span>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <v-dialog
+                    v-model="delOpen"
+                    max-width="400px"
+                    style="overflow:hidden"
+                  >
+                    <v-card class="py-2 px-3">
+                      <p>정말 삭제하시겠습니까?</p>
+                      <v-row justify="end">
                         <v-btn
                           text
-                          color="secondary"
-                          @click="selectedOpen = false"
+                          color="dark lighten-2"
+                          @click="delOpen = false"
                         >
                           Cancel
                         </v-btn>
-                      </v-card-actions>
+                        <v-btn
+                          text
+                          color="error"
+                          @click="eventDelete(selectedEvent)"
+                        >
+                          Ok
+                        </v-btn>
+                      </v-row>
                     </v-card>
-                  </v-menu>
-                </v-sheet>
-              </v-col>
-            </v-row>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+                  </v-dialog>
+                </v-toolbar>
+                <v-card-text>
+                  <p
+                    v-text="selectedEvent.start + ' ~ ' + selectedEvent.end"
+                    class="text-center"
+                  ></p>
+                  <span v-html="selectedEvent.content"></span>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="secondary" @click="selectedOpen = false">
+                    Cancel
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-menu>
+          </v-sheet>
+        </v-col>
+      </v-row>
       <add-modal
         :add-modal="addModal"
         :is-update="isUpdate"
         :prop-event="propEvent"
-        v-on:close="addModal = false"
+        v-on:close="addModal = false, isUpdate=false"
         v-on:reload="reload"
       />
     </div>
@@ -245,12 +174,12 @@ export default {
     ],
     delOpen: false,
     tableHeaders: [
-      { text: '그룹명', align: 'center', value: 'group'},
+      { text: "그룹명", align: "center", value: "group" },
       { text: "일정명", align: "center", value: "name" },
       { text: "내용", align: "start", sortable: false, value: "content" },
-      { text: "날짜", align: "start", value: 'date'},
-      { text: '시간', align: 'start', value: 'time'}
-    ]
+      { text: "날짜", align: "start", value: "date" },
+      { text: "시간", align: "start", value: "time" }
+    ],
   }),
   components: {
     AddModal: () => import("./AddModal"),
@@ -296,19 +225,7 @@ export default {
     }
   },
   mounted() {
-    WorkService.getWorks({ type: "personal" }).then(works => {
-      works.data.map(work => {
-        work.name = "[" + work.status + "]" + work.name;
-        work.color = work.color
-          ? work.color
-          : "primary"; /* 빨리 여기를 수정해야 한다. */
-        work.start = work.start_date;
-        work.end = work.end_date;
-      });
-
-      this.events = works.data;
-    });
-    // 마운트시 내 일정 엑시오스 요청
+    this.reload();
   },
   methods: {
     viewDay({ date }) {
@@ -328,99 +245,37 @@ export default {
       this.$refs.calendar.next();
     },
     showEvent({ nativeEvent, event }) {
-      const open = () => {
-        this.selectedEvent = event;
-        this.selectedElement = nativeEvent.target;
-        setTimeout(
-          () => ((this.selectedOpen = true), (this.detail = false)),
-          10
-        );
-      };
-
-      if (this.selectedOpen) {
-        this.selectedOpen = false;
-        setTimeout(open, 10);
-      } else {
-        open();
-      }
-
-      nativeEvent.stopPropagation();
+      this.propEvent = event;
+      this.selectedElement = nativeEvent.target;
+      this.isUpdate = true;
+      this.addModal = true;
     },
     updateRange({ start, end }) {
-      //   const events = [];
-
-      //   const my_events = []; // 내일정 엑시오스 요청
-
-      //   for (var i = 0; i < my_events.length; i++) {
-      //     events.push({
-      //       name:
-      //         my_events.group == "empty"
-      //           ? my_events.name
-      //           : "[" + my_events.group + "]" + my_events.name,
-      //       content: my_events.content,
-      //       start:
-      //         event.startTime != ""
-      //           ? event.startDay + " " + event.startTime
-      //           : event.startDay,
-      //       end:
-      //         event.endTime != ""
-      //           ? event.endDay + " " + event.endTime
-      //           : event.endDay,
-      //       group: event.group,
-      //       color: event.color,
-      //       event_id: event.event_id
-      //     });
-      //   }
-
       this.start = start;
       this.end = end;
-
-      //   console.log(my_events);
-      //   console.log(events);
-      //   this.events = events;
     },
 
-    loadAddModal(event) {
-      if (!event) {
-        this.isUpdate = false;
-        this.addModal = true;
-      } else {
-        this.isUpdate = true;
-        this.propEvent = event;
-        this.addModal = true;
+    loadAddModal() {
+      this.isUpdate = false;
+      this.addModal = true;
+    },
+
+    async reload() {
+      this.events = [];
+      let res = await WorkService.getWorks({ type: "personal" });
+      for (let item of res) {
+        if (item.dates.length == 0) continue;
+        item.dates = this.datesToList(item.dates);
+        for (let date of item.dates) {
+          let copy = JSON.parse(JSON.stringify(item));
+          copy.start = date + " " + copy.start_time;
+          copy.end = date + " " + copy.end_time;
+          copy.color = copy.study_id ? "redC" : "primary";
+          this.events.push(copy);
+        }
       }
-    },
 
-    reload(/*event*/) {
-      // 추가할 데이터 // 테스트용
-      // var newEvent = {
-      //   name:
-      //     event.group == "empty"
-      //       ? event.name
-      //       : "[" + event.group + "]" + event.name,
-      //   content: event.content,
-      //   start: event.start,
-      //   end: event.end,
-      //   group: event.group,
-      //   color: event.color,
-      //   event_id: 0
-      // };
-      // //테스트라인
-      // this.events.push(newEvent);
-      WorkService.getWorks({ type: "personal" }).then(works => {
-        works.data.map(work => {
-          work.name = "[" + work.status + "]" + work.name;
-          work.color = work.color
-            ? work.color
-            : "primary"; /* 빨리 여기를 수정해야 한다. */
-          work.start = work.start_date;
-          work.end = work.end_date;
-        });
-
-        this.events = works.data;
-        this.$refs.calendar.checkChange();
-      });
-      // 일정목록 리로드
+      this.$refs.calendar.checkChange();
     },
 
     clickDetailMenu(value, event) {
@@ -447,6 +302,18 @@ export default {
       this.delOpen = false;
       this.selectedOpen = false;
       this.$refs.calendar.checkChange();
+    },
+
+    datesToList(dates) {
+      if (dates == "") return [];
+      let result = [];
+      let arr = dates.split("/");
+      if (arr.length == 1) return [dates];
+
+      for (let date of arr) {
+        result.push(date);
+      }
+      return result;
     }
   }
 };

@@ -2,30 +2,32 @@
   <v-dialog id="addmodal" v-model="open" max-width="540px">
     <v-card style="overflow:hidden">
       <v-card-title class="customTheme darken-1 white--text pb-3">
-        <span v-text="isUpdate ? '일정 수정' : '일정 추가'" class="headline"></span>
+        <span
+          v-text="isUpdate ? '일정 수정' : '일정 추가'"
+          class="headline"
+        ></span>
       </v-card-title>
       <!-- 내용입력란 -->
       <v-row justify="center">
-        <v-col cols="11">
-          <!-- 날짜/시간 선택 -->
-          <!-- 시작 날짜 -->
+        <v-col cols="11" class="pb-0">
+          <!-- 날짜 선택 -->
           <v-row>
             <v-col cols="12" sm="8" class="pb-0">
               <v-menu
-                ref="startDay"
-                v-model="active.startDay"
+                ref="dates"
+                v-model="active.dates"
                 :close-on-content-click="false"
                 :nudge-right="30"
-                :return-value.sync="input.startDay"
+                :return-value.sync="input.dates"
                 transition="scale-transition"
                 min-width="290px"
                 offset-y
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="input.startDay"
+                    v-model="input.dates"
                     class="mt-3"
-                    label="시작날짜"
+                    label="날짜"
                     prepend-icon="event"
                     dense
                     readonly
@@ -34,17 +36,31 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker
-                  v-model="input.startDay"
-                  @click:date="$refs.startDay.save(input.startDay)"
-                  no-title
-                  scrollable
-                ></v-date-picker>
+                <v-date-picker v-model="input.dates" no-title multiple>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    text
+                    color="dark lighten-2"
+                    @click="active.dates = false"
+                  >
+                    Cancel
+                  </v-btn>
+                  <v-btn
+                    text
+                    color="dark lighten-2"
+                    @click="$refs.dates.save(input.dates)"
+                  >
+                    OK
+                  </v-btn>
+                </v-date-picker>
               </v-menu>
             </v-col>
-            <!-- 시작 날짜 끝 -->
-            <!-- 시작 시간 -->
-            <v-col cols="6" sm="4" class="pb-0">
+          </v-row>
+          <!-- 날짜선택 끝 -->
+          <!-- 시간선택 -->
+          <!-- 시작 시간 -->
+          <v-row align="center">
+            <v-col cols="6" sm="4" class="py-0">
               <v-menu
                 ref="startTime"
                 v-model="active.startTime"
@@ -75,45 +91,7 @@
                 ></v-time-picker>
               </v-menu>
             </v-col>
-          </v-row>
-          <!-- <hr style="border: 0.5px solid #404040"/> -->
-          <!-- 시작 시간 끝 -->
-
-          <!-- 종료 날짜 -->
-          <v-row>
-            <v-col cols="12" sm="8" class="pt-1 pb-0">
-              <v-menu
-                ref="endDay"
-                v-model="active.endDay"
-                :close-on-content-click="false"
-                :nudge-right="30"
-                :return-value.sync="input.endDay"
-                transition="scale-transition"
-                min-width="290px"
-                offset-y
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="input.endDay"
-                    class="mt-3"
-                    label="종료날짜"
-                    prepend-icon="event"
-                    dense
-                    readonly
-                    outlined
-                    hide-details
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="input.endDay"
-                  no-title
-                  scrollable
-                  @click:date="$refs.endDay.save(input.endDay)"
-                ></v-date-picker>
-              </v-menu>
-            </v-col>
-            <!-- 종료 날짜 끝 -->
+            <!-- 시작 시간 끝 -->
             <!-- 종료 시간 -->
             <v-col cols="6" sm="4" class="py-0">
               <v-menu
@@ -132,6 +110,7 @@
                     v-model="input.endTime"
                     label="종료시간"
                     prepend-icon="access_time"
+                    readonly
                     hide-details
                     v-on="on"
                   ></v-text-field>
@@ -146,15 +125,13 @@
               </v-menu>
             </v-col>
           </v-row>
-          <!-- <hr style="border: 0.5px solid #404040"/> -->
-          <!-- 종료 시간 끝 -->
-          <!-- 날짜/시간 선택 끝 -->
+          <!-- 시간선택 끝 -->
 
           <!-- 이름/내용 입력 -->
           <!-- 이름입력 -->
           <v-row justify="center">
             <v-col cols="12" class="py-0">
-              <v-text-field v-model="input.name" label="일정명"></v-text-field>
+              <v-text-field v-model="input.name" label="일정명"> </v-text-field>
             </v-col>
           </v-row>
           <!-- 이름입력 끝 -->
@@ -173,54 +150,67 @@
           </v-row>
           <!-- 내용입력 끝 -->
           <!-- 이름/내용 입력 끝 -->
-
-          <!-- 그룹 선택 -->
-          <v-row justify="center">
-            <v-col cols="12" sm="6" class="pt-1 pb-0">
-              <v-select
-                v-model="input.group"
-                :items="groupOptions"
-                label="그룹선택"
-                outlined
-                dense
-                hide-details
-              ></v-select>
-            </v-col>
-            <!-- 그룹 선택 끝 -->
-
-            <!-- 색상선택 -->
-            <v-col cols="12" sm="6" class="pt-1 pb-0">
-              <v-select
-                v-model="input.color"
-                :items="colorOptions"
-                label="색상"
-                :color="input.color"
-                outlined
-                dense
-              ></v-select>
-            </v-col>
-          </v-row>
-          <!-- 색상선택 끝 -->
         </v-col>
       </v-row>
       <!-- 내용입력란 끝 -->
 
+      <!-- 참여인원 -->
+      <v-row v-show="isUpdate" justify="center">
+        <v-col cols="10">
+          <v-card class="pa-2" elevation="1">
+            <span>현재 참여인원</span><br />
+            <span class="primary--text pl-2">{{ propEvent.members }}</span>
+          </v-card>
+        </v-col>
+      </v-row>
+      <!-- 참여인원 끝 -->
+
       <!-- 버튼 -->
       <v-row justify="end" class="mb-2">
-        <v-col cols="12" class="text-end pb-0">
+        <v-col cols="12" class="text-end py-0">
           <span class="error--text">{{ message }}</span>
-          <v-btn text color="dark lighten-2" @click="close">Cancel</v-btn>
-          <v-btn text color="dark lighten-2" @click="create" v-if="!isUpdate">OK</v-btn>
-          <v-btn text color="dark lighten-2" @click="update" v-else>Update</v-btn>
+          <v-btn
+            text
+            color="error lighten-2"
+            @click="deleteCard"
+            v-if="isUpdate"
+          >
+            삭제
+          </v-btn>
+          <v-btn
+            text
+            color="primary lighten-2"
+            @click="create"
+            v-if="!isUpdate"
+          >
+            추가
+          </v-btn>
+          <!-- <v-btn
+            text
+            color="primary lighten-2"
+            @click="update"
+            v-else
+            :disabled="isLoading"
+          >
+            수정
+          </v-btn> -->
+          <v-btn text color="lighten-2" @click="close">
+            취소
+          </v-btn>
         </v-col>
       </v-row>
       <!-- 버튼 끝 -->
     </v-card>
+    <modal :open-modal="errorModal" v-on:close="errorModal = false">
+      <template v-slot:text>
+        <span>해당시간에 이미 일정이 있습니다</span>
+      </template>
+    </modal>
   </v-dialog>
 </template>
 
 <script>
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import WorkService from "@/services/work.service";
 
 export default {
@@ -230,190 +220,228 @@ export default {
     isLoading: false,
 
     active: {
-      startDay: false,
+      dates: false,
       startTime: false,
-      endDay: false,
       endTime: false
     },
 
     input: {
-      startDay: format(new Date(), "yyyy-MM-dd"),
+      dates: [],
       startTime: "",
-      endDay: format(new Date(), "yyyy-MM-dd"),
       endTime: "",
       name: "",
       content: "",
-      group: "schedule",
-      color: "primary"
     },
     event_id: "",
-
     message: "",
-
-    groupOptions: [
-      { text: "일정", value: "schedule" },
-      { text: "목표", value: "goal" }
-    ],
-
-    colorOptions: [
-      { text: "Primary", value: "primary" },
-      { text: "Secondary", value: "secondary" },
-      { text: "Accent", value: "accent" },
-      { text: "Red", value: "red" },
-      { text: "Pink", value: "pink" },
-      { text: "Purple", value: "purple" },
-      { text: "Deep Purple", value: "deep-purple" },
-      { text: "Indigo", value: "indigo" },
-      { text: "Blue", value: "blue" },
-      { text: "Light Blue", value: "light-blue" },
-      { text: "Cyan", value: "cyan" },
-      { text: "Teal", value: "teal" },
-      { text: "Green", value: "green" },
-      { text: "Light Green", value: "light-green" },
-      { text: "Lime", value: "lime" },
-      { text: "Yellow", value: "yellow" },
-      { text: "Amber", value: "amber" },
-      { text: "Orange", value: "orange" },
-      { text: "Deep Orange", value: "deep-orange" },
-      { text: "Brown", value: "brown" },
-      { text: "Blue Gray", value: "blue-gray" },
-      { text: "Gray", value: "gray" },
-      { text: "Black", value: "black" }
-    ]
+    errorModal: false
   }),
-  props: ["addModal", "isUpdate", "propEvent"],
+  props: ["addModal", "isUpdate", "propEvent", "study_id"],
+  components: {
+    modal: () => import("@/components/base/Modal")
+  },
   watch: {
     addModal() {
       this.open = this.addModal;
-      if (this.isUpdate) {
-        
-        var start_arr = this.propEvent.start.split(" ");
-        var end_arr = this.propEvent.end.split(" ");
-        var name_arr = this.propEvent.name.split("]");
-        this.input = {
-          startDay: start_arr[0],
-          startTime: start_arr.length == 2 ? start_arr[1] : "",
-          endDay: end_arr[0],
-          endTime: end_arr.length == 2 ? end_arr[1] : "",
-          name: name_arr.length == 2 ? name_arr[1] : name_arr[0],
-          content: this.propEvent.content,
-          group: this.propEvent.status,
-          color: this.propEvent.color
-        };
-        
-        this.event_id = this.propEvent.event_id;
-      }
     },
     open() {
       if (!this.open) {
         this.close();
       }
+    },
+    isUpdate() {
+      if (this.isUpdate) {
+        this.input = {
+          dates: this.propEvent.dates,
+          startTime: this.propEvent.start_time,
+          endTime: this.propEvent.end_time,
+          name: this.propEvent.name,
+          content: this.propEvent.content,
+          isDefault: false
+        };
+      }
     }
-
-    //Test
   },
   methods: {
     close() {
+      this.message = "";
+      this.isLoading = false;
       this.input = {
-        startDay: format(new Date(), "yyyy-MM-dd"),
+        dates: [],
         startTime: "",
-        endDay: format(new Date(), "yyyy-MM-dd"),
         endTime: "",
         name: "",
         content: "",
-        group: "schedule",
-        color: "primary"
+        isDefault: false
       };
       this.$emit("close");
     },
 
-    create() {
+    datesToList(dates) {
+      if (dates == "") return [];
+      let result = [];
+      let arr = dates.split("/");
+      if (arr.length == 1) return [dates];
+
+      for (let date of arr) {
+        result.push(date);
+      }
+      return result;
+    },
+
+    async create() {
+      this.isLoading = true;
       this.message = "";
       if (this.input.name == "") {
         this.message = "일정명을 입력해주세요";
+        this.isLoading = false;
         return;
       }
 
-      let s_arr = this.input.startDay.split("-");
-      let e_arr = this.input.endDay.split("-");
-      let start = { year: s_arr[0], month: s_arr[1], day: s_arr[2] };
-      let end = { year: e_arr[0], month: e_arr[1], day: e_arr[2] };
+      if (this.input.dates.length == 0) {
+        this.message = "날짜를 입력해주세요";
+        this.isLoading = false;
+        return;
+      }
+
+      if (this.input.startTime == "") {
+        this.input.startTime = "00:00";
+      }
+      if (this.input.endTime == "") {
+        this.input.endTime = "23:59";
+      }
+      let s_arr = this.input.startTime.split(":");
+      let e_arr = this.input.endTime.split(":");
+      let startT = { hour: s_arr[0], minute: s_arr[1] };
+      let endT = { hour: e_arr[0], minute: e_arr[1] };
       if (
-        start.year > end.year ||
-        start.month > end.month ||
-        start.day > end.day
+        startT.hour > endT.hour ||
+        (startT.hour == endT.hour && startT.minute > endT.minute)
       ) {
-        this.message = "종료날짜를 확인해주세요";
+        this.message = "종료시간을 확인해주세요";
+        this.isLoading = false;
         return;
-      }
-
-      if (this.input.startDay == this.input.endDay) {
-        if (this.input.startTime == "") {
-          this.input.startTime = "00:00";
-        }
-        if (this.input.endTime == "") {
-          this.input.endTime = "23:59";
-        }
-        s_arr = this.input.startTime.split(":");
-        e_arr = this.input.endTime.split(":");
-        let startT = { hour: s_arr[0], minute: s_arr[1] };
-        let endT = { hour: e_arr[0], minute: e_arr[1] };
-        if (startT.hour > endT.hour || startT.minute > endT.minute) {
-          this.message = "종료시간을 확인해주세요";
-          return;
-        }
       }
 
       // 추가할 데이터
       var newEvent = {
+        study_id: '',
         type: "personal",
         name: this.input.name,
         content: this.input.content,
-        start:
-          this.input.startTime != ""
-            ? this.input.startDay + " " + this.input.startTime
-            : this.input.startDay,
-        end:
-          this.input.endTime != ""
-            ? this.input.endDay + " " + this.input.endTime
-            : this.input.endDay,
-        group: this.input.group,
-        color: this.input.color
+        dates: this.input.dates,
+        start_time: this.input.startTime,
+        end_time: this.input.endTime,
+        status: 'personal'
       };
 
-      //데이터추가 엑시오스
-      WorkService.createWork(newEvent);
-      //테스트 변수 제거해야함
-      this.$emit("reload", newEvent);
-      this.close();
+      let res = await this.enterIssue(newEvent)
+      if (res.state == 'success') {
+        res = await WorkService.createWork(newEvent);
+        this.$emit("reload");
+        this.close();
+      } else {
+        this.message = "추가하지 못했습니다.";
+      }
+      this.isLoading = false;
+    },
+    isLaterLeftTime(time1, time2) {
+      let arr1 = time1.split(":");
+      let arr2 = time2.split(":");
+      let left = {
+        hour: arr1[0],
+        minute: arr1[1]
+      };
+      let right = {
+        hour: arr2[0],
+        minute: arr2[1]
+      };
+
+      if (left.hour > right.hour) {
+        return true;
+      } else if (left.hour == right.hour && left.minute >= right.minute) {
+        return true;
+      }
+
+      return false;
+    },
+    async enterIssue(item) {
+      let payload = {
+        type: "personal"
+      };
+      let myIssues = await WorkService.getWorks(payload);
+      
+      // 시간겹치는지 체크
+      for (let issue of myIssues) {
+        issue.dates = this.datesToList(issue.dates)
+        if (issue.dates.length == 0) continue;
+
+        for (let date1 of issue.dates) {
+          for (let date2 of item.dates) {
+            if (date1 == date2) {
+              if (
+                (this.isLaterLeftTime(item.start_time, issue.start_time) &&
+                  this.isLaterLeftTime(issue.end_time, item.start_time)) ||
+                (this.isLaterLeftTime(item.end_time, issue.start_time) &&
+                  this.isLaterLeftTime(issue.end_time, item.end_time))
+              ) {
+                this.errorModal = true;
+                return false;
+              }
+            }
+          }
+        }
+      }
+      
+      // 내일정으로 생성
+      let copy = JSON.parse(JSON.stringify(item));
+      let res = await WorkService.createWork(copy);
+      if(res.id){
+        return true;
+      }
+
+      return false;
     },
 
-    update() {
-      
-     
-
+    async update() {
+      this.isLoading = true;
       //수정 데이터
       var updateEvent = {
-        type:"personal",
         work_id: this.propEvent.id,
+        type: "personal",
         name: this.input.name,
         content: this.input.content,
-        start:
-          this.input.startTime != ""
-            ? this.input.startDay + " " + this.input.startTime
-            : this.input.startDay,
-        end:
-          this.input.endTime != ""
-            ? this.input.endDay + " " + this.input.endTime
-            : this.input.endDay,
-        group: this.input.group,
-        color: this.input.color
+        dates: this.input.dates,
+        start_time: this.input.startTime,
+        end_time: this.input.endTime,
+        status: this.propEvent.status,
       };
-    
+
       //수정 엑시오스 요청
-      WorkService.updateWork(updateEvent);
-      this.$emit("reload", updateEvent);
-      this.close();
+      let res = await WorkService.updateWork(updateEvent);
+      if (res.state == "success") {
+        this.$emit("reload");
+        this.close();
+      } else {
+        this.message = "수정되지 않았습니다";
+      }
+      this.isLoading = false;
+    },
+
+    async deleteCard() {
+      this.isLoading = true;
+      let payload = {
+        type: "personal",
+        work_id: this.propEvent.id
+      };
+      let res = await WorkService.deleteWork(payload);
+      if (res.state == "success") {
+        this.$emit("reload");
+        this.close();
+      } else {
+        this.message = "삭제되지 않았습니다";
+      }
+      this.isLoading = false;
     }
   },
 

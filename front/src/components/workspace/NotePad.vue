@@ -131,10 +131,16 @@ export default {
       document.getElementById("file_load").click();
     },
     load_editor() {
+      console.log("로딩완료");
+      
       this.is_change = true;
     },
-    change_editor() {
+    change_editor(event) {
+      if(event.source == "wysiwyg"){
+        return;
+      }
       if (this.is_change) {
+        console.log("보낸다");
         this.socket.emit("typing", {
           study_id: this.study_id,
           text: this.editorText

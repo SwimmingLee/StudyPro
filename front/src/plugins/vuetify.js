@@ -12,6 +12,10 @@ export default new Vuetify({
             light: {
                 customTheme: "#404040",
                 customOrange: "#E48E58",
+                greenC: "#fbf4f9",
+                redC: "#ffd5e5",
+                blueC: "#f1fcfc",
+                greyC: "#e9e2d0",
             },
         },
     },

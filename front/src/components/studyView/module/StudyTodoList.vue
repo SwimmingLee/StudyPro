@@ -10,7 +10,7 @@
         </v-row>
       </v-card-title>
 
-      <v-card flat v-show="items.length === 0">
+      <v-card flat v-show="!items">
         <v-row no-gutters style="height:100%" align="center" justify="center">
           <v-col cols="12">
             <v-card flat align="center" style="width: 100%; height: 100%" class="mb-7">
@@ -19,7 +19,7 @@
           </v-col>
         </v-row>
       </v-card>
-      <v-list two-line v-show="!(items.length === 0)">
+      <v-list two-line v-show="items">
         <v-row no-gutters>
           <v-col cols="6">
             <v-card outlined min-height="300" class="mx-2">

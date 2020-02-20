@@ -116,7 +116,6 @@ export default {
       for(var d of process_days){
         days += weekofdays[d.day] + ' '
       }
-      console.log(days)
       return days;
     },
 

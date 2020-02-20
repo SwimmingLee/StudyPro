@@ -96,8 +96,6 @@ export default {
       this.messages.push(['', [message]])
     })
     this.socket.on("leave", data => {
-      console.log("누가 떠났어~~~~~~~~~~~");
-      
       this.prvUsr = '공지'
       const message = data.user_id == this.user.user_id ? '스터디룸을 나갔습니다' : `${data.user_nickname} 님이 퇴장하였습니다`
       this.messages.push(['', [message]])
@@ -110,9 +108,9 @@ export default {
   span {
     display: inline-block;
     border-radius: 5px;
-    font-family: '중고딕';
-    font-weight: bolder;
-    font-size: 12px;
+    font-family: 'MapoPeacefull';
+    /* font-weight: bolder; */
+    font-size: 14px;
   }
   .chat {
     margin-top: 5px;

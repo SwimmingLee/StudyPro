@@ -164,7 +164,7 @@
       </v-card>
     </v-dialog>
     <template>
-      <SendMsgModal
+      <SendMsgModal v-if="studyInfo !=null"
         :group-modal="msgOpen"
         :user="studyInfo.captain"
         v-on:close="SendMsgModalClose"
@@ -187,8 +187,7 @@ export default {
     greetComment: "",
     msgOpen: false,
     loginChkOpen: false,
-    open: false,
-    captain: null
+    open: false
   }),
   props: ["groupModal", "studyInfo"],
   components: {
@@ -268,13 +267,12 @@ export default {
 </script>
 
 <style>
-#img-container{
-  height:200px;
+#img-container {
+  height: 200px;
 }
 
-#study-img{
+#study-img {
   height: 100%;
-  width : auto;
+  width: auto;
 }
-  
 </style>

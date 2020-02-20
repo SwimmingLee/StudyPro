@@ -2,7 +2,7 @@
   <v-card id="workspace_card" flat class="customTheme lighten-2">
     <v-row align="center" justify="center">
       <!-- 상단 탭 버튼 -->
-      <v-col class="py-1 pr-1">
+      <v-col class="py-1 pr-0">
         <v-tabs height="95" grow icons-and-text centered dark color="cyan">
           <v-tabs-slider color="red"></v-tabs-slider>
 
@@ -188,8 +188,7 @@ export default {
         };
     this.study_id = window.location.href.split("workspace/")[1];
     this.socket = io.connect(
-      process.env.VUE_APP_SOCKET_URL +
-        `${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
+      process.env.VUE_APP_SOCKET_URL+`${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
       {
         transports: ["websocket"],
         secure: true
@@ -198,8 +197,16 @@ export default {
   },
   mounted() {
     window.moveTo(0, 0);
-    window.resizeTo(screen.availWidth, screen.availHeight);
+    window.resizeTo(1540 ,824);
     this.loadStudyInfo();
+    
+
+    if (!window.opener) return;
+    window.onkeyup = event => {
+      if (event.keyCode == 27) {
+        this.overlay = false;
+      }
+    };
 
     window.onbeforeunload = () => {
       this.socket.emit("leave", {
@@ -207,14 +214,6 @@ export default {
         user_id: this.user.user_id,
         user_nickname: this.user.user_nickname
       });
-    };
-
-    if (!window.opener) return;
-
-    window.onkeyup = event => {
-      if (event.keyCode == 27) {
-        this.overlay = false;
-      }
     };
 
     this.socket.on("alreadyexist", () => {
@@ -251,7 +250,7 @@ export default {
           const now = new Date();
           const name = `${
             this.studyInfo.name
-          } ${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}${"'"}${now.getMinutes()}${"''"}`;
+          } ${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours()}${"'"}${now.getMinutes()}${"''"}`;
           saveAs(data, name);
         });
       }
@@ -268,9 +267,7 @@ export default {
     },
 
     exit() {
-      window.opener.closechild
-        ? window.opener.closechild()
-        : window.alert("오류가 있습니다 페이지를 직접 종료해주세요");
+      window.opener.closechild ? window.opener.closechild() : window.alert("오류가 있습니다 페이지를 직접 종료해주세요")
     },
 
     connected(connected_users) {
