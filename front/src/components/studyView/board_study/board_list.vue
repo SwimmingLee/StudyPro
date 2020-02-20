@@ -82,6 +82,7 @@
 
 <script>
 import PostService from "@/services/post.service";
+import StudyService from '@/services/study.service'
 
 export default {
   props: [ "board_name", "study_id" ],
@@ -99,7 +100,8 @@ export default {
         { icon: "menu_book", text: "스터디 게시판", route: "study" },
         { icon: "style", text: "자유 게시판", route: "free" },
         { icon: "notifications_none", text: "공지사항", route: "notice" }
-      ]
+      ],
+      studyInfo: {},
     };
   },
 
@@ -109,6 +111,8 @@ export default {
     if (this.$router.params && this.$router.params.post_id) {
       this.routeTo(this.$router.params.post_id);
     }
+
+    this.loadStudyInfo();
   },
   watch: {
     page() {
@@ -134,9 +138,19 @@ export default {
     },
     showBtn() {
       if (this.board_name === "notice") {
+        if(this.isCaptain) return true;
         return false;
       }
       return true;
+    },
+    currentUser(){
+      return this.$store.getters['auth/getUser']
+    },
+    isCaptain(){
+      if(this.currentUser.uid == this.studyInfo.captain){
+        return true;
+      }
+      return false;
     }
   },
   methods: {
@@ -169,7 +183,15 @@ export default {
         name: "study_register",
         params: { study_id: this.study_id, board_name: this.board_name },
       })
-    }
+    },
+
+    async loadStudyInfo() {
+      this.studyInfo = await StudyService.getStudyInfo({
+        study_id: this.study_id
+      }).then(res => {
+        return res.data;
+      });
+    },
   }
 };
 </script>

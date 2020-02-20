@@ -73,6 +73,7 @@
 
 <script>
 import WorkService from "@/services/work.service";
+import { format } from 'date-fns'
 
 export default {
   props: ["study_id"],
@@ -86,21 +87,51 @@ export default {
   },
 
   methods: {
-    isSelected(index) {
+    async isSelected(index) {
       for (let i = 0; i < this.selected.length; i++) {
-        if (this.selected[i] === index) return true;
+        if (this.selected[i] === index) {
+          // item.status = '완료'
+          // await this.update(item)
+          return true;
+        }
+      }
+      return false;
+    },
+    async isSelected2(index, item) {
+      for (let i = 0; i < this.selected.length; i++) {
+        if (this.selected[i] === index) {
+          item.status = '활성'
+          await this.update(item)
+          return true;
+        }
       }
       return false;
     },
     async getTodo() {
-      const date = new Date();
-      const tmp = await WorkService.getWorks({
+      const today = format(new Date(), 'yyyy-MM-dd')
+      let res = await WorkService.getWorks({
         type: "study",
         study_id: this.study_id,
-        today: date
       });
-      this.items = tmp.data;
-    }
+      this.items = [];
+      for(let item of res){
+        if(item.dates == '')  continue;
+        let arr = item.dates.split('/')
+        for(let date of arr){
+          if(date == today){
+            this.items.push(item);
+            break;
+          }
+        }
+      }
+    },
+
+    async update(event) {
+      let updateEvent = JSON.parse(JSON.stringify(event));
+      updateEvent.work_id = updateEvent.id;
+      //수정 엑시오스 요청
+      await WorkService.updateWork(updateEvent);
+    },
   }
 };
 </script>

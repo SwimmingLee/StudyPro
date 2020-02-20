@@ -248,7 +248,7 @@
       <template v-slot:btn>
         <div class="text-end pr-3 pb-3">
           <v-btn elevation="0" @click="regGroup" v-show="reg_message == ''">가입신청</v-btn>
-          <v-btn elevation="0" @click="modalClose" v-show="reg_message != ''">확인</v-btn>
+          <v-btn elevation="0" @click="(modal = false)" v-show="reg_message != ''">확인</v-btn>
         </div>
       </template>
     </modal>
@@ -456,6 +456,7 @@ export default {
       this.comment = "";
       this.modal = true;
     },
+ 
 
     // clickBack() {
     //   this.$router.go(-1);
@@ -473,14 +474,16 @@ export default {
 
       if (res.state == "success") {
         //이메일 보내기
-        let captain_info = await UserService.getUserContent(
-          this.studyInfo.captain
-        );
-        let captain_email = captain_info.email;
-        let study_name = this.studyInfo.name;
-        EmailService.noticeApply(captain_email, study_name, this.study_id);
+        // let captain_info = await UserService.getUserContent(
+        //   this.studyInfo.captain
+        // );
+        // let captain_email = captain_info.email;
+        // let study_name = this.studyInfo.name;
+        // EmailService.noticeApply(captain_email, study_name, this.study_id);
 
         this.reg_message = "가입신청을 완료했습니다";
+        this.isApplying = true;
+
       } else {
         this.reg_message = res.data.detail;
       }

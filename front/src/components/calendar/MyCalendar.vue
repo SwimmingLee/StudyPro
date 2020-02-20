@@ -31,7 +31,28 @@
                 <span class="white--text px-2">+</span>
                 <span class="pr-2 white--text d-none d-sm-flex">일정추가</span>
               </v-btn>
-              <v-btn >월단위로</v-btn>
+              <v-menu bottom right>
+                <template v-slot:activator="{ on }">
+                  <v-btn outlined color="grey darken-2" v-on="on">
+                    <span>{{ typeToLabel[type] }}</span>
+                    <v-icon right>mdi-menu-down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="type = 'day'">
+                    <v-list-item-title>일</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="type = 'week'">
+                    <v-list-item-title>주</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="type = 'month'">
+                    <v-list-item-title>월</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="type = '4day'">
+                    <v-list-item-title>4일</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </v-toolbar>
           </v-sheet>
 
@@ -43,6 +64,7 @@
               color="primary"
               :events="events"
               :event-color="getEventColor"
+              :value="today"
               :now="today"
               :type="type"
               @click:event="showEvent"
@@ -134,7 +156,7 @@
         :add-modal="addModal"
         :is-update="isUpdate"
         :prop-event="propEvent"
-        v-on:close="addModal = false, isUpdate=false"
+        v-on:close="(addModal = false), (isUpdate = false)"
         v-on:reload="reload"
       />
     </div>
@@ -179,7 +201,7 @@ export default {
       { text: "내용", align: "start", sortable: false, value: "content" },
       { text: "날짜", align: "start", value: "date" },
       { text: "시간", align: "start", value: "time" }
-    ],
+    ]
   }),
   components: {
     AddModal: () => import("./AddModal"),

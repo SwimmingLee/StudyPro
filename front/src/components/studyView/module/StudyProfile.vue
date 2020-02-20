@@ -1,7 +1,13 @@
 <template>
   <div>
     <v-card class="mb-2">
-      <v-btn height="70" class="btns_room primary mb-4" large @click="toWorkspace" block>
+      <v-btn
+        height="70"
+        class="btns_room primary mb-4"
+        large
+        @click="toWorkspace"
+        block
+      >
         <v-icon color="white" class="mr-2">exit_to_app</v-icon>스터디룸
       </v-btn>
     </v-card>
@@ -33,8 +39,11 @@
               large
               @click="attendence"
               block
-            >출석 체크</v-btn>
-            <v-btn v-else class="btns_join mt-1" disabled large block>출석 완료</v-btn>
+              >출석 체크</v-btn
+            >
+            <v-btn v-else class="btns_join mt-1" disabled large block
+              >출석 완료</v-btn
+            >
           </template>
           <template v-else>
             <v-btn
@@ -44,9 +53,20 @@
               dark
               @click="modalOpen"
               block
-            >가입하기</v-btn>
-            <v-btn v-else class="btns_join mt-1" disabled large block>가입 심사 중</v-btn>
+              >가입하기</v-btn
+            >
+            <v-btn v-else class="btns_join mt-1" disabled large block
+              >가입 심사 중</v-btn
+            >
           </template>
+          <v-btn
+            v-if="currentUser.uid == study_info.captain"
+            class="btns_join error mt-2"
+            @click="(deleteType = 'question'), (deleteModal = true)"
+            large
+            block
+            >스터디 해체</v-btn
+          >
         </v-row>
       </v-card-actions>
     </v-card>
@@ -59,12 +79,46 @@
           <p>신청글</p>
           <v-textarea outlined hide-details v-model="comment"></v-textarea>
         </div>
-        {{reg_message}}
+        {{ reg_message }}
+      </template>
+      <template v-slot:btn>
+        <div class="text-end pr-3 pb-3 pt-5">
+          <v-btn elevation="0" @click="regGroup" v-show="reg_message == ''"
+            >가입신청</v-btn
+          >
+          <v-btn elevation="0" @click="modalClose" v-show="reg_message != ''"
+            >확인</v-btn
+          >
+        </div>
+      </template>
+    </modal>
+    <modal :open-modal="deleteModal" v-on:close="deleteModal = false">
+      <template v-slot:text>
+        <span v-show="deleteType == 'question'"
+          >정말 모임을 해체하시겠습니까?</span
+        >
+        <span v-show="deleteType == 'confirm'"
+          >모임이 해체되었습니다<br />메인페이지로 이동하겠습니다</span
+        >
       </template>
       <template v-slot:btn>
         <div class="text-end pr-3 pb-3">
-          <v-btn elevation="0" @click="regGroup" v-show="reg_message == ''">가입신청</v-btn>
-          <v-btn elevation="0" @click="modalClose" v-show="reg_message != ''">확인</v-btn>
+          <v-btn
+            v-show="deleteType == 'question'"
+            class="error"
+            text
+            @click="destroyStudy"
+            >확인</v-btn
+          >
+          <v-btn
+            v-show="deleteType == 'question'"
+            text
+            @click="(deleteType = 'question'), (deleteModal = false)"
+            >취소</v-btn
+          >
+          <v-btn v-show="deleteType == 'confirm'" text @click="moveHome"
+            >확인</v-btn
+          >
         </div>
       </template>
     </modal>
@@ -76,7 +130,6 @@ import StudyService from "@/services/study.service";
 import UserService from "@/services/user.service";
 import EmailService from "@/services/email.service";
 
-
 export default {
   props: ["study_id"],
   data() {
@@ -87,20 +140,22 @@ export default {
       reg_message: "",
       isJoined: false,
       attendenced: false,
-      isApplying: ""
+      isApplying: "",
+      deleteModal: false,
+      deleteType: "question"
     };
   },
 
   computed: {
     currentUser() {
-      return this.$store.getters["auth/getUser"].id;
+      return this.$store.getters["auth/getUser"];
     }
   },
   components: {
     modal: () => import("@/components/base/Modal")
   },
   async created() {
-    this.getStudyInfo();
+    await this.getStudyInfo();
     var res = await StudyService.getStudyInfo({ study_id: this.study_id }).then(
       res => {
         return res.data;
@@ -130,7 +185,7 @@ export default {
       var res = await StudyService.applyStudy(payload).then(res => {
         return res.data;
       });
-      
+
       if (res.state == "success") {
         this.reg_message = "가입신청을 완료했습니다";
         let captain_info = await UserService.getUserContent(
@@ -138,9 +193,7 @@ export default {
         );
         let captain_email = captain_info.email;
         let study_name = this.study_info.name;
-        EmailService.noticeApply(captain_email, study_name,this.study_id);
-
-
+        EmailService.noticeApply(captain_email, study_name, this.study_id);
       } else {
         this.reg_message = res.data.detail;
       }
@@ -185,8 +238,6 @@ export default {
       } else if (result.data.state === "fail") {
         alert("출석에 실패했습니다.");
       }
-
-      console.log(this.attendenced);
     },
 
     async check_attendence() {
@@ -200,7 +251,25 @@ export default {
     },
 
     toWorkspace() {
-      this.$emit('toWorkspace')
+      this.$emit("toWorkspace");
+    },
+
+    async destroyStudy() {
+      console.log('des')
+      let payload = {
+        study_id: this.study_info.id,
+        user_id: this.currentUser.uid
+      };
+      let res = StudyService.destroyStudy(payload);
+      if(res.state == 'success'){
+        this.deleteType = 'confirm'
+      }
+
+    },
+
+    moveHome() {
+      this.deleteModal = false;
+      this.$router.push({ name: "home" });
     }
   },
   async mounted() {
@@ -212,20 +281,17 @@ export default {
       }
     });
 
-    let apply_list = await StudyService.getApplyList({study_id :this.study_id});
+    let apply_list = await StudyService.getApplyList({
+      study_id: this.study_id
+    });
     let user_id = this.$store.getters["auth/getUser"].uid;
     apply_list.data.forEach(element => {
-      if(element.user_id === user_id){
+      if (element.user_id === user_id) {
         this.isApplying = true;
         return;
       }
     });
-
-
-
   }
-
-  
 };
 </script>
 

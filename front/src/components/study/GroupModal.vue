@@ -12,13 +12,13 @@
             </v-row>
             <v-row class="pt-4 pb-1">
               <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold">카테고리</v-content>
+                <v-content text class="py-0 font-weight-bold"
+                  >카테고리</v-content
+                >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">
-                  {{
-                  studyInfo.minor_class.name
-                  }}
+                  {{ studyInfo.minor_class.name }}
                 </v-content>
               </v-col>
             </v-row>
@@ -32,12 +32,14 @@
             </v-row>
             <v-row class="pb-4">
               <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold">멤버 수</v-content>
+                <v-content text class="py-0 font-weight-bold"
+                  >멤버 수</v-content
+                >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">
                   {{ studyInfo.num_joined_student }}/{{
-                  studyInfo.user_limit == 0 ? "-" : studyInfo.user_limit
+                    studyInfo.user_limit == 0 ? "-" : studyInfo.user_limit
                   }}
                 </v-content>
               </v-col>
@@ -45,7 +47,9 @@
             <hr />
             <v-row class="pt-4 pb-1">
               <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold">스터디명</v-content>
+                <v-content text class="py-0 font-weight-bold"
+                  >스터디명</v-content
+                >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">{{ studyInfo.name }}</v-content>
@@ -53,7 +57,9 @@
             </v-row>
             <v-row class="pb-1">
               <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold">스터디 목표</v-content>
+                <v-content text class="py-0 font-weight-bold"
+                  >스터디 목표</v-content
+                >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">{{ studyInfo.goal }}</v-content>
@@ -61,37 +67,39 @@
             </v-row>
             <v-row class="pb-1">
               <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold">스터디 소개</v-content>
+                <v-content text class="py-0 font-weight-bold"
+                  >스터디 소개</v-content
+                >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">
                   {{
-                  studyInfo.description == "" ? "-" : studyInfo.description
+                    studyInfo.description == "" ? "-" : studyInfo.description
                   }}
                 </v-content>
               </v-col>
             </v-row>
             <v-row class="pb-1">
               <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold">시작날짜</v-content>
+                <v-content text class="py-0 font-weight-bold"
+                  >시작날짜</v-content
+                >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">
-                  {{
-                  studyInfo.start_date
-                  }}
+                  {{ studyInfo.start_date }}
                 </v-content>
               </v-col>
             </v-row>
             <v-row class="pb-1">
               <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold">종료날짜</v-content>
+                <v-content text class="py-0 font-weight-bold"
+                  >종료날짜</v-content
+                >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">
-                  {{
-                  studyInfo.end_date
-                  }}
+                  {{ studyInfo.end_date }}
                 </v-content>
               </v-col>
             </v-row>
@@ -112,9 +120,7 @@
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">
-                  {{
-                  studyInfo.process_days | getDays
-                  }}
+                  {{ studyInfo.process_days | getDays }}
                 </v-content>
               </v-col>
             </v-row>
@@ -126,9 +132,7 @@
               </v-col>
               <v-col class="py-0" @click="sendMsg(studyInfo.captain)">
                 <v-content text class="py-0">
-                  {{
-                  studyInfo.captain.nickname
-                  }}
+                  {{ studyInfo.captain.nickname }}
                   <a>
                     <v-icon class="primary--text">mdi-email</v-icon>
                   </a>
@@ -138,14 +142,16 @@
 
             <v-row>
               <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold">그룹장 소개글</v-content>
+                <v-content text class="py-0 font-weight-bold"
+                  >그룹장 소개글</v-content
+                >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">
                   {{
-                  studyInfo.captain.about == "null"
-                  ? "-"
-                  : studyInfo.captain.about
+                    studyInfo.captain.about == "null"
+                      ? "-"
+                      : studyInfo.captain.about
                   }}
                 </v-content>
               </v-col>
@@ -154,12 +160,20 @@
         </v-card-text>
         <v-card-actions class="pt-3 pr-5">
           <v-spacer></v-spacer>
-          <v-btn color="error--text lighten-1 transparent" elevation="0" @click="open = false">close</v-btn>
+          <v-btn
+            color="error--text lighten-1 transparent"
+            elevation="0"
+            @click="open = false"
+            >close</v-btn
+          >
           <v-btn
             color="primary--text transparent"
             elevation="0"
             @click="regGroup"
-          >{{studyInfo.membership_level ? '스터디로 가기' : '가입하러가기'}}</v-btn>
+            >{{
+              studyInfo.membership_level ? "스터디로 가기" : "가입하러가기"
+            }}</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -187,7 +201,8 @@ export default {
     greetComment: "",
     msgOpen: false,
     loginChkOpen: false,
-    open: false
+    open: false,
+    captain: {}
   }),
   props: ["groupModal", "studyInfo"],
   components: {

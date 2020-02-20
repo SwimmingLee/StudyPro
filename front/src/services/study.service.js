@@ -8,8 +8,8 @@ class StudyService {
         AuthHeader.changeHeadersToken()
         return axios.get(URL)
             .then(res => {
-                return Promise.resolve(res.data)
-            },
+                    return Promise.resolve(res.data)
+                },
                 error => {
                     return Promise.reject(error.data)
                 })
@@ -41,8 +41,8 @@ class StudyService {
         // } = payload;
         AuthHeader.changeHeadersToken()
         return axios.post(URL,
-            payload
-        )
+                payload
+            )
             .then(res => {
                 return Promise.resolve(res.data)
             })
@@ -89,10 +89,11 @@ class StudyService {
 
     deleteUser(payload) {
         return axios.delete(URL + "join", {
-            data:{
-            study_id: payload.study_id,
-            user_id: payload.user_id}
-        
+            data: {
+                study_id: payload.study_id,
+                user_id: payload.user_id
+            }
+
         })
     }
 
@@ -103,7 +104,7 @@ class StudyService {
             level: payload.level,
         })
     }
-    
+
     checkAttendence(payload) {
         return axios.post(URL + "check_attendence", {
             study_id: payload.study_id,
@@ -118,8 +119,14 @@ class StudyService {
             user_id: payload.user_id,
         })
     }
-    
-    
+
+    destroyStudy(payload) {
+        return axios.delete(URL, { data: payload })
+            .then(res => {
+                console.log(res)
+                return res.data
+            })
+    }
 
 }
 

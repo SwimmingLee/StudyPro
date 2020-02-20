@@ -20,14 +20,14 @@
           </v-tab>
 
           <v-card flat>
-            <v-btn class="px-9" height="95" @click="record">
-              <v-icon x-large v-if="!recording" class="material-icons">mdi-record-rec</v-icon>
-              <v-icon x-large v-else class="material-icons">mdi-stop</v-icon>
+            <v-btn class="px-8" height="95" @click="record">
+              <v-icon large v-if="!recording" class="material-icons">mdi-record-rec</v-icon>
+              <v-icon large v-else class="material-icons">mdi-stop</v-icon>
             </v-btn>
-            <v-btn class="px-9" height="95" @click="help">
+            <v-btn class="px-8" height="95" @click="help">
               <v-icon large>help_outline</v-icon>
             </v-btn>
-            <v-btn class="px-9" height="95" @click="exit">
+            <v-btn class="px-8" height="95" @click="exit">
               <v-icon large>power_settings_new</v-icon>
             </v-btn>
           </v-card>

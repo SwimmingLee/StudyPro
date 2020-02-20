@@ -95,7 +95,7 @@
                         color="red"
                         overlap
                       >
-                        <v-icon v-if="isAuth" class="black--text"
+                        <v-icon v-if="isAuth" class="gray--text"
                           >mdi-email</v-icon
                         >
                         <v-icon v-else class="gray--text">mdi-email</v-icon>
@@ -241,9 +241,9 @@ export default {
       usermenuitems: [
         { icon: "email", title: "쪽지함", name: "msgbox" },
         { icon: "mdi-account", title: "정보수정", name: "info" },
-        { icon: "library_books", title: "가입목록", name: "groups" },
+        { icon: "list", title: "가입목록", name: "groups" },
         { icon: "library_books", title: "일정관리", name: "calendar" },
-        { icon: "home", title: "로그아웃", name: "signout" }
+        { icon: "mdi-lock", title: "로그아웃", name: "signout" }
       ],
       userInfo: {},
       isLoading: false,

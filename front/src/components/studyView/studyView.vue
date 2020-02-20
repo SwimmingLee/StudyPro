@@ -47,7 +47,7 @@
       <v-card flat>
         <div id="group-img-container">
           <v-img src="@/assets/images/banner/group_default.png" />
-          <v-row justify="end">
+          <v-row justify="end" v-if="currentUser.uid == studyInfo.captain">
             <v-btn text id="group-img-btn">
               <v-icon color="white">settings</v-icon>
             </v-btn>
@@ -55,9 +55,7 @@
         </div>
         <v-row no-gutters justify="center">
           <v-col offset="1" cols="11" class="mr-7 mt-5">
-            <router-view
-              @toWorkspace="toWorkspace"
-            ></router-view>
+            <router-view @toWorkspace="toWorkspace"></router-view>
           </v-col>
         </v-row>
       </v-card>
@@ -65,8 +63,6 @@
     <request-signin v-else />
   </v-content>
 </template>
-
-
 
 <script>
 import StudyService from "@/services/study.service";
@@ -108,13 +104,13 @@ export default {
             routes: "study_member"
           }
         }
-      ]
+      ],
+      studyInfo: {}
     };
   },
-  components:{
-    requestSignin: () => import('@/components/base/RequestSignin')
+  components: {
+    requestSignin: () => import("@/components/base/RequestSignin")
   },
-
 
   async mounted() {
     await this.loadStudyInfo();
@@ -145,6 +141,9 @@ export default {
       }).then(res => {
         return res.data;
       });
+      if (this.studyInfo.state == "fail") {
+        this.$router.push({ name: "home" });
+      }
     },
 
     routeTo(route) {
