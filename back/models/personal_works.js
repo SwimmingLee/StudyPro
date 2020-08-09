@@ -16,20 +16,8 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    study_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'studies',
-        key: 'id'
-      }
-    },
-    start_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false
-    },
-    end_date: {
-      type: DataTypes.DATEONLY,
+    dates: {
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     content: {
@@ -39,6 +27,26 @@ module.exports = function(sequelize, DataTypes) {
     status: {
       type: DataTypes.STRING(45),
       allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    start_time: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    end_time: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    user_nickname:{
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    members:{
+      type: DataTypes.STRING(100),
+      allowNull: false
     }
   }, {
     tableName: 'personal_works'
@@ -46,7 +54,7 @@ module.exports = function(sequelize, DataTypes) {
 
   personal_works.create_work = async function(data, wrong_id, same_work) {
       
-      if (!data.content || !data.writer || !data.start_date || !data.end_date || !data.study_id) {return "Data 부족"}
+      if (!data.content || !data.writer || !data.start_date || !data.end_date) {return "Data 부족"}
       else if (wrong_id) {
         return {
       "state": "fail",
@@ -57,15 +65,15 @@ module.exports = function(sequelize, DataTypes) {
         "detail": "같은 날짜에 같은 일정이 존재합니다."
     }}
       else {
-        this.create(data)
+        const created_work = await this.create(data)
         return {
           "state": "success",
-          "detail": `${data.study_id}번 스터디에 일정이 추가되었습니다.`
+          "detail": `${created_work.writer}번 유저에게 일정이 추가되었습니다.`
       }
       }
   }
 
-  personal_works.delete_work = async function(work_id) {
+  personal_works.delete_work = async function(work_id, user_id) {
     const work = await this.findOne({where:{id:work_id}})
 
     if (!work) {return {
@@ -73,26 +81,36 @@ module.exports = function(sequelize, DataTypes) {
       "detail": "wrong id"
   }}
     else {
-      this.destroy({where:{id:work_id}})
-      return {
-        "state": "success",
-        "detail": `${work_id}번 일정이 삭제되었습니다.`
-    }
+      
+      if (work.writer != user_id) {return {
+        "state": "fail",
+        "detail": `작성자가 아닙니다`
+      }} else {
+        this.destroy({where: {id:work_id}})
+        return {
+          "state": "success",
+          "detail": `${work_id}번 일정 삭제완료`
+      }}
     }
   }
 
-  personal_works.update_work = async function(work_id, data) {
+  personal_works.update_work = async function(work_id, data,user_id) {
     const work = await this.findOne({where:{id:work_id}})
     if (!work) {return {
       "state": "fail",
       "detail": "wrong id"
   }}
     else {
+      if (work.writer != user_id) {return {
+        "state": "fail",
+        "detail": `작성자가 아닙니다`
+      }}
+      else {
       this.update(data, {where:{id:work_id}})
       return {
         "state": "success",
         "detail": `${work_id}번 일정이 수정되었습니다.`
-    }
+      }}
     }
   }
 

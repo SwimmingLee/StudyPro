@@ -1,6 +1,7 @@
-
 # Created by https://www.gitignore.io/api/node,windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,windows,visualstudiocode
+### AWS Key ###
+*.pem
 
 ### Node ###
 # Logs
@@ -153,3 +154,18 @@ yarn-error.log
 # Editor directories and files
 .idea
 .vscode
+
+# Created by https://www.gitignore.io/api/firebase
+# Edit at https://www.gitignore.io/?templates=firebase
+
+### Firebase ###
+.idea
+**/node_modules/*
+**/.firebaserc
+
+### Firebase Patch ###
+.runtimeconfig.json
+.firebase/
+firebase.json
+
+# End of https://www.gitignore.io/api/firebase

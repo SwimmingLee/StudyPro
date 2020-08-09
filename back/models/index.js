@@ -1,7 +1,8 @@
 var fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const env = process.env.NODE_ENV || 'development';
+const dotenv = require('dotenv').config();
+const env = process.env.MYSQL_ENV || 'development';
 const config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
 const db = {};
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
@@ -13,8 +14,7 @@ fs
     .forEach(function (file) {
         var model = sequelize.import(path.join(__dirname, file));
         db[model.name] = model;
-        console.log('model.name:' + model.name);  // 테스트로그 model명..
-    });
+    }); 
 Object.keys(db).forEach(function (modelName) {
     if ("associate" in db[modelName]) {
         db[modelName].associate(db);

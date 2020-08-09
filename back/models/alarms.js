@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('alarms', {
+  const alarms = sequelize.define('alarms', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -45,4 +45,67 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'alarms'
   });
+
+
+  alarms.create_alarm = async function(payload) {
+    const {title, content} = payload
+
+    if (!content || !title) {
+        return {
+        "state": "fail",
+        "detail": "Wrong Input"
+      }
+    } else {
+      const created_alarm = await this.create(payload)
+      return {
+        "state": "success",
+        "detail": created_alarm
+      }
+    }
+  }
+
+  alarms.delete_alarm = async function(alarm_id, user_id) {
+    const alarm = await this.findOne({where:{id: alarm_id}})
+    if (!alarm) {
+        return {
+          "state": "fail",
+          "detail": "wrong id"
+      }
+    } else {
+
+        if (alarms.from != user_id) {return {
+          "state": "fail",
+          "detail": `작성자가 아닙니다`
+      }} else {
+        this.destroy({where: {id:alarm_id}})
+        return {
+          "state": "success",
+          "detail": `${alarm_id}번 쪽지 삭제완료`
+      }}
+    }
+  }
+  //
+  alarms.read_alarm = async function(alarm_id) {
+    const alarm = await this.findOne({where:{id:alarm_id}})
+    
+    if (!alarm) {return {
+      "state": "fail",
+      "detail": "wrong id"
+    }} else {
+      return alarm
+    }
+  }
+  
+  alarms.read_alarms_all = function(payload) {
+    const {to, from} = payload
+
+    if (to) {
+      return this.findAll({where:{to}})
+    } else if (from) {
+      return this.findAll({where:{from}})
+    }
+    return alarms
+  }
+
+  return alarms;
 };
