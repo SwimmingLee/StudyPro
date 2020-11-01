@@ -1,2 +1,5 @@
-back-dev
-front-dev read me
+# StudyPro PJT :man_student:
+
+언제 어디서나 모일 수 있는 공간, 스터디프로를 소개합니다.
+
+간편하게 스터디를 찾아보고, 클릭 한 번으로 스터디원과 만나보세요!
