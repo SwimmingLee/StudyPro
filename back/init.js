@@ -11,7 +11,7 @@ const option = {
   ca: fs.readFileSync("./keys/ca_bundle.crt"),
 };
 
-const https_app = require("http").createServer(option, app);
+const https_app = require("https").createServer(option, app);
 const handleListening = () => {
   console.log(`✅  Listening on : https://localhost:${PORT} ✌`);
   // connect()
