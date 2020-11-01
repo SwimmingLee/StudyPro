@@ -95,13 +95,13 @@ export default {
     user: {
       email: "",
       password: "",
-      loginRemain: false
+      loginRemain: false,
     },
     open: false,
     isLoading: false,
     message: "",
-    idRules: [v => !!v || "아이디를 입력해 주세요."],
-    passwordRules: [v => !!v || "비밀번호를   입력해 주세요."]
+    idRules: [(v) => !!v || "아이디를 입력해 주세요."],
+    passwordRules: [(v) => !!v || "비밀번호를   입력해 주세요."],
   }),
   props: ["signinModal"],
   watch: {
@@ -112,15 +112,15 @@ export default {
       if (!this.open) {
         this.close();
       }
-    }
+    },
   },
   methods: {
     close() {
       this.user = {
         email: "",
         password: "",
-        loginRemain: false
-      }
+        loginRemain: false,
+      };
       this.$emit("close");
     },
 
@@ -128,21 +128,21 @@ export default {
       this.isLoading = true;
       if (this.user.email && this.user.password) {
         await this.$store.dispatch("auth/login", this.user).then(
-          res => {
+          (res) => {
             if (res) {
               this.close();
             } else {
               this.message = "아이디 또는 비밀번호를 잘못입력했습니다.";
             }
           },
-          error => {
+          (error) => {
             this.message = error.message;
           }
         );
-      }else if(!this.user.email){
-        this.message="아이디를 입력해주세요"
-      }else{
-        this.message="비밀번호를 입력해주세요"
+      } else if (!this.user.email) {
+        this.message = "아이디를 입력해주세요";
+      } else {
+        this.message = "비밀번호를 입력해주세요";
       }
 
       this.isLoading = false;
@@ -151,32 +151,32 @@ export default {
       const user_info = await WbKakao.signinForm();
       let {
         properties: { nickname, profile_image },
-        kakao_account: { email, gender }
+        kakao_account: { email, gender },
       } = user_info;
-
+      console.log(user_info);
       try {
-        gender = (gender === "male" ? "M" : "F");
-        await this.$store.dispatch("auth/socialLogin",{
+        gender = gender === "male" ? "M" : "F";
+        await this.$store.dispatch("auth/socialLogin", {
           email,
           nickname,
           gender,
           profile_image,
-          platform: "kakao"
+          platform: "kakao",
         });
         this.isLoading = false;
       } catch (err) {
         console.log(err);
       }
     },
-    clickEnter(){
-      this.signin()
-    }
+    clickEnter() {
+      this.signin();
+    },
   },
   mounted() {
     if (this.$store.getters["auth/isAuth"]) {
-      this.$emit('close')
+      this.$emit("close");
     }
-  }
+  },
 };
 </script>
 
