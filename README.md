@@ -132,7 +132,7 @@ pm2 start
 
 #### 2. redis를 어떻게 이용할까? redis를 어떻게 사용할 수 있을까?
 
-   ![image-20201102175307175](images/레디스.png)
+   <img src="images/레디스.png" width="500">
 
    - reid는 RDBMS에 직접적으로 접근하것보다 더 빠르게 처리하기 위한 일종의 인모메리 DB이다.
    - redis가 사용되는 곳
@@ -155,21 +155,24 @@ pm2 start
 
 - 과연 redis를 적용하면 얼마나 빨라졌을까? redis 적용 전 응답시간과 TPS를 비교해봐았습니다. 
 - 부하테스트는 120초간 100유저 성능 테스트를 진행하였다. 
+- redis 적용 전
 
-![image-20201102175352083](images/전응답시간.png)
+<img src="images/전응답시간.png" width="500">
 
-![image-20201102175359226](images/전TPS.png)
+<img src="images/전TPS.png" width="500">
 
-![image-20201102175419801](images/후응답시간.png)
+- redis 적용 후
 
-![image-20201102175426754](images/후TPS.png)
+<img src="images/후응답시간.png" width="500">
+
+<img src="images/후TPS.png" width="500">
 
 
 
 - 위에서 보다시피 부하 테스트를 걸면 TPS가 120-130씩 나오다가 갑자기 요청이 뚝 떨어지는 모습이 발견되었다. 원인을 확인한 결과 TCP 프로토콜의 TIME_WAIT 설정때문에 포트가 계속 유지되어 테스트에 사용할 수 있는 포트가 고갈되었기 때문이다. 
 - 포트 고갈문제는 윈도우 레지스터에디터에서 TIME_WAIT 변수를 낮추어 변경하여 해결할 수 있었다. 해결된 그래프는 TPS가 120-150으로 계속 나왔다. 
 
-![image-20201102175441693](images/테스에러원인.png)
+<img src="images/테스에러원인.png" width="500">
 
 
 
