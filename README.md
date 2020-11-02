@@ -4,13 +4,13 @@
 
 간편하게 스터디를 찾아보고, 클릭 한 번으로 스터디원과 만나보세요! 온라인이지만 실제로 옆에 있는 것처럼 내 화면을 보여주고, 얼굴을 마주보면서 이야기할 수 있다면 어떨까요? 놀라운 스터디의 새로운 플랫폼, 스터디프로를 보여드리겠습니다. 
 
-![](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102132914962.png)
+![](images/메인페이지.png)
 
 ## 서비스 설명 :artificial_satellite:
 
 스터디프로만의 두 가지 핵심기능을 소개합니다!
 
-![image-20201102135733807](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102135733807.png)
+![image-20201102135733807](images/핵심기능.png)
 
 ### 1. 온라인 스터디 - 워크스페이스
 
@@ -20,7 +20,7 @@
 
   팀원들과 같이 그림을 그리면서 알고리즘, 서비스 기획 등을 설명할 수 있는 공간입니다.
 
-![image-20201102133154752](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102133154752.png)
+![image-20201102133154752](images/화이트보드.png)
 
 
 
@@ -28,7 +28,7 @@
 
   온라인이지만 바로 옆에 있는 것처럼! 내 화면을 공유해서 같이 볼 수 있어요. 특히, 코드나 PPT등 세부적으로 화면을 보면서 이야기해야 하는 작업에는 굉장히 유용합니다 .
 
-![image-20201102133235992](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102133235992.png)
+![image-20201102133235992](images/쉐어뷰.png)
 
 
 
@@ -36,7 +36,7 @@
 
   팀원들과 동시에 문서를 수정할 수 있는 공간이에요. 로컬에 있는 문서를 불러와서 실시간으로 팀원들과 같이 수정할 수 있습니다. 마크다운 형식도 지원이 되서  README.md 를 작성하기에 완전 완성맞춤입니다.
 
-![image-20201102133255145](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102133255145.png)
+![image-20201102133255145](images/노트패드.png)
 
 
 
@@ -45,7 +45,7 @@
 
   워크스페이스 공간에서 한 스터디 활동을 녹화할 수 있어요! "어 이거 옛날에 공부했던건데" 라고 생각만 하면서 까먹고 놓치는 일은 이제 없을 거에요. 
 
-![image-20201102135148744](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102135148744.png)
+![image-20201102135148744](images/녹화기능.png)
 
 
 
@@ -57,9 +57,9 @@
 
   내가 원하는 스터디를 쉽고 빠르게 매칭할 수 있습니다. 이름으로도 간편하게, 그리고 내가 원하는 시간대에 맞춰서 스터디를 찾을 수 있죠. 
 
-  ![image-20201102135411726](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102135411726.png)
+  ![image-20201102135411726](images/스터디검색.png)
 
-![image-20201102135349170](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102135349170.png)
+![image-20201102135349170](images/스터디매칭.png)
 
 
 
@@ -67,7 +67,7 @@
 
   스터디 일정을 캘린더에 추가하면 알림으로 확인할 수 있습니다. 스터디 세미나나 스터디 자체 활동을 관리하기에 굉장히 편리합니다. 
 
-![image-20201102135527688](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102135527688.png)
+![image-20201102135527688](images/스터디매칭.png)
 
 
 
@@ -75,7 +75,7 @@
 
   따로 스터디원과 자료를 공유하기 위해 타 플랫폼을 이용하지 않아도 되요. 스터디만의 게시글오 서로 이야기할 수 있습니다. 그리고 첨부파일이 가능하니, 스터디에 필요한 자료도 같이 공유할 수 있죠.
 
-![image-20201102135623824](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20201102135623824.png)
+![image-20201102135623824](images/스터디게시판.png)
 
 
 
