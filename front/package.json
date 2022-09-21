@@ -36,7 +36,7 @@
         "vue-timeselector": "^1.0.0",
         "vue2-perfect-scrollbar": "^1.3.0",
         "vuedraggable": "^2.23.2",
-        "vuetify": "^2.2.4",
+        "vuetify": "^2.6.10",
         "vuetify-daterange-picker": "^3.2.0",
         "vuex": "^3.1.2"
     },
